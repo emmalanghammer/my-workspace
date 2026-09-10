@@ -805,6 +805,41 @@ side while both fit and stack when they don't. Before that, a stacked tile
 left the search input 54px wide; it's 162px now. Desktop is unchanged —
 566px tiles side by side, both fields in one row.
 
+## The menu is one implementation, used on every screen
+
+Emma: "I can't access the menu on the tasks page, it should always be
+clickable." It wasn't there to click — the menu had been built inside
+`index.html`, and the tasks screen's hamburger was still a `data-rmx-todo`
+placeholder. Copying the menu into the second screen would have made two
+copies to keep in step, so it moved out instead: `assets/megamenu.css` and
+`assets/megamenu.js`, linked by both pages. Same reasoning as the Task
+Details modal, which is one file shown in an iframe rather than two markup
+blocks.
+
+`megamenu.js` is self-contained and self-wiring — sprite, markup, the seven
+categories and their ~150 items, and an `init()` that injects the overlay and
+binds every opener it can find (`[data-rmx-megamenu]`, `#megaMenuBtn`,
+`[aria-label="Mega Menu"]`), stripping the placeholder attribute as it goes.
+A screen gets the menu by adding two lines and giving its hamburger an id.
+Nothing else changed on either page: `index.html` shrank by 22KB and still
+measures 200px sidebar, 211px active row, a 12px notch and 5 columns.
+
+Two things the extraction had to get right:
+
+- **Icon ids are `mm-`-prefixed.** The sprite ships inside the shared script
+  and lands in whatever screen includes it, so unprefixed names like `#search`
+  would have collided with a host screen's own harvested icons.
+- **Links resolve from the site root, not the page.** `href="index.html"` is
+  correct from `index.html` and wrong from `screens/tasks.html`. The script
+  reads its own `document.currentScript.src`, walks up one level, and builds
+  every href from that — so Workspace and Tasks both resolve correctly from
+  any depth, and on GitHub Pages under `/my-workspace/` as well as at a
+  domain root. Verified on the tasks page: Workspace → site root
+  `index.html`, Services → Calendar → **Tasks** → `screens/tasks.html`.
+
+Still only Workspace and Tasks navigate, as asked. Every other item is real
+content and inert.
+
 ---
 
 # Worth raising with the design system

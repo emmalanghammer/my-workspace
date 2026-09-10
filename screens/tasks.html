@@ -80,6 +80,7 @@
 <link rel="stylesheet" href="../assets/tokens.css">
 <link rel="stylesheet" href="../assets/type.css">
 <link rel="stylesheet" href="../assets/rmx.css">
+<link rel="stylesheet" href="../assets/megamenu.css">
 <style>
 /* ============================================================
    RMX (Rent Manager Express) starter stylesheet — inlined from
@@ -480,7 +481,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
 
   <div class="rmx-appbar__launch">
     <div class="rmx-appbar__icons">
-      <button aria-label="Mega Menu" data-rmx-todo="Mega Menu is not built in this prototype"><svg class="rmx-icon"><use href="#menu"></use></svg></button>
+      <button aria-label="Mega Menu" id="megaMenuBtn"><svg class="rmx-icon"><use href="#menu"></use></svg></button>
       <button aria-label="Reports" data-rmx-todo="Reports are not built in this prototype"><svg class="rmx-icon"><use href="#reports"></use></svg></button>
       <button aria-label="Favorites" data-rmx-todo="Favorites are not built in this prototype"><svg class="rmx-icon"><use href="#grade"></use></svg></button>
     </div>
@@ -1806,4 +1807,5 @@ if (new URLSearchParams(location.search).get('embed') === '1') {
    switched). The data-rmx-todo attribute stays as a marker of what isn't
    built; it just no longer triggers feedback here. */
 </script>
+<script src="../assets/megamenu.js"></script>
 </body></html>
