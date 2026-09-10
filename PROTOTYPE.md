@@ -1145,6 +1145,98 @@ Worth flagging that **72 is off the spacing scale** — Foundations runs 40
 declared as a literal rather than dressed up in a `var()` that would look
 official, and it is item 24 below.
 
+## History / Notes, opened from a mention
+
+Emma's call, 2026-09-10: "on click of each line display the history notes of
+the specific entity (issue, tenant, etc.)", "I want each note to be
+accessible and to be able to add a new note" — built from two frames in
+RMX-Pages and nothing else, `4628:44305` (History Notes Overlay) and
+`3779:60444` (Note Details Dialog).
+
+**It is an overlay, not a page.** I built it as a screen first and Emma
+corrected it: "the history notes is an overlay on the workspace not a page."
+So it lives in `assets/history-notes.css` + `assets/history-notes.js` — one
+self-contained, self-injecting overlay that any screen picks up with two
+lines and opens with `RMXHistory.open('<record key>')`. Same arrangement as
+the Mega Menu, and it means there is no second copy of it and no navigation
+away from the workspace. The standalone screen I had written was deleted
+rather than left lying around.
+
+Two rules that file lives by, because a host screen includes it:
+
+- **Nothing may be styled outside the overlay.** No bare `body`, `*` or `a`
+  rules — they would restyle My Workspace. Every reset is scoped.
+- **Every class and glyph id is `hn-`prefixed.** The markup lands in a page
+  that has its own `.btn`, `.toast` and `.chkbox`, and its own `call` and
+  `mail` icons.
+
+What each mention opens: the Diego Alvarez mention is about an **Issue**
+(Riverview #204's carpet), Karen Hsu's is about a **Tenant**, Anthony Park's
+a **Vendor**, Sally Klydon's an **Owner Prospect**. Each has a Scoreboard,
+its own notes, and every note is clickable — the row or its kebab opens Note
+Details, and **Add** opens the same dialog empty. There is no separate "new
+note" form.
+
+The register's filters are real, not decoration: Search, Users, History
+Category and Type all filter (their options are built from the notes'
+own data), the date range accepts typed `mm/dd/yy`, and "Only Notes with
+Attachments" works. **Unit Notes** and **Print** are the two that don't, and
+they carry `data-rmx-todo` — Unit Notes is a scoping rule this prototype has
+no second scope to model.
+
+### The @ tag
+
+Emma sent a screenshot of the real product for this: **an outlined pill
+carrying the person's name with no "@" left showing — orange when you tag
+yourself, blue when you tag anyone else.** So the Note field is
+`contenteditable` rather than a `<textarea>`, because the chips live inside
+it the way they do in the product: type `@`, the user list opens, typing
+filters it, arrow keys move through it, Enter or a click inserts a chip and
+the caret carries on after it.
+
+A note is still stored as plain text with `@Name` in it, so the same tag
+renders as the same chip in the field, in the register's Note column and in
+the data. That is deliberate, and it is where the real product currently
+slips: its register prints the raw token — `@u:53(Izzy Geza)Izzy Geza test`
+— in the Note column, showing the internal form next to the display name.
+Worth raising with engineering; it is item 25 below.
+
+### Faked, and worth knowing
+
+- **The Scoreboard only carries a status Lozenge and a Balance for the
+  tenant**, because that is the only entity type the frame documents. An
+  Issue's status and a prospect's stage would both need Lozenge copy and a
+  state the library does not define, so those Scoreboards carry just the
+  record and its links rather than inventing a sixth Lozenge state. Emma's
+  reference screenshot shows a second real one — a **Future** tenant on an
+  amber Lozenge — which suggests the tenant states at least are a known set
+  worth harvesting.
+- **Upload and Paste both attach the frame's own example file.** There is no
+  file picker in a prototype, and a dropzone that does nothing when you click
+  it is worse than one that shows you the result.
+- **Follow-up is disabled until its checkbox is ticked**, which is what the
+  frame draws — `border-disabled` hairlines, the greyed field, and the button
+  in `brand-primary-disabled`.
+- **Notes reset each time the overlay opens.** There is nothing to persist
+  them to, and a half-finished edit surviving into the next sitting would
+  read as a bug rather than a feature.
+
+### Two things this round taught me
+
+- **The icon-font trap is real.** The overlay first landed on My Workspace
+  with its glyphs rendered as the literal words `keyboard_arrow_down`,
+  `add_circle`, `print` — because it used Material Symbols by ligature and My
+  Workspace, unlike the Tasks screen, does not load that font. Exactly the
+  failure the skill warns about. All 22 glyphs are harvested SVG symbols now:
+  14 from `assets/icons.svg`, and 8 pulled from the two frames' own exports —
+  `reorder`, `cloud_upload`, `rmx-paste`, and the five Scoreboard glyphs,
+  two of which (`properties`, `units`) are Express icons the core sheet does
+  not carry. Extracted programmatically, never redrawn.
+- **A floating panel appended to `<body>` is a sibling of the overlay, not a
+  child.** The filter menus and the @ list were rendering *behind* the thing
+  that opened them until the stack was set deliberately: overlay 520, Note
+  dialog 540, menus 560, toast 580.
+
 ---
 
 # Worth raising with the design system
@@ -1300,3 +1392,19 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     density. Either the scale wants a step there, or the gutter should snap to
     64 or 80. This prototype declares 72 as a literal so the gap stays
     visible; it should not become a habit across prototypes.
+25. **The real product prints a note's raw mention token in the register.**
+    Emma's reference screenshot of History / Notes shows the Note column
+    reading `@u:53(Izzy Geza)Izzy Geza test` and
+    `@u:121(Emma Langhammer)Emma Langhammer reminder to add this tenants
+    details later` — the internal `@u:<id>(Name)` form rendered next to the
+    display name instead of being resolved to the chip the Note field shows.
+    An implementation bug rather than a design question, and worth passing to
+    engineering. This prototype renders the chip in both places.
+26. **`Lozenge` has no documented state set for record statuses.** The
+    History / Notes Scoreboard shows a tenant as **Current** (green) in the
+    frame and **Future** (amber) in Emma's screenshot of the product, so
+    there is clearly a real set — but `data/components.json` records only the
+    five semantic states, so an Issue's status or a prospect's stage cannot be
+    drawn without inventing copy and a colour. Those Scoreboards here carry
+    no Lozenge at all rather than guess. If record statuses are a pattern,
+    they want either named states or a documented mapping.

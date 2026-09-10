@@ -441,7 +441,11 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
 }
+/* A mention is a real target now -- it opens the History / Notes overlay for
+   the record it is about. Emma's call, 2026-09-10. */
+.ws-mention { cursor: pointer; }
 .ws-mention:hover { background: var(--container-tertiary); }
+.ws-mention:focus-visible { outline: 2px solid var(--border-secondary); outline-offset: -2px; }
 .ws-mention__meta {
   display: flex;
   align-items: baseline;
@@ -506,6 +510,15 @@
   padding: var(--spacing-xs) var(--spacing-xs) 0;
 }
 .ws-taskbar__spacer { flex: 1; }
+
+/* Tile header counts are a plain grey number, not a Pill. Emma's call,
+   2026-09-10 — a Pill reads as a status or a filter you can act on, and these
+   two are neither; they are just how many. The element carries no
+   data-rmx-component now, because it is no longer one. */
+.ws-tile-count {
+  font: var(--type-paragraph-s-regular);
+  color: var(--text-primary);
+}
 
 /* ---- Quick add, tile-sized ----
    Emma's call, 2026-09-10: the tile's "+" opens a mini version of the Tasks
