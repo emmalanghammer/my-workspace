@@ -474,6 +474,35 @@ the two screens don't share a script:
   wrapper opens Assigned To directly. `toggleUserBubble()` and its
   click-outside `.active` cleanup are gone — nothing sets that class anymore.
 
+## A second small round of interaction fixes, 2026-09-10
+
+- **High Priority chip: plain by default, pink on hover, pink once selected.**
+  The unselected chip already used the right colors (`--text-primary` gray,
+  no background), but hovering it did nothing — there was no preview before
+  committing to the click. Added `.hp-chip:not(.active):hover`, matching the
+  existing `.active` treatment.
+- **The Select an Action / Add Link floating panels wouldn't dismiss on an
+  outside click, while a task modal was open.** `#taskOverlay`'s own modal
+  wrapper calls `event.stopPropagation()` on every click inside it (so
+  clicking the modal doesn't also close the whole overlay) — which meant the
+  global `document` click listeners that dismiss `actionsPanel`,
+  `linkTypePanel` and `linkResultsPanel` never saw those clicks at all. Both
+  listeners are now named functions (`dismissFloatingPanels`,
+  `dismissLinkPanels`) invoked directly from the modal's own `onclick`, so a
+  click anywhere in the modal — not just outside it — closes whichever panel
+  is open.
+- **A stray "Tenant" lozenge on the "Return Marcia Clark's call" row.** This
+  task has no workflow and no linked record (`workflow:''`, `link:''` in the
+  data), but the row still carried a leftover `Tenant` category lozenge next
+  to its plain-text context — implying a linked tenant that doesn't exist.
+  Removed; the row now matches the other genuinely-unlinked rows (plain
+  context text, no lozenge).
+- **The Add Link row (Type + search) could run past the Links tile's edge.**
+  Both fields were hardcoded to `width:250px`, sized for the full-width
+  Figma frame, not the narrower Task Details column they actually render in.
+  Both are `flex:1; min-width:0` now, so they share the tile's real width
+  instead of overflowing it.
+
 ## Checked against the real Figma frames
 
 Two frames, both in `Tasks-Enhancements`

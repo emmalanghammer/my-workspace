@@ -350,6 +350,7 @@ a:hover { text-decoration:none; }
 .hp-chip{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 10px;border-radius:var(--r-sm);background:#fff;border:none;color:var(--text-primary);font-size:14px;cursor:pointer;white-space:nowrap;}
 .hp-chip .hp-flag{flex:none;}
 .hp-chip.active{background:var(--lozenge-error);color:var(--rmx-navy);}
+.hp-chip:not(.active):hover{background:var(--lozenge-error);color:var(--rmx-navy);}
 .select-action-link{display:inline-flex;align-items:center;gap:2px;color:var(--rmx-blue);font-size:14px;cursor:pointer;}
 /* Action card: per the "2.2.5 Task Details - Desktop" mock, a selected action lives in its own
    bordered/padded card with a "Action <name> x" row, a divider, then the detail fields. */
@@ -410,10 +411,10 @@ a:hover { text-decoration:none; }
 /* Add Link — node 4385:103128, "2.2.6 Task Linking Details": a Type
    dropdown (250px) + a search field (250px) + a cancel X, matching the
    real frame's proportions. */
-.link-add-row{display:flex;align-items:center;gap:8px;}
-.link-type-trigger{width:250px;flex:none;cursor:pointer;}
+.link-add-row{display:flex;align-items:center;gap:8px;max-width:100%;}
+.link-type-trigger{flex:1;min-width:0;cursor:pointer;}
 .link-type-trigger .material-symbols-outlined{margin-left:auto;color:var(--icon-muted);font-size:20px;}
-.link-search-field{width:250px;flex:none;}
+.link-search-field{flex:1;min-width:0;}
 .link-cancel-x{color:var(--rmx-blue);cursor:pointer;font-size:20px;flex:none;}
 .color-swatch{width:14px;height:14px;border-radius:2px;background:#13314c;flex:none;display:inline-block;}
 .uploader{border:1px dashed var(--rmx-hairline);border-radius:var(--r-sm);padding:20px;text-align:center;color:var(--text-primary);font-size:14px;background:var(--bg-subtle);}
@@ -621,7 +622,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
 
 <!-- ============================== NEW TASK / TASK DETAILS MODAL ============================== -->
 <div class="overlay-scrim" id="taskOverlay" hidden onclick="if(event.target===this)closeTaskModal()">
-  <div class="modal modal-lg" onclick="event.stopPropagation()">
+  <div class="modal modal-lg" onclick="event.stopPropagation();dismissFloatingPanels(event);dismissLinkPanels(event)">
     <div class="modal-header">
       <h2 id="taskModalTitle">New Task</h2>
       <button class="btn btn-primary" id="memorizeBtn">Load Memorized</button>
@@ -1578,14 +1579,15 @@ function pickLinkRecord(value){
   document.getElementById('linkResultsPanel').hidden = true;
   closeLinkAdd();
 }
-document.addEventListener('click', (e) => {
+function dismissLinkPanels(e){
   if (!e.target.closest('.link-type-trigger') && !document.getElementById('linkTypePanel').contains(e.target)) {
     document.getElementById('linkTypePanel').hidden = true;
   }
   if (!e.target.closest('.link-search-field') && !document.getElementById('linkResultsPanel').contains(e.target)) {
     document.getElementById('linkResultsPanel').hidden = true;
   }
-});
+}
+document.addEventListener('click', dismissLinkPanels);
 
 /* ---- History / Notes tile ---- */
 function renderModalHistory(){
@@ -1734,7 +1736,7 @@ function positionPanel(panel, anchor){
   if(left > maxLeft) left = Math.max(12, maxLeft);
   panel.style.left = left + 'px';
 }
-document.addEventListener('click', (e)=>{
+function dismissFloatingPanels(e){
   const triggers = {actionsPanel:'openActionsMenu', addChecklistPanel:'openAddChecklistMenu', rowKebabPanel:'openRowKebab', assigneeDropdown:'openAssigneeDropdown', checklistItemPanel:'openChecklistItemMenu'};
   Object.keys(triggers).forEach(id=>{
     const panel = document.getElementById(id);
@@ -1742,7 +1744,8 @@ document.addEventListener('click', (e)=>{
       panel.hidden = true;
     }
   });
-});
+}
+document.addEventListener('click', dismissFloatingPanels);
 
 /* ============================================================
    TOAST
