@@ -1194,6 +1194,10 @@ it the way they do in the product: type `@`, the user list opens, typing
 filters it, arrow keys move through it, Enter or a click inserts a chip and
 the caret carries on after it.
 
+The Note field carries no placeholder — Emma's call, 2026-09-10, and it
+matches the real product, whose Note field is empty too. Nothing on screen
+advertises that `@` works, which is how it ships.
+
 A note is still stored as plain text with `@Name` in it, so the same tag
 renders as the same chip in the field, in the register's Note column and in
 the data. That is deliberate, and it is where the real product currently
