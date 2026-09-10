@@ -840,6 +840,97 @@ Two things the extraction had to get right:
 Still only Workspace and Tasks navigate, as asked. Every other item is real
 content and inert.
 
+## The Add Task bar, trued up against its own component
+
+Emma gave the two states as frames — Tasks Enhancements `4098:74461`
+(default) and `3502:96852` (selected) — and the bar was wrong in three ways,
+all in the default state:
+
+| | Was | The component says |
+|---|---|---|
+| Radius | 4px | **8px** |
+| Shadow | none | **`dropshadow-xs`**, `0 4px 6px rgba(0,0,0,.04)` |
+| "+ Add a task" | `--text-link` blue | **`--text-secondary`** #13314C, icon and label both |
+
+The first two were my doing, and they were argued for in this file: an
+earlier conformance pass took the radius down to 4px and stripped the shadow
+on the reasoning that RMX is border-led and nothing above 4px belongs on a
+control. The reasoning was sound and the conclusion was wrong — this is a
+card, not a control, and the component carries both. The design source wins
+over an inference from the rules, so both are back and that conformance item
+now records the reversal instead of the original claim.
+
+The selected state needed nothing: blue border, 52/52 rows, `#f5f8fa` second
+row, the 255x36 date/time field, `#b3b3b3` character count and blue links all
+already matched, and are now measured rather than assumed.
+
+## Quick add from the My Workspace tile
+
+Emma's call: the tile's "+" opens a mini Add Task bar between the All/Overdue
+filter and the first task, so a task can be added without leaving the page.
+
+**Same component, fewer parts — and this is the deviation to look at.** The
+real bar's second row carries a 255px date/time field, the assignee bubbles
+and Add Action; that row alone measures 610px and the tile's content box is
+534px. Squeezing it in wraps it into something taller than the tasks it sits
+above, which defeats the point. So the mini bar keeps what makes it quick —
+the icon, the name field, the 50-character count, the two links — and treats
+**Add More Details** as the way to reach everything it drops. That link hands
+the typed name to the same Task Details modal the task rows open, in new-task
+mode (`?embed=1&new=<title>`), where the due date, assignee, action and
+checklist all already work. One implementation of the modal, now used three
+ways.
+
+Every value is the component's own — 8px radius, `dropshadow-xs`,
+`#cedbe7` resting border going `#008dd5` on focus, tertiary second row,
+disabled-grey links. The only numbers that aren't are the two row heights,
+44px instead of 52px, which is what makes it read as "mini" next to 74px task
+rows. **No Figma frame exists for a tile-sized variant of Add Task**, so if
+this pattern is worth keeping it wants one — that is the honest status of it.
+
+A task added here lives only on this page, so it deliberately carries no
+`data-ws-task-id`: clicking it does nothing rather than asking the Tasks
+register to open details for a task it has never heard of.
+
+## Inline checklist items are checklist items, not tasks
+
+Two things were wrong under "Close service tickets", and they had the same
+root cause — the inline rows were a separate `children` array that nothing
+else could see.
+
+- **Ticking one showed "Task closed successfully".** Nothing was closed; it
+  is one item on a checklist. No toast now. The parent row's progress count
+  ticking from 0/2 to 1/2 is the feedback, which is both quieter and more
+  informative.
+- **They didn't appear in the Task Details Checklist tile.** They do now,
+  because there is only one array: `task.checklist`. The register draws an
+  item as an inline row with initials bubbles, the Checklist tile draws the
+  same item as a table row with a name, and both read and write the same
+  data — so a tick in either shows up in the other, and the modal's Add /
+  Delete reach the register rows too.
+
+Two things that fell out of unifying them:
+
+- **The progress count is counted, not typed.** "Record Park's records" and
+  the other-user copy of "Close service tickets" carried hard-coded `0/1` and
+  `1/2` labels over empty checklists — a label that could not move and a
+  Checklist tile that opened empty. Both now have real items matching their
+  counts, and the label is derived, so it moves when you tick something.
+- **`SA` is an initials bubble with no user behind it.** It appears three
+  times in the register's data and matches nothing in either user list, so
+  the Checklist tile's Assigned To column shows "Property Manager, SA" — the
+  names that resolve, and the raw initials for the one that doesn't. Left
+  visible rather than having a person invented for it. It may just be `AS`
+  (Amy Scharffe, a real record) typed backwards, but that is a guess and it
+  is Emma's to make.
+
+## The logo is the way home
+
+Emma's call: "on click of the logo it should always take you to the workspace
+no matter the page." The app-bar lockup is now a link to My Workspace on both
+screens. The anchor is layout-neutral — the mark keeps its 175x32 and
+`flex: none` from `rmx.css` — and it is not underlined in either state.
+
 ---
 
 # Worth raising with the design system
@@ -965,3 +1056,23 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     a darker brand blue that the component is correctly using. This screen
     keeps #0071AA as a local `--mm-blue` rather than rounding to #008dd5,
     but it should be one or the other, not both. Emma's call.
+
+21. **`tokens.css` carries no shadows at all**, though Foundations names at
+    least four effect styles (`dropshadow-xs`, `-sm`, `-md`, `-lg`) and real
+    components depend on them: `dropshadow-md` on Tile Style=Workspace,
+    `dropshadow-xs` on Add Task. Both screens here declare the ones they need
+    locally, which means two prototypes could easily disagree about what
+    `dropshadow-md` is. They belong in the stylesheet next to the colours.
+22. **The `Add Task` card is 8px with a shadow, which the audit rejects.**
+    Same collision as item 1, from the other direction: `scripts/audit.mjs`
+    errors on any radius >= 8 outside Orion and the skill's own Visual DNA
+    rule 3 reads as "borders, not shadows", but the real component
+    (`4098:74461`) is 8px *and* carries `dropshadow-xs`. A card is not a
+    control and the rules currently give no way to say so. Worth resolving
+    together with item 1.
+23. **There is no tile-sized variant of `Add Task`.** Its second row is 610px
+    of controls, which does not fit any Workspace Tile (534px of content box),
+    so putting quick-add inside a tile — which Emma asked for, and which is
+    the natural place for it — currently means composing a reduced version by
+    hand. If quick-add-from-a-tile is a real pattern, the component wants a
+    compact variant so every prototype reduces it the same way.

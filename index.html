@@ -131,7 +131,7 @@
      Hamburger Icon exists in the component but is hidden in Use=Default. -->
 <header class="rmx-appbar" data-rmx-component="Header (app bar)">
   <div class="rmx-appbar__leading">
-    <svg class="rmx-appbar__logo" viewBox="0 0 175 32" role="img" aria-label="Rent Manager"><use href="#rmx-logo"></use></svg>
+    <a class="rmx-appbar__home" href="index.html" aria-label="Rent Manager — go to My Workspace"><svg class="rmx-appbar__logo" viewBox="0 0 175 32" role="img" aria-label="Rent Manager"><use href="#rmx-logo"></use></svg></a>
   </div>
 
   <div class="rmx-appbar__launch">
@@ -542,8 +542,7 @@
           <span class="rmx-tile__title">My Tasks</span>
           <span class="rmx-pill" data-rmx-component="Pill" data-ws-open-count>6</span>
           <span class="rmx-tile__actions">
-            <button class="ws-iconbtn" aria-label="New task"
-                    data-rmx-todo="Adding a task is not built in this prototype">
+            <button class="ws-iconbtn" aria-label="New task" id="wsQaddBtn">
               <svg class="rmx-icon"><use href="#add"></use></svg>
             </button>
             <!-- Real jump link, not a data-rmx-todo placeholder — same icon/pattern as
@@ -564,6 +563,22 @@
             </div>
             <div class="ws-taskbar__spacer"></div>
             <span class="rmx-lozenge rmx-lozenge--error" data-rmx-component="Lozenge" data-ws-overdue-count>2 overdue</span>
+          </div>
+
+          <!-- Mini Add Task bar, opened by the tile header's "+". Sits between
+               the filter and the first task; see .ws-qadd in workspace.css for
+               which parts of the real component it keeps and why. -->
+          <div class="ws-qadd" id="wsQadd" hidden>
+            <div class="ws-qadd__row">
+              <svg class="rmx-icon ws-qadd__icon" aria-hidden="true"><use href="#add"></use></svg>
+              <input class="ws-qadd__input" id="wsQaddInput" type="text" maxlength="50"
+                     placeholder="Add a task" aria-label="Task name">
+              <span class="ws-qadd__count" id="wsQaddCount">0/50</span>
+            </div>
+            <div class="ws-qadd__actions">
+              <button type="button" id="wsQaddAdd" disabled>Add Task</button>
+              <button type="button" id="wsQaddMore" disabled>Add More Details</button>
+            </div>
           </div>
 
           <div class="ws-tasklist">
@@ -795,6 +810,12 @@
     taskFrameFrame.src = 'screens/tasks.html?embed=1&open=' + encodeURIComponent(id);
     taskFrame.hidden = false;
   }
+  // Same frame, new-task mode -- used by the mini Add Task bar's
+  // "Add More Details", which has a name typed but nothing else set.
+  function openNewTaskFrame(title) {
+    taskFrameFrame.src = 'screens/tasks.html?embed=1&new=' + encodeURIComponent(title);
+    taskFrame.hidden = false;
+  }
   function closeTaskFrame() {
     taskFrame.hidden = true;
     taskFrameFrame.src = 'about:blank'; // drop the iframe's state so the next open starts clean
@@ -825,6 +846,83 @@
     overdueChip.hidden = overdue.length === 0;
     overdueChip.textContent = overdue.length + ' overdue';
   }
+
+  /* ---- Mini Add Task bar ----
+     The tile header's "+" opens it; typing a name enables both links; Enter
+     adds. "Add Task" inserts the task at the top of the list and updates the
+     open count, and "Add More Details" hands the typed name to the same Task
+     Details modal the rows open, in new-task mode, so the parts the mini bar
+     leaves out (due date, assignee, action, checklist) are all still reachable.
+     A task added here exists only on this page -- it carries no
+     data-ws-task-id, so clicking it does not try to open details for a task
+     the Tasks register has never heard of. */
+  var qadd = document.getElementById('wsQadd');
+  var qaddInput = document.getElementById('wsQaddInput');
+  var qaddCount = document.getElementById('wsQaddCount');
+  var qaddAdd = document.getElementById('wsQaddAdd');
+  var qaddMore = document.getElementById('wsQaddMore');
+  var list = tile.querySelector('.ws-tasklist');
+
+  function openQadd() {
+    qadd.hidden = false;
+    qaddInput.focus();
+  }
+  function closeQadd() {
+    qadd.hidden = true;
+    qaddInput.value = '';
+    qaddCount.textContent = '0/50';
+    qaddAdd.disabled = true;
+    qaddMore.disabled = true;
+  }
+  function addTaskRow(title) {
+    var row = document.createElement('div');
+    row.className = 'ws-task';
+    row.setAttribute('data-overdue', 'false');
+    row.setAttribute('data-done', 'false');
+    row.innerHTML =
+      '<span class="rmx-check" data-rmx-component="Checkbox" data-checked="false"' +
+      ' role="checkbox" aria-checked="false" tabindex="0">' +
+      '<span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true">' +
+      '<use href="#check"></use></svg></span></span>' +
+      '<div><div class="ws-task__title"></div></div>' +
+      '<span class="ws-task__due">Today</span>';
+    row.querySelector('.ws-task__title').textContent = title;
+    list.insertBefore(row, list.firstElementChild);
+    rows.unshift(row);
+    paint();
+  }
+
+  document.getElementById('wsQaddBtn').addEventListener('click', function () {
+    if (qadd.hidden) openQadd(); else closeQadd();
+  });
+  qaddInput.addEventListener('input', function () {
+    var v = qaddInput.value;
+    qaddCount.textContent = v.length + '/50';
+    qaddAdd.disabled = qaddMore.disabled = v.trim().length === 0;
+  });
+  qaddInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && qaddInput.value.trim()) { e.preventDefault(); qaddAdd.click(); }
+    if (e.key === 'Escape') closeQadd();
+  });
+  qaddAdd.addEventListener('click', function () {
+    var v = qaddInput.value.trim();
+    if (!v) return;
+    addTaskRow(v);
+    closeQadd();
+    if (window.RMX) RMX.toast('Task added', 'success');
+  });
+  qaddMore.addEventListener('click', function () {
+    var v = qaddInput.value.trim();
+    if (!v) return;
+    closeQadd();
+    openNewTaskFrame(v);
+  });
+  // clicking away closes an empty bar, same as the full bar on the Tasks page
+  document.addEventListener('click', function (e) {
+    if (qadd.hidden || qaddInput.value.trim()) return;
+    if (qadd.contains(e.target) || e.target.closest('#wsQaddBtn')) return;
+    closeQadd();
+  });
 
   tile.addEventListener('click', function (e) {
     var seg = e.target.closest ? e.target.closest('[data-ws-taskfilter] button') : null;

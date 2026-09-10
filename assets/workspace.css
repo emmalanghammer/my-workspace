@@ -35,6 +35,10 @@
   --spacing-4xl: 48px;
   --spacing-6xl: 64px;
 
+  /* dropshadow-xs, the named effect style on the Add Task component
+     (Tasks Enhancements 4098:74461). */
+  --shadow-xs: 0 4px 6px rgba(0, 0, 0, .04);
+
   /* dropshadow-md, the named effect style on Tile Style=Workspace, read off
      node 4075:109757. Replaces the shadow this file previously invented. */
   --ws-shadow:
@@ -483,6 +487,12 @@
   background: var(--icon-success);
   border-color: var(--icon-success);
 }
+/* The app-bar lockup is the way home from anywhere. Emma's call,
+   2026-09-10: "on click of the logo it should always take you to the
+   workspace no matter the page". The anchor is layout-neutral -- the svg
+   keeps its own 175x32 and flex:none from rmx.css. */
+.rmx-appbar__home { display: inline-flex; align-items: center; color: inherit; text-decoration: none; flex: none; }
+
 .ws-taskbar {
   display: flex;
   align-items: center;
@@ -490,6 +500,79 @@
   padding: var(--spacing-xs) var(--spacing-xs) 0;
 }
 .ws-taskbar__spacer { flex: 1; }
+
+/* ---- Quick add, tile-sized ----
+   Emma's call, 2026-09-10: the tile's "+" opens a mini version of the Tasks
+   page's Add Task bar, between the All/Overdue filter and the first task, so
+   a task can be added without leaving My Workspace.
+
+   Same component, fewer parts. The real Add Task bar (Tasks Enhancements
+   3502:96852) carries a 255px date/time field, the assignee bubbles and Add
+   Action on its second row; that row alone is 610px and the tile's content
+   box is 534px, so squeezing it in would wrap into something taller than the
+   tasks it sits above. The mini bar keeps what makes it quick -- the icon,
+   the name field, the 50-character count -- and treats "Add More Details" as
+   the way to reach everything it drops, which is what that link is for.
+   Every value below (8px radius, dropshadow-xs, #cedbe7 -> #008dd5 border,
+   the tertiary second row, the disabled-grey count) is the component's own;
+   only the two row heights are the tile's, 44px rather than 52px.
+   No Figma frame exists for a tile-sized variant -- see PROTOTYPE.md. */
+.ws-qadd {
+  margin: var(--spacing-xs) var(--spacing-xs) 0;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  background: var(--container-primary);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+.ws-qadd:focus-within { border-color: var(--text-link); }
+.ws-qadd__row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  height: 44px;
+  padding: 0 var(--spacing-sm);
+}
+.ws-qadd__icon { flex: none; color: var(--text-secondary); }
+.ws-qadd__input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font: var(--type-label-m-regular);
+  color: var(--text-secondary);
+}
+.ws-qadd__input::placeholder { font-style: italic; color: var(--text-disabled); }
+.ws-qadd__count {
+  flex: none;
+  font: var(--type-label-m-regular);
+  color: var(--text-disabled);
+}
+.ws-qadd__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  height: 44px;
+  padding: 0 var(--spacing-sm);
+  background: var(--container-tertiary);
+  border-top: 1px solid var(--border-primary);
+}
+/* Both links stay put and go grey until there is a name to add, exactly as
+   they do on the full bar. Never underlined, in either state. */
+.ws-qadd__actions button {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: var(--type-label-m-regular);
+  color: var(--text-link);
+  cursor: pointer;
+}
+.ws-qadd__actions button[disabled] {
+  color: var(--text-disabled);
+  cursor: default;
+}
 
 /* Toggle Switch — 132x36, two 66px segments; the selected segment fills
    --border-disabled with a --border-secondary border and a SemiBold label.
