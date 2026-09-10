@@ -568,6 +568,52 @@ Addendum`) are realistic-sounding mock content in the same spirit as the
 existing Send Email demo, not something read off a real source — there was
 no real source for these three to read from.
 
+## Add Link, actually built
+
+`+ Add Link` in Task Details was a bare `<a>` with no `onclick` at all — it
+did nothing. Checked against the real frame (`2.2.6 Task Linking Details`,
+node `4385:103128`, fetched 2026-09-10 via `get_metadata` + `get_screenshot`,
+three progressive states of the same interaction): clicking it reveals a
+**Type dropdown + a search field + a cancel X**, matching the frame's own
+proportions (two 250px fields). Now real: pick a type (`Tenant` / `Unit` /
+`Property` / `Vendor`), the search field filters a small list of records and
+picking one adds it as a new, removable chip above.
+
+The record lists (`LINK_RECORDS`) aren't invented — every name in them was
+already used somewhere else in this prototype's own data (`Riverview
+Apartments` is the frame's own example; `Anderson Mechanical` is My
+Workspace's HVAC task; `FMHP` / `HH` / `PARK` / `BUCK` are property codes
+already appearing in `myTasks` / `otherTasks`' `link` fields).
+
+**A checked-off task is green here too.** The Task Details modal's own "mark
+this task done" checkbox (top-left, next to the title) used the default
+marketing-orange checked state; it's the same "whole task complete" semantic
+as the register's row-level checkbox, which is already green — now so is
+this one (`.chkbox.green`). Checklist *item* checkboxes are unaffected — a
+sub-item is a different, more granular thing than the task itself.
+
+**High Priority uses a real flag asset, not a Material Symbols glyph.** Emma
+supplied the SVG directly (14×16, `#EB343C` — the real RMX error-red token) —
+used in both places a flag appears: the High Priority chip in Task Details,
+and the small flag next to a high-priority task's title in the register row.
+
+## Similar link UI, on My Workspace
+
+Three of My Workspace's six task rows genuinely reference a specific record
+— "Patrick O'Malley" is a Tenant, "Riverview #204" is a Unit, "Anderson
+Mechanical" is a Vendor — and now carry the same label + blue-value
+treatment as the Tasks screen's own Links section, instead of plain gray
+text. The other three ("Duplicate charge on statement", "All properties",
+"Lease ends in 32 days") are notes, not links to anything, and stay plain —
+applying link styling to them would have implied a record that doesn't
+exist. Emma's call, 2026-09-10.
+
+Clicking through from one of the three now-linked rows to that task's
+details (the in-place modal from the previous round) shows the matching
+link chip — `myWorkspaceTasks` in `screens/tasks.html` gained a `links:[...]`
+array for those three entries, so the row's implied link and the modal's
+actual Links section agree.
+
 ---
 
 # Worth raising with the design system

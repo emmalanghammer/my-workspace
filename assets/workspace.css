@@ -563,6 +563,16 @@
   margin-top: var(--spacing-xxs);
   min-width: 0;
 }
+/* Where a task's context is a real linked record (not a free-text note),
+   it carries the same label + blue-value treatment as the Tasks screen's
+   own Links section (node 4385:103128, "2.2.6 Task Linking Details") —
+   gray label, blue value. Only the rows that genuinely reference a record
+   (Tenant, Unit, Vendor) use it; a note like "Duplicate charge on statement"
+   stays plain text, since it isn't a link to anything. Emma's call,
+   2026-09-10. */
+.ws-task__link-label { color: var(--text-primary); }
+.ws-task__link-value { color: var(--text-link); }
+
 .ws-task__context {
   font: var(--type-label-s-regular);
   color: var(--text-primary);

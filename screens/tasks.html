@@ -302,7 +302,8 @@ a:hover { text-decoration:none; }
 .row-color-bar{display:block;width:10px;height:36px;}
 .task-cell{display:flex;align-items:center;gap:6px;}
 .task-cell .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.task-cell .material-symbols-outlined.flag{color:var(--rmx-red);font-size:16px;}
+/* Real flag asset, not a Material Symbols glyph — Emma's call, 2026-09-10. */
+.task-cell-flag{flex:none;}
 .link-pill{display:inline-flex;align-items:center;gap:0;height:20px;padding:0 2px 0 8px;border:1px solid var(--rmx-blue);border-radius:12px;background:#fff;color:var(--rmx-blue);font-size:14px;cursor:pointer;margin-left:6px;vertical-align:middle;}
 .link-pill .material-symbols-outlined{font-size:16px;}
 .chk-progress{font-size:12px;color:var(--text-primary);margin-left:6px;}
@@ -347,7 +348,7 @@ a:hover { text-decoration:none; }
 .nt-toprow{display:flex;align-items:center;gap:12px;}
 .nt-toprow .input{flex:1;height:36px;}
 .hp-chip{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 10px;border-radius:var(--r-sm);background:#fff;border:none;color:var(--text-primary);font-size:14px;cursor:pointer;white-space:nowrap;}
-.hp-chip .material-symbols-outlined{font-size:16px;color:var(--rmx-red);}
+.hp-chip .hp-flag{flex:none;}
 .hp-chip.active{background:var(--lozenge-error);color:var(--rmx-navy);}
 .select-action-link{display:inline-flex;align-items:center;gap:2px;color:var(--rmx-blue);font-size:14px;cursor:pointer;}
 /* Action card: per the "2.2.5 Task Details - Desktop" mock, a selected action lives in its own
@@ -406,6 +407,14 @@ a:hover { text-decoration:none; }
 .tile-link-row .val{color:var(--rmx-blue);}
 .tile-link-row .close-x{color:var(--rmx-blue);cursor:pointer;font-size:20px;}
 .links-list>a{display:inline-flex;align-items:center;gap:4px;font-size:14px;color:var(--rmx-blue);}
+/* Add Link — node 4385:103128, "2.2.6 Task Linking Details": a Type
+   dropdown (250px) + a search field (250px) + a cancel X, matching the
+   real frame's proportions. */
+.link-add-row{display:flex;align-items:center;gap:8px;}
+.link-type-trigger{width:250px;flex:none;cursor:pointer;}
+.link-type-trigger .material-symbols-outlined{margin-left:auto;color:var(--icon-muted);font-size:20px;}
+.link-search-field{width:250px;flex:none;}
+.link-cancel-x{color:var(--rmx-blue);cursor:pointer;font-size:20px;flex:none;}
 .color-swatch{width:14px;height:14px;border-radius:2px;background:#13314c;flex:none;display:inline-block;}
 .uploader{border:1px dashed var(--rmx-hairline);border-radius:var(--r-sm);padding:20px;text-align:center;color:var(--text-primary);font-size:14px;background:var(--bg-subtle);}
 .uploader .material-symbols-outlined{font-size:28px;color:var(--icon-muted);display:block;margin:0 auto 6px;}
@@ -622,9 +631,9 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
       <div class="nt-section">
         <label style="font-size:14px;color:var(--text-primary);">Task *</label>
         <div class="nt-toprow">
-          <div class="chkbox" id="taskDoneCheck" onclick="toggleModalDone()"><span class="material-symbols-outlined hidden">check</span></div>
+          <div class="chkbox green" id="taskDoneCheck" onclick="toggleModalDone()"><span class="material-symbols-outlined hidden">check</span></div>
           <div class="input"><input id="taskTitleInput" type="text" placeholder="Enter task name" oninput="onTaskTitleInput()"></div>
-          <div class="hp-chip" id="hpChip" onclick="toggleHighPriority()"><span class="material-symbols-outlined">flag</span>High Priority</div>
+          <div class="hp-chip" id="hpChip" onclick="toggleHighPriority()"><svg class="hp-flag" width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 15.8333V0H13.3333L11.6667 4.16667L13.3333 8.33333H1.66667V15.8333H0Z" fill="#EB343C"/></svg>High Priority</div>
         </div>
       </div>
 
@@ -806,6 +815,13 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
   <div class="fp-plain-item" onclick="rowKebabAction('Delete Task')">Delete Task</div>
 </div>
 
+<!-- Add Link — Type panel and search-results panel (node 4385:103128,
+     "2.2.6 Task Linking Details"). Static, top-level, like every other
+     float-panel; #tileLinksList itself gets rebuilt on every render, which
+     a panel living inside it would not survive. -->
+<div class="float-panel" id="linkTypePanel" hidden style="min-width:250px;"></div>
+<div class="float-panel" id="linkResultsPanel" hidden style="min-width:250px;"></div>
+
 <!-- Assigned To dropdown (node 4015:69959) — "User Roles" tab is visual-only in this prototype, no separate role list -->
 <div class="assignee-dropdown" id="assigneeDropdown" hidden onclick="event.stopPropagation()">
   <div class="ad-tabs">
@@ -871,11 +887,11 @@ let myWorkspaceTasks = [
   { id:'ws-post-notice', title:"Post 3-day notice — Flagstone Lot 3", flag:true, colorBar:'red', completed:false,
     action:null, actionDetails:null, dueDate:'09/08/25', dueTime:'09:00 AM', overdue:true,
     assigned:[av('TL','blue')], link:"Patrick O'Malley", linkOverflow:0, workflow:'Eviction', claim:false,
-    checklist:[], externalCal:false },
+    checklist:[], externalCal:false, links:[{label:'Tenant', value:"Patrick O'Malley", removable:false}] },
   { id:'ws-carpet-vendor', title:'Approve carpet vendor quote', flag:false, colorBar:'green', completed:false,
     action:null, actionDetails:null, dueDate:'09/09/25', dueTime:'05:00 PM', overdue:true,
     assigned:[av('TL','blue')], link:'Riverview #204', linkOverflow:0, workflow:'Make-Ready', claim:false,
-    checklist:[], externalCal:false },
+    checklist:[], externalCal:false, links:[{label:'Unit', value:'Riverview #204', removable:false}] },
   { id:'ws-marcia-clark', title:"Return Marcia Clark's call", flag:false, colorBar:'blue', completed:false,
     action:null, actionDetails:null, dueDate:'09/10/25', dueTime:'04:00 PM', overdue:false,
     assigned:[av('TL','blue')], link:'', linkOverflow:0, workflow:'', claim:false,
@@ -883,7 +899,7 @@ let myWorkspaceTasks = [
   { id:'ws-hvac-scope', title:'Sign off on Brookside HVAC scope', flag:false, colorBar:'orange', completed:false,
     action:null, actionDetails:null, dueDate:'09/10/25', dueTime:'05:00 PM', overdue:false,
     assigned:[av('TL','blue')], link:'Anderson Mechanical', linkOverflow:0, workflow:'Vendor', claim:false,
-    checklist:[], externalCal:false },
+    checklist:[], externalCal:false, links:[{label:'Vendor', value:'Anderson Mechanical', removable:false}] },
   { id:'ws-rent-roll', title:'Review May rent roll variance', flag:false, colorBar:'blue', completed:false,
     action:null, actionDetails:null, dueDate:'09/12/25', dueTime:'05:00 PM', overdue:false,
     assigned:[av('TL','blue')], link:'', linkOverflow:0, workflow:'Reporting', claim:false,
@@ -998,6 +1014,8 @@ let state = {
   checklistFilter: 'incomplete',
   actionsMenuContext: null, // 'modal' | {row index}
   saveNewRequested: false,
+  linkAddOpen: false,
+  linkAddType: null,
 };
 
 /* ============================================================
@@ -1022,7 +1040,7 @@ function taskRowHTML(t, dataset){
   const checkedIcon = t.completed
     ? `<div class="chkbox green checked" onclick="event.stopPropagation();toggleRowComplete('${dataset}','${t.id}')"><span class="material-symbols-outlined">check</span></div>`
     : `<div class="chkbox" onclick="event.stopPropagation();toggleRowComplete('${dataset}','${t.id}')"></div>`;
-  const flag = t.flag ? `<span class="material-symbols-outlined flag">flag</span>` : '';
+  const flag = t.flag ? `<svg class="task-cell-flag" width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="High priority"><path d="M0 15.8333V0H13.3333L11.6667 4.16667L13.3333 8.33333H1.66667V15.8333H0Z" fill="#EB343C"/></svg>` : '';
   const progress = t.progress ? `<span class="chk-progress">${t.progress}</span>` : '';
   const action = t.action ? `<a onclick="event.stopPropagation()">${t.action}</a>` : '';
   const linkPill = t.linkOverflow ? `<span class="link-pill" onclick="event.stopPropagation()">+${t.linkOverflow}<span class="material-symbols-outlined">arrow_drop_down</span></span>` : '';
@@ -1350,6 +1368,8 @@ function openTaskModal(dataset, id, prefillTitle){
   state.modalLinks = task ? JSON.parse(JSON.stringify(task.links||[])) : [];
   state.modalHistory = task ? JSON.parse(JSON.stringify(task.history||[])) : [];
   state.checklistFilter = 'incomplete';
+  state.linkAddOpen = false;
+  state.linkAddType = null;
   document.getElementById('recurringExpanded').classList.add('hidden');
   document.getElementById('recurringCollapsed').classList.remove('hidden');
 
@@ -1469,7 +1489,21 @@ function pickActionItem(label){
   }
 }
 
-/* ---- Details tile: Links ---- */
+/* ---- Details tile: Links ----
+   Matches node 4385:103128, "2.2.6 Task Linking Details": clicking Add Link
+   reveals a Type dropdown + a search field + a cancel X (not a bare "Add
+   Link" that does nothing, which is what this was before). Record lists are
+   drawn from names already used elsewhere in this prototype's own data
+   (myTasks/otherTasks link and vendor fields, My Workspace's task rows) —
+   nothing invented for this feature specifically. Emma's call, 2026-09-10. */
+const LINK_TYPES = ['Tenant', 'Unit', 'Property', 'Vendor'];
+const LINK_RECORDS = {
+  Tenant: ['Daniel Smith', "Patrick O'Malley", 'Marcia Clark', 'Tomas Webber'],
+  Unit: ['107B', 'Riverview #204', 'Lot 3'],
+  Property: ['Riverview Apartments', 'FMHP', 'HH', 'PARK', 'BUCK'],
+  Vendor: ["Anderson Mechanical", "Bob's Appliances", 'Anderson Pest Control'],
+};
+
 function renderModalLinks(){
   const box = document.getElementById('tileLinksList');
   const rows = state.modalLinks.map((l,i)=>`
@@ -1477,12 +1511,81 @@ function renderModalLinks(){
       <span class="lbl">${l.label}</span><a class="val">${l.value}</a>
       ${l.removable ? `<span class="material-symbols-outlined close-x" onclick="removeModalLink(${i})">close</span>` : ''}
     </div>`).join('');
-  box.innerHTML = rows + `<a><span class="material-symbols-outlined icon-16">add</span>Add Link</a>`;
+
+  const addRow = state.linkAddOpen ? `
+    <div class="link-add-row">
+      <div class="input link-type-trigger" onclick="openLinkTypeMenu(event)">
+        <span class="val" style="flex:1;${state.linkAddType ? '' : 'color:var(--text-disabled);font-style:italic;'}">${state.linkAddType || 'Type'}</span>
+        <span class="material-symbols-outlined">keyboard_arrow_down</span>
+      </div>
+      <div class="input link-search-field">
+        <span class="material-symbols-outlined">search</span>
+        <input id="linkSearchInput" type="text" autocomplete="off"
+               placeholder="${state.linkAddType ? 'Find a ' + state.linkAddType.toLowerCase() : 'Choose a type first'}"
+               ${state.linkAddType ? '' : 'disabled'} oninput="onLinkSearchInput()">
+      </div>
+      <span class="material-symbols-outlined link-cancel-x" onclick="closeLinkAdd()">close</span>
+    </div>` : '';
+
+  box.innerHTML = rows + addRow + `<a onclick="openLinkAdd()"><span class="material-symbols-outlined icon-16">add</span>Add Link</a>`;
+
+  if (state.linkAddOpen && state.linkAddType) {
+    const input = document.getElementById('linkSearchInput');
+    if (input) input.focus();
+  }
 }
 function removeModalLink(i){
   state.modalLinks.splice(i,1);
   renderModalLinks();
 }
+function openLinkAdd(){
+  state.linkAddOpen = true;
+  state.linkAddType = null;
+  renderModalLinks();
+}
+function closeLinkAdd(){
+  state.linkAddOpen = false;
+  state.linkAddType = null;
+  document.getElementById('linkTypePanel').hidden = true;
+  document.getElementById('linkResultsPanel').hidden = true;
+  renderModalLinks();
+}
+function openLinkTypeMenu(e){
+  const panel = document.getElementById('linkTypePanel');
+  panel.innerHTML = LINK_TYPES.map(t => `<div class="fp-plain-item" onclick="pickLinkType('${t}')">${t}</div>`).join('');
+  panel.hidden = false;
+  positionPanel(panel, e.currentTarget);
+}
+function pickLinkType(type){
+  state.linkAddType = type;
+  document.getElementById('linkTypePanel').hidden = true;
+  renderModalLinks();
+}
+function onLinkSearchInput(){
+  const q = (document.getElementById('linkSearchInput').value || '').toLowerCase().trim();
+  const records = LINK_RECORDS[state.linkAddType] || [];
+  const matches = q ? records.filter(r => r.toLowerCase().includes(q)) : records;
+  const panel = document.getElementById('linkResultsPanel');
+  if (!matches.length) { panel.hidden = true; return; }
+  panel.innerHTML = matches.map(r =>
+    `<div class="fp-plain-item" onclick="pickLinkRecord('${r.replace(/'/g, "\\'")}')">${r}</div>`
+  ).join('');
+  positionPanel(panel, document.getElementById('linkSearchInput').closest('.link-search-field'));
+  panel.hidden = false;
+}
+function pickLinkRecord(value){
+  state.modalLinks.push({label: state.linkAddType, value, removable: true});
+  document.getElementById('linkResultsPanel').hidden = true;
+  closeLinkAdd();
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.link-type-trigger') && !document.getElementById('linkTypePanel').contains(e.target)) {
+    document.getElementById('linkTypePanel').hidden = true;
+  }
+  if (!e.target.closest('.link-search-field') && !document.getElementById('linkResultsPanel').contains(e.target)) {
+    document.getElementById('linkResultsPanel').hidden = true;
+  }
+});
 
 /* ---- History / Notes tile ---- */
 function renderModalHistory(){
