@@ -741,6 +741,38 @@ at x=737 of a 1164px content area in the frame as well.
 frame has no scrollbar there either, and any `overflow` value on that
 element clips both the active row's 12px bleed and its corner notch.
 
+## The menu was unreachable below 600px — fixed
+
+Emma reported not being able to open the menu in a browser at all. It
+reproduced immediately at narrow width: `.rmx-appbar__icons { display: none }`
+in the phone-width block hid the whole icon cluster, so the hamburger — the
+Mega Menu's only entry point — did not exist to click, and clicking where it
+should have been did nothing silently (this screen suppresses the
+`data-rmx-todo` toast).
+
+That rule predates the menu and was correct when it was written: its own
+comment says it drops "the three Command Launch icon buttons, which are the
+only things in the bar that lead nowhere in this prototype anyway." Building
+the Mega Menu behind the first of those three quietly invalidated it. The
+rule now hides only Reports and Favorites, which still lead nowhere, and
+keeps the Mega Menu button at every width.
+
+**A stopgap phone layout came with it, and it is a stopgap.** Once the button
+was reachable at 338px the desktop layout arrived with its header tabs
+clipped, the close button sitting on top of "Workspace", and the 200px
+sidebar taking most of a 290px-wide menu. Below 600px the header now stacks
+(brand, then tabs full width) and the category list runs as a horizontally
+scrolling strip above its content rather than beside it. The active row's
+12px bleed and corner notch are dropped there, since both point into a
+content area that is no longer to the right. None of this is evidence that
+the real component behaves this way — RMX has no responsive variant of the
+frame, exactly as with the phone app bar. Desktop rendering is unchanged:
+200px sidebar, 211px active row with the notch, five columns in one row.
+
+**Worth taking from this:** a `display: none` justified by "these lead
+nowhere" becomes a bug the moment one of them leads somewhere. Worth a look
+at the other placeholders that responsive rules currently drop.
+
 ---
 
 # Worth raising with the design system

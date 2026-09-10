@@ -798,14 +798,19 @@
      is authored at a fixed desktop width — so this is a stopgap that stops it
      visibly breaking, not a design. Two rules: keep the wordmark on one line
      (it was wrapping to "Re / Manager" and colliding with the icons), and drop
-     the three Command Launch icon buttons, which are the only things in the bar
-     that lead nowhere in this prototype anyway. See PROTOTYPE.md,
-     "Worth raising". */
+     the Command Launch icon buttons that lead nowhere in this prototype.
+     See PROTOTYPE.md, "Worth raising". */
   /* The logo is a vector at a fixed 175x32, and the bar clips rather than
      scrolls, so at phone width it was cut mid-wordmark. Let it scale in its
      column instead — the viewBox keeps it proportional. */
   .rmx-appbar__logo { width: 100%; max-width: 175px; height: auto; }
-  .rmx-appbar__icons { display: none; }
+  /* Keep the Mega Menu button. This rule used to drop all three icon buttons,
+     which was fine while all three were placeholders — but the first one is
+     now the only way into the Mega Menu, so hiding it removed the feature
+     entirely below 600px rather than merely tidying the bar. Reports and
+     Favorites still lead nowhere, so they're the two that go. */
+  .rmx-appbar__icons > button:nth-child(2),
+  .rmx-appbar__icons > button:last-child { display: none; }
 }
 
 /* ---------- toast position ----------
@@ -1039,4 +1044,47 @@
   color: var(--text-primary);
   font-size: 12px;
   flex: none;
+}
+
+/* Phone-width Mega Menu — a stopgap, not a design, the same way the phone
+   app bar above is. The frame is authored at a fixed 1384x541 and RMX has no
+   responsive variant of it, so at 338px the desktop layout arrives with its
+   header tabs clipped, the close button sitting on top of "Administration",
+   and a 200px sidebar eating most of a 290px-wide menu. This stacks the
+   category list above its content instead of beside it, which is how the
+   menu stops being broken at that width — it is not evidence that the real
+   component behaves this way. See PROTOTYPE.md, "Worth raising". */
+@media (max-width: 599px) {
+  .megamenu-overlay { padding: 8px; }
+  .megamenu { max-height: calc(100vh - 16px); }
+  /* Brand on its own line, tabs full-width beneath it. Left as one row, the
+     tabs get squeezed into whatever the brand leaves and the close button
+     lands on top of "Workspace". */
+  .megamenu__header {
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 40px 10px 12px;
+  }
+  .megamenu__tabs { width: 100%; flex: none; gap: 8px 16px; }
+  .megamenu__close { position: absolute; top: 6px; right: 6px; }
+  .megamenu__body { flex-direction: column; min-height: 0; }
+  .megamenu__sidebar {
+    width: 100%;
+    flex: none;
+    flex-direction: row;
+    gap: 0;
+    padding: 0;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--border-primary);
+  }
+  .megamenu__sidebar-item { width: auto; flex: none; height: 36px; }
+  /* The active row's 12px bleed and corner notch both point into a content
+     area that is no longer to its right, so neither applies here. */
+  .megamenu__sidebar-item--active { width: auto; }
+  .megamenu__sidebar-item--active::after { display: none; }
+  .megamenu__content { overflow-x: auto; padding: 16px 12px; }
+  .megamenu__footer { padding: 10px 12px; }
 }
