@@ -400,8 +400,14 @@ a:hover { text-decoration:none; }
 .recurring-cancel{width:20px;height:20px;border-radius:50%;background:var(--rmx-blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none;}
 .recurring-cancel .material-symbols-outlined{font-size:14px;}
 
-.tile-row{display:flex;gap:20px;}
-.tile-row>.tile{flex:1;min-width:0;display:flex;flex-direction:column;}
+/* Task Details / History-Notes sit side by side until the row can't give each
+   tile ~340px, then they stack. 340px is what the Add Link row needs before
+   its type dropdown and search field start truncating (the row itself measures
+   324px). Driven by the row's own width via flex-wrap rather than a viewport
+   media query, since this modal is 1200px capped at 94vw — so it's the modal
+   shrinking, not the screen, that decides. Emma's call, 2026-09-10. */
+.tile-row{display:flex;gap:20px;flex-wrap:wrap;}
+.tile-row>.tile{flex:1 1 340px;min-width:0;display:flex;flex-direction:column;}
 .links-list{display:flex;flex-direction:column;gap:8px;}
 .tile-link-row{display:flex;align-items:center;gap:8px;font-size:14px;}
 .tile-link-row .lbl{color:var(--rmx-navy);}
@@ -411,10 +417,14 @@ a:hover { text-decoration:none; }
 /* Add Link — node 4385:103128, "2.2.6 Task Linking Details": a Type
    dropdown (250px) + a search field (250px) + a cancel X, matching the
    real frame's proportions. */
-.link-add-row{display:flex;align-items:center;gap:8px;max-width:100%;}
-.link-type-trigger{flex:1;min-width:0;cursor:pointer;}
+/* Once the tiles stack, this row only has ~236px to work with and an even
+   split left the search input at 54px. A 130px basis keeps the type dropdown
+   and the search field side by side while they both fit, and stacks them
+   when they don't, rather than shrinking both into uselessness. */
+.link-add-row{display:flex;align-items:center;gap:8px;max-width:100%;flex-wrap:wrap;}
+.link-type-trigger{flex:1 1 130px;min-width:0;cursor:pointer;}
 .link-type-trigger .material-symbols-outlined{margin-left:auto;color:var(--icon-muted);font-size:20px;}
-.link-search-field{flex:1;min-width:0;}
+.link-search-field{flex:1 1 130px;min-width:0;}
 .link-cancel-x{color:var(--rmx-blue);cursor:pointer;font-size:20px;flex:none;}
 .color-swatch{width:14px;height:14px;border-radius:2px;background:#13314c;flex:none;display:inline-block;}
 .uploader{border:1px dashed var(--rmx-hairline);border-radius:var(--r-sm);padding:20px;text-align:center;color:var(--text-primary);font-size:14px;background:var(--bg-subtle);}

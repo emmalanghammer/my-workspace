@@ -885,21 +885,27 @@
   border-bottom: 1px solid var(--border-primary);
   flex: none;
 }
+/* Brand lockup = the real `Admin Menu Logo` component (RMX-Components
+   YhvzfcXOniQJ7xlC8ONzS4, node 10135:5172): a 40x40 `Express Icon / Admin
+   Menu` mark, 20px gap (Spacing/lg), then the title in Web/Heading/L/Regular
+   (24px/32px) at --text-secondary. The first pass used the app bar's full
+   175x32 wordmark scaled to 20px — the wrong asset; this component uses the
+   mark on its own, with no "Rent Manager" wordmark. */
 .megamenu__brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--spacing-lg);
   flex: none;
 }
 .megamenu__brandmark {
-  height: 20px;
-  width: auto;
-  fill: currentColor;
-  color: var(--text-secondary);
+  width: 40px;
+  height: 40px;
+  flex: none;
 }
 .megamenu__title {
-  font-size: 22px;
+  font: var(--type-heading-l-regular);
   color: var(--text-secondary);
+  white-space: nowrap;
 }
 .megamenu__tabs {
   display: flex;

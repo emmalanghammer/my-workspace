@@ -773,6 +773,38 @@ frame, exactly as with the phone app bar. Desktop rendering is unchanged:
 nowhere" becomes a bug the moment one of them leads somewhere. Worth a look
 at the other placeholders that responsive rules currently drop.
 
+## The brand lockup is its own component
+
+Emma pointed at the logo-and-"Menu" lockup: it should match `Admin Menu Logo`
+(RMX-Components `YhvzfcXOniQJ7xlC8ONzS4`, node `10135:5172`). The first pass
+reached for the app bar's full 175x32 wordmark and scaled it to 20px high,
+which was simply the wrong asset — the component uses the **mark on its own,
+with no "Rent Manager" wordmark**:
+
+- a 40x40 `Express Icon / Admin Menu` mark, harvested from the component and
+  spliced in by script rather than retyped (`#mm-brand`)
+- `gap: 20px` — Spacing/lg
+- the title in **Web/Heading/L/Regular** (`--type-heading-l-regular`,
+  400 24px/32px) at `--text-secondary`
+
+Total renders 120px against the component's 121px. The mark keeps its literal
+brand fills rather than `currentColor`, the same as `#rmx-logo` — it's
+three-colour artwork, not a monochrome glyph.
+
+## Task Details / History stack when the row is tight
+
+Emma's call: the two tiles in the Task Details modal stack instead of staying
+side by side once the width is tight. They now wrap below ~340px per tile,
+which is what the Add Link row needs before its controls start truncating.
+
+Driven by the row's own width via `flex-wrap`, not a viewport media query —
+this modal is 1200px capped at 94vw, so it's the modal shrinking that should
+decide, not the screen. Same reasoning applied one level down: the Add Link
+row's type dropdown and search field share a 130px basis, so they sit side by
+side while both fit and stack when they don't. Before that, a stacked tile
+left the search input 54px wide; it's 162px now. Desktop is unchanged —
+566px tiles side by side, both fields in one row.
+
 ---
 
 # Worth raising with the design system
