@@ -264,7 +264,10 @@ a:hover { text-decoration:none; }
 .user-bubble-tooltip{display:none;position:absolute;left:50%;transform:translateX(-50%);top:-37px;background:var(--container-primary,#fff);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);box-shadow:0 3px 3px rgba(0,0,0,.1);padding:8px;width:150px;font-size:14px;line-height:20px;color:var(--rmx-navy);white-space:normal;z-index:50;}
 
 /* Assigned To dropdown (node 4015:69959) — opened by the "+" next to a Users Bubble */
-.assignee-dropdown{position:fixed;z-index:300;width:500px;background:#fff;border-radius:var(--r-sm);box-shadow:0 4px 12px rgba(0,0,0,.1);overflow:hidden;}
+.assignee-dropdown{position:fixed;z-index:300;width:500px;max-width:calc(100vw - 24px);display:flex;flex-direction:column;background:#fff;border-radius:var(--r-sm);box-shadow:0 4px 12px rgba(0,0,0,.1);overflow:hidden;}
+/* Tabs, search and footer hold their height; the list is the part that
+   gives, so a capped panel still shows its tabs and its clear link. */
+.ad-tabs,.ad-search-row,.ad-footer{flex:none;}
 .assignee-dropdown[hidden]{display:none;}
 .ad-tabs{display:flex;}
 .ad-tab{flex:1;text-align:center;padding:16px 8px;font:600 14px/1 'Roboto',sans-serif;color:var(--text-primary);border-bottom:1px solid var(--rmx-hairline);cursor:pointer;}
@@ -272,7 +275,7 @@ a:hover { text-decoration:none; }
 .ad-tab.active{color:var(--rmx-navy);border-bottom:2px solid var(--rmx-orange);}
 .ad-search-row{display:flex;align-items:center;gap:4px;padding:8px;border-bottom:1px solid var(--rmx-hairline);}
 .ad-search-row .input{flex:1;height:36px;}
-.ad-list{max-height:288px;overflow-y:auto;}
+.ad-list{flex:1;min-height:0;max-height:288px;overflow-y:auto;}
 .ad-row{display:flex;align-items:center;gap:4px;padding:8px;cursor:pointer;}
 .ad-row:hover{background:var(--bg-hover);}
 .ad-row .avatar{width:24px;height:24px;border-radius:50%;background:var(--rmx-blue);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex:none;margin-left:8px;}
@@ -492,7 +495,7 @@ a:hover { text-decoration:none; }
 .hn-avatar{width:24px;height:24px;border-radius:50%;background:var(--rmx-blue);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex:none;}
 
 /* Floating dropdown panels (Select an Action / row kebab / add-checklist-item) */
-.float-panel{position:fixed;z-index:300;background:#fff;border-radius:var(--r-sm);box-shadow:var(--shadow-md);padding:8px 0;min-width:180px;}
+.float-panel{position:fixed;z-index:300;background:#fff;border-radius:var(--r-sm);box-shadow:var(--shadow-md);padding:8px 0;min-width:180px;overflow-y:auto;}
 .float-panel[hidden]{display:none;}
 .fp-section-label{display:flex;align-items:center;gap:4px;padding:8px 16px 4px;font-size:14px;font-weight:600;color:var(--rmx-navy);}
 .fp-section-label .material-symbols-outlined{font-size:18px;color:var(--rmx-navy);}
@@ -1992,13 +1995,34 @@ function deleteTask(){
 /* ============================================================
    FLOATING PANEL POSITIONING + GLOBAL DISMISS
    ============================================================ */
+/* Every floating panel here is position:fixed, so once it runs past the
+   bottom of the viewport the overflowing part is simply unreachable -- you
+   cannot scroll to it, because the page scrolls underneath it. That is what
+   cut off the Assigned To list. Emma's call, 2026-09-10: "I need to be able
+   to scroll through all of the users."
+
+   So: measure the panel at its natural height, put it below the anchor if it
+   fits there, flip it above when there is more room that way, and cap its
+   height to whatever room it ends up with so the list inside scrolls instead
+   of spilling. The cap is only ever applied when the panel is taller than the
+   space -- otherwise the stylesheet's own max-height stands. */
 function positionPanel(panel, anchor){
+  const GAP = 6, EDGE = 12;
   const r = anchor.getBoundingClientRect();
-  panel.style.top = (r.bottom + 6) + 'px';
+  panel.style.maxHeight = '';                 // measure at natural size
+  const h = panel.offsetHeight;
+  const below = window.innerHeight - r.bottom - GAP - EDGE;
+  const above = r.top - GAP - EDGE;
+  let top, room;
+  if (h <= below || below >= above) { top = r.bottom + GAP; room = below; }
+  else { room = above; top = r.top - GAP - Math.min(h, above); }
+  if (h > room) panel.style.maxHeight = room + 'px';
+  const used = Math.min(h, room);
+  panel.style.top = Math.max(EDGE, Math.min(top, window.innerHeight - used - EDGE)) + 'px';
   let left = r.left;
-  const maxLeft = window.innerWidth - panel.offsetWidth - 12;
-  if(left > maxLeft) left = Math.max(12, maxLeft);
-  panel.style.left = left + 'px';
+  const maxLeft = window.innerWidth - panel.offsetWidth - EDGE;
+  if (left > maxLeft) left = Math.max(EDGE, maxLeft);
+  panel.style.left = Math.max(EDGE, left) + 'px';
 }
 function dismissFloatingPanels(e){
   const triggers = {actionsPanel:'openActionsMenu', addChecklistPanel:'openAddChecklistMenu', rowKebabPanel:'openRowKebab', assigneeDropdown:'openAssigneeDropdown', checklistItemPanel:'openChecklistItemMenu'};

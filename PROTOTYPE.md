@@ -1038,6 +1038,38 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
 
+## Floating panels stay inside the viewport
+
+Emma: "the scroll for the assigned to dropdown is getting cut off, I need to
+be able to scroll through all of the users." The list itself was already
+scrollable — the problem was one level up. Every floating panel on this screen
+is `position: fixed`, so once one runs past the bottom of the viewport the
+overflowing part is simply unreachable: you cannot scroll to it, because the
+page scrolls underneath it. `positionPanel` had been placing every panel at
+`anchor.bottom + 6` with no vertical clamp at all, and the Assignee field sits
+low enough in a scrolled modal to push a ~420px panel off the bottom.
+
+It now measures the panel at its natural height, puts it below the anchor if
+it fits, **flips it above when there is more room that way**, and caps its
+height to whatever room it ends up with so the contents scroll instead of
+spilling. The cap is only applied when the panel is genuinely taller than the
+space, so the stylesheet's own `max-height` still governs when there is room.
+The Assignee dropdown became a flex column for this: its tabs, search row and
+footer hold their height and the list is the part that gives, so a squeezed
+panel still shows you its tabs and its clear link.
+
+Measured at three viewport heights, with the field deliberately low:
+
+| Viewport | Where it went | Inside the viewport | All 7 users reachable |
+|---|---|---|---|
+| 700px, field low | flipped **above** | yes | yes — list scrolls 343px in 245px |
+| 700px, field high | below | yes | yes |
+| 480px | above, capped to 206px | yes, tabs and footer both visible | yes — 343px in a 60px box |
+
+This fixed every panel on the screen, not just this one — the Actions
+dropdown, the row kebab, the link results and the checklist menus all go
+through the same function.
+
 ## The row hover is dropshadow-sm — and the shadows were all wrong
 
 Emma's call: make the task-row hover less aggressive and use `dropshadow-sm`
