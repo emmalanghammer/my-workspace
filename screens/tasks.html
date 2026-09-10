@@ -164,6 +164,8 @@ a:hover { text-decoration:none; }
 .input input::placeholder{font-style:italic;color:var(--text-disabled);}
 .input .material-symbols-outlined{color:var(--icon-muted);font-size:20px;}
 .input.disabled{background:var(--bg-disabled);color:var(--text-disabled);}
+.input.disabled .material-symbols-outlined{color:var(--text-disabled);}
+.input input:disabled{color:var(--text-disabled);cursor:default;}
 
 /* Checkbox / radio */
 .check{display:inline-flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;user-select:none;}
@@ -1753,10 +1755,15 @@ function renderModalLinks(){
         <span class="val" style="flex:1;${state.linkAddType ? '' : 'color:var(--text-disabled);font-style:italic;'}">${state.linkAddType || 'Type'}</span>
         <span class="material-symbols-outlined">keyboard_arrow_down</span>
       </div>
-      <div class="input link-search-field">
+      <!-- No placeholder, and the whole field reads disabled -- not just the
+           input -- until a type is chosen. Emma's call, 2026-09-10. It was
+           already unusable before a type was picked; it just did not look it,
+           because only the inner <input> carried the attribute while the
+           wrapper stayed white. -->
+      <div class="input link-search-field${state.linkAddType ? '' : ' disabled'}">
         <span class="material-symbols-outlined">search</span>
         <input id="linkSearchInput" type="text" autocomplete="off"
-               placeholder="${state.linkAddType ? 'Find a ' + state.linkAddType.toLowerCase() : 'Choose a type first'}"
+               aria-label="Find a linked record"
                ${state.linkAddType ? '' : 'disabled'} oninput="onLinkSearchInput()">
       </div>
       <span class="material-symbols-outlined link-cancel-x" onclick="closeLinkAdd()">close</span>

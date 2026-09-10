@@ -1020,12 +1020,34 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
 - **A regular due date is `--text-primary`, not `--text-disabled`.** A due
   date is real information; disabled grey reads as "not applicable". Overdue
   rows still override it with `--text-error`.
+- **The overdue fill is 50% of the lightest red Foundations has.** Emma asked
+  for it lighter still, and `#fbd6d8` (`--component-lozenge-error`) is the
+  lightest red the library carries — so rather than invent a hex, this thins
+  the real token over the tile surface: `color-mix(in srgb,
+  var(--component-lozenge-error) 50%, var(--background-tile))`, which computes
+  to **#fdeaec**. The token itself is the fallback for anything without
+  `color-mix()`. See design-system item 27.
+- **The task row shows a pointer.** It opens the task's details and did not
+  say so. Swept the rest of the tile at the same time — the mentions, the
+  icon buttons, the checkbox, the quick-add controls and the carousel dots
+  all already had one; the row was the only gap.
 - **The Toggle Switch's selected segment now rounds at the group's corners.**
   Its blue ring is an inset `box-shadow`, drawn on the button's own square
   box, so at the group's rounded corners it ran into the curve and got sliced
   off — which is what looked wrong. Each end segment carries the matching
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
+
+## Add Link's search field: no placeholder, and it looks disabled
+
+Emma's call: remove the placeholder and keep the field disabled until a type
+is chosen. It *was* already unusable before a type was picked — it just did
+not look it, because only the inner `<input>` carried the attribute while the
+wrapper stayed white. The whole field now takes the `.disabled` treatment
+(`--background-disabled` ground, disabled-grey icon and text) and drops both
+placeholders — the "Choose a type first" prompt and the "Find a tenant" one
+that replaced it. An `aria-label` carries what the placeholder used to say,
+so the field is still named for a screen reader.
 
 ## Make-readys are Issues
 
@@ -1477,3 +1499,11 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     drawn without inventing copy and a colour. Those Scoreboards here carry
     no Lozenge at all rather than guess. If record statuses are a pattern,
     they want either named states or a documented mapping.
+27. **Foundations has no red lighter than `#fbd6d8`.** It is the error
+    Lozenge's tint (`Component/lozenge-error`), and it is the full-strength
+    fill for a small chip — used as the ground of a whole list row it reads
+    heavy, which is what Emma reacted to twice. This prototype thins it with
+    `color-mix()` to 50% over the tile surface (#fdeaec). Every semantic
+    family probably wants a second, paler step for row and section grounds,
+    not just the chip-strength one: the same gap will appear the first time
+    anything needs a pale green or amber row.

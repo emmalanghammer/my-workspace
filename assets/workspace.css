@@ -51,6 +51,14 @@
     1px 2px 6px rgba(76, 76, 76, .12);
   /* Derived from --icon-attention (#f58220). Warm glow behind the welcome band. */
   --ws-glow: rgba(245, 130, 32, .28);
+  /* Overdue-row fill. Emma asked for the light red lighter still, and
+     #fbd6d8 (--component-lozenge-error) is the lightest red Foundations
+     carries — see design-system item 27. So rather than invent a new hex,
+     this thins the real token over the tile surface: 50% of the error
+     Lozenge's own tint — Emma's number — which lands on #fdebec. The token
+     itself is the fallback for anything without color-mix(). */
+  --ws-overdue-fill: color-mix(in srgb, var(--component-lozenge-error) 50%, var(--background-tile));
+
   /* Page gutter beside the welcome band and the tile grid, held all the way
      down to the one-column breakpoint; it steps down below that in the media
      queries at the bottom of this file.
@@ -730,7 +738,9 @@
   padding: var(--spacing-sm);
   border: 1px solid var(--border-disabled);
   border-radius: var(--radius-sm);
-  background: var(--background-tile);
+  background: var(--background-tile);  /* The row opens the task's details, so it says so. Emma's call,
+     2026-09-10. The checkbox inside keeps its own pointer from rmx.css. */
+  cursor: pointer;
 }
 .ws-task:hover { box-shadow: var(--ws-shadow-hover); }
 
@@ -757,7 +767,8 @@
    --border-disabled every other row carries, so the fill is doing the work on
    its own, and the due date keeps its --text-error. */
 .ws-task[data-overdue="true"] {
-  background: var(--component-lozenge-error);
+  background: var(--component-lozenge-error);      /* fallback */
+  background: var(--ws-overdue-fill);
 }
 .ws-task[data-done="true"] {
   opacity: .55;
