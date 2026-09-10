@@ -21,8 +21,15 @@
    ============================================================ */
 
 /* The overlay carries its own scrim -- the screen underneath is still there. */
-.hn-overlay { position: fixed; inset: 0; z-index: 520; display: flex; align-items: flex-start; justify-content: center; padding: 24px; overflow: auto; background: rgba(19, 49, 76, .45); }
-.hn-overlay .hn { width: 100%; box-shadow: var(--hn-shadow-lg); }
+/* The overlay is one size whatever record it opens -- Emma's call,
+   2026-09-10: "the history/notes overlay should be the same height and width
+   across different ones, and the register inside should fill the height." A
+   record with two notes and one with forty are the same shape, and the
+   register takes up the slack rather than the overlay shrinking to fit its
+   contents. The chain of flex:1 + min-height:0 below is what lets the
+   register scroll inside a fixed frame instead of stretching it. */
+.hn-overlay { position: fixed; inset: 0; z-index: 520; display: flex; align-items: stretch; justify-content: center; padding: 24px; overflow: hidden; background: rgba(19, 49, 76, .45); }
+.hn-overlay .hn { flex: 1; width: 100%; max-width: 1561px; min-height: 0; box-shadow: var(--hn-shadow-lg); }
 @media (max-width: 899px) { .hn-overlay { padding: 12px; } }
 
 /* Icons are harvested SVG symbols, never an icon font by ligature -- when
@@ -69,16 +76,17 @@
    register and the count all sit inside it.
    ============================================================ */
 .hn { background:var(--bg-page); border:1px solid var(--rmx-hairline); border-radius:var(--r-sm); display:flex; flex-direction:column; max-width:1561px; margin:0 auto; overflow:hidden; }
+.hn__header { flex:none; }
 .hn__header { display:flex; align-items:center; justify-content:space-between; gap:8px; height:48px; padding:8px 16px; background:var(--bg-surface); border-bottom:1px solid var(--rmx-hairline); }
 /* 14px SemiBold in text-primary — not the 20px navy the Note Details dialog
    uses. Two different Overlay Header variants; both are as authored. */
 .hn__title { font-size:14px; font-weight:600; color:var(--text-primary); white-space:nowrap; }
 .hn__header-icons { display:flex; align-items:center; gap:8px; flex:none; }
 .hn__header-icons .hn-ico { width:24px;height:24px; color:var(--rmx-blue); cursor:pointer; }
-.hn__body { display:flex; flex-direction:column; gap:16px; padding:16px; }
+.hn__body { flex:1; min-height:0; display:flex; flex-direction:column; gap:16px; padding:16px; overflow-y:auto; }
 
 /* ---- Scoreboard ---- */
-.hn-score { display:flex; align-items:stretch; min-height:64px; }
+.hn-score { flex:none; display:flex; align-items:stretch; min-height:64px; }
 .hn-score__bar { width:24px; flex:none; background:var(--border-scoreboard); border-radius:var(--r-sm) 0 0 var(--r-sm); }
 .hn-score__content { flex:1; min-width:0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; padding:16px 32px; background:var(--bg-surface); border:1px solid var(--rmx-hairline); border-left:0; border-radius:0 var(--r-sm) var(--r-sm) 0; }
 .hn-score__lead { display:flex; align-items:center; flex-wrap:wrap; gap:40px; min-width:0; }
@@ -94,7 +102,7 @@
 .hn-lozenge__dot { width:8px; height:8px; border-radius:50%; background:var(--rmx-green); flex:none; }
 
 /* ---- filter rows ---- */
-.hn-filters { display:flex; align-items:flex-end; flex-wrap:wrap; gap:16px; }
+.hn-filters { flex:none; display:flex; align-items:flex-end; flex-wrap:wrap; gap:16px; }
 .hn-field { display:flex; flex-direction:column; gap:4px; min-width:0; }
 /* Filter labels are text-label (#008dd5) in the frame, not the #666 that
    labels a form field inside a dialog. */
@@ -132,7 +140,7 @@
 .hn-chkbox .hn-ico { width:16px;height:16px; color:#fff; display:none; }
 .hn-chkbox.checked { background:var(--icon-attention,#f58220); border-color:var(--icon-attention,#f58220); }
 .hn-chkbox.checked .hn-ico { display:block; }
-.hn-row2 { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+.hn-row2 { flex:none; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
 .hn-row2__right { display:flex; align-items:center; gap:16px; margin-left:auto; }
 .hn-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; height:36px; padding:0 16px; border:none; border-radius:var(--r-sm); font:400 14px 'Roboto',sans-serif; cursor:pointer; white-space:nowrap; }
 .hn-btn .hn-ico { width:20px;height:20px; }
@@ -147,7 +155,9 @@
 .hn-btn-split .caret:hover { background:var(--rmx-blue-hover); }
 
 /* ---- register ---- */
-.hn-register-wrap { background:var(--bg-surface); border:1px solid var(--rmx-hairline); border-radius:var(--r-sm); overflow-x:auto; }
+.hn-register-wrap { flex:1; min-height:180px; overflow:auto; background:var(--bg-surface); border:1px solid var(--rmx-hairline); border-radius:var(--r-sm); }
+/* Sticky header, since the rows scroll inside the wrap now. */
+.hn-register thead th { position:sticky; top:0; z-index:1; }
 .hn-register { width:calc(var(--hc-type) + var(--hc-date) + var(--hc-note) + var(--hc-cat) + var(--hc-user) + var(--hc-kebab)); min-width:100%; border-collapse:collapse; table-layout:fixed; background:var(--bg-surface); }
 .hn-register th { position:relative; height:28px; background:var(--register-header); font-size:12.6px; font-weight:500; letter-spacing:1.1px; color:#fff; text-align:left; padding:4px 8px; border-right:.5px solid rgba(255,255,255,.5); }
 .hn-register th:last-child { border-right:none; }
@@ -163,7 +173,7 @@
 .hn-register .kebab { color:var(--rmx-blue); cursor:pointer; font-size:20px; }
 .hn-register .attach { font-size:16px; color:var(--icon-muted); vertical-align:-3px; margin-right:4px; }
 .hn-empty { text-align:center; color:var(--text-primary); font-style:italic; font-size:12px; padding:22px 8px; }
-.hn-count { text-align:right; font-size:14px; color:var(--text-primary); }
+.hn-count { flex:none; text-align:right; font-size:14px; color:var(--text-primary); }
 /* @tag chip. An outlined pill carrying the person's name with no "@" left
    showing -- orange when the tagged person is you, blue when it is anyone
    else. Emma's call, 2026-09-10, off a screenshot of the real product. The

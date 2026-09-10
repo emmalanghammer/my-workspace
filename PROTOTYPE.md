@@ -1221,6 +1221,24 @@ Worth raising with engineering; it is item 25 below.
   them to, and a half-finished edit surviving into the next sitting would
   read as a bug rather than a feature.
 
+### One size, whatever record it opens
+
+Emma's call: "the history/notes overlay should be the same height and width
+across different ones, and the register inside should fill the height." A
+record with two notes and one with forty are now the same shape — the overlay
+fills the viewport less its 24px margin, capped at the frame's own 1561px, and
+the register takes up the slack rather than the overlay shrinking to fit its
+contents. Measured across all four records at 1440x900: same width (1392),
+same height (852), same Scoreboard height (64) and **the same register height
+(526)**, with the rows sitting at the top and the empty area below them white,
+which is what the real product does.
+
+What makes it work is a chain of `flex: 1` + `min-height: 0` from the overlay
+down to the register, so the register scrolls inside a fixed frame instead of
+stretching it, and everything above it (header, Scoreboard, filters, the
+Add/Print row) is `flex: none` so a long list cannot squeeze them. The
+register's header is sticky now, since its rows scroll.
+
 ### Two things this round taught me
 
 - **The icon-font trap is real.** The overlay first landed on My Workspace
