@@ -19,7 +19,9 @@ work: what is waiting, what is late, who needs an answer.
 | [`screens/my-workspace-original.html`](screens/my-workspace-original.html) | **The original.** Today's My Workspace, rebuilt from frame `My Workspace` (node 4969:70308) in RMX Pages. Four `Tile Style=Workspace` sections with their coloured overlines, the eight Favorites menu areas and four Reports areas with their real Express glyphs, two announcement cards with the real artwork, the Rent Manager University sign-in, and the two hidden-tile links bottom right. Each tile body scrolls, which is what the frame's clipped content is doing. Every link and menu says it is not built rather than dead-ending. |
 | [`screens/my-workspace.html`](screens/my-workspace.html) | **The proposal.** The whole page in its default state, full-bleed and fluid. The announcement band is a two-item carousel; My Tasks filters All / Overdue through a real Toggle Switch and each task ticks off through a real Checkbox, with the open and overdue counts following; every link and menu that goes nowhere says so instead of doing nothing. |
 
-Open `index.html` for the index.
+Open [`compare.html`](compare.html) to see both side by side. The site root
+(`index.html`) redirects straight to the proposed screen — see "Two screens,
+one entry point" below.
 
 ---
 
@@ -200,6 +202,24 @@ with 700 weights. None of that survived.
 Details redesign (`tenant-details.jsx`). Both are in the export and both were
 deliberately left for later. Adding either is a new screen in `screens/`, not a
 restructure — nothing here moves.
+
+## Two screens, one entry point
+
+`screens/my-workspace-original.html` was added by a parallel session, rebuilt
+from the real production frame in RMX Pages rather than from the Claude
+Design export — a faithful baseline to measure the proposal against, not a
+second proposal. Both screens are real and neither is hidden, but only one
+can be "the page" at the root URL.
+
+**The root `index.html` now redirects to `screens/my-workspace.html`** — the
+proposed screen, Emma's call, 2026-09-10. It is a meta-refresh + `location.replace`
+stub with no RMX chrome of its own, so it should never actually render;
+`compare.html` (the old index — the picker with both screens and the
+PROTOTYPE.md link) took over the job `index.html` used to do. Both screens
+carry a slim 28px nav strip above the app bar — plain markup, not a
+component, styled in each screen's own local stylesheet — linking to the
+other screen and to `compare.html`, since landing on the redirect target
+otherwise strands you there.
 
 ## What was read off the live library rather than assumed
 

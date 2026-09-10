@@ -762,3 +762,25 @@
   .rmx-appbar__logo { width: 100%; max-width: 175px; height: auto; }
   .rmx-appbar__icons { display: none; }
 }
+
+/* ---------- prototype navigation strip ----------
+   Not RMX. This prototype ships two screens (this proposal, and the
+   production page rebuilt from the real Figma frame) plus a compare page,
+   and the site root redirects straight to this screen — see PROTOTYPE.md,
+   "Two screens, one entry point". This strip is the only way back to the
+   other two once you land here. Plain markup, no data-rmx-component,
+   deliberately not dressed as any real component. */
+.ws-protonav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  height: 28px;
+  padding: 0 var(--spacing-md);
+  background: var(--container-tertiary);
+  border-bottom: 1px solid var(--border-primary);
+  font: var(--type-label-s-regular);
+  color: var(--text-primary);
+}
+.ws-protonav > span { font-weight: 600; color: var(--text-secondary); }
+.ws-protonav > a { margin-left: auto; }
+.ws-protonav > a + a { margin-left: 0; }

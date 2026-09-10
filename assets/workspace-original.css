@@ -491,3 +491,23 @@
   .ows-areas { flex-wrap: wrap; }
   .ows-areas__col { flex-basis: 100%; }
 }
+
+/* ---------- prototype navigation strip ----------
+   Not RMX, and not part of the harvested frame anatomy above — added so this
+   screen and the proposal can link to each other and to compare.html. Same
+   treatment as .ws-protonav in workspace.css; kept in this file's own
+   namespace since everything else on this screen is ows-*. */
+.ows-protonav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  height: 28px;
+  padding: 0 var(--spacing-md);
+  background: var(--container-tertiary);
+  border-bottom: 1px solid var(--border-primary);
+  font: var(--type-label-s-regular);
+  color: var(--text-primary);
+}
+.ows-protonav > span { font-weight: 600; color: var(--text-secondary); }
+.ows-protonav > a { margin-left: auto; }
+.ows-protonav > a + a { margin-left: 0; }
