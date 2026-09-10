@@ -836,3 +836,187 @@
   border: 0;
   display: block;
 }
+
+/* ---------- Mega Menu ----------
+   Real Figma frame (RMX-Pages fileKey 5XEzI94nmZsWE7rQQ7OIHP, node
+   4077:83115), built in full — header tabs, all 7 Full Menu categories,
+   their real column content and footer links. See PROTOTYPE.md, "The Mega
+   Menu, built in full". z-index sits above the task-details frame (500),
+   since opening the menu while a task is open should sit on top of it. */
+.megamenu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(19, 49, 76, .45);
+  z-index: 600;
+  display: flex;
+  justify-content: center;
+  padding: 56px 24px 24px;
+}
+.megamenu {
+  background: var(--background-card);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px rgba(19, 49, 76, .3);
+  width: 100%;
+  max-width: 1200px;
+  max-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.megamenu__header {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-primary);
+  flex: none;
+}
+.megamenu__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+.megamenu__brandmark {
+  height: 20px;
+  width: auto;
+  fill: currentColor;
+  color: var(--text-secondary);
+}
+.megamenu__title {
+  font-size: 22px;
+  color: var(--text-secondary);
+}
+.megamenu__tabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  flex: 1;
+  min-width: 0;
+}
+.megamenu__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  font: 400 14px/1 'Roboto', sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 4px 0;
+  text-decoration: none;
+}
+.megamenu__tab:hover { text-decoration: none; }
+.megamenu__tab .rmx-icon { width: 18px; height: 18px; flex: none; }
+.megamenu__tab--current { cursor: default; }
+.megamenu__close {
+  flex: none;
+  background: none;
+  border: none;
+  color: var(--text-link);
+  cursor: pointer;
+  display: flex;
+  padding: 4px;
+}
+.megamenu__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.megamenu__sidebar {
+  width: 190px;
+  flex: none;
+  border-right: 1px solid var(--border-primary);
+  padding: 8px 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.megamenu__sidebar-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  color: var(--text-link);
+  font: 400 14px/1.2 'Roboto', sans-serif;
+  cursor: pointer;
+  position: relative;
+}
+.megamenu__sidebar-item--active {
+  background: var(--text-link);
+  color: var(--text-inverse);
+}
+.megamenu__sidebar-item--active::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 7px solid var(--text-secondary);
+}
+.megamenu__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 24px 40px;
+}
+.megamenu__col {
+  flex: 0 1 190px;
+  min-width: 150px;
+}
+.megamenu__col-title {
+  color: var(--text-link);
+  font-size: 14px;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--text-link);
+}
+.megamenu__item {
+  display: block;
+  padding: 6px 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.megamenu__item:hover { text-decoration: none; }
+.megamenu__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 20px;
+  border-top: 1px solid var(--border-primary);
+  flex-wrap: wrap;
+  flex: none;
+}
+.megamenu__footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.megamenu__footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+}
+.megamenu__footer-link .rmx-icon { width: 18px; height: 18px; }
+.megamenu__version {
+  color: var(--text-disabled);
+  font-size: 12px;
+  flex: none;
+}

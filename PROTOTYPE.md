@@ -643,6 +643,68 @@ link chip — `myWorkspaceTasks` in `screens/tasks.html` gained a `links:[...]`
 array for those three entries, so the row's implied link and the modal's
 actual Links section agree.
 
+## The Mega Menu, built in full
+
+The hamburger icon in the app bar was a `data-rmx-todo` placeholder since the
+very first pass at this screen. Emma asked for it built for real, from the
+actual Figma frame — RMX-Pages (fileKey `5XEzI94nmZsWE7rQQ7OIHP`), node
+`4077:83115`, "Menu" — and to build it in full rather than just the one
+category state the frame happened to have open (Full Menu → Receivables).
+
+**What's real.** The header's six tabs (Workspace, Dashboard, Administration,
+Full Menu, Search, Help), all 7 Full Menu categories (Rental Info,
+Accounting, Receivables, Payables, Owners, Services, Communication) with
+their real column headings and roughly 150 real item names transcribed from
+the frame, and each category's real Setup/Reports footer links. Only two
+things actually go anywhere: **Workspace** (the header tab — this page is
+already My Workspace) and **Tasks**, which lives under Services → Calendar →
+Tasks and opens `screens/tasks.html`. Everything else — every other header
+tab, every one of the ~150 module items, every footer link — is
+`data-rmx-todo`; clicking it does nothing, per this screen's own rule that
+`data-rmx-todo` no longer produces a toast (see "Toasts are for a completed
+action"), which turned out to be exactly the right behavior here too: a
+placeholder-heavy screen like this would otherwise toast constantly.
+
+**Tasks isn't a real item anywhere else in this menu.** Checked — there's no
+"Tasks" in Rental Info, Accounting, or any other category. Emma named the one
+real spot for it: Services → Calendar → Tasks, which is where it actually
+sits in the production menu.
+
+**One content bug found in the source frame, kept as-is.** The "Workflows"
+column under Services (Workflow Projects / Workflow Boards / Workflow
+Templates) is titled "Online Listing" in the actual Figma frame — the same
+title text used in the Rental Info tab, apparently reused without renaming.
+Since the rule is to transcribe the real content exactly rather than
+silently fix what looks like someone else's mistake, the title stays
+"Online Listing" here too. Worth flagging to whoever owns this page in
+Figma.
+
+**Icons, harvested, not reused from a similarly-named neighbor.** Four new
+icons for the header tabs — Workspace, Dashboard, Administration, Full Menu —
+came from RMX Iconography (componentKey per symbol, in `index.html`'s own
+icon block). It would have been easy to reach for the Favorites-tile "Admin"
+icon (`system-preferences`, a gear) already sitting in `assets/icons-local.svg`
+since the label matches, but it's a different Figma component (a
+gear-in-hexagon, not the Mega Menu's shield-with-person) — confirmed by
+comparing componentKeys before reusing anything. Setup and Reports footer
+icons *do* reuse the core sprite's `settings`/`reports` symbols — checked
+byte-for-byte against a fresh harvest of the actual footer-link instances
+first, and they're identical.
+
+**One deliberate simplification: the sidebar's active-item notch is a plain
+CSS triangle, not a harvested shape.** The real frame's active category tab
+has a small folded-corner tail bleeding into the content area; that's a
+one-off decorative flourish, not a named, reusable RMX component, so it's
+approximated with a CSS border-triangle rather than being harvested as if it
+were a real icon or component.
+
+**Responsive note.** The frame is a fixed 1384px wide; this screen scales it
+to `min(1200px, 96vw)` with the content area's columns wrapping via flexbox
+instead of the frame's fixed column positions, and the header's six tabs
+wrap to a second line under about 700px of tab-row width. Same deliberate
+"the proposal is the site" responsive approach as the rest of this
+prototype, not a fixed-width recreation.
+
 ---
 
 # Worth raising with the design system
@@ -752,3 +814,10 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     real anatomy), or the rule needs to distinguish "restyled a component
     rmx.css implements" from "implemented a component rmx.css does not".
     Fifteen of this screen's errors are that, and they are the only errors.
+19. **A copy-paste title bug in the Mega Menu frame (RMX-Pages, node
+    `4077:83115`).** Services' "Workflows" column (Workflow Projects /
+    Workflow Boards / Workflow Templates) is titled "Online Listing" —
+    the same title used one tab over, in Rental Info, for its actual Online
+    Listing column. Kept as-is here rather than silently corrected, per the
+    "transcribe exactly, flag what looks wrong" rule — see "The Mega Menu,
+    built in full" above.
