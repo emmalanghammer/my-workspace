@@ -435,6 +435,20 @@ a:hover { text-decoration:none; }
 /* misc */
 .hidden{display:none!important;}
 [hidden]{display:none!important;}
+
+/* Embedded mode — see the ?embed=1 script near the bottom of the page. Only
+   the page's own chrome (app bar, Context Bar, register) and the Select
+   Other Users modal are hidden — the task modal's own scrim, and every
+   floating panel/dropdown/toast IT depends on (Actions Dropdown, Add
+   Checklist Item, the checklist row kebab, Assigned To, the template
+   dialog), stay exactly as they are, since picking an action or reassigning
+   the task from inside the embedded modal still needs them. */
+body.rmx-embedded .rmx-appbar,
+body.rmx-embedded .rmx-contextbar,
+body.rmx-embedded .page-content,
+body.rmx-embedded #usersOverlay { display: none !important; }
+body.rmx-embedded { background: transparent; }
+body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
 </style>
 
 <!-- App bar — Header, Use=Default. Same markup, tokens and icon symbols as
@@ -625,7 +639,7 @@ a:hover { text-decoration:none; }
           <hr class="action-card-divider hidden" id="actionCardDivider">
           <div class="action-detail-row hidden" id="actionDetailRow">
             <div class="field"><label>Type</label><div class="input" style="cursor:pointer;"><span class="val" style="flex:1;">Tenant</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div></div>
-            <div class="field"><label>Email Template</label><div class="input" style="cursor:pointer;"><span class="val" style="flex:1;">Pet Request Approval</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div></div>
+            <div class="field"><label id="actionTemplateLabel">Email Template</label><div class="input" style="cursor:pointer;"><span class="val" style="flex:1;">Pet Request Approval</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div></div>
             <div class="field"><label>Tenant</label><div class="input"><span class="material-symbols-outlined">search</span><span class="val" style="flex:1;">Daniel Smith</span></div></div>
           </div>
         </div>
@@ -821,7 +835,18 @@ const PET_CHECKLIST = () => ([
   {text:"Collect pet deposit / monthly pet rent if required", assignee:"Emma Langhammer", done:false},
   {text:"Send approval email to tenant", assignee:"Emma Langhammer", done:false},
 ]);
-const SEND_EMAIL_DEMO = {type:"Tenant", template:"Pet Request Approval", tenant:"Daniel Smith"};
+// Every Communication action in the Actions Dropdown shows the same shape —
+// Type / [action] Template / Tenant — not just Send Email. Emma's call,
+// 2026-09-10: "this is how a task action should work for any communication
+// based action." Demo content stays on the same Daniel Smith record this
+// whole feature is themed around, with a template name that reads right for
+// that action.
+const COMMUNICATION_ACTION_DEMOS = {
+  'Send Email': {templateLabel:'Email Template', type:'Tenant', template:'Pet Request Approval', tenant:'Daniel Smith'},
+  'Send Text': {templateLabel:'Text Template', type:'Tenant', template:'Pet Request Reminder', tenant:'Daniel Smith'},
+  'Write Letter': {templateLabel:'Letter Template', type:'Tenant', template:'Pet Addendum Cover Letter', tenant:'Daniel Smith'},
+  'Publish Signable Document': {templateLabel:'Document Template', type:'Tenant', template:'Pet Addendum', tenant:'Daniel Smith'},
+};
 // Links + History/Notes shown on the "Approve Daniel for Pet" Task Details example
 // (node 3502:94964, "2.2.5 Task Details - Desktop" -- the only task this feature's mock populates these for).
 const PET_LINKS = () => ([
@@ -874,7 +899,7 @@ let myTasks = [
   ...myWorkspaceTasks,
 
   { id:'t-approve-pet', title:'Approve Daniel for Pet', flag:true, colorBar:null, completed:false,
-    action:'Send Email', actionDetails:{...SEND_EMAIL_DEMO}, dueDate:'09/17/25', dueTime:'11:00 AM', overdue:false,
+    action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/17/25', dueTime:'11:00 AM', overdue:false,
     assigned:[av('EL','blue')], link:'', linkOverflow:0, workflow:'', claim:false,
     checklist: PET_CHECKLIST(), externalCal:true, links: PET_LINKS(), history: PET_HISTORY() },
   { id:'t1', title:'Assign ticket to maintenance staff', flag:true, colorBar:'red', completed:false,
@@ -907,7 +932,7 @@ let myTasks = [
     checklist:[], externalCal:false,
     children:[ {text:'Open service issue list', assigned:[av('EL','blue')]}, {text:'Close all tickets', assigned:[av('PM','notice'),av('SA','notice')]} ] },
   { id:'t-receipts', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:true,
-    action:'Send Email', actionDetails:{...SEND_EMAIL_DEMO}, dueDate:'09/15/25', dueTime:'10:00 AM', overdue:false,
+    action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/15/25', dueTime:'10:00 AM', overdue:false,
     assigned:[av('EL','blue')], link:"Patrick O'Malley", linkOverflow:1, workflow:'', claim:false,
     checklist: PET_CHECKLIST(), externalCal:true },
   { id:'t9', title:'Review owner details for FMHP', flag:false, colorBar:'blue', completed:false,
@@ -1356,6 +1381,12 @@ function openTaskModal(dataset, id, prefillTitle){
 }
 function closeTaskModal(){
   document.getElementById('taskOverlay').hidden = true;
+  // Embedded in My Workspace's in-place overlay (see the ?embed=1 handling
+  // below) — tell the parent to tear the iframe down. Runs on every close
+  // path (X, Cancel, scrim click, Save, Delete), since they all call this.
+  if (window.self !== window.top) {
+    try { window.parent.postMessage({ source: 'rmx-tasks', type: 'close' }, '*'); } catch (e) {}
+  }
 }
 function toggleModalDone(){
   state.modalDone = !state.modalDone;
@@ -1404,11 +1435,12 @@ function renderActionArea(){
     card.classList.add('hidden');
     return;
   }
-  if(state.modalActionLabel==='Send Email' && state.modalActionDetails){
+  if(COMMUNICATION_ACTION_DEMOS[state.modalActionLabel] && state.modalActionDetails){
     divider.classList.remove('hidden');
     row.classList.remove('hidden');
     const fields = row.querySelectorAll('.input .val');
     fields[0].textContent = state.modalActionDetails.type;
+    document.getElementById('actionTemplateLabel').textContent = state.modalActionDetails.templateLabel;
     fields[1].textContent = state.modalActionDetails.template;
     fields[2].textContent = state.modalActionDetails.tenant;
   } else {
@@ -1431,7 +1463,8 @@ function pickActionItem(label){
   document.getElementById('actionsPanel').hidden = true;
   if(state.actionsMenuContext==='modal'){
     state.modalActionLabel = label;
-    state.modalActionDetails = (label==='Send Email') ? {...SEND_EMAIL_DEMO} : null;
+    const demo = COMMUNICATION_ACTION_DEMOS[label];
+    state.modalActionDetails = demo ? {...demo} : null;
     renderActionArea();
   }
 }
@@ -1639,6 +1672,16 @@ initColumnResize();
   const dataset = myTasks.includes(task) ? 'my' : 'other';
   openTaskModal(dataset, task.id);
 })();
+
+// Embedded mode (?embed=1) — My Workspace frames this page in an iframe
+// overlay so a task's details open in place, not as a real navigation (see
+// index.html's [data-ws-task-id] row click). In this mode the register, app
+// bar and Context Bar are pointless — the only thing worth showing is the
+// modal itself — so everything but the overlay is hidden, and the overlay's
+// own scrim becomes the whole visible surface. Emma's call, 2026-09-10.
+if (new URLSearchParams(location.search).get('embed') === '1') {
+  document.body.classList.add('rmx-embedded');
+}
 
 /* data-rmx-todo elements (the borrowed app bar / Context Bar placeholders)
    intentionally do nothing on click and show no toast — Emma's call,

@@ -726,6 +726,19 @@
   </div>
 </main>
 
+<!-- Task details, opened in place — Emma's call, 2026-09-10: clicking a task
+     opens its details on My Workspace itself, not a navigation away. The
+     Task Details modal and everything it depends on (checklist, Assigned To,
+     Select an Action, History/Notes) already exist as real, working code on
+     screens/tasks.html; duplicating that here would fork a few hundred lines
+     of logic that would then drift. Instead this frames that same page in
+     ?embed=1 mode (which hides its own chrome and shows only the modal — see
+     PROTOTYPE.md, "Task details, opened in place") so there is exactly one
+     implementation of the modal, used two ways. -->
+<div id="wsTaskFrame" class="ws-taskframe" hidden>
+  <iframe id="wsTaskFrameFrame" title="Task details" src="about:blank"></iframe>
+</div>
+
 <script src="assets/app.js"></script>
 <script>
 /* Behaviour assets/app.js does not cover. app.js still owns the Checkboxes
@@ -761,6 +774,32 @@
     });
   }
 
+  /* ---- Task details, opened in place ----
+     Frames screens/tasks.html?embed=1&open=<id> full-viewport. That page's
+     own Task Details modal (checklist, Assigned To, Select an Action,
+     History/Notes — all real, all already working) is the only thing it
+     shows in embed mode; its closeTaskModal() posts back to this window on
+     every close path (X, Cancel, scrim click, Save, Delete) rather than
+     duplicating that logic here. See PROTOTYPE.md, "Task details, opened in
+     place". */
+  var taskFrame = document.getElementById('wsTaskFrame');
+  var taskFrameFrame = document.getElementById('wsTaskFrameFrame');
+
+  function openTaskFrame(id) {
+    taskFrameFrame.src = 'screens/tasks.html?embed=1&open=' + encodeURIComponent(id);
+    taskFrame.hidden = false;
+  }
+  function closeTaskFrame() {
+    taskFrame.hidden = true;
+    taskFrameFrame.src = 'about:blank'; // drop the iframe's state so the next open starts clean
+  }
+  window.addEventListener('message', function (e) {
+    if (e.data && e.data.source === 'rmx-tasks' && e.data.type === 'close') closeTaskFrame();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !taskFrame.hidden) closeTaskFrame();
+  });
+
   /* ---- My Tasks: Toggle Switch filter, counts, done state, row -> details ---- */
   var tile = document.querySelector('[data-ws-tasks]');
   if (!tile) return;
@@ -790,12 +829,14 @@
       return;
     }
     // Clicking a task row (not its checkbox) opens that task's full details
-    // on the Tasks screen — same task, same id, not a different one that
-    // happens to share a title. Emma's call, 2026-09-10.
+    // in place, on My Workspace — same task, same id, not a different one
+    // that happens to share a title, and not a navigation away. Emma's
+    // call, 2026-09-10 (twice: first the deep link, then "open on the
+    // workspace" instead of leaving it).
     if (e.target.closest('.rmx-check')) return;
     var row = e.target.closest ? e.target.closest('.ws-task') : null;
     var id = row && row.getAttribute('data-ws-task-id');
-    if (id) location.href = 'screens/tasks.html?open=' + encodeURIComponent(id);
+    if (id) openTaskFrame(id);
   });
 
   tile.addEventListener('rmx:change', function (e) {

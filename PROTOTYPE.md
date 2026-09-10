@@ -14,7 +14,7 @@ what is waiting, what is late, who needs an answer.
 |---|---|
 | [`index.html`](index.html) | **The proposal — the page.** Full-bleed and fluid. The announcement band is a two-item carousel; My Tasks filters All / Overdue through a real Toggle Switch and each task ticks off through a real Checkbox, with the open and overdue counts following; every link and menu that goes nowhere says so instead of doing nothing. |
 | [`screens/my-workspace-original.html`](screens/my-workspace-original.html) | **The original — reference only, not part of the main flow.** Today's My Workspace, rebuilt from frame `My Workspace` (node 4969:70308) in RMX Pages, for comparison against the proposal above. Four `Tile Style=Workspace` sections with their coloured overlines, the eight Favorites menu areas and four Reports areas with their real Express glyphs, two announcement cards with the real artwork, the Rent Manager University sign-in, and the two hidden-tile links bottom right. Reached only by direct link — a one-line "← Back to My Workspace" is its only navigation. |
-| [`screens/tasks.html`](screens/tasks.html) | **Tasks — a separate screen**, brought in from another session's artifact and given a real, matching app bar / Context Bar in this session. My Tasks' "Open Tasks" jump link (the icon in its top-right corner, matching Rent Manager University's icon/pattern — but real, not a `data-rmx-todo` placeholder) opens it. Full task register (My Tasks / Other Users' Tasks), a Quick Add bar, an Assigned To dropdown, a New Task / Task Details modal with a live checklist, links, and history/notes. See "The Tasks screen" below for what it is and isn't. |
+| [`screens/tasks.html`](screens/tasks.html) | **Tasks — a separate screen**, brought in from another session's artifact and given a real, matching app bar / Context Bar in this session. My Tasks' "Open Tasks" jump link (the icon in its top-right corner, matching Rent Manager University's icon/pattern — but real, not a `data-rmx-todo` placeholder) opens the full register here. Individual task rows on My Workspace instead open this screen's Task Details modal *in place*, via `?embed=1` — see "Task details, opened in place" below. Full task register (My Tasks / Other Users' Tasks), a Quick Add bar, an Assigned To dropdown, a New Task / Task Details modal with a live checklist, links, and history/notes. See "The Tasks screen" below for what it is and isn't. |
 
 ---
 
@@ -516,6 +516,57 @@ doc (`design.md §6.3` / an unnamed general rule) as justification. That
 reference doc may be generalizing from a different pattern than this specific
 feature, or may itself be stale. Worth Emma flagging to whoever maintains it
 — the design.md-vs-real-frame gap looks systematic, not a one-off typo.
+
+## Task details, opened in place
+
+Clicking a task on My Workspace used to navigate away to `screens/tasks.html`.
+Emma's call, 2026-09-10: it should open on My Workspace itself.
+
+The Task Details modal — its checklist, Assigned To dropdown, Select an
+Action, Links, History/Notes, every floating panel it needs — already exists
+as real, working code on the Tasks screen. Duplicating a few hundred lines of
+that into `index.html` would fork it, and a fork drifts. Instead:
+
+- `screens/tasks.html` gained an **embed mode** (`?embed=1`): when set, the
+  app bar, Context Bar, register and Select Other Users modal are hidden
+  (`body.rmx-embedded` in its own `<style>`), leaving only the Task Details
+  overlay-scrim visible — which was already full-viewport, already dimmed,
+  already click-outside-to-close. Nothing about the modal itself changed.
+- `closeTaskModal()` gained one addition: when framed (`window.self !==
+  window.top`), it posts `{source:'rmx-tasks', type:'close'}` to the parent.
+  Every close path — the X, Cancel, clicking the scrim, Save, Delete — already
+  calls this function, so all of them notify the parent for free.
+- `index.html` frames `screens/tasks.html?embed=1&open=<id>` full-viewport in
+  an iframe (`#wsTaskFrame`) when a task row is clicked, and tears the iframe
+  down (`src="about:blank"`, so the next open starts clean) on receiving that
+  message, on Escape, or after Save. **One implementation of the modal, used
+  two ways** — a real navigation for anyone who lands on `screens/tasks.html`
+  directly, an in-place overlay for anyone who opens a task from My Workspace.
+
+**My Tasks now caps its height and scrolls.** A 7th task would otherwise push
+the whole page down; `.ws-tasklist` caps at 340px (four full rows measured at
+74px + 8px gap, plus a sliver of the fifth as a scroll cue) and scrolls
+internally past that. Emma's call, 2026-09-10.
+
+## Any Communication action, not just Send Email
+
+The Actions Dropdown's Communication group has four items — Send Text, Write
+Letter, Publish Signable Document, Send Email — but only Send Email showed
+its Type / Template / Tenant detail row; the other three showed a bare
+"Action <name> ×" card with nothing below it. Emma's call, 2026-09-10: "this
+is how a task action should work for any communication based action."
+
+All four now share the same field shape (`COMMUNICATION_ACTION_DEMOS`, keyed
+by action label), the middle field's label swapping per action (Email
+Template / Text Template / Letter Template / Document Template) — the
+non-Communication actions (View Issues, Post Owner Checks, …) are unaffected
+and still show only the bare card. Demo content stays on the Daniel Smith /
+pet-approval record this whole feature is themed around, since that's the
+one real detail the rest of the page already commits to; the specific
+template names (`Pet Request Reminder`, `Pet Addendum Cover Letter`, `Pet
+Addendum`) are realistic-sounding mock content in the same spirit as the
+existing Send Email demo, not something read off a real source — there was
+no real source for these three to read from.
 
 ---
 
