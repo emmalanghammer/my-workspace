@@ -692,6 +692,17 @@
   font: var(--type-label-m-regular);
   cursor: pointer;
 }
+/* The selected segment's blue ring is an inset box-shadow, which is drawn on
+   the button's own square box -- so at the group's rounded corners it ran
+   straight into the curve and got sliced off, which is what looked wrong.
+   Giving each end segment the matching outer radius makes the ring follow the
+   curve instead of being clipped by it. Emma's call, 2026-09-10. */
+[data-rmx-component="Toggle Switch"] > button:first-child {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+[data-rmx-component="Toggle Switch"] > button:last-child {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
 [data-rmx-component="Toggle Switch"] > button[aria-pressed="true"] {
   background: var(--border-disabled);
   color: var(--text-secondary);
@@ -737,18 +748,16 @@
   vertical-align: -2px;
   flex: none;
 }
-/* Overdue rows are outlined, not filled. Emma's call, 2026-09-10: "only
-   display red outline not gradient" — the tinted gradient came from the
-   export and was the loudest thing in the tile, on the rows least in need of
-   decoration. The row keeps the tile surface; only the stroke and the due
-   text carry the error colour.
+/* Overdue rows are filled, not outlined. Emma's call, 2026-09-10: "instead
+   of red outline, display light red background fill on overdue tasks."
 
-   The stroke is --icon-error, because tokens.css has no red border token —
-   see design-system item 12, which reports the same gap for
-   Border/border-success and Border/border-notice. */
+   The fill is --component-lozenge-error, the error Lozenge's own tint, which
+   is the light red the palette actually has — a flat one, not the diagonal
+   gradient the original export used. The border goes back to the same
+   --border-disabled every other row carries, so the fill is doing the work on
+   its own, and the due date keeps its --text-error. */
 .ws-task[data-overdue="true"] {
-  border-color: var(--icon-error);
-  background: var(--background-tile);
+  background: var(--component-lozenge-error);
 }
 .ws-task[data-done="true"] {
   opacity: .55;
@@ -789,7 +798,10 @@
    preview of the Tasks register, so a task should read the same in both
    places. Overdue rows colour it, exactly as the register's Due Date column
    does. */
-.ws-task__due { font: var(--type-label-m-regular); color: var(--text-disabled); white-space: nowrap; }
+/* text-primary, not text-disabled -- Emma's call, 2026-09-10. A due date is
+   real information, and disabled grey reads as "not applicable". Overdue rows
+   override it with text-error just below. */
+.ws-task__due { font: var(--type-label-m-regular); color: var(--text-primary); white-space: nowrap; }
 .ws-task[data-overdue="true"] .ws-task__due { color: var(--text-error); }
 /* The tag Lozenge sits in a dense row, so it runs at the compact end of the
    component rather than the 14px default. */

@@ -921,6 +921,20 @@
     qaddAdd.disabled = true;
     qaddMore.disabled = true;
   }
+  /* Overdue tasks stay at the top of the list, whatever arrives after them.
+     Emma's call, 2026-09-10. A stable partition rather than a sort, so the
+     order inside each group is left alone -- the overdue two keep their
+     oldest-first order and everything else keeps the order it was added in. */
+  function orderTasks() {
+    var all = [].slice.call(list.children).filter(function (el) {
+      return el.classList && el.classList.contains('ws-task');
+    });
+    var overdue = all.filter(function (r) { return r.getAttribute('data-overdue') === 'true'; });
+    var rest = all.filter(function (r) { return r.getAttribute('data-overdue') !== 'true'; });
+    overdue.concat(rest).forEach(function (row) { list.appendChild(row); });
+    rows = overdue.concat(rest);
+  }
+
   function addTaskRow(title) {
     var row = document.createElement('div');
     row.className = 'ws-task';
@@ -935,7 +949,7 @@
       '<span class="ws-task__due">09/17/25 11:00 AM</span>';
     row.querySelector('.ws-task__title').textContent = title;
     list.insertBefore(row, list.firstElementChild);
-    rows.unshift(row);
+    orderTasks();   // a new task is not overdue, so it lands below the overdue ones
     paint();
   }
 
@@ -1012,6 +1026,7 @@
     if (checked && window.RMX) RMX.toast('Task closed successfully', 'success');
   });
 
+  orderTasks();
   paint();
 
 })();

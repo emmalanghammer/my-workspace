@@ -998,6 +998,35 @@ all — the same gap design-system item 12 reports for `Border/border-success`
 and `Border/border-notice`. Using an icon token for a border is not right; it
 is the only red available.
 
+## Overdue rows, reversed again — and three small corrections
+
+Emma's calls, all 2026-09-10, all on the My Tasks tile:
+
+- **Overdue rows are filled, not outlined.** "Instead of red outline,
+  display light red background fill on overdue tasks" — so the red stroke
+  from the round above is gone and the row carries
+  `--component-lozenge-error` (#fbd6d8), the error Lozenge's own tint and the
+  light red the palette actually has. Flat, not the diagonal gradient the
+  original export used. The border is back to the same `--border-disabled`
+  every other row carries, so the fill does the work on its own. This
+  supersedes "Overdue rows are outlined, not filled" below; the intermediate
+  step is what took the gradient off, and the fill came back deliberately.
+- **Overdue tasks are always at the top.** A task added from the mini bar was
+  landing above them, which put the two things most in need of attention
+  third and fourth. It is a stable partition rather than a sort, so the order
+  inside each group is untouched — the overdue two keep their oldest-first
+  order and everything else keeps the order it arrived in. Runs on load too,
+  in case the authored markup ever drifts.
+- **A regular due date is `--text-primary`, not `--text-disabled`.** A due
+  date is real information; disabled grey reads as "not applicable". Overdue
+  rows still override it with `--text-error`.
+- **The Toggle Switch's selected segment now rounds at the group's corners.**
+  Its blue ring is an inset `box-shadow`, drawn on the button's own square
+  box, so at the group's rounded corners it ran into the curve and got sliced
+  off — which is what looked wrong. Each end segment carries the matching
+  outer radius now, so the ring follows the curve instead of being clipped
+  by it.
+
 ## Make-readys are Issues
 
 Emma's correction: "make-ready's don't exist they're just issues." The word
