@@ -64,6 +64,16 @@
    clipped bar on a narrow window. */
 .rmx-appbar__search { width: min(454px, 100%); }
 
+/* Fixed on scroll — Emma's call, 2026-09-10. Neither bar's Figma anatomy
+   says anything about scroll behaviour (a static frame has none to say), so
+   this is prototype judgment, not a harvested value: real Express keeps both
+   bars in view while the page scrolls, and a long My Workspace should too.
+   Stacked in the order they already appear — app bar pinned to the very top,
+   Context Bar directly under it at the app bar's own 48px height — so
+   nothing overlaps and the page content scrolls underneath both. */
+.rmx-appbar { position: sticky; top: 0; z-index: 40; }
+.rmx-contextbar { position: sticky; top: 48px; z-index: 39; }
+
 /* ---------- page ground ----------
    Not .rmx-page: that paints --container-primary (white), which is right for
    a register or detail page and wrong here. My Workspace sits on the Express
