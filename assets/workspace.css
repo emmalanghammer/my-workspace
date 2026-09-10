@@ -591,12 +591,14 @@
   font: var(--type-label-m-regular);
   color: var(--text-disabled);
 }
-/* The second row carries the same three controls as the full bar -- date and
-   time, the assignee bubbles, Add Action -- plus the two links. Emma's call,
-   2026-09-10. They do not fit a 534px tile on one line (the full bar's row is
-   610px before the links), so the row wraps: controls first, links after,
-   side by side when there is room and stacked when there isn't. Same
-   container-driven wrap the Add Link row and the tile pair use. */
+/* The second row carries the date/time field and Add Action, plus the two
+   links. The full bar's assignee bubbles are deliberately absent: this is the
+   My Tasks tile, so a task added here is the signed-in user's by definition --
+   Emma's call, 2026-09-10, "remove the user here since it's only my tasks".
+   What remains still does not fit a 534px tile on one line, so the row wraps:
+   controls first, links after, side by side when there is room and stacked
+   when there isn't. Same container-driven wrap the Add Link row and the Task
+   Details tile pair use. */
 .ws-qadd__actions {
   display: flex;
   align-items: center;
@@ -652,18 +654,6 @@
   justify-content: center;
   border-left: 1px solid var(--border-primary);
   color: var(--text-primary);
-}
-.ws-qadd__who { display: flex; align-items: center; gap: var(--spacing-xxs); flex: none; cursor: pointer; color: var(--text-link); }
-.ws-qadd__who .ub {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius-round);
-  background: var(--container-secondary);
-  color: var(--text-inverse);
-  font: var(--type-label-s-regular);
 }
 .ws-qadd__addaction {
   display: inline-flex;

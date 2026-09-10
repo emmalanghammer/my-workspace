@@ -1170,14 +1170,20 @@ assigned to, and action selector I think as the regular quick add task." Fair
 — the argument for dropping them was that they do not fit, and that is a
 layout problem, not a reason to remove function.
 
-They are all there now, at the component's own values: the 255x36 date/time
-field with its two 28px icon cells, the assignee bubble (Tony), and Add
-Action. The row wraps rather than squeezing — controls on one line, the two
+They are there at the component's own values: the 255x36 date/time field with
+its two 28px icon cells, and Add Action. The assignee bubble was there too
+until Emma removed it — see below. The row wraps rather than squeezing — controls on one line, the two
 links on the next when the tile is too narrow for both, which is the same
 container-driven wrap the Add Link row and the Task Details tile pair use.
 
-Clicking the date, the assignee or Add Action opens the full Task Details
-form with whatever has been typed so far. Those three fields are only really
+**No assignee control.** Emma's call, 2026-09-10: "remove the user here since
+it's only my tasks." The full bar carries assignee bubbles because it sits
+above a register that shows everyone's tasks; this one sits in the My Tasks
+tile, so a task added here is the signed-in user's by definition and a picker
+would only invite you to contradict the tile you are standing in.
+
+Clicking the date or Add Action opens the full Task Details form with whatever
+has been typed so far. Those three fields are only really
 editable there, and porting their three floating panels onto My Workspace
 would mean a second copy of each; this is the same handoff "Add More Details"
 already makes, through the same code path. A control that leads somewhere it
