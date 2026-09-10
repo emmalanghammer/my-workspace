@@ -493,9 +493,10 @@
 }
 
 /* ---------- prototype navigation strip ----------
-   Not RMX, and not part of the harvested frame anatomy above — added so this
-   screen and the proposal can link to each other and to compare.html. Same
-   treatment as .ws-protonav in workspace.css; kept in this file's own
+   Not RMX, and not part of the harvested frame anatomy above. This screen is
+   a reference baseline — RMX Pages' production frame, not the proposal — so
+   it lives unlinked from the main flow and only needs a way back to
+   index.html, which is where the proposal lives. Kept in this file's own
    namespace since everything else on this screen is ows-*. */
 .ows-protonav {
   display: flex;
@@ -510,4 +511,3 @@
 }
 .ows-protonav > span { font-weight: 600; color: var(--text-secondary); }
 .ows-protonav > a { margin-left: auto; }
-.ows-protonav > a + a { margin-left: 0; }

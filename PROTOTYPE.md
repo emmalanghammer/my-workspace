@@ -1,14 +1,10 @@
 # My Workspace
 
 The Express welcome page. It answers: **when a property manager signs in, what
-should the first screen give them?** Two screens sit side by side here.
-
-**The original** is today's page, rebuilt from the production Figma frame:
-four reference tiles — My Favorites, My Reports, Announcements, My Training.
-
-**The proposal** is the Claude Design "Workspace" canvas (Option B — Splashy
-v2) rebuilt on the RMX foundation. It keeps Favorites and Reports and adds the
-work: what is waiting, what is late, who needs an answer.
+should the first screen give them?** Today's My Workspace is four reference
+tiles — My Favorites, My Reports, Announcements, My Training. This is a
+proposal for what replaces it: keeps Favorites and Reports, adds the work —
+what is waiting, what is late, who needs an answer.
 
 **Owner** Emma Langhammer · **Started** 2026-09-10 · **Built with** rmx-prototype 2.0.0
 
@@ -16,12 +12,8 @@ work: what is waiting, what is late, who needs an answer.
 
 | Screen | What it shows |
 |---|---|
-| [`screens/my-workspace-original.html`](screens/my-workspace-original.html) | **The original.** Today's My Workspace, rebuilt from frame `My Workspace` (node 4969:70308) in RMX Pages. Four `Tile Style=Workspace` sections with their coloured overlines, the eight Favorites menu areas and four Reports areas with their real Express glyphs, two announcement cards with the real artwork, the Rent Manager University sign-in, and the two hidden-tile links bottom right. Each tile body scrolls, which is what the frame's clipped content is doing. Every link and menu says it is not built rather than dead-ending. |
-| [`screens/my-workspace.html`](screens/my-workspace.html) | **The proposal.** The whole page in its default state, full-bleed and fluid. The announcement band is a two-item carousel; My Tasks filters All / Overdue through a real Toggle Switch and each task ticks off through a real Checkbox, with the open and overdue counts following; every link and menu that goes nowhere says so instead of doing nothing. |
-
-Open [`compare.html`](compare.html) to see both side by side. The site root
-(`index.html`) redirects straight to the proposed screen — see "Two screens,
-one entry point" below.
+| [`index.html`](index.html) | **The proposal — the page.** Full-bleed and fluid. The announcement band is a two-item carousel; My Tasks filters All / Overdue through a real Toggle Switch and each task ticks off through a real Checkbox, with the open and overdue counts following; every link and menu that goes nowhere says so instead of doing nothing. |
+| [`screens/my-workspace-original.html`](screens/my-workspace-original.html) | **The original — reference only, not part of the main flow.** Today's My Workspace, rebuilt from frame `My Workspace` (node 4969:70308) in RMX Pages, for comparison against the proposal above. Four `Tile Style=Workspace` sections with their coloured overlines, the eight Favorites menu areas and four Reports areas with their real Express glyphs, two announcement cards with the real artwork, the Rent Manager University sign-in, and the two hidden-tile links bottom right. Reached only by direct link — a one-line "← Back to My Workspace" is its only navigation. |
 
 ---
 
@@ -203,23 +195,19 @@ Details redesign (`tenant-details.jsx`). Both are in the export and both were
 deliberately left for later. Adding either is a new screen in `screens/`, not a
 restructure — nothing here moves.
 
-## Two screens, one entry point
+## The proposal is the site
+
+`index.html` *is* the proposed screen — not a picker, not a redirect. Emma's
+call, 2026-09-10: My Workspace is the only page most visitors need, so it lives
+at the root with no indirection. `screens/my-workspace.html` (the old location)
+is now a one-line redirect stub, kept only so an old link or bookmark still
+lands somewhere.
 
 `screens/my-workspace-original.html` was added by a parallel session, rebuilt
-from the real production frame in RMX Pages rather than from the Claude
-Design export — a faithful baseline to measure the proposal against, not a
-second proposal. Both screens are real and neither is hidden, but only one
-can be "the page" at the root URL.
-
-**The root `index.html` now redirects to `screens/my-workspace.html`** — the
-proposed screen, Emma's call, 2026-09-10. It is a meta-refresh + `location.replace`
-stub with no RMX chrome of its own, so it should never actually render;
-`compare.html` (the old index — the picker with both screens and the
-PROTOTYPE.md link) took over the job `index.html` used to do. Both screens
-carry a slim 28px nav strip above the app bar — plain markup, not a
-component, styled in each screen's own local stylesheet — linking to the
-other screen and to `compare.html`, since landing on the redirect target
-otherwise strands you there.
+from the real production frame in RMX Pages rather than from the Claude Design
+export — a faithful baseline to measure the proposal against, not a second
+proposal. It is unlinked from the main flow; its only navigation is a single
+"← Back to My Workspace" line above the app bar.
 
 ## What was read off the live library rather than assumed
 
