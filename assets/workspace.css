@@ -641,11 +641,18 @@
   vertical-align: -2px;
   flex: none;
 }
-/* Overdue rows take the real error tint, faded to the tile surface — the
-   export's move, on the token. */
+/* Overdue rows are outlined, not filled. Emma's call, 2026-09-10: "only
+   display red outline not gradient" — the tinted gradient came from the
+   export and was the loudest thing in the tile, on the rows least in need of
+   decoration. The row keeps the tile surface; only the stroke and the due
+   text carry the error colour.
+
+   The stroke is --icon-error, because tokens.css has no red border token —
+   see design-system item 12, which reports the same gap for
+   Border/border-success and Border/border-notice. */
 .ws-task[data-overdue="true"] {
-  border-color: var(--component-lozenge-error);
-  background: linear-gradient(135deg, var(--component-lozenge-error) 0%, var(--background-tile) 65%);
+  border-color: var(--icon-error);
+  background: var(--background-tile);
 }
 .ws-task[data-done="true"] {
   opacity: .55;

@@ -984,6 +984,40 @@ cannot tick or show nothing at all. Both are worse than a visible default. **A
 single user list would fix it, and which name `CA` belongs to is Emma's
 call** — see also the `SA` bubble noted above, which belongs to neither list.
 
+## Overdue rows are outlined, not filled
+
+Emma's call: "only display red outline not gradient." The tinted gradient
+came in with the Claude Design export and it was the loudest thing in the
+tile, applied to the rows least in need of decoration — the two overdue tasks
+read as a warning banner rather than as two rows in a list. They now keep the
+tile surface and carry the error colour in the stroke and the due text only,
+which is enough to find them and quiet enough to read past.
+
+The stroke is `--icon-error`, because `tokens.css` has no red border token at
+all — the same gap design-system item 12 reports for `Border/border-success`
+and `Border/border-notice`. Using an icon token for a border is not right; it
+is the only red available.
+
+## Make-readys are Issues
+
+Emma's correction: "make-ready's don't exist they're just issues." The word
+was sitting in two record-shaped slots and both are wrong:
+
+- The Diego Alvarez mention read **"Make-Ready · Riverview #204"**, in the
+  same slot where the other three mentions name a real record type — Tenant,
+  Vendor, Owner Prospect. It reads "Issue" now. Its message said "before I
+  close this **WO**", which is the same mistake spelled differently, so that
+  is "before I close this issue".
+- A task's Workflow Project column read **"Make-Ready"**; it is now "Unit
+  Renovation", a project name already in the register's data, so nothing new
+  was invented to fill the gap.
+
+The Mega Menu's **Make Ready Templates** and **Make Ready Board** are left
+exactly as they are. Those came from the real Services frame and are real
+menu items — the product area exists, and it is the *record type* that does
+not. The category Lozenge that read "Make-Ready" is already gone, removed
+with the rest of them in the round above.
+
 ---
 
 # Worth raising with the design system
@@ -1054,7 +1088,11 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     production frame — and neither is in the stylesheet, which carries only
     `border-primary`, `border-secondary`, `border-disabled` and
     `border-attention`. Two of the four tiles on the shipped page cannot be
-    coloured from tokens alone today.
+    coloured from tokens alone today. **There is no red border either** —
+    an outlined overdue row has to reach for `--icon-error`, an icon token, to
+    get a stroke. If `Border/border-error` exists in Foundations it belongs in
+    the stylesheet with the other two; if it does not, it is worth adding,
+    because outlining something as wrong is a common need.
 13. **`Lozenge` has no state for the dark-blue "NEW" badge, so the production
     frame overrides a `State=Success` Lozenge's fill to an unbound #195ca4.**
     Either that badge is wrong and should be a real status state, or the
