@@ -931,6 +931,59 @@ no matter the page." The app-bar lockup is now a link to My Workspace on both
 screens. The anchor is layout-neutral — the mark keeps its 175x32 and
 `flex: none` from `rmx.css` — and it is not underlined in either state.
 
+## The tile's task rows: no category Lozenges, a real priority flag
+
+Emma's call: the category Lozenges come off the My Workspace task rows —
+Eviction, Make-Ready, Vendor, Reporting, Leasing — and a **High Priority
+flag** shows next to the name instead, when the task is saved as high
+priority. The row now carries the task, its priority, its linked entity and
+when it is due, and nothing else. It reads much quieter, and the one piece of
+colour left in it means something.
+
+Two things worth knowing about how it works:
+
+- **The flag is the same glyph the register uses**, lifted from
+  `screens/tasks.html` programmatically rather than retyped — 14x16,
+  `--icon-error`, now `#flag-priority` in this page's sprite. A task looks the
+  same in both places because it is the same geometry.
+- **It follows the saved state, not the state at page load.** Open a task from
+  the tile, mark it High Priority, save, and the flag appears on the row
+  behind you; turn it off and it goes. The framed modal already posted a
+  `close` message on every close path, so saving now posts a `saved` message
+  alongside it (`id`, `flag`, `title`) and the tile applies it. Nothing polls
+  and there is no second copy of the task's state — the frame stays the one
+  implementation of the modal.
+
+The "2 overdue" Lozenge on the filter row stays. It is a status Lozenge doing
+what Lozenges are for, which is precisely what the category tags were not.
+
+## The Assignee field opens the real dropdown
+
+Emma's call: clicking the Assignee field in Task Details opens the
+Users / User Roles dropdown. It was static text — an avatar, "Emma
+Langhammer" and a chevron that did nothing.
+
+It now opens the dropdown that already existed for the quick-add bar's Users
+Bubbles: the same tabs, search, checkboxes, selected count and clear. Two
+changes made that possible without duplicating it — the panel anchors on
+whatever opened it (it had assumed a `.user-bubble-wrap` and got `null` from
+anywhere else), and it keeps a **separate selection per trigger**, because the
+quick-add bar and an open task are two different tasks. Selecting in one no
+longer moves the other. The field renders what is selected: avatars plus
+names, and italic grey "Unassigned" when nothing is, which is the one thing
+italic grey is allowed to mean.
+
+**The field opens on the current user rather than on the task's own
+assignees, and that is deliberate.** The register's avatars take initials from
+`ROLE_USERS` while this dropdown lists `ASSIGNEE_USERS`, and the two lists
+disagree: `CA` is **Charlie Apegian** in one and **Carly Anderson** in the
+other, `JC` and `AS` exist only in the first, `AA`, `AB`, `DG` and `TL` only
+in the second. Seeding the field from a task would mean choosing which list
+wins, and a task assigned to `JC` would either show a name the Users tab
+cannot tick or show nothing at all. Both are worse than a visible default. **A
+single user list would fix it, and which name `CA` belongs to is Emma's
+call** — see also the `SA` bubble noted above, which belongs to neither list.
+
 ---
 
 # Worth raising with the design system

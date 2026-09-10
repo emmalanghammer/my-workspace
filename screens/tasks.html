@@ -403,7 +403,12 @@ a:hover { text-decoration:none; }
 
 .details-box{border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);padding:16px;display:flex;flex-direction:column;gap:12px;}
 .details-row{display:flex;align-items:center;gap:16px;}
-.details-row .assign-field{flex:1;display:flex;align-items:center;gap:8px;height:36px;padding:0 8px;background:var(--bg-subtle);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);}
+.details-row .assign-field{flex:1;display:flex;align-items:center;gap:8px;height:36px;padding:0 8px;background:var(--bg-subtle);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);cursor:pointer;}
+.ma-avatars{display:flex;align-items:center;flex:none;}
+.ma-avatars .ub-avatar{margin-right:-6px;}
+.ma-avatars .ub-avatar:last-child{margin-right:0;}
+#modalAssignNames{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--rmx-navy);}
+#modalAssignNames.empty{font-style:italic;color:var(--text-disabled);}
 .details-divider{border-top:1px solid var(--rmx-hairline);margin:0;}
 .recurring-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
 .recurring-link{display:inline-flex;align-items:center;gap:4px;color:var(--rmx-blue);font-size:14px;cursor:pointer;}
@@ -700,7 +705,11 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
       <!-- Assignee + Scheduling -->
       <div class="details-box" style="margin-bottom:20px;">
         <div class="details-row">
-          <div class="assign-field"><div class="user-avatar" style="width:20px;height:20px;">EL</div><span style="flex:1;">Emma Langhammer</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div>
+          <div class="assign-field" id="modalAssignField" onclick="event.stopPropagation();openAssigneeDropdown(event,'modal')">
+            <div class="ma-avatars" id="modalAssignAvatars"></div>
+            <span style="flex:1;" id="modalAssignNames">Emma Langhammer</span>
+            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+          </div>
           <div class="check"><div class="chkbox" id="privateCheck" onclick="toggleCheckEl(this)"></div><span>Make private</span></div>
         </div>
         <hr class="details-divider">
@@ -1282,34 +1291,58 @@ const ASSIGNEE_USERS = [
   {key:'tlittle', initials:'TL', name:'Tony Little', uname:'tlittle'},
 ];
 let assigneeSelected = new Set(['elanghammer']);
-function openAssigneeDropdown(e){
+/* The Assigned To dropdown is shared by the quick-add bar's Users Bubbles and
+   the Task Details Assignee field. It keeps a separate selection per trigger
+   -- they are two different tasks -- and writes back to whichever one opened
+   it. Emma's call, 2026-09-10: "on click display the user/user roles
+   dropdown". */
+let modalAssignees = new Set();
+let assigneeTarget = 'quickadd';
+function assigneeSet(){ return assigneeTarget==='modal' ? modalAssignees : assigneeSelected; }
+function renderAssigneeTarget(){
+  if(assigneeTarget==='modal') renderModalAssignee(); else renderQuickAddAssignees();
+}
+function renderModalAssignee(){
+  const selected = ASSIGNEE_USERS.filter(u=>modalAssignees.has(u.key));
+  const shown = selected.slice(0,2), overflow = selected.slice(2);
+  let html = shown.map(u=>`<div class="ub-avatar">${u.initials}</div>`).join('');
+  if(overflow.length) html += `<div class="ub-avatar plus">+${overflow.length}</div>`;
+  document.getElementById('modalAssignAvatars').innerHTML = html;
+  const names = document.getElementById('modalAssignNames');
+  names.textContent = selected.length ? selected.map(u=>u.name).join(', ') : 'Unassigned';
+  names.classList.toggle('empty', selected.length===0);
+}
+function openAssigneeDropdown(e, target){
+  assigneeTarget = target || 'quickadd';
   const panel = document.getElementById('assigneeDropdown');
   panel.hidden = false;
   renderAssigneeList();
-  positionPanel(panel, e.currentTarget.closest('.user-bubble-wrap'));
+  // the quick-add bar anchors on its bubble cluster; the modal field is its own anchor
+  positionPanel(panel, e.currentTarget.closest('.user-bubble-wrap') || e.currentTarget);
 }
 function renderAssigneeList(){
   const q = (document.getElementById('adSearchInput').value||'').toLowerCase().trim();
   const list = ASSIGNEE_USERS.filter(u => !q || u.name.toLowerCase().includes(q) || u.uname.toLowerCase().includes(q));
   document.getElementById('adList').innerHTML = list.map(u=>{
-    const checked = assigneeSelected.has(u.key);
+    const checked = assigneeSet().has(u.key);
     return `<div class="ad-row" onclick="toggleAssignee('${u.key}')">
       <div class="chkbox ${checked?'checked':''}">${checked?'<span class="material-symbols-outlined">check</span>':''}</div>
       <div class="avatar">${u.initials}</div>
       <div class="names"><span class="name">${u.name}</span><span class="uname">${u.uname}</span></div>
     </div>`;
   }).join('') || `<div class="checklist-empty">No users match your search.</div>`;
-  document.getElementById('adSelCount').textContent = assigneeSelected.size;
+  document.getElementById('adSelCount').textContent = assigneeSet().size;
 }
 function toggleAssignee(key){
-  if(assigneeSelected.has(key)) assigneeSelected.delete(key); else assigneeSelected.add(key);
+  const set = assigneeSet();
+  if(set.has(key)) set.delete(key); else set.add(key);
   renderAssigneeList();
-  renderQuickAddAssignees();
+  renderAssigneeTarget();
 }
 function clearAssignees(){
-  assigneeSelected.clear();
+  assigneeSet().clear();
   renderAssigneeList();
-  renderQuickAddAssignees();
+  renderAssigneeTarget();
 }
 /* Renders the Users Bubbles cluster in the quick-add bar: up to 2 avatars, then a "+N" overflow bubble */
 function renderQuickAddAssignees(){
@@ -1420,6 +1453,13 @@ function openTaskModal(dataset, id, prefillTitle){
   state.modalDone = task ? !!task.completed : false;
   state.modalExternalCal = task ? !!task.externalCal : false;
   state.modalLinks = task ? JSON.parse(JSON.stringify(task.links||[])) : [];
+  /* The Assignee field opens on the current user, not on the task's own
+     assignees, and that is deliberate: the register's avatars carry initials
+     from ROLE_USERS while this dropdown lists ASSIGNEE_USERS, and the two
+     lists disagree -- `CA` is Charlie Apegian in one and Carly Anderson in
+     the other. Seeding the field from a task would mean choosing which list
+     wins, which is Emma's call, not a prototype's. See PROTOTYPE.md. */
+  modalAssignees = new Set(['elanghammer']);
   state.modalHistory = task ? JSON.parse(JSON.stringify(task.history||[])) : [];
   state.checklistFilter = 'incomplete';
   state.linkAddOpen = false;
@@ -1445,6 +1485,7 @@ function openTaskModal(dataset, id, prefillTitle){
   renderModalChecklist();
   renderModalLinks();
   renderModalHistory();
+  renderModalAssignee();
 
   document.getElementById('deleteBtn').classList.toggle('hidden', !task);
   document.getElementById('saveBtn').classList.toggle('hidden', !task);
@@ -1761,6 +1802,16 @@ function saveTask(mode){
     toast('Task saved');
   }
   renderRegister();
+  /* Framed by My Workspace? Tell it what was saved, so a task's High Priority
+     flag on the tile reflects the saved state rather than the state it had
+     when the page loaded. Emma's call, 2026-09-10: "display the high priority
+     flag icon next to the task name if the task is saved as high priority". */
+  if (!state.modalIsNew && window.self !== window.top && state.modalTask) {
+    try {
+      window.parent.postMessage({ source: 'rmx-tasks', type: 'saved',
+        id: state.modalTask.id, flag: !!taskData.flag, title: taskData.title }, '*');
+    } catch (e) {}
+  }
   if(mode==='new'){
     closeTaskModal();
     openTaskModal(null, null, '');

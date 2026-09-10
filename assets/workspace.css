@@ -626,6 +626,21 @@
   background: var(--background-tile);
 }
 .ws-task:hover { box-shadow: var(--ws-shadow-hover); }
+
+/* High Priority flag, next to the task name. Same harvested glyph the Tasks
+   register uses for the same purpose (14x16, --icon-error), so a task reads
+   the same in both places. Emma's call, 2026-09-10. Category Lozenges came
+   off these rows in the same round -- the row now carries the task, its
+   priority, its linked entity and when it is due, and nothing else. */
+.ws-task__flag {
+  width: 14px;
+  height: 16px;
+  margin-left: var(--spacing-xs);
+  color: var(--icon-error);
+  fill: currentColor;
+  vertical-align: -2px;
+  flex: none;
+}
 /* Overdue rows take the real error tint, faded to the tile surface — the
    export's move, on the token. */
 .ws-task[data-overdue="true"] {
