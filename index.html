@@ -562,7 +562,7 @@
 
           <div class="ws-tasklist">
 
-            <div class="ws-task" data-overdue="true" data-done="false">
+            <div class="ws-task" data-overdue="true" data-done="false" data-ws-task-id="ws-post-notice">
               <span class="rmx-check" data-rmx-component="Checkbox" data-checked="false" role="checkbox" aria-checked="false" tabindex="0">
                 <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
               </span>
@@ -576,7 +576,7 @@
               <span class="ws-task__due">2 days late</span>
             </div>
 
-            <div class="ws-task" data-overdue="true" data-done="false">
+            <div class="ws-task" data-overdue="true" data-done="false" data-ws-task-id="ws-carpet-vendor">
               <span class="rmx-check" data-rmx-component="Checkbox" data-checked="false" role="checkbox" aria-checked="false" tabindex="0">
                 <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
               </span>
@@ -590,7 +590,7 @@
               <span class="ws-task__due">Yesterday</span>
             </div>
 
-            <div class="ws-task" data-overdue="false" data-done="false">
+            <div class="ws-task" data-overdue="false" data-done="false" data-ws-task-id="ws-marcia-clark">
               <span class="rmx-check" data-rmx-component="Checkbox" data-checked="false" role="checkbox" aria-checked="false" tabindex="0">
                 <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
               </span>
@@ -604,7 +604,7 @@
               <span class="ws-task__due">Today 4:00 PM</span>
             </div>
 
-            <div class="ws-task" data-overdue="false" data-done="false">
+            <div class="ws-task" data-overdue="false" data-done="false" data-ws-task-id="ws-hvac-scope">
               <span class="rmx-check" data-rmx-component="Checkbox" data-checked="false" role="checkbox" aria-checked="false" tabindex="0">
                 <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
               </span>
@@ -618,7 +618,7 @@
               <span class="ws-task__due">Today</span>
             </div>
 
-            <div class="ws-task" data-overdue="false" data-done="false">
+            <div class="ws-task" data-overdue="false" data-done="false" data-ws-task-id="ws-rent-roll">
               <span class="rmx-check" data-rmx-component="Checkbox" data-checked="false" role="checkbox" aria-checked="false" tabindex="0">
                 <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
               </span>
@@ -632,7 +632,7 @@
               <span class="ws-task__due">Fri</span>
             </div>
 
-            <div class="ws-task" data-overdue="false" data-done="false">
+            <div class="ws-task" data-overdue="false" data-done="false" data-ws-task-id="ws-tomas-renewal">
               <span class="rmx-check" data-rmx-component="Checkbox" data-checked="false" role="checkbox" aria-checked="false" tabindex="0">
                 <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
               </span>
@@ -729,11 +729,22 @@
 <script src="assets/app.js"></script>
 <script>
 /* Behaviour assets/app.js does not cover. app.js still owns the Checkboxes
-   (it toggles data-checked and fires rmx:change) and every data-rmx-todo
-   toast — this only adds the announcement carousel, the Toggle Switch
-   filter, and the counts that follow from them. No alert(), per the skill. */
+   (it toggles data-checked and fires rmx:change) — this adds the
+   announcement carousel, the Toggle Switch filter and its counts, the
+   completed-task toast, the jump to a task's full details, and suppresses
+   app.js's own data-rmx-todo toast (see below). No alert(), per the skill. */
 (function () {
   'use strict';
+
+  /* Toasts are reserved for a completed action now, not a "not built"
+     placeholder — Emma's call, 2026-09-10. app.js's todos() listens on
+     document in the bubble phase; a capture-phase listener that stops
+     propagation on the same target runs first and pre-empts it site-wide.
+     data-rmx-todo stays on every element as a marker of what isn't built;
+     it just no longer produces a toast when clicked. */
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-rmx-todo]')) e.stopPropagation();
+  }, true);
 
   /* ---- announcements carousel ---- */
   var ann = document.querySelector('[data-ws-ann]');
@@ -750,7 +761,7 @@
     });
   }
 
-  /* ---- My Tasks: Toggle Switch filter, counts, done state ---- */
+  /* ---- My Tasks: Toggle Switch filter, counts, done state, row -> details ---- */
   var tile = document.querySelector('[data-ws-tasks]');
   if (!tile) return;
   var rows = [].slice.call(tile.querySelectorAll('.ws-task'));
@@ -772,17 +783,28 @@
 
   tile.addEventListener('click', function (e) {
     var seg = e.target.closest ? e.target.closest('[data-ws-taskfilter] button') : null;
-    if (!seg) return;
-    filter = seg.getAttribute('data-filter');
-    segs.forEach(function (b) { b.setAttribute('aria-pressed', String(b === seg)); });
-    paint();
+    if (seg) {
+      filter = seg.getAttribute('data-filter');
+      segs.forEach(function (b) { b.setAttribute('aria-pressed', String(b === seg)); });
+      paint();
+      return;
+    }
+    // Clicking a task row (not its checkbox) opens that task's full details
+    // on the Tasks screen — same task, same id, not a different one that
+    // happens to share a title. Emma's call, 2026-09-10.
+    if (e.target.closest('.rmx-check')) return;
+    var row = e.target.closest ? e.target.closest('.ws-task') : null;
+    var id = row && row.getAttribute('data-ws-task-id');
+    if (id) location.href = 'screens/tasks.html?open=' + encodeURIComponent(id);
   });
 
   tile.addEventListener('rmx:change', function (e) {
     var row = e.target.closest ? e.target.closest('.ws-task') : null;
     if (!row) return;
-    row.setAttribute('data-done', String(!!(e.detail && e.detail.checked)));
+    var checked = !!(e.detail && e.detail.checked);
+    row.setAttribute('data-done', String(checked));
     paint();
+    if (checked && window.RMX) RMX.toast('Task closed successfully', 'success');
   });
 
   paint();

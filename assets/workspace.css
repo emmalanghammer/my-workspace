@@ -473,6 +473,16 @@
 }
 
 /* ---------- My Tasks ---------- */
+/* A checked row here means "task complete," matching the Tasks screen's own
+   green-for-completed convention (its row-level .chkbox.green.checked) —
+   not the standard orange checked state real RMX Checkbox otherwise uses
+   everywhere else in this prototype (--icon-attention). Emma's call,
+   2026-09-10, scoped to this tile only; the shared orange default in
+   rmx.css is untouched for every other checkbox. */
+.ws-task .rmx-check[data-checked="true"] .rmx-check__box {
+  background: var(--icon-success);
+  border-color: var(--icon-success);
+}
 .ws-taskbar {
   display: flex;
   align-items: center;
@@ -775,4 +785,14 @@
      column instead — the viewBox keeps it proportional. */
   .rmx-appbar__logo { width: 100%; max-width: 175px; height: auto; }
   .rmx-appbar__icons { display: none; }
+}
+
+/* ---------- toast position ----------
+   Top centre, below the sticky app bar + Context Bar (88px), not proto.css's
+   shared bottom-centre default. Emma's call, 2026-09-10, and reserved for a
+   completed action now — checking off a task, not a data-rmx-todo
+   placeholder (that listener is suppressed in the screen's own script). */
+.rmx-toaststack {
+  top: 96px;
+  bottom: auto;
 }

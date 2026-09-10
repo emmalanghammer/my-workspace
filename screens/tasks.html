@@ -119,7 +119,11 @@ body { margin:0; font-family:'Roboto',sans-serif; font-size:14px; line-height:20
 h1,h2,h3,h4 { color:var(--text-secondary); font-weight:500; margin:0; }
 h3 { font-size:16px; font-weight:600; line-height:24px; }
 a { color:var(--text-link); text-decoration:none; cursor:pointer; }
-a:hover { text-decoration:underline; }
+/* Blue text buttons/links carry no underline in either state — Emma's call,
+   2026-09-10, matching the same house rule already applied on index.html.
+   Every <a> in this file is this blue action-text style; none needed
+   scoping out. */
+a:hover { text-decoration:none; }
 /* Icons never underline, even inside a hovered link/action-text that underlines its own text
    (text-decoration:none on a descendant suppresses the ancestor's underline under that descendant's box). */
 .material-symbols-outlined { font-size:20px; vertical-align:middle; user-select:none; text-decoration:none; }
@@ -180,10 +184,13 @@ a:hover { text-decoration:underline; }
 .pill-counter .material-symbols-outlined{font-size:16px;}
 
 /* Toast */
-/* Top-right corner, 16px below the navy app header and 16px from the edge -- design.md §7.4
-   ("Corner, auto-dismissing"), not the center of the screen. */
-.toast{position:fixed;top:64px;right:16px;z-index:500;display:flex;align-items:center;gap:8px;padding:16px;border-radius:var(--r-sm);background:var(--rmx-navy);color:#fff;font-size:16px;font-weight:600;line-height:24px;box-shadow:var(--shadow-toast);max-width:360px;transform:translateX(12px);opacity:0;pointer-events:none;transition:all .18s ease;}
-.toast.show{transform:translateX(0);opacity:1;}
+/* Top centre, 16px below the app bar + Context Bar. Emma's call, 2026-09-10,
+   reversing this artifact's own earlier decision (top-right corner, citing
+   design.md §7.4 "Corner, auto-dismissing") — and used ONLY for a completed
+   action now (task added/saved/deleted/closed, checklist populated), not for
+   data-rmx-todo placeholders; see the removed listener below this script. */
+.toast{position:fixed;top:96px;left:50%;z-index:500;display:flex;align-items:center;gap:8px;padding:16px;border-radius:var(--r-sm);background:var(--rmx-navy);color:#fff;font-size:16px;font-weight:600;line-height:24px;box-shadow:var(--shadow-toast);max-width:360px;transform:translate(-50%,-8px);opacity:0;pointer-events:none;transition:all .18s ease;}
+.toast.show{transform:translate(-50%,0);opacity:1;}
 .toast.success{background:var(--rmx-green);}
 .toast .material-symbols-outlined{font-size:32px;}
 
@@ -225,7 +232,10 @@ a:hover { text-decoration:underline; }
    the Assigned To dropdown, per node 4543:100018's "Users Bubbles" component. */
 .user-bubble-wrap{position:relative;display:inline-flex;align-items:center;gap:4px;cursor:pointer;}
 .user-bubble-wrap .plus-icon{display:none;color:var(--rmx-blue);font-size:16px;cursor:pointer;}
-.user-bubble-wrap.active .plus-icon{display:inline-flex;}
+/* Reveals on hover of the wrapper (name tooltip + plus icon together), not on
+   a click-toggled state — a single click anywhere in the wrapper now opens
+   the Assigned To dropdown directly. Emma's call, 2026-09-10. */
+.user-bubble-wrap:hover .plus-icon{display:inline-flex;}
 .user-bubble-tooltip{display:none;position:absolute;left:50%;transform:translateX(-50%);top:-37px;background:var(--container-primary,#fff);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);box-shadow:0 3px 3px rgba(0,0,0,.1);padding:8px;width:150px;font-size:14px;line-height:20px;color:var(--rmx-navy);white-space:normal;z-index:50;}
 
 /* Assigned To dropdown (node 4015:69959) — opened by the "+" next to a Users Bubble */
@@ -355,6 +365,12 @@ a:hover { text-decoration:underline; }
 /* The 2px blue bottom border is the Tile's signature underline (design.md §7.3) -- every tile
    uses it, with no per-tile color variant. */
 .tile-header{display:flex;align-items:center;gap:12px;min-height:36px;padding:8px;border-bottom:2px solid var(--rmx-blue);}
+/* History / Notes carries an orange underline in the real Task Details frame
+   (node 3502:94964) — confirmed by screenshot, 2026-09-10 — not the blue
+   every other tile header on this screen uses. The artifact's own comment #8
+   asserted a single blue treatment for all three tile headers on this
+   modal; that assertion doesn't hold for this one against the real frame. */
+.tile-header.orange{border-bottom-color:var(--rmx-orange);}
 .tile-header h3{font-size:14px;font-weight:600;color:var(--text-secondary);}
 .tile-header .actions{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:14px;}
 .tile-header .actions a{color:var(--rmx-blue);display:inline-flex;align-items:center;gap:2px;}
@@ -492,9 +508,9 @@ a:hover { text-decoration:underline; }
             <div class="dt-field">11:00 AM</div>
             <div class="dt-icon"><span class="material-symbols-outlined">schedule</span></div>
           </div>
-          <div class="user-bubble-wrap" onclick="event.stopPropagation();toggleUserBubble(this)">
+          <div class="user-bubble-wrap" onclick="event.stopPropagation();openAssigneeDropdown(event)">
             <div class="ub-avatars" id="qaddAvatars"></div>
-            <span class="material-symbols-outlined plus-icon" onclick="event.stopPropagation();openAssigneeDropdown(event)">add</span>
+            <span class="material-symbols-outlined plus-icon">add</span>
           </div>
           <a class="select-action-link" style="white-space:nowrap;" onclick="event.stopPropagation();openActionsMenu(event,'quickadd')"><span class="material-symbols-outlined">add</span>Add Action</a>
         </div>
@@ -509,7 +525,7 @@ a:hover { text-decoration:underline; }
   <!-- Filters + toggle -->
   <div class="tasks-toolbar">
     <div class="filters">
-      <button class="btn btn-secondary">Bulk Actions <span class="material-symbols-outlined">arrow_drop_down</span></button>
+      <button class="btn btn-primary">Bulk Actions <span class="material-symbols-outlined">arrow_drop_down</span></button>
       <div class="field field-sm">
         <label style="color:var(--rmx-blue);">Search</label>
         <div class="input input-filter"><span class="material-symbols-outlined">search</span><input id="searchInput" type="text" placeholder="Find a task" oninput="renderRegister()"></div>
@@ -518,7 +534,7 @@ a:hover { text-decoration:underline; }
         <label style="color:var(--rmx-blue);">Saved Filters</label>
         <div class="saved-filters-field">
           <div class="input input-filter" style="cursor:pointer;"><span style="flex:1;color:var(--rmx-navy);">&lt;No Filter&gt;</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div>
-          <div class="sf-calendar-btn" title="Saved Filters"><span class="material-symbols-outlined">calendar_today</span></div>
+          <div class="sf-calendar-btn" title="Saved Filters"><span class="material-symbols-outlined">tune</span></div>
         </div>
       </div>
       <div class="qf-link" onclick="toggleQuickFilters()"><span class="material-symbols-outlined">visibility</span><span id="qfLabel">Show Quick Filters</span></div>
@@ -685,7 +701,7 @@ a:hover { text-decoration:underline; }
           </div>
         </div>
         <div class="tile">
-          <div class="tile-header"><h3>History / Notes</h3><div class="actions"><a>Add Note <span class="material-symbols-outlined icon-16">open_in_new</span></a></div></div>
+          <div class="tile-header orange"><h3>History / Notes</h3><div class="actions"><a>Add Note <span class="material-symbols-outlined icon-16">open_in_new</span></a></div></div>
           <div class="tile-body" id="historyNotesBody">
             <table class="hn-table"><thead><tr><th style="width:70px;">Date</th><th style="width:60px;">Type</th><th>Note</th></tr></thead><tbody id="historyBody"></tbody></table>
             <div class="checklist-empty hidden" id="historyEmpty">No History Notes found.</div>
@@ -821,8 +837,42 @@ const PET_HISTORY = () => ([
 
 function av(initials, style){ return {initials, style}; }
 
+// The six tasks shown on My Workspace's My Tasks preview — same ids, same
+// titles, same categories/urgency, so opening one here shows the same task,
+// not a different one with the same name. Combined per Emma's call,
+// 2026-09-10. Assigned to Tony (this prototype's signed-in persona on the
+// My Workspace screen), not Emma Langhammer, since these are Tony's tasks.
+let myWorkspaceTasks = [
+  { id:'ws-post-notice', title:"Post 3-day notice — Flagstone Lot 3", flag:true, colorBar:'red', completed:false,
+    action:null, actionDetails:null, dueDate:'09/08/25', dueTime:'09:00 AM', overdue:true,
+    assigned:[av('TL','blue')], link:"Patrick O'Malley", linkOverflow:0, workflow:'Eviction', claim:false,
+    checklist:[], externalCal:false },
+  { id:'ws-carpet-vendor', title:'Approve carpet vendor quote', flag:false, colorBar:'green', completed:false,
+    action:null, actionDetails:null, dueDate:'09/09/25', dueTime:'05:00 PM', overdue:true,
+    assigned:[av('TL','blue')], link:'Riverview #204', linkOverflow:0, workflow:'Make-Ready', claim:false,
+    checklist:[], externalCal:false },
+  { id:'ws-marcia-clark', title:"Return Marcia Clark's call", flag:false, colorBar:'blue', completed:false,
+    action:null, actionDetails:null, dueDate:'09/10/25', dueTime:'04:00 PM', overdue:false,
+    assigned:[av('TL','blue')], link:'', linkOverflow:0, workflow:'', claim:false,
+    checklist:[], externalCal:false },
+  { id:'ws-hvac-scope', title:'Sign off on Brookside HVAC scope', flag:false, colorBar:'orange', completed:false,
+    action:null, actionDetails:null, dueDate:'09/10/25', dueTime:'05:00 PM', overdue:false,
+    assigned:[av('TL','blue')], link:'Anderson Mechanical', linkOverflow:0, workflow:'Vendor', claim:false,
+    checklist:[], externalCal:false },
+  { id:'ws-rent-roll', title:'Review May rent roll variance', flag:false, colorBar:'blue', completed:false,
+    action:null, actionDetails:null, dueDate:'09/12/25', dueTime:'05:00 PM', overdue:false,
+    assigned:[av('TL','blue')], link:'', linkOverflow:0, workflow:'Reporting', claim:false,
+    checklist:[], externalCal:false },
+  { id:'ws-tomas-renewal', title:'Draft renewal — Tomas Webber', flag:false, colorBar:'green', completed:false,
+    action:null, actionDetails:null, dueDate:'09/17/25', dueTime:'05:00 PM', overdue:false,
+    assigned:[av('TL','blue')], link:'Tomas Webber', linkOverflow:0, workflow:'Leasing', claim:false,
+    checklist:[], externalCal:false },
+];
+
 // My Tasks dataset (screenshots 03/04/05 + the "Approve Daniel for Pet" demo row from screenshot 08)
 let myTasks = [
+  ...myWorkspaceTasks,
+
   { id:'t-approve-pet', title:'Approve Daniel for Pet', flag:true, colorBar:null, completed:false,
     action:'Send Email', actionDetails:{...SEND_EMAIL_DEMO}, dueDate:'09/17/25', dueTime:'11:00 AM', overdue:false,
     assigned:[av('EL','blue')], link:'', linkOverflow:0, workflow:'', claim:false,
@@ -1051,16 +1101,13 @@ function renderTabCounts(){
    TABS
    ============================================================ */
 function switchTab(tab){
-  if(tab==='other'){
-    if(state.selectedUserKeys.size===0){
-      openUsersModal();
-      return;
-    }
-    if(state.activeTab==='other'){
-      // already active — reopen picker to adjust selection (discoverable revisit affordance)
-      openUsersModal();
-      return;
-    }
+  // The Select Other Users overlay shows only the first time this tab is
+  // clicked, before any users are selected. Once a selection exists, every
+  // later click — including clicking the tab again while it's already
+  // active — just switches/stays, no reopen. Emma's call, 2026-09-10.
+  if(tab==='other' && state.selectedUserKeys.size===0){
+    openUsersModal();
+    return;
   }
   state.activeTab = tab;
   document.getElementById('tabMyBtn').classList.toggle('active', tab==='my');
@@ -1124,17 +1171,8 @@ document.addEventListener('click', (e)=>{
     collapseQuickAdd();
   }
 });
-/* Users Bubbles: click the assignee avatar to reveal the "+" (add another assignee) and a name tooltip */
-function toggleUserBubble(el){
-  const wasActive = el.classList.contains('active');
-  document.querySelectorAll('.user-bubble-wrap.active').forEach(w=>w.classList.remove('active'));
-  if(!wasActive) el.classList.add('active');
-}
-document.addEventListener('click', (e)=>{
-  if(!e.target.closest('.user-bubble-wrap')){
-    document.querySelectorAll('.user-bubble-wrap.active').forEach(w=>w.classList.remove('active'));
-  }
-});
+/* Users Bubbles: hovering the wrapper reveals the name tooltip and the "+"
+   together; a single click anywhere in it opens the Assigned To dropdown. */
 
 /* ---- Assigned To dropdown (opened from the Users Bubbles "+") ---- */
 const ASSIGNEE_USERS = [
@@ -1144,6 +1182,7 @@ const ASSIGNEE_USERS = [
   {key:'capegian', initials:'CA', name:'Charlie Apegian', uname:'capegian'},
   {key:'dgardin', initials:'DG', name:'Danielle Gardin', uname:'dgardin'},
   {key:'elanghammer', initials:'EL', name:'Emma Langhammer', uname:'elanghammer'},
+  {key:'tlittle', initials:'TL', name:'Tony Little', uname:'tlittle'},
 ];
 let assigneeSelected = new Set(['elanghammer']);
 function openAssigneeDropdown(e){
@@ -1589,14 +1628,23 @@ renderRegister();
 renderQuickAddAssignees();
 initColumnResize();
 
-/* data-rmx-todo affordances in the borrowed app bar / Context Bar — this
-   screen doesn't link assets/app.js (it stays self-contained), so wire the
-   same behaviour here with its own toast(). */
-document.addEventListener('click', e => {
-  const el = e.target.closest('[data-rmx-todo]');
-  if (!el) return;
-  e.preventDefault();
-  toast(el.getAttribute('data-rmx-todo') || 'Not built in this prototype');
-});
+// Arrived from My Workspace's My Tasks preview — open that task's details
+// directly, so "open a task's details" lands on the actual task, not the
+// bare register. Emma's call, 2026-09-10.
+(function openFromQueryParam(){
+  const id = new URLSearchParams(location.search).get('open');
+  if (!id) return;
+  const task = myTasks.find(t => t.id === id) || otherTasks.find(t => t.id === id);
+  if (!task) return;
+  const dataset = myTasks.includes(task) ? 'my' : 'other';
+  openTaskModal(dataset, task.id);
+})();
+
+/* data-rmx-todo elements (the borrowed app bar / Context Bar placeholders)
+   intentionally do nothing on click and show no toast — Emma's call,
+   2026-09-10: toasts are reserved for a completed action (see toast() calls
+   above: task added/saved/deleted/closed, checklist populated, tab
+   switched). The data-rmx-todo attribute stays as a marker of what isn't
+   built; it just no longer triggers feedback here. */
 </script>
 </body></html>

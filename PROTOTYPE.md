@@ -409,6 +409,114 @@ Rent Manager University" button — but a real `<a href>`, not a
 `data-rmx-todo` placeholder, because a real destination exists. Rent Manager
 University's icon stays a placeholder; it has nowhere real to go yet.
 
+## The two task lists are one task list
+
+My Workspace's My Tasks preview and the Tasks screen's own dataset were two
+independent, disconnected sets of mock data until this pass — a task could
+share a title by coincidence but not an identity. Emma's call, 2026-09-10:
+"combine the data so it all makes sense." Now:
+
+- The six tasks on My Workspace's My Tasks (`ws-post-notice`,
+  `ws-carpet-vendor`, `ws-marcia-clark`, `ws-hvac-scope`, `ws-rent-roll`,
+  `ws-tomas-renewal`) are real entries in `myTasks`, prepended ahead of the
+  artifact's own ten, assigned to `TL` (Tony, this prototype's signed-in
+  persona) rather than Emma Langhammer. Tony was also added to
+  `ASSIGNEE_USERS` so the Assigned To dropdown can find him.
+- **Clicking a `.ws-task` row on My Workspace** (anywhere but its Checkbox)
+  navigates to `screens/tasks.html?open=<id>`, which opens that exact task's
+  Task Details modal on load — the same task, not a different one that
+  happens to share a title.
+- **Checking a My Workspace task done now toasts** — `RMX.toast('Task closed
+  successfully', 'success')`, matching the Tasks register's own message for
+  the same action — and its checked box is **green**
+  (`.ws-task .rmx-check[data-checked="true"] .rmx-check__box`), matching the
+  Tasks screen's own green-for-row-completed convention, scoped to this one
+  tile. Every other checkbox in this prototype stays the real RMX orange
+  (`--icon-attention`); this is a deliberate, narrow exception, not a
+  reinterpretation of the component.
+
+## Toasts are for a completed action, not a placeholder
+
+Emma's call, 2026-09-10, on both screens: a toast means something finished —
+a task added, saved, deleted, closed, a checklist populated from a template —
+never a `data-rmx-todo` "not built" click. Two different mechanisms, because
+the two screens don't share a script:
+
+- **My Workspace** suppresses `assets/app.js`'s `todos()` toast with a
+  capture-phase listener in its own inline script (`e.stopPropagation()` on
+  any `[data-rmx-todo]` click, registered on `document` in the capture
+  phase — capture always runs before app.js's bubble-phase listener,
+  regardless of script load order). `data-rmx-todo` stays on every element as
+  a marker of what isn't built; it just produces no toast now.
+- **The Tasks screen** simply had its equivalent listener (added earlier this
+  session, for its borrowed header) removed outright — its own `toast()`
+  calls for real actions were never touched.
+- **Both toast surfaces moved to top-centre**, below the sticky app bar +
+  Context Bar (96px) — `.rmx-toaststack` on My Workspace (overridden in
+  `workspace.css`; shared `proto.css` still defaults to bottom-centre for
+  every other prototype) and `#toastEl` on the Tasks screen (which
+  **reverses that artifact's own §7.4-cited decision** to move it from
+  centre to a top-right corner).
+
+## Interaction refinements — Emma's calls, 2026-09-10, verified against the live screen
+
+- **The Select Other Users overlay opens once.** It showed on the very first
+  click of "Other Users' Tasks" (correct — no selection exists yet) but also
+  reopened every time you revisited the tab afterward, even with a selection
+  already made ("a discoverable revisit affordance," per the artifact's own
+  comment). That revisit branch is removed: once a selection exists, clicking
+  the tab — including clicking it again while it's already active — just
+  shows the tab.
+- **Users Bubbles: hover reveals, one click acts.** Was a two-step flow —
+  click the avatar to reveal a "+", click the "+" to open Assigned To. Now
+  hovering the wrapper reveals the name tooltip and the "+" together (CSS
+  only, `.user-bubble-wrap:hover`), and a single click anywhere in the
+  wrapper opens Assigned To directly. `toggleUserBubble()` and its
+  click-outside `.active` cleanup are gone — nothing sets that class anymore.
+
+## Checked against the real Figma frames
+
+Two frames, both in `Tasks-Enhancements`
+(fileKey `snY4UsgGTXdSKrLxNqIYuc`), fetched 2026-09-10 — `get_design_context`
+wasn't available in this session (needs a skill this session doesn't have
+loaded), so these came from `get_metadata` + `get_screenshot`, read and
+adapted by hand rather than pasted.
+
+**"Filters + buttons" (node `4077:74713`)** — the toolbar row. Two real
+discrepancies against the artifact's own delivered markup:
+
+- **"Bulk Actions" is filled Primary, not outlined Secondary.** The
+  artifact's own header comment (#5) asserts the opposite, citing "design.md
+  §6.3: the register filter row's leading action is a Secondary button" —
+  that assertion doesn't hold against the actual frame for this feature.
+  Corrected to `.btn-primary`.
+- **The Saved Filters field's attached icon is `tune`** (filter sliders), not
+  `calendar_today`. Corrected.
+
+Everything else on that row — the 16px gaps between Bulk Actions / Search /
+Saved Filters / Show Quick Filters, the toggle switch flush right — already
+matched.
+
+**"2.2.5 Task Details - Desktop" (node `3502:94964`)** — the exact frame the
+artifact's own comments say the New Task / Task Details modal and its Links /
+History-Notes content were built from. Close to begin with; one real
+discrepancy:
+
+- **History / Notes' tile header is orange, not blue.** The artifact's own
+  comment (#8) asserts a single blue underline for every tile header on this
+  modal ("the per-tile green/gray/orange underlines... were invented
+  variants with no basis in design.md") — that assertion doesn't hold for
+  this tile against the real frame either. Fixed with a scoped `.orange`
+  modifier (`.tile-header.orange`), Task Details' header stays blue.
+
+**Pattern worth naming:** the artifact's own header comments record two
+"corrections" the author made *away* from what a real Figma frame actually
+shows (Bulk Actions, and now History/Notes), both citing the same reference
+doc (`design.md §6.3` / an unnamed general rule) as justification. That
+reference doc may be generalizing from a different pattern than this specific
+feature, or may itself be stale. Worth Emma flagging to whoever maintains it
+— the design.md-vs-real-frame gap looks systematic, not a one-off typo.
+
 ---
 
 # Worth raising with the design system
