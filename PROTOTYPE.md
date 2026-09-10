@@ -1018,6 +1018,28 @@ menu items — the product area exists, and it is the *record type* that does
 not. The category Lozenge that read "Make-Ready" is already gone, removed
 with the rest of them in the round above.
 
+## Due dates are dates, not phrases
+
+Emma's call: the tile's due column shows the actual due date and time in the
+register's own format — `09/08/25 09:00 AM` — rather than "2 days late",
+"Yesterday", "Fri" or "Next week". The tile is a preview of the Tasks
+register, so the same task has to read the same in both places; a relative
+phrase also quietly rots, because "Fri" stops being true the moment anyone
+opens the prototype on a different day.
+
+Every value is copied from that task's own record in `screens/tasks.html`, so
+the two screens cannot disagree, and a task added from the mini bar gets the
+same default the register gives a new task (`09/17/25 11:00 AM`). Overdue
+rows still colour the date, which is what the register's Due Date column
+does.
+
+Making the tile honest turned up the same bug inside the Task Details modal:
+its **Due Date and Time fields were hard-coded** to `09/17/25` and
+`11:00 AM`, so a task due the 8th opened claiming it was due the 17th. They
+read from the task now. It is the same shape of defect as the Assignee field
+noted above — a static field that looked filled in — and worth watching for
+in the rest of that form.
+
 ---
 
 # Worth raising with the design system

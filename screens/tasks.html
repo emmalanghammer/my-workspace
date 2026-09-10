@@ -1486,6 +1486,13 @@ function openTaskModal(dataset, id, prefillTitle){
   renderModalLinks();
   renderModalHistory();
   renderModalAssignee();
+  /* Due Date and Time were hard-coded to 09/17/25 11:00 AM for every task,
+     so a task due 09/08 opened claiming it was due the 17th. They read from
+     the task now -- same values the register's Due Date column prints, and
+     the makeBlankTask default for a new one. Found while making the My
+     Workspace tile show real due dates, 2026-09-10. */
+  document.getElementById('dueDateVal').textContent = task ? task.dueDate : '09/17/25';
+  document.getElementById('dueTimeVal').textContent = task ? task.dueTime : '11:00 AM';
 
   document.getElementById('deleteBtn').classList.toggle('hidden', !task);
   document.getElementById('saveBtn').classList.toggle('hidden', !task);

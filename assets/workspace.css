@@ -685,6 +685,11 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+/* The real due date and time, in the register's own format, not a relative
+   phrase ("2 days late", "Next week"). Emma's call, 2026-09-10: the tile is a
+   preview of the Tasks register, so a task should read the same in both
+   places. Overdue rows colour it, exactly as the register's Due Date column
+   does. */
 .ws-task__due { font: var(--type-label-m-semibold); color: var(--text-disabled); white-space: nowrap; }
 .ws-task[data-overdue="true"] .ws-task__due { color: var(--text-error); }
 /* The tag Lozenge sits in a dense row, so it runs at the compact end of the
