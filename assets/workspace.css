@@ -355,6 +355,9 @@
 /* Header icon buttons — the kabob / customise / expand affordances a Tile
    header carries. Deliberately not .rmx-btn: a Button is 36px and these are
    24px icon targets inside a 44px header. */
+/* Also used on the one real <a> in this pattern (My Tasks' "Open Tasks" jump
+   link) alongside every icon-only <button>, so it resets text-decoration
+   explicitly rather than relying on there being no text to underline. */
 .ws-iconbtn {
   width: 24px;
   height: 24px;
@@ -363,6 +366,7 @@
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--icon-tertiary);
+  text-decoration: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;

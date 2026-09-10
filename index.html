@@ -540,10 +540,13 @@
                     data-rmx-todo="Adding a task is not built in this prototype">
               <svg class="rmx-icon"><use href="#add"></use></svg>
             </button>
-            <button class="ws-iconbtn" aria-label="More"
-                    data-rmx-todo="The tile menu is not built in this prototype">
-              <svg class="rmx-icon"><use href="#more-vert"></use></svg>
-            </button>
+            <!-- Real jump link, not a data-rmx-todo placeholder — same icon/pattern as
+                 Rent Manager University's "Open Rent Manager University" button, but
+                 this one actually navigates: My Tasks is a preview, the full Tasks
+                 register (screens/tasks.html) is a real screen in this prototype. -->
+            <a class="ws-iconbtn" aria-label="Open Tasks" href="screens/tasks.html">
+              <svg class="rmx-icon"><use href="#open-in-new"></use></svg>
+            </a>
           </span>
         </div>
         <div class="rmx-tile__body ws-body--list">

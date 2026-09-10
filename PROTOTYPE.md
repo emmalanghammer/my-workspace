@@ -14,6 +14,7 @@ what is waiting, what is late, who needs an answer.
 |---|---|
 | [`index.html`](index.html) | **The proposal — the page.** Full-bleed and fluid. The announcement band is a two-item carousel; My Tasks filters All / Overdue through a real Toggle Switch and each task ticks off through a real Checkbox, with the open and overdue counts following; every link and menu that goes nowhere says so instead of doing nothing. |
 | [`screens/my-workspace-original.html`](screens/my-workspace-original.html) | **The original — reference only, not part of the main flow.** Today's My Workspace, rebuilt from frame `My Workspace` (node 4969:70308) in RMX Pages, for comparison against the proposal above. Four `Tile Style=Workspace` sections with their coloured overlines, the eight Favorites menu areas and four Reports areas with their real Express glyphs, two announcement cards with the real artwork, the Rent Manager University sign-in, and the two hidden-tile links bottom right. Reached only by direct link — a one-line "← Back to My Workspace" is its only navigation. |
+| [`screens/tasks.html`](screens/tasks.html) | **Tasks — a separate screen**, brought in from another session's artifact and given a real, matching app bar / Context Bar in this session. My Tasks' "Open Tasks" jump link (the icon in its top-right corner, matching Rent Manager University's icon/pattern — but real, not a `data-rmx-todo` placeholder) opens it. Full task register (My Tasks / Other Users' Tasks), a Quick Add bar, an Assigned To dropdown, a New Task / Task Details modal with a live checklist, links, and history/notes. See "The Tasks screen" below for what it is and isn't. |
 
 ---
 
@@ -313,9 +314,100 @@ Everything on the page is realistic Express content, but none of it is wired:
 | Two accent colours dropped | My Tasks, Rent Manager University | The export used teal (#0bb5c9) and purple (#9747ff). Foundations has neither, and `background-teal` / `background-purple` exist but are scoped "exclusively for signature fields in Signable Documents". Both sections fall back to a solid real accent rather than being approximated. |
 | The app bar departs from three equal columns | below 900px | Equal columns squeeze Command Launch to nothing. The middle column takes double weight and Company Code hides; below 600px the icon buttons hide and the logo scales. Not a design — see "Worth raising". |
 | Bespoke JS | the inline script in the screen | `assets/app.js` owns the Checkboxes and every `data-rmx-todo` toast. The announcement carousel, the Toggle Switch filter and the counts that follow are not behaviours it covers. No `alert()`. |
+| My Tasks' icon button is a real link, everywhere else it is a placeholder | `[data-ws-tasks] a.ws-iconbtn` | Deliberately inconsistent with its own tile row: every other `data-rmx-todo` icon in this screen is a dead end that toasts. This one genuinely navigates, because `screens/tasks.html` is a real screen to navigate to — see "The Tasks screen" below. |
 
 `assets/workspace.css` is the prototype-local layer and says the same things at
 each rule. A developer handed this deletes it and keeps `rmx.css`.
+
+---
+
+# The Tasks screen
+
+`screens/tasks.html` came in whole from a separate artifact — **"Tasks
+Enhancements"**, shared with Emma, built by a different session — added here
+because it needed a real home to link to from My Tasks' "Open Tasks" icon.
+Its app bar and Context Bar were then brought into conformance with this
+repo, Emma's call on 2026-09-10; everything below the Context Bar is
+untouched.
+
+**What it is:** a complete, working Tasks register — My Tasks / Other Users'
+Tasks, search, a resizable-column register, a Quick Add bar, Users Bubbles
+assignment with an Assigned To dropdown, and a New Task / Task Details modal
+carrying a live checklist (with a "from template" flow), Links, and
+History / Notes. Ten seed tasks on My Tasks, nine on Other Users' Tasks — all
+real property-management content (assign to maintenance, close service
+tickets, distribute owner payments), no lorem ipsum.
+
+**The header conformance pass — what changed:**
+
+- **The app bar and Context Bar are now the real, shared components** —
+  `.rmx-appbar` / `.rmx-contextbar`, linked to this repo's actual
+  `assets/tokens.css`, `assets/type.css` and `assets/rmx.css` rather than
+  re-derived from a different reference doc. The nine icon symbols the header
+  needs (`rmx-logo`, `menu`, `reports`, `grade`, `search`, `notifications`,
+  `print`, `autorenew`, `help`) were copied byte-for-byte from
+  `assets/icons.svg` — verified by diff against the source after copying,
+  because a hand-retyped first attempt at the 10KB logo path drifted by one
+  digit in one coordinate. Not a value to eyeball twice; diff it.
+- **Avatar reads `TL`**, matching Tony (the signed-in persona on the proposal
+  screen), not the original artifact's `EL`.
+- **The Context Bar drops the original's leading "Calendar >" item.** It
+  doesn't match any real Context Bar Item content type (`Title Text | Search
+  | Dropdown | Pagination | Filter Button | Navigation | Icon | Tour Action |
+  Print Button`) — not a case of picking the wrong one, there wasn't a right
+  one to pick. Trailing stays print / autorenew / help — the register-page
+  default (`page-patterns.md`: 23 of 30 register frames carry exactly these
+  three) — so unlike the "Calendar" item, this part of the original was
+  already right, just re-pointed at the real icon symbols.
+- **Full-bleed and sticky-pinned on scroll**, same as the proposal screen.
+- **Its own `toast()` now fires on every borrowed header placeholder**
+  (Mega Menu, Reports, Favorites, Command Launch, Print, Refresh, Help) via a
+  small `data-rmx-todo` click listener added at the end of the existing
+  `<script>` block — this screen doesn't link `assets/app.js`, so the
+  behaviour is wired locally rather than pulling in a script dependency for
+  one listener.
+
+**What is still exactly as delivered, below the Context Bar:**
+
+- **Not built against this repo's foundation.** It carries its own inlined
+  stylesheet and its own token names (`--rmx-blue`, `--r-sm`, …) rather than
+  `assets/tokens.css` / `assets/rmx.css`, and none of its elements carry
+  `data-rmx-component`. Its own header comments say why: it was built RMX-
+  conformant against an earlier design-system reference doc (`design.md`),
+  without Figma access, in one self-contained file — a different (valid)
+  path to the same design system this repo also targets, not a lesser one.
+  Reconciling the *rest* of it onto this repo's foundation — same tokens,
+  same components, same audit — is real work and a real decision, not
+  something to do silently while fixing a header.
+- **Not audited.** `check.mjs` / `audit.mjs` check `data-rmx-component`
+  tagging and this repo's token names; neither exists below the header, so a
+  run would be mostly noise, not signal. Its own header comments are its
+  equivalent of an audit trail — ten numbered RMX-conformance corrections,
+  then an explicit list of extensions beyond the base system and its
+  reasoning for each.
+- **Icons are Material Symbols**, not this repo's harvested SVG sheet — a
+  deliberate substitution its own comments call out (`view_column` for the
+  register's column picker, `apartment` for the property/company domain,
+  `sms` / `mail` / `description` for Send Text / Write Letter / Publish
+  Signable Document), not an oversight. The header conformance pass above
+  added a second, real icon sheet (9 symbols) alongside this one — the two
+  coexist because they cover different, non-overlapping parts of the page.
+- **Not responsive.** Built and verified at a 1920px desktop width; the
+  register does not reflow narrower. Unlike the proposal, this was not
+  something asked for here.
+
+**The integration point — My Tasks' jump link:**
+
+```html
+<a class="ws-iconbtn" aria-label="Open Tasks" href="screens/tasks.html">
+  <svg class="rmx-icon"><use href="#open-in-new"></use></svg>
+</a>
+```
+
+Same icon, same `.ws-iconbtn` treatment as Rent Manager University's "Open
+Rent Manager University" button — but a real `<a href>`, not a
+`data-rmx-todo` placeholder, because a real destination exists. Rent Manager
+University's icon stays a placeholder; it has nowhere real to go yet.
 
 ---
 
