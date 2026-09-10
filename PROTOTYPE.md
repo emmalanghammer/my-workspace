@@ -1194,6 +1194,15 @@ it the way they do in the product: type `@`, the user list opens, typing
 filters it, arrow keys move through it, Enter or a click inserts a chip and
 the caret carries on after it.
 
+**Who you can tag is per record.** Emma's call: "include any users who have
+added notes as users available to @ tag in a note." The list is the seven
+users plus anyone who has written a note on the record you are looking at, so
+Karen Hsu is taggable on Marcia Clark's history, Diego Alvarez on the Issue,
+Sally Klydon on the prospect — none of whom is in `ASSIGNEE_USERS`. It reads
+oddly to get a note from someone you cannot reply to. Derived entries show a
+name and initials but no username, because the note record gives us a name
+and not a login.
+
 The Note field carries no placeholder — Emma's call, 2026-09-10, and it
 matches the real product, whose Note field is empty too. Nothing on screen
 advertises that `@` works, which is how it ships.

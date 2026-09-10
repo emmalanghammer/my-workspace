@@ -145,12 +145,34 @@ function chipHTML(name){
   return '<span class="hn-at ' + (isMe(name) ? 'hn-at--me' : 'hn-at--other') +
          '" contenteditable="false" data-name="' + esc(name) + '">' + esc(name) + '</span>';
 }
+/* Who can be tagged: the user list, plus anyone who has written a note on
+   this record. Emma's call, 2026-09-10 -- "include any users who have added
+   notes as users available to @ tag in a note." Karen Hsu, Diego Alvarez,
+   Anthony Park and Sally Klydon all show up as note authors without being in
+   the user list, and it reads oddly to get a note from someone you cannot
+   reply to. Derived entries carry no username: the record gives us a name,
+   not a login. */
+function initialsFor(name){
+  return String(name).split(/\s+/).filter(Boolean).slice(0, 2)
+    .map(function(part){ return part.charAt(0).toUpperCase(); }).join('');
+}
+function taggableUsers(){
+  var list = USERS.slice();
+  (state.notes || []).forEach(function(n){
+    if (!n.user) return;
+    var known = list.some(function(u){ return u.name === n.user; });
+    if (!known) list.push({ initials: initialsFor(n.user), name: n.user, uname: '' });
+  });
+  return list.sort(function(a, b){ return a.name.localeCompare(b.name); });
+}
 /* A note is stored as plain text with "@Name" in it, so it reads the same in
    the register, in the field and in the data. Only names we know become
-   chips; a stray "@" stays text rather than posing as a person. */
+   chips; a stray "@" stays text rather than posing as a person. "Tony" stays
+   as a short alias for the signed-in user, since the seeded mentions use it.
+   Longest first, so "@Tony Little" is not eaten by "@Tony". */
 function knownNames(){
-  return USERS.map(function(u){ return u.name; })
-    .concat(['Tony','Diego Alvarez','Karen Hsu','Anthony Park','Sally Klydon'])
+  return taggableUsers().map(function(u){ return u.name; })
+    .concat(['Tony'])
     .sort(function(a,b){ return b.length - a.length; });
 }
 function withMentions(text){
@@ -451,7 +473,7 @@ function onNoteInput(){
   if (!tok) { closeAtMenu(); return; }
   var q = tok.query.toLowerCase();
   if (q.length > 24) { closeAtMenu(); return; }
-  atState.matches = USERS.filter(function(u){
+  atState.matches = taggableUsers().filter(function(u){
     return !q || u.name.toLowerCase().indexOf(q) === 0 || u.uname.indexOf(q) === 0
               || u.name.toLowerCase().split(' ').some(function(p){ return p.indexOf(q) === 0; });
   });
