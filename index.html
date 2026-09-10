@@ -577,8 +577,25 @@
               <span class="ws-qadd__count" id="wsQaddCount">0/50</span>
             </div>
             <div class="ws-qadd__actions">
-              <button type="button" id="wsQaddAdd" disabled>Add Task</button>
-              <button type="button" id="wsQaddMore" disabled>Add More Details</button>
+              <div class="ws-qadd__controls">
+                <div class="ws-qadd__dt" data-ws-qadd-more>
+                  <span class="f">09/17/25</span>
+                  <span class="i"><svg class="rmx-icon rmx-icon--16"><use href="#calendar-today"></use></svg></span>
+                  <span class="f">11:00 AM</span>
+                  <span class="i"><svg class="rmx-icon rmx-icon--16"><use href="#schedule"></use></svg></span>
+                </div>
+                <div class="ws-qadd__who" data-ws-qadd-more aria-label="Assigned to Tony Little">
+                  <span class="ub">TL</span>
+                  <svg class="rmx-icon rmx-icon--16"><use href="#add"></use></svg>
+                </div>
+                <button type="button" class="ws-qadd__addaction" data-ws-qadd-more>
+                  <svg class="rmx-icon rmx-icon--16"><use href="#add"></use></svg>Add Action
+                </button>
+              </div>
+              <div class="ws-qadd__links">
+                <button type="button" id="wsQaddAdd" disabled>Add Task</button>
+                <button type="button" id="wsQaddMore" disabled>Add More Details</button>
+              </div>
             </div>
           </div>
 
@@ -616,9 +633,6 @@
               </span>
               <div>
                 <div class="ws-task__title">Return Marcia Clark&rsquo;s call</div>
-                <div class="ws-task__meta">
-                  <span class="ws-task__context">Duplicate charge on statement</span>
-                </div>
               </div>
               <span class="ws-task__due">09/10/25 04:00 PM</span>
             </div>
@@ -642,9 +656,6 @@
               </span>
               <div>
                 <div class="ws-task__title">Review May rent roll variance</div>
-                <div class="ws-task__meta">
-                  <span class="ws-task__context">All properties</span>
-                </div>
               </div>
               <span class="ws-task__due">09/12/25 05:00 PM</span>
             </div>
@@ -656,7 +667,7 @@
               <div>
                 <div class="ws-task__title">Draft renewal &mdash; Tomas Webber</div>
                 <div class="ws-task__meta">
-                  <span class="ws-task__context">Lease ends in 32 days</span>
+                  <span class="ws-task__context ws-task__link"><span class="ws-task__link-label">Tenant</span> <span class="ws-task__link-value">Tomas Webber</span></span>
                 </div>
               </div>
               <span class="ws-task__due">09/17/25 05:00 PM</span>
@@ -937,6 +948,19 @@
     if (!v) return;
     closeQadd();
     openNewTaskFrame(v);
+  });
+  /* The date/time, assignee and Add Action controls show the same defaults the
+     Tasks page's quick-add bar shows, and clicking any of them opens the full
+     Task Details form with whatever has been typed so far -- that form is
+     where those three fields are actually editable, and porting its three
+     floating panels onto this page would mean a second copy of each. Same
+     handoff "Add More Details" makes, so there is one code path. */
+  [].forEach.call(qadd.querySelectorAll('[data-ws-qadd-more]'), function (el) {
+    el.addEventListener('click', function () {
+      var v = qaddInput.value.trim();
+      closeQadd();
+      openNewTaskFrame(v);
+    });
   });
   // clicking away closes an empty bar, same as the full bar on the Tasks page
   document.addEventListener('click', function (e) {

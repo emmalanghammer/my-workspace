@@ -51,10 +51,16 @@
     1px 2px 6px rgba(76, 76, 76, .12);
   /* Derived from --icon-attention (#f58220). Warm glow behind the welcome band. */
   --ws-glow: rgba(245, 130, 32, .28);
-  /* Page gutter: 64px (Spacing/6xl) beside the welcome band and the tile grid,
-     held all the way down to the one-column breakpoint. Steps down below that
-     in the media queries at the bottom of this file. */
-  --ws-page-pad: var(--spacing-6xl);
+  /* Page gutter beside the welcome band and the tile grid, held all the way
+     down to the one-column breakpoint; it steps down below that in the media
+     queries at the bottom of this file.
+
+     72px is Emma's call, 2026-09-10, and it is deliberately OFF the spacing
+     scale — Foundations goes ...40 (3xl), 48 (4xl), 64 (6xl), 80 (8xl), with
+     nothing at 72. Declared as a literal rather than dressed up as a token,
+     and reported in PROTOTYPE.md so the gap is visible rather than hidden
+     behind a var() that looks official. */
+  --ws-page-pad: 72px;
 }
 
 /* ---------- full-bleed chrome ----------
@@ -549,15 +555,92 @@
   font: var(--type-label-m-regular);
   color: var(--text-disabled);
 }
+/* The second row carries the same three controls as the full bar -- date and
+   time, the assignee bubbles, Add Action -- plus the two links. Emma's call,
+   2026-09-10. They do not fit a 534px tile on one line (the full bar's row is
+   610px before the links), so the row wraps: controls first, links after,
+   side by side when there is room and stacked when there isn't. Same
+   container-driven wrap the Add Link row and the tile pair use. */
 .ws-qadd__actions {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: var(--spacing-md);
-  height: 44px;
-  padding: 0 var(--spacing-sm);
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs) var(--spacing-md);
+  min-height: 44px;
+  padding: var(--spacing-xs) var(--spacing-sm);
   background: var(--container-tertiary);
   border-top: 1px solid var(--border-primary);
+}
+.ws-qadd__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+.ws-qadd__links {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-left: auto;
+}
+/* Date + time, one field split by two icon buttons — the component's own
+   255x36 with its 28px icon cells. */
+.ws-qadd__dt {
+  display: flex;
+  align-items: stretch;
+  width: 255px;
+  height: 36px;
+  flex: none;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  background: var(--container-primary);
+  overflow: hidden;
+  cursor: pointer;
+}
+.ws-qadd__dt .f {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-xs);
+  font: var(--type-label-m-regular);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.ws-qadd__dt .i {
+  flex: none;
+  width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid var(--border-primary);
+  color: var(--text-primary);
+}
+.ws-qadd__who { display: flex; align-items: center; gap: var(--spacing-xxs); flex: none; cursor: pointer; color: var(--text-link); }
+.ws-qadd__who .ub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-round);
+  background: var(--container-secondary);
+  color: var(--text-inverse);
+  font: var(--type-label-s-regular);
+}
+.ws-qadd__addaction {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xxs);
+  flex: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: var(--type-label-m-regular);
+  color: var(--text-link);
+  white-space: nowrap;
+  cursor: pointer;
 }
 /* Both links stay put and go grey until there is a name to add, exactly as
    they do on the full bar. Never underlined, in either state. */
@@ -660,7 +743,10 @@
   border-color: var(--border-disabled);
 }
 .ws-task[data-done="true"] .ws-task__title { text-decoration: line-through; }
-.ws-task__title { font: var(--type-paragraph-s-semibold); color: var(--text-secondary); }
+/* Regular weight, not SemiBold. Emma's call, 2026-09-10 -- with the
+   category Lozenges gone the row has less competing for attention, and a
+   list of bold titles reads as a list of headings. */
+.ws-task__title { font: var(--type-paragraph-s-regular); color: var(--text-secondary); }
 .ws-task__meta {
   display: flex;
   align-items: center;
@@ -690,7 +776,7 @@
    preview of the Tasks register, so a task should read the same in both
    places. Overdue rows colour it, exactly as the register's Due Date column
    does. */
-.ws-task__due { font: var(--type-label-m-semibold); color: var(--text-disabled); white-space: nowrap; }
+.ws-task__due { font: var(--type-label-m-regular); color: var(--text-disabled); white-space: nowrap; }
 .ws-task[data-overdue="true"] .ws-task__due { color: var(--text-error); }
 /* The tag Lozenge sits in a dense row, so it runs at the compact end of the
    component rather than the 14px default. */

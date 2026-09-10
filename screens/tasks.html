@@ -362,14 +362,35 @@ a:hover { text-decoration:none; }
 .hp-chip.active{background:var(--lozenge-error);color:var(--rmx-navy);}
 .hp-chip:not(.active):hover{background:var(--lozenge-error);color:var(--rmx-navy);}
 .select-action-link{display:inline-flex;align-items:center;gap:2px;color:var(--rmx-blue);font-size:14px;cursor:pointer;}
+
 /* Action card: per the "2.2.5 Task Details - Desktop" mock, a selected action lives in its own
    bordered/padded card with a "Action <name> x" row, a divider, then the detail fields. */
 .action-card{border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);padding:16px;display:flex;flex-direction:column;gap:12px;}
 .action-card-row1{display:flex;align-items:center;gap:8px;}
-.action-card-row1 .lbl{font-size:14px;color:var(--text-primary);}
+.action-card-row1 .lbl{font-size:14px;color:var(--rmx-navy);}
 .action-card-row1 .val{font-size:14px;color:var(--rmx-blue);}
 .action-card-row1 .close-x{color:var(--rmx-blue);cursor:pointer;font-size:20px;}
 .action-card-divider{border-top:1px solid var(--rmx-hairline);margin:0;width:100%;}
+/* ---- New Action UI (Tasks Enhancements 4465:114954) ----
+   One card, four states: "+ Add Action" -> the Action dropdown field ->
+   that field open -> the action selected with its detail fields. The card is
+   the same in all four (1px hairline, 4px radius, 16px padding, 12px gap);
+   only its direction changes -- a row with the field and its cancel X while
+   choosing, a column otherwise. Emma's call, 2026-09-10: "make the select an
+   action follow this UI exactly". */
+.action-card--row{flex-direction:row;align-items:flex-end;gap:12px;}
+.action-add-link{display:inline-flex;align-items:center;justify-content:center;gap:4px;border-radius:var(--r-sm);color:var(--rmx-blue);font-size:14px;cursor:pointer;}
+.action-add-link .material-symbols-outlined{font-size:20px;}
+.action-field{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.action-field__label{font-size:14px;color:var(--text-primary);}
+.action-field__input{display:flex;align-items:center;gap:8px;height:36px;padding:0 8px;background:var(--component-input-default,#f5f8fa);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);cursor:pointer;}
+.action-field__input.open{border-color:var(--rmx-blue);}
+.action-field__input .val{flex:1;min-width:0;font-size:14px;color:var(--rmx-navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.action-field__input .material-symbols-outlined{flex:none;font-size:20px;color:var(--rmx-blue);}
+/* The cancel X sits outside the field and aligns to its 36px row, not to the
+   label above it -- which is why the card is items-end while choosing. */
+.action-cancel{display:flex;align-items:center;height:36px;flex:none;cursor:pointer;}
+.action-cancel .material-symbols-outlined{font-size:20px;color:var(--rmx-blue);}
 .action-detail-row{display:flex;gap:8px;align-items:flex-end;width:100%;}
 .action-detail-row .field{flex:1;}
 
@@ -462,7 +483,29 @@ a:hover { text-decoration:none; }
 .fp-divider{height:1px;background:var(--rmx-hairline);margin:6px 0;}
 .fp-plain-item{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:14px;color:var(--text-secondary);cursor:pointer;white-space:nowrap;}
 .fp-plain-item:hover{background:var(--bg-hover);}
-.actions-dropdown{width:231px;max-height:60vh;overflow-y:auto;}
+/* The Actions Dropdown is as wide as the field that opens it (the frame's is
+   1088px under a 1088px input), not a narrow menu -- openActionsMenu sets the
+   width. 499px is the frame's own height, so the list scrolls at the same
+   point it does in the design. */
+.actions-dropdown{min-width:231px;max-height:499px;overflow-y:auto;border-radius:var(--r-sm);box-shadow:0 3px 6px rgba(0,0,0,.15);padding:0;}
+.actions-dropdown .ad-search{padding:8px;}
+.actions-dropdown .ad-search .box{display:flex;align-items:center;gap:8px;height:36px;padding:0 8px;background:var(--component-input-default,#f5f8fa);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);}
+.actions-dropdown .ad-search .material-symbols-outlined{font-size:20px;color:var(--icon-muted);flex:none;}
+.actions-dropdown .ad-search input{flex:1;min-width:0;border:none;background:transparent;outline:none;font:400 14px 'Roboto',sans-serif;color:var(--rmx-navy);}
+.actions-dropdown .ad-search input::placeholder{font-style:italic;color:var(--text-disabled);}
+/* Group header and item share one anatomy -- 8px padding, a 20px leading
+   slot, 4px gap, 14px/20px navy. The header's slot holds the collapse
+   chevron; an item's is empty, which is what indents it. Both are navy: the
+   frame uses text-link in exactly four places and none of them is in this
+   list. */
+.actions-dropdown .fp-section-label,
+.actions-dropdown .fp-item{display:flex;align-items:center;gap:4px;padding:8px;font-size:14px;line-height:20px;color:var(--rmx-navy);max-width:100%;}
+.actions-dropdown .fp-section-label{font-weight:600;cursor:pointer;}
+.actions-dropdown .fp-section-label .material-symbols-outlined{font-size:20px;color:var(--rmx-blue);flex:none;transition:transform .12s ease;}
+.actions-dropdown .fp-section-label.collapsed .material-symbols-outlined{transform:rotate(-90deg);}
+.actions-dropdown .fp-item{font-weight:400;cursor:pointer;}
+.actions-dropdown .fp-item::before{content:'';flex:none;width:20px;height:20px;}
+.actions-dropdown .fp-item:hover{background:var(--bg-hover);}
 
 /* Dialog Overlay (Add Checklist Items from Template) */
 .dialog-sm{width:442px;max-width:92vw;}
@@ -664,7 +707,21 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
       </div>
 
       <div class="nt-section" style="margin-bottom:20px;">
-        <a class="select-action-link" id="selectActionLink" onclick="openActionsMenu(event,'modal')">Select an Action <span class="material-symbols-outlined icon-16">arrow_drop_down</span></a>
+        <!-- New Action UI, 4465:114954. State 1: nothing chosen yet. -->
+        <div class="action-card" id="actionAddCard">
+          <a class="action-add-link" onclick="beginAddAction()"><span class="material-symbols-outlined">add</span>Add Action</a>
+        </div>
+        <!-- State 2/3: choosing. The X abandons it and goes back to state 1. -->
+        <div class="action-card action-card--row hidden" id="actionPickCard">
+          <div class="action-field">
+            <span class="action-field__label">Action</span>
+            <div class="action-field__input" id="actionFieldInput" onclick="event.stopPropagation();openActionsMenu(event,'modal')">
+              <span class="val"></span>
+              <span class="material-symbols-outlined">keyboard_arrow_down</span>
+            </div>
+          </div>
+          <span class="action-cancel" onclick="cancelAddAction()"><span class="material-symbols-outlined">close</span></span>
+        </div>
         <div class="action-card hidden" id="actionCard">
           <div class="action-card-row1">
             <span class="lbl">Action</span>
@@ -707,7 +764,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
         <div class="details-row">
           <div class="assign-field" id="modalAssignField" onclick="event.stopPropagation();openAssigneeDropdown(event,'modal')">
             <div class="ma-avatars" id="modalAssignAvatars"></div>
-            <span style="flex:1;" id="modalAssignNames">Emma Langhammer</span>
+            <span style="flex:1;" id="modalAssignNames">Tony Little</span>
             <span class="material-symbols-outlined">keyboard_arrow_down</span>
           </div>
           <div class="check"><div class="chkbox" id="privateCheck" onclick="toggleCheckEl(this)"></div><span>Make private</span></div>
@@ -795,14 +852,19 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
 </div>
 
 <!-- ============================== FLOATING PANELS (Actions Dropdown, Add Checklist Item menu, row kebab) ============================== -->
-<div class="float-panel actions-dropdown" id="actionsPanel" hidden>
-  <div class="fp-section-label"><span class="material-symbols-outlined" onclick="event.stopPropagation()">expand_more</span>Communication</div>
+<div class="float-panel actions-dropdown" id="actionsPanel" hidden onclick="event.stopPropagation()">
+  <div class="ad-search">
+    <div class="box">
+      <span class="material-symbols-outlined">search</span>
+      <input id="actionSearchInput" type="text" placeholder="Search actions" oninput="filterActions()" aria-label="Search actions">
+    </div>
+  </div>
+  <div class="fp-section-label" onclick="toggleActionGroup(this)"><span class="material-symbols-outlined">keyboard_arrow_down</span>Communication</div>
+  <div class="fp-item" onclick="pickActionItem('Publish Signable Documents')">Publish Signable Documents</div>
+  <div class="fp-item" onclick="pickActionItem('Send Email')">Send Email</div>
   <div class="fp-item" onclick="pickActionItem('Send Text')">Send Text</div>
   <div class="fp-item" onclick="pickActionItem('Write Letter')">Write Letter</div>
-  <div class="fp-item" onclick="pickActionItem('Publish Signable Document')">Publish Signable Document</div>
-  <div class="fp-item" onclick="pickActionItem('Send Email')">Send Email</div>
-  <div class="fp-divider"></div>
-  <div class="fp-section-label"><span class="material-symbols-outlined" onclick="event.stopPropagation()">expand_more</span>Financial</div>
+  <div class="fp-section-label" onclick="toggleActionGroup(this)"><span class="material-symbols-outlined">keyboard_arrow_down</span>Financial</div>
   <div class="fp-item" onclick="pickActionItem('Batch Owner Reports')">Batch Owner Reports</div>
   <div class="fp-item" onclick="pickActionItem('Enter a Invoice')">Enter a Invoice</div>
   <div class="fp-item" onclick="pickActionItem('Enter a Journal')">Enter a Journal</div>
@@ -816,15 +878,14 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
   <div class="fp-item" onclick="pickActionItem('Post Utilities')">Post Utilities</div>
   <div class="fp-item" onclick="pickActionItem('Print Checks')">Print Checks</div>
   <div class="fp-item" onclick="pickActionItem('Write A Check')">Write A Check</div>
-  <div class="fp-divider"></div>
-  <div class="fp-section-label"><span class="material-symbols-outlined" onclick="event.stopPropagation()">expand_more</span>View</div>
+  <div class="fp-section-label" onclick="toggleActionGroup(this)"><span class="material-symbols-outlined">keyboard_arrow_down</span>View</div>
   <div class="fp-item" onclick="pickActionItem('View Bank Register')">View Bank Register</div>
   <div class="fp-item" onclick="pickActionItem('View Bills')">View Bills</div>
-  <div class="fp-item" onclick="pickActionItem('View Customers')">View Customers</div>
+  <div class="fp-item" onclick="pickActionItem('View Tenants')">View Tenants</div>
   <div class="fp-item" onclick="pickActionItem('View Meter Readings')">View Meter Readings</div>
   <div class="fp-item" onclick="pickActionItem('View Owners')">View Owners</div>
   <div class="fp-item" onclick="pickActionItem('View Properties')">View Properties</div>
-  <div class="fp-item" onclick="pickActionItem('View Service Tickets')">View Service Tickets</div>
+  <div class="fp-item" onclick="pickActionItem('View Issues')">View Issues</div>
   <div class="fp-item" onclick="pickActionItem('View Units')">View Units</div>
   <div class="fp-item" onclick="pickActionItem('View Vendors')">View Vendors</div>
 </div>
@@ -876,10 +937,10 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
    STATE + DATA
    ============================================================ */
 const PET_CHECKLIST = () => ([
-  {text:"Verify pet request details and documents (vaccinations, policy compliance)", assignee:"Emma Langhammer", done:false},
-  {text:"Prepare and attach Pet Addendum & update tenant record", assignee:"Emma Langhammer", done:false},
-  {text:"Collect pet deposit / monthly pet rent if required", assignee:"Emma Langhammer", done:false},
-  {text:"Send approval email to tenant", assignee:"Emma Langhammer", done:false},
+  {text:"Verify pet request details and documents (vaccinations, policy compliance)", assignee:"Tony Little", done:false},
+  {text:"Prepare and attach Pet Addendum & update tenant record", assignee:"Tony Little", done:false},
+  {text:"Collect pet deposit / monthly pet rent if required", assignee:"Tony Little", done:false},
+  {text:"Send approval email to tenant", assignee:"Tony Little", done:false},
 ]);
 // Every Communication action in the Actions Dropdown shows the same shape —
 // Type / [action] Template / Tenant — not just Send Email. Emma's call,
@@ -891,7 +952,7 @@ const COMMUNICATION_ACTION_DEMOS = {
   'Send Email': {templateLabel:'Email Template', type:'Tenant', template:'Pet Request Approval', tenant:'Daniel Smith'},
   'Send Text': {templateLabel:'Text Template', type:'Tenant', template:'Pet Request Reminder', tenant:'Daniel Smith'},
   'Write Letter': {templateLabel:'Letter Template', type:'Tenant', template:'Pet Addendum Cover Letter', tenant:'Daniel Smith'},
-  'Publish Signable Document': {templateLabel:'Document Template', type:'Tenant', template:'Pet Addendum', tenant:'Daniel Smith'},
+  'Publish Signable Documents': {templateLabel:'Document Template', type:'Tenant', template:'Pet Addendum', tenant:'Daniel Smith'},
 };
 // Links + History/Notes shown on the "Approve Daniel for Pet" Task Details example
 // (node 3502:94964, "2.2.5 Task Details - Desktop" -- the only task this feature's mock populates these for).
@@ -900,7 +961,7 @@ const PET_LINKS = () => ([
   {label:'Unit', value:'107B', removable:true},
 ]);
 const PET_HISTORY = () => ([
-  {date:'08/08/25', type:'System', avatar:av('EL','blue'), text:'Emma Langhammer claimed task'},
+  {date:'08/08/25', type:'System', avatar:av('TL','blue'), text:'Tony Little claimed task'},
   {date:'07/22/25', type:'System', avatar:av('AS','blue'), text:'Amy Scharffe assigned task to Property Manager'},
   {date:'07/21/25', type:'System', avatar:av('AS','blue'), text:'Amy Scharffe claimed task'},
   {date:'07/19/25', type:'System', avatar:av('CA','blue'), text:'Carly Anderson created task'},
@@ -964,7 +1025,10 @@ let myWorkspaceTasks = [
   { id:'ws-tomas-renewal', title:'Draft renewal — Tomas Webber', flag:false, colorBar:'green', completed:false,
     action:null, actionDetails:null, dueDate:'09/17/25', dueTime:'05:00 PM', overdue:false,
     assigned:[av('TL','blue')], link:'Tomas Webber', linkOverflow:0, workflow:'Leasing', claim:false,
-    checklist:[], externalCal:false },
+    // The Link column carried a value with no typed link record behind it, so
+    // the Links tile opened empty on a task the register said was linked.
+    // Added 2026-09-10 while making the My Workspace tile show only real links.
+    checklist:[], externalCal:false, links:[{label:'Tenant', value:'Tomas Webber', removable:false}] },
 ];
 
 // My Tasks dataset (screenshots 03/04/05 + the "Approve Daniel for Pet" demo row from screenshot 08)
@@ -973,15 +1037,15 @@ let myTasks = [
 
   { id:'t-approve-pet', title:'Approve Daniel for Pet', flag:true, colorBar:null, completed:false,
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/17/25', dueTime:'11:00 AM', overdue:false,
-    assigned:[av('EL','blue')], link:'', linkOverflow:0, workflow:'', claim:false,
+    assigned:[av('TL','blue')], link:'', linkOverflow:0, workflow:'', claim:false,
     checklist: PET_CHECKLIST(), externalCal:true, links: PET_LINKS(), history: PET_HISTORY() },
   { id:'t1', title:'Assign ticket to maintenance staff', flag:true, colorBar:'red', completed:false,
     action:'View Issues', actionDetails:null, dueDate:'07/05/25', dueTime:'07:30 AM', overdue:true,
-    assigned:[av('EL','blue')], link:'Daniel Smith', linkOverflow:0, workflow:'', claim:false,
+    assigned:[av('TL','blue')], link:'Daniel Smith', linkOverflow:0, workflow:'', claim:false,
     checklist:[], externalCal:false },
   { id:'t2', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'07/25/25', dueTime:'07:30 AM', overdue:true,
-    assigned:[av('CA','blue'),av('EL','blue'),av('+2','plus')], link:'', linkOverflow:0, workflow:'', claim:false,
+    assigned:[av('CA','blue'),av('TL','blue'),av('+2','plus')], link:'', linkOverflow:0, workflow:'', claim:false,
     checklist:[], externalCal:false },
   { id:'t3', title:"Record Park's records", flag:true, colorBar:null, completed:false,
     action:'Add Journal', actionDetails:null, dueDate:'07/31/25', dueTime:'07:30 AM', overdue:false,
@@ -993,21 +1057,21 @@ let myTasks = [
     checklist:[], externalCal:false },
   { id:'t5', title:'Close completed service ticket', flag:false, colorBar:null, completed:true,
     action:null, actionDetails:null, dueDate:'08/07/25', dueTime:'08:30 AM', overdue:false,
-    assigned:[av('EL','blue')], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', claim:false,
+    assigned:[av('TL','blue')], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', claim:false,
     checklist:[], externalCal:false },
   { id:'t6', title:'Distribute payments to owners', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'08/31/25', dueTime:'02:00 PM', overdue:false,
-    assigned:[av('EL','blue')], link:'', linkOverflow:0, workflow:'', claim:false,
+    assigned:[av('TL','blue')], link:'', linkOverflow:0, workflow:'', claim:false,
     checklist:[], externalCal:false },
   { id:'t7', title:'Close service tickets', flag:false, colorBar:null, completed:false,
     action:'View Issues', actionDetails:null, dueDate:'09/10/25', dueTime:'05:05 PM', overdue:false,
     assigned:[av('SA','notice')], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', claim:true,
     externalCal:false, showProgress:true, expandChecklist:true,
-    checklist:[ {text:'Open service issue list', assigned:[av('EL','blue')], done:false},
+    checklist:[ {text:'Open service issue list', assigned:[av('TL','blue')], done:false},
                 {text:'Close all tickets', assigned:[av('PM','notice'),av('SA','notice')], done:false} ] },
   { id:'t-receipts', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:true,
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/15/25', dueTime:'10:00 AM', overdue:false,
-    assigned:[av('EL','blue')], link:"Patrick O'Malley", linkOverflow:1, workflow:'', claim:false,
+    assigned:[av('TL','blue')], link:"Patrick O'Malley", linkOverflow:1, workflow:'', claim:false,
     checklist: PET_CHECKLIST(), externalCal:true },
   { id:'t9', title:'Review owner details for FMHP', flag:false, colorBar:'blue', completed:false,
     action:'Post Owner Checks', actionDetails:null, dueDate:'09/16/25', dueTime:'10:00 AM', overdue:false,
@@ -1077,6 +1141,7 @@ let state = {
   saveNewRequested: false,
   linkAddOpen: false,
   linkAddType: null,
+  actionPicking: false,
 };
 
 /* ============================================================
@@ -1267,7 +1332,7 @@ function quickAddMoreDetails(){
 function makeBlankTask(title){
   return { id:'t-'+Date.now(), title, flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/17/25', dueTime:'11:00 AM', overdue:false,
-    assigned:[av('EL','blue')], link:'', linkOverflow:0, workflow:'', claim:false, checklist:[], externalCal:false };
+    assigned:[av('TL','blue')], link:'', linkOverflow:0, workflow:'', claim:false, checklist:[], externalCal:false };
 }
 // click-outside collapses the empty quick-add bar
 document.addEventListener('click', (e)=>{
@@ -1290,7 +1355,7 @@ const ASSIGNEE_USERS = [
   {key:'elanghammer', initials:'EL', name:'Emma Langhammer', uname:'elanghammer'},
   {key:'tlittle', initials:'TL', name:'Tony Little', uname:'tlittle'},
 ];
-let assigneeSelected = new Set(['elanghammer']);
+let assigneeSelected = new Set(['tlittle']);
 /* The Assigned To dropdown is shared by the quick-add bar's Users Bubbles and
    the Task Details Assignee field. It keeps a separate selection per trigger
    -- they are two different tasks -- and writes back to whichever one opened
@@ -1449,17 +1514,24 @@ function openTaskModal(dataset, id, prefillTitle){
   state.modalChecklist = task ? JSON.parse(JSON.stringify(task.checklist||[])) : [];
   state.modalActionLabel = task ? task.action : null;
   state.modalActionDetails = task ? task.actionDetails : null;
+  state.actionPicking = false;
   state.modalHighPriority = task ? !!task.flag : false;
   state.modalDone = task ? !!task.completed : false;
   state.modalExternalCal = task ? !!task.externalCal : false;
   state.modalLinks = task ? JSON.parse(JSON.stringify(task.links||[])) : [];
-  /* The Assignee field opens on the current user, not on the task's own
-     assignees, and that is deliberate: the register's avatars carry initials
-     from ROLE_USERS while this dropdown lists ASSIGNEE_USERS, and the two
-     lists disagree -- `CA` is Charlie Apegian in one and Carly Anderson in
-     the other. Seeding the field from a task would mean choosing which list
-     wins, which is Emma's call, not a prototype's. See PROTOTYPE.md. */
-  modalAssignees = new Set(['elanghammer']);
+  /* My Tasks are the signed-in user's tasks, and the signed-in user is Tony
+     Little -- the app bar's avatar, "Good morning, Tony", every @Tony
+     mention. Emma's call, 2026-09-10: "any task opened from the my tasks
+     should be assigned to tony". A new task belongs to whoever is creating
+     it, so it opens the same way.
+
+     Other Users' Tasks are by definition not Tony's, and this field cannot
+     say whose they are: the register's avatars take initials from ROLE_USERS
+     while this dropdown lists ASSIGNEE_USERS, and the two disagree -- `CA` is
+     Charlie Apegian in one and Carly Anderson in the other. It shows the
+     italic "Unassigned" placeholder rather than a name that might be the
+     wrong person. Resolving that needs one user list. See PROTOTYPE.md. */
+  modalAssignees = new Set(state.modalDataset === 'other' ? [] : ['tlittle']);
   state.modalHistory = task ? JSON.parse(JSON.stringify(task.history||[])) : [];
   state.checklistFilter = 'incomplete';
   state.linkAddOpen = false;
@@ -1542,19 +1614,23 @@ function collapseRecurring(){
   document.getElementById('recurringCollapsed').classList.remove('hidden');
 }
 
-/* ---- Select an Action ---- */
+/* ---- New Action UI (4465:114954) ----
+   Add Action -> the Action field -> that field open -> the action selected.
+   state.actionPicking is the middle step: the field is on screen with nothing
+   chosen in it yet, which is a state the old "Select an Action" link had no
+   way to represent. */
 function renderActionArea(){
-  const link = document.getElementById('selectActionLink');
+  const addCard = document.getElementById('actionAddCard');
+  const pickCard = document.getElementById('actionPickCard');
   const card = document.getElementById('actionCard');
   const divider = document.getElementById('actionCardDivider');
   const row = document.getElementById('actionDetailRow');
+  addCard.classList.toggle('hidden', !!state.modalActionLabel || state.actionPicking);
+  pickCard.classList.toggle('hidden', !!state.modalActionLabel || !state.actionPicking);
+  card.classList.toggle('hidden', !state.modalActionLabel);
   if(state.modalActionLabel){
-    link.classList.add('hidden');
-    card.classList.remove('hidden');
     document.getElementById('actionNameLink').textContent = state.modalActionLabel;
   } else {
-    link.classList.remove('hidden');
-    card.classList.add('hidden');
     return;
   }
   if(COMMUNICATION_ACTION_DEMOS[state.modalActionLabel] && state.modalActionDetails){
@@ -1573,18 +1649,71 @@ function renderActionArea(){
 function clearAction(){
   state.modalActionLabel = null;
   state.modalActionDetails = null;
+  state.actionPicking = false;
+  renderActionArea();
+}
+function beginAddAction(){
+  state.actionPicking = true;
+  renderActionArea();
+}
+function cancelAddAction(){
+  state.actionPicking = false;
+  document.getElementById('actionsPanel').hidden = true;
   renderActionArea();
 }
 function openActionsMenu(e, ctx){
   state.actionsMenuContext = ctx;
   const panel = document.getElementById('actionsPanel');
+  const trigger = e.currentTarget;
   panel.hidden = false;
-  positionPanel(panel, e.currentTarget);
+  /* In the frame the panel is exactly as wide as the field that opens it
+     (1088px under a 1088px input), so it matches its trigger here too. The
+     quick-add bar's opener is a short text link, and a panel that narrow
+     would be unusable, so min-width in the stylesheet floors it. */
+  panel.style.width = ctx === 'modal' ? trigger.getBoundingClientRect().width + 'px' : '';
+  document.getElementById('actionSearchInput').value = '';
+  filterActions();
+  positionPanel(panel, trigger);
+  if(ctx === 'modal') document.getElementById('actionFieldInput').classList.add('open');
+}
+function closeActionsMenu(){
+  document.getElementById('actionsPanel').hidden = true;
+  document.getElementById('actionFieldInput').classList.remove('open');
+}
+/* The group chevron collapses its group -- it is the only thing a chevron on a
+   header can mean, and the frame draws one on every group. */
+function toggleActionGroup(header){
+  const collapsed = header.classList.toggle('collapsed');
+  let el = header.nextElementSibling;
+  while(el && !el.classList.contains('fp-section-label')){
+    if(el.classList.contains('fp-item')) el.dataset.groupCollapsed = collapsed ? '1' : '';
+    el = el.nextElementSibling;
+  }
+  filterActions();
+}
+function filterActions(){
+  const q = (document.getElementById('actionSearchInput').value||'').toLowerCase().trim();
+  const panel = document.getElementById('actionsPanel');
+  panel.querySelectorAll('.fp-section-label').forEach(header=>{
+    let el = header.nextElementSibling, shown = 0;
+    while(el && !el.classList.contains('fp-section-label')){
+      if(el.classList.contains('fp-item')){
+        // a search reaches into collapsed groups; without one they stay shut
+        const match = !q || el.textContent.toLowerCase().includes(q);
+        const hide = !match || (!q && el.dataset.groupCollapsed === '1');
+        el.hidden = hide;
+        if(!hide) shown++;
+      }
+      el = el.nextElementSibling;
+    }
+    header.hidden = q ? shown === 0 : false;
+  });
 }
 function pickActionItem(label){
-  document.getElementById('actionsPanel').hidden = true;
+  closeActionsMenu();
   if(state.actionsMenuContext==='modal'){
     state.modalActionLabel = label;
+    state.actionPicking = false;
     const demo = COMMUNICATION_ACTION_DEMOS[label];
     state.modalActionDetails = demo ? {...demo} : null;
     renderActionArea();
@@ -1769,7 +1898,7 @@ function openAddChecklistMenu(e){
 }
 function addBlankChecklistItem(){
   document.getElementById('addChecklistPanel').hidden = true;
-  state.modalChecklist.push({text:'New checklist item', assignee:'Emma Langhammer', done:false});
+  state.modalChecklist.push({text:'New checklist item', assignee:'Tony Little', done:false});
   setChecklistFilter('all');
 }
 function openTemplateDialog(){
@@ -1853,6 +1982,8 @@ function dismissFloatingPanels(e){
     const panel = document.getElementById(id);
     if(!panel.hidden && !panel.contains(e.target) && !e.target.closest('[onclick*="'+ triggers[id] +'"]')){
       panel.hidden = true;
+      // the Action field's blue focus border belongs to the open panel
+      if(id === 'actionsPanel') document.getElementById('actionFieldInput').classList.remove('open');
     }
   });
 }

@@ -1040,6 +1040,111 @@ read from the task now. It is the same shape of defect as the Assignee field
 noted above — a static field that looked filled in — and worth watching for
 in the rest of that form.
 
+## The signed-in user is Tony, everywhere
+
+Emma's call: "any task opened from the my tasks should be assigned to tony."
+The Assignee field read "Emma Langhammer" for every task — Emma is the
+designer, not the persona. Tony Little is the signed-in user on every other
+piece of this prototype: the app bar's `TL` avatar, "Good morning, Tony", all
+four `@Tony` mentions, and the six My Workspace tasks, which already said
+`TL`. `EL` had crept in as a stand-in on the later-authored register rows.
+
+So Tony now owns what is his: the seven My Tasks rows that said `EL`, the
+"claimed task" history entry, the checklist items on his own tasks, the
+quick-add bar's default assignee, and a brand-new task. Emma Langhammer stays
+in the user list as a real person you can assign things to — she just no
+longer stands in for whoever is logged in.
+
+Other Users' Tasks are by definition **not** Tony's, so they open with the
+italic "Unassigned" placeholder rather than a name. That field still cannot
+say whose they are, for the reason recorded above: `CA` is Charlie Apegian in
+`ASSIGNEE_USERS` and Carly Anderson in `ROLE_USERS`, and the register draws
+its avatars from the second list while the dropdown lists the first. One user
+list fixes it and it needs Emma's answer on `CA`.
+
+## Task rows: lighter type, and only real links
+
+Three of Emma's calls, all pushing the same direction — the rows had more
+emphasis than their content deserved.
+
+- **Task names are regular weight**, not SemiBold. With the category
+  Lozenges gone there is less competing for attention, and a list of bold
+  titles reads as a list of headings.
+- **Due dates are regular weight** too.
+- **The free-text context line is gone.** Emma, pointing at "Duplicate charge
+  on statement": "why is this displaying". Because it was flavour text from
+  the original export, and her earlier rule — remove the meta line when there
+  is no linked entity — already covered it; the previous round only took out
+  the stray Lozenge and left the note. Two rows have no linked record and now
+  show nothing: "Return Marcia Clark's call" and "Review May rent roll
+  variance".
+- The third note, "Lease ends in 32 days", turned out to be hiding a real
+  link: the register's Link column for that task says **Tomas Webber**. The
+  tile shows `Tenant Tomas Webber` now, and the register gained the typed link
+  record it was missing — its Link column had a value while its Links tile
+  opened empty.
+
+## The mini Add Task bar gets the rest of the controls
+
+Emma, revisiting the reduced version: "this should still have the same date,
+assigned to, and action selector I think as the regular quick add task." Fair
+— the argument for dropping them was that they do not fit, and that is a
+layout problem, not a reason to remove function.
+
+They are all there now, at the component's own values: the 255x36 date/time
+field with its two 28px icon cells, the assignee bubble (Tony), and Add
+Action. The row wraps rather than squeezing — controls on one line, the two
+links on the next when the tile is too narrow for both, which is the same
+container-driven wrap the Add Link row and the Task Details tile pair use.
+
+Clicking the date, the assignee or Add Action opens the full Task Details
+form with whatever has been typed so far. Those three fields are only really
+editable there, and porting their three floating panels onto My Workspace
+would mean a second copy of each; this is the same handoff "Add More Details"
+already makes, through the same code path. A control that leads somewhere it
+can actually be set beats one that looks live and is not.
+
+## Select an Action is the real New Action UI
+
+Emma: "make the select an action follow this UI exactly" — Tasks Enhancements
+`4465:114954`, the `New Action UI` component and its four variants. What was
+there was a "Select an Action ▾" text link over a narrow 231px menu. What the
+component actually is:
+
+1. **Add Action** — the card with a `+ Add Action` link.
+2. **The Action field** — the same card, now a row: a labelled dropdown
+   (`#f5f8fa`, 36px, 4px radius) and a blue X that abandons it.
+3. **That field open** — the field's border goes `#008dd5` and the panel
+   opens **as wide as the field**, not as a narrow menu; the frame's is 1088px
+   under a 1088px input. It has a search field ("Search actions", italic
+   placeholder) the old menu had no equivalent of.
+4. **Selected** — "Action / *Send Email* / ✕", a rule, then the detail fields.
+
+The middle state is the interesting one: the old link had no way to represent
+"the field is on screen with nothing chosen in it yet", so that step did not
+exist. Three smaller corrections came out of reading the frame:
+
+- **The list is navy, not blue.** The frame uses `text-link` in exactly four
+  places and none of them is in this list; group names are 14px SemiBold navy
+  and items 14px Regular navy, both `p-8px` with a 20px leading slot. An
+  item's slot is empty, which is what indents it under its group.
+- **Group headers collapse.** They carry a chevron, which is the only thing a
+  chevron on a header can mean; it did nothing before. A search reaches into
+  collapsed groups, and groups with no match hide entirely.
+- **Three labels were wrong.** "Publish Signable Document" is plural in the
+  frame, and Communication is alphabetical there but was not here. In the
+  View group, "View Customers" and "View Service Tickets" are **View
+  Tenants** and **View Issues** — the same vocabulary correction Emma made
+  about make-readys, found independently in the design.
+
+## 72px page gutter
+
+Emma's call: 72px beside the welcome band and the tile grid, up from 64px.
+Worth flagging that **72 is off the spacing scale** — Foundations runs 40
+(3xl), 48 (4xl), 64 (6xl), 80 (8xl), with nothing between 64 and 80. It is
+declared as a literal rather than dressed up in a `var()` that would look
+official, and it is item 24 below.
+
 ---
 
 # Worth raising with the design system
@@ -1189,3 +1294,9 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     the natural place for it — currently means composing a reduced version by
     hand. If quick-add-from-a-tile is a real pattern, the component wants a
     compact variant so every prototype reduces it the same way.
+24. **The page gutter Emma wants is 72px, which is not on the spacing scale.**
+    Foundations goes 40 (3xl), 48 (4xl), 64 (6xl), 80 (8xl) — nothing between
+    64 and 80, and 72 is a natural gutter width for a two-column page at this
+    density. Either the scale wants a step there, or the gutter should snap to
+    64 or 80. This prototype declares 72 as a literal so the gap stays
+    visible; it should not become a habit across prototypes.
