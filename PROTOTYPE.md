@@ -699,11 +699,47 @@ approximated with a CSS border-triangle rather than being harvested as if it
 were a real icon or component.
 
 **Responsive note.** The frame is a fixed 1384px wide; this screen scales it
-to `min(1200px, 96vw)` with the content area's columns wrapping via flexbox
+to `min(1320px, 96vw)` with the content area's columns wrapping via flexbox
 instead of the frame's fixed column positions, and the header's six tabs
 wrap to a second line under about 700px of tab-row width. Same deliberate
 "the proposal is the site" responsive approach as the rest of this
 prototype, not a fixed-width recreation.
+
+## Trued up against the frame's own SVG
+
+Emma sent the frame's SVG export and asked for the UI to match exactly.
+Reading measurements and colors straight off it turned up five real
+discrepancies in the first pass, all now fixed:
+
+| What | First pass | The frame |
+|---|---|---|
+| Accent blue | `--text-link` (#008dd5) | **#0071AA** — sidebar text, active row, column-title text and underline |
+| Sidebar width | 190px | **200px** |
+| Sidebar rows | 40px padded blocks | **28px tall, 12px apart**, 8px top inset |
+| Active row | full-width bar, centre-right arrow | **bleeds 12px into the content area**, with a navy notch off its *bottom-right corner* |
+| Version text | `--text-disabled` (#b3b3b3) | **#666666** (`--text-primary`) |
+| Corner radius | `--radius-sm` (4px) | **8px** |
+
+**The accent blue is genuinely a different blue.** #0071AA is not this
+prototype's link blue and not a token in `tokens.css` — it's what the
+component actually uses for every blue element in it. Kept as a literal,
+scoped to `.megamenu` as `--mm-blue`, rather than snapped to the nearest
+existing token, because rounding it to #008dd5 is exactly the kind of
+"close enough" that the icons rule exists to prevent. Worth resolving
+against Foundations — see item 20 below.
+
+**Columns hug their content.** The frame's five Receivables columns measure
+185/198/188/162/170px, each sized to its longest item rather than to a
+shared grid; giving them a fixed flex basis wrapped the last column onto a
+second row the real menu doesn't have. With content-hugging widths the
+Rental Info columns now come out 107/151/119/85/154 against the frame's
+107/149/122/87/152 — within a few px of font rendering. The empty space to
+the right of the columns is authentic too: Rental Info's five columns end
+at x=737 of a 1164px content area in the frame as well.
+
+**No scroll on the sidebar, deliberately.** Seven fixed rows always fit, the
+frame has no scrollbar there either, and any `overflow` value on that
+element clips both the active row's 12px bleed and its corner notch.
 
 ---
 
@@ -821,3 +857,12 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     Listing column. Kept as-is here rather than silently corrected, per the
     "transcribe exactly, flag what looks wrong" rule — see "The Mega Menu,
     built in full" above.
+20. **The Mega Menu's accent blue is #0071AA, which is not a Foundations
+    token.** Every blue element in that component — sidebar item text, the
+    active row's fill, column-title text and its underline — uses #0071AA,
+    read off the frame's own SVG export. `tokens.css` has #008dd5 for
+    `--text-link` / `--border-secondary` / `--icon-brand`, and nothing at
+    #0071AA. So either the component is off-token, or Foundations is missing
+    a darker brand blue that the component is correctly using. This screen
+    keeps #0071AA as a local `--mm-blue` rather than rounding to #008dd5,
+    but it should be one or the other, not both. Emma's call.

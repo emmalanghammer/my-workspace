@@ -842,7 +842,15 @@
    4077:83115), built in full — header tabs, all 7 Full Menu categories,
    their real column content and footer links. See PROTOTYPE.md, "The Mega
    Menu, built in full". z-index sits above the task-details frame (500),
-   since opening the menu while a task is open should sit on top of it. */
+   since opening the menu while a task is open should sit on top of it.
+
+   Emma sent the frame's own SVG export (2026-09-10) to true up colors and
+   spacing exactly. Two findings kept as literal values, not tokens:
+   --mm-blue #0071AA is the accent used throughout this component (sidebar
+   text, active row, column-title underline) — distinct from this
+   prototype's usual link blue (#008dd5); and the footer's "Version" text
+   is #666666 (--text-primary here), not the disabled gray it might look
+   like at a glance. Both are real, read off the export, not approximated. */
 .megamenu-overlay {
   position: fixed;
   inset: 0;
@@ -853,11 +861,12 @@
   padding: 56px 24px 24px;
 }
 .megamenu {
+  --mm-blue: #0071AA;
   background: var(--background-card);
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
   box-shadow: 0 8px 24px rgba(19, 49, 76, .3);
   width: 100%;
-  max-width: 1200px;
+  max-width: 1320px;
   max-height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
@@ -915,7 +924,7 @@
   flex: none;
   background: none;
   border: none;
-  color: var(--text-link);
+  color: var(--mm-blue);
   cursor: pointer;
   display: flex;
   padding: 4px;
@@ -925,42 +934,47 @@
   flex: 1;
   min-height: 0;
 }
+/* No scroll on the sidebar: seven fixed items (28px each, 12px apart) always
+   fit, and the frame has no scrollbar here either. It also has to not clip —
+   the active row bleeds 12px into the content area and hangs a notch off its
+   bottom-right corner, and an overflow value would cut both off. */
 .megamenu__sidebar {
-  width: 190px;
+  width: 200px;
   flex: none;
   border-right: 1px solid var(--border-primary);
   padding: 8px 0;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  gap: 12px;
 }
 .megamenu__sidebar-item {
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
+  height: 28px;
   text-align: left;
   background: none;
   border: none;
-  padding: 10px 20px;
-  color: var(--text-link);
-  font: 400 14px/1.2 'Roboto', sans-serif;
+  padding: 0 20px;
+  color: var(--mm-blue);
+  font: 400 14px/1 'Roboto', sans-serif;
   cursor: pointer;
   position: relative;
 }
 .megamenu__sidebar-item--active {
-  background: var(--text-link);
+  background: var(--mm-blue);
   color: var(--text-inverse);
+  width: calc(100% + 12px);
 }
 .megamenu__sidebar-item--active::after {
   content: '';
   position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  right: -13px;
+  bottom: 0;
   width: 0;
   height: 0;
-  border-top: 7px solid transparent;
-  border-bottom: 7px solid transparent;
-  border-left: 7px solid var(--text-secondary);
+  border-bottom: 12px solid var(--text-secondary);
+  border-right: 13px solid transparent;
 }
 .megamenu__content {
   flex: 1;
@@ -969,18 +983,23 @@
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: 24px 40px;
+  gap: 24px;
 }
+/* Columns hug their content, as they do in the frame — its five Rental Info
+   columns measure 185/198/188/162/170px wide, sized to their longest item,
+   not to a shared grid. A fixed basis here wrapped the last column onto a
+   second row that the real menu doesn't have. */
 .megamenu__col {
-  flex: 0 1 190px;
-  min-width: 150px;
+  flex: 0 0 auto;
+  min-width: 0;
 }
 .megamenu__col-title {
-  color: var(--text-link);
+  color: var(--mm-blue);
   font-size: 14px;
   padding-bottom: 6px;
   margin-bottom: 6px;
-  border-bottom: 1px solid var(--text-link);
+  border-bottom: 1px solid var(--mm-blue);
+  white-space: nowrap;
 }
 .megamenu__item {
   display: block;
@@ -989,6 +1008,7 @@
   font-size: 14px;
   cursor: pointer;
   text-decoration: none;
+  white-space: nowrap;
 }
 .megamenu__item:hover { text-decoration: none; }
 .megamenu__footer {
@@ -1016,7 +1036,7 @@
 }
 .megamenu__footer-link .rmx-icon { width: 18px; height: 18px; }
 .megamenu__version {
-  color: var(--text-disabled);
+  color: var(--text-primary);
   font-size: 12px;
   flex: none;
 }
