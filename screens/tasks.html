@@ -407,7 +407,11 @@ a:hover { text-decoration:none; }
 .tile-header h3{font-size:14px;font-weight:600;color:var(--text-secondary);}
 .tile-header .actions{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:14px;}
 .tile-header .actions a{color:var(--rmx-blue);display:inline-flex;align-items:center;gap:2px;}
-.tile-body{padding:16px;}
+/* The Tile slot's own 16px padding, and 16px between the field groups inside
+   it -- Links / Description / Display / Attachments. Emma's call, 2026-09-10.
+   They were relying on each label's 6px margin, which left them crowded and
+   unevenly spaced. */
+.tile-body{padding:16px;display:flex;flex-direction:column;gap:16px;}
 
 .checklist-table{width:100%;border-collapse:collapse;}
 /* A register embedded in a Tile: white header, navy text, 1px hairline top+bottom (design.md §7.2) */

@@ -1221,6 +1221,15 @@ Worth raising with engineering; it is item 25 below.
   them to, and a half-finished edit surviving into the next sitting would
   read as a bug rather than a feature.
 
+### Task Details tile: 16px between its field groups
+
+Emma's call: 16px between Links, Description, Display and Attachments. They
+had been relying on each label's own 6px bottom margin, which left the four
+groups crowded and unevenly spaced — the gap between a field and the next
+label was whatever the previous control happened to leave. The tile body is a
+16px-gap column now, which is the same step the Note Details dialog's content
+uses, so the two forms space their fields identically.
+
 ### One size, whatever record it opens
 
 Emma's call: "the history/notes overlay should be the same height and width
