@@ -1,0 +1,764 @@
+/* ============================================================
+   My Workspace — prototype-local recipes.
+
+   This file exists because My Workspace is a NEW page: a welcome /
+   landing surface that RMX Components does not yet have components for.
+   Everything here is either
+     (a) a real component whose recipe rmx.css does not ship yet
+         (Toggle Switch, the Tile Style=Workspace overline + 44px header), or
+     (b) the "splashy" card language carried over from the Claude Design
+         export, which Emma chose to keep — see PROTOTYPE.md, Deviations.
+
+   Rules it obeys, so it stays a design-system prototype and not a one-off:
+     - Colour, spacing and radius come from tokens.css. No literal hex.
+       Where a colour was needed that Foundations does not have, the section
+       is either dropped to the nearest real token or listed in PROTOTYPE.md.
+     - Type comes from type.css. Every rule uses a --type-* shorthand or a
+       size/weight pair that resolves to a named RMX Foundations style.
+       There is no 700 weight anywhere: RMX stops at SemiBold (600).
+     - Nothing here restyles an element carrying data-rmx-component via a
+       class. Where a real component needed the splashy shell, it is reached
+       through a data attribute instead, so the component stays used-as-is.
+
+   A developer handed this deletes it and keeps rmx.css.
+   ============================================================ */
+
+:root {
+  /* ---- two real Foundations tokens that tokens.css does not export ----
+     Both are named in the component anatomy harvested for skill 2.0.0, so
+     these are the library's own values, not chosen numbers. Reported in
+     PROTOTYPE.md so they can move into tokens.css.
+
+       Radius/md    8px   — Tile Style=Dashboard's own radius
+       Spacing/6xl  64px  — (4xl 48, 8xl 80 and xxxs 2 are also referenced) */
+  --radius-md: 8px;
+  --spacing-4xl: 48px;
+  --spacing-6xl: 64px;
+
+  /* dropshadow-md, the named effect style on Tile Style=Workspace, read off
+     node 4075:109757. Replaces the shadow this file previously invented. */
+  --ws-shadow:
+    0 -2px 10px rgba(76, 76, 76, .08),
+    0 4px 5px rgba(76, 76, 76, .10),
+    1px 2px 6px rgba(76, 76, 76, .10);
+  --ws-shadow-hover:
+    0 -2px 10px rgba(76, 76, 76, .12),
+    0 6px 10px rgba(76, 76, 76, .14),
+    1px 2px 6px rgba(76, 76, 76, .12);
+  /* Derived from --icon-attention (#f58220). Warm glow behind the welcome band. */
+  --ws-glow: rgba(245, 130, 32, .28);
+  /* Page gutter: 64px (Spacing/6xl) beside the welcome band and the tile grid,
+     held all the way down to the one-column breakpoint. Steps down below that
+     in the media queries at the bottom of this file. */
+  --ws-page-pad: var(--spacing-6xl);
+}
+
+/* ---------- full-bleed chrome ----------
+   The app bar and Context Bar are authored at Display/Display (1920px) in
+   Figma because that is the artboard width, and rmx.css carries that literally.
+   In the app they span the viewport, so this page lets them. Nothing else about
+   either component is touched. */
+.rmx-appbar,
+.rmx-contextbar { width: 100%; }
+/* Command Launch is 454px by design and shrinks rather than overflowing the
+   clipped bar on a narrow window. */
+.rmx-appbar__search { width: min(454px, 100%); }
+
+/* ---------- page ground ----------
+   Not .rmx-page: that paints --container-primary (white), which is right for
+   a register or detail page and wrong here. My Workspace sits on the Express
+   page ground with cards floating on it. */
+.ws-page {
+  width: 100%;
+  min-height: calc(100vh - 88px);
+  background: var(--background-ui-primary);
+}
+
+/* ---------- welcome band ----------
+   The navy splash. background-color carries the true base so contrast is
+   measurable (and so the audit reads the real ground, not the body's);
+   background-image carries the gradient over it. */
+.ws-band {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--container-secondary-dark);
+  background-image: linear-gradient(135deg,
+    var(--container-secondary-dark) 0%,
+    var(--component-context-header) 100%);
+  color: var(--text-ondark);
+  border-bottom: 1px solid var(--container-secondary-dark);
+}
+
+/* Two texture layers and a glow, masked so they fade rather than tile flatly.
+   White at low opacity, so no colour outside the palette is introduced. */
+.ws-band::before,
+.ws-band::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+.ws-band::before {
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14'><circle cx='2' cy='2' r='1.4' fill='%23ffffff' opacity='.22'/></svg>");
+  -webkit-mask-image: radial-gradient(ellipse at top right, black 0%, transparent 70%);
+  mask-image: radial-gradient(ellipse at top right, black 0%, transparent 70%);
+}
+.ws-band::after {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 320px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><path d='M-1,1 l2,-2 M0,10 l10,-10 M9,11 l2,-2' stroke='%23ffffff' stroke-width='1' opacity='.16'/></svg>");
+  -webkit-mask-image: linear-gradient(to right, black 0%, transparent 90%);
+  mask-image: linear-gradient(to right, black 0%, transparent 90%);
+}
+.ws-band__glow {
+  position: absolute;
+  right: -120px;
+  top: -120px;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ws-glow) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.ws-band__inner {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+  padding: var(--spacing-2xl) var(--ws-page-pad);
+}
+.ws-band__copy { flex: 1; min-width: 0; }
+
+/* Eyebrow — a glass chip with a live dot. 12px SemiBold = Web/Label/S/SemiBold. */
+.ws-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-xxs) var(--spacing-sm);
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, .08);
+  font: var(--type-label-s-semibold);
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: var(--text-ondark);
+}
+.ws-eyebrow__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--icon-success);
+}
+
+.ws-band__title {
+  margin: 0;
+  font: var(--type-heading-xl-semibold);
+  color: var(--text-ondark);
+}
+.ws-band__summary {
+  margin: var(--spacing-xs) 0 0;
+  font: var(--type-paragraph-l-regular);
+  color: var(--text-ondark);
+}
+.ws-band__summary b { font: var(--type-paragraph-l-semibold); }
+
+.ws-band__actions { flex: none; display: flex; align-items: center; gap: var(--spacing-xs); }
+
+/* ---------- content grid ---------- */
+.ws-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+  align-items: start;
+  padding: var(--spacing-xl) var(--ws-page-pad) var(--spacing-3xl);
+}
+.ws-grid__full { grid-column: 1 / -1; }
+.ws-col { display: flex; flex-direction: column; gap: var(--spacing-lg); min-width: 0; }
+
+/* ---------- announcements band ----------
+   NOT a real component. RMX has Callout (outlined, 40px), Bulk Action (the
+   blue banner above a register), Toast and Reminder — none of them is a
+   marketing announcement surface, and production My Workspace uses a plain
+   Tile with a list instead. This band is the export's design, kept, and the
+   gap is logged in PROTOTYPE.md rather than papered over with a component
+   name that would be a lie.
+
+   Text is --text-ondark (white), Emma's call on 2026-09-10, which is what the
+   Claude Design export had. It does not clear WCAG AA on either gradient:
+   white measures 2.59:1 on #f58220, 1.99:1 on #faa61c, 2.47:1 on #6eb744 and
+   1.19:1 on #e2f1da. Orange is light enough that no size threshold rescues it.
+   Raised with Emma rather than silently reverted — see PROTOTYPE.md. */
+.ws-ann {
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--ws-shadow);
+  overflow: hidden;
+}
+.ws-ann__panel {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  padding: var(--spacing-md) var(--spacing-lg);
+  color: var(--text-ondark);
+}
+.ws-ann__panel[data-kind="webinar"] {
+  background-color: var(--icon-attention);
+  background-image: linear-gradient(135deg, var(--icon-attention) 0%, var(--icon-notice) 100%);
+}
+.ws-ann__panel[data-kind="update"] {
+  background-color: var(--icon-success);
+  background-image: linear-gradient(135deg, var(--icon-success) 0%, var(--component-lozenge-success) 100%);
+}
+.ws-ann__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xxs);
+  flex: none;
+  padding: var(--spacing-xxs) var(--spacing-sm);
+  border: 1px solid rgba(255, 255, 255, .25);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, .20);
+  font: var(--type-label-s-semibold);
+  letter-spacing: .10em;
+  text-transform: uppercase;
+}
+.ws-ann__chip::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-ondark);
+}
+.ws-ann__copy { flex: 1; min-width: 240px; }
+.ws-ann__title { font: var(--type-heading-s-semibold); }
+.ws-ann__body { font: var(--type-paragraph-l-regular); }
+.ws-ann__dots { display: flex; gap: var(--spacing-xxs); flex: none; margin-left: auto; }
+.ws-ann__dots > button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .40);
+  cursor: pointer;
+}
+.ws-ann__dots > button[aria-current="true"] { background: var(--text-ondark); }
+
+/* ============================================================
+   Tile Style=Workspace
+   ------------------------------------------------------------
+   Read off the live component (RMX Components, page "Cards & Tiles",
+   Tile / Style=Workspace) on 2026-09-10:
+
+     root      VERTICAL, radius 4, fill background-tile, 1px border-primary
+     Overline  h4, top stroke 4px border-secondary   <- the coloured bar
+     Header    h44, padding 8/16, HORIZONTAL, NO blue underline
+     content   SLOT, padding 16, gap 16
+
+   rmx.css's .rmx-tile__header encodes the Dashboard/Content header instead
+   (36px + a 2px blue bottom stroke), so the Workspace geometry is set here.
+   That is a gap in the shipped stylesheet, not a deviation — see PROTOTYPE.md.
+   ============================================================ */
+
+/* The overline. Real element, real height, real default colour. */
+.ws-overline {
+  height: 4px;
+  flex: none;
+  background: var(--border-secondary);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+/* Per-section accents. Every stop is a token. The two gradients the export
+   used that have no Foundations equivalent — teal for Tasks, purple for
+   Rent Manager University — drop to a solid real accent instead of being
+   approximated. Colours follow production My Workspace, where the same bar
+   is blue on My Favorites, green on My Reports and orange on My Training. */
+.ws-overline[data-ws-accent="favorites"] {
+  background: linear-gradient(90deg, var(--border-secondary), var(--icon-success));
+}
+.ws-overline[data-ws-accent="reports"] {
+  background: linear-gradient(90deg, var(--container-secondary-dark), var(--border-secondary));
+}
+.ws-overline[data-ws-accent="mentions"] {
+  background: linear-gradient(90deg, var(--icon-attention), var(--icon-notice));
+}
+.ws-overline[data-ws-accent="tasks"] { background: var(--border-secondary); }
+.ws-overline[data-ws-accent="rmu"] { background: var(--icon-attention); }
+
+/* Workspace-tile geometry + the kept soft shadow. Reached by attribute so the
+   Tile element itself carries nothing but rmx- classes. */
+/* Radius/md (8px), Emma's call on 2026-09-10. It is a real token — Tile
+   Style=Dashboard uses it — but scripts/audit.mjs still errors on any radius
+   >= 8 outside Orion, so this reports as a `radius` error on five tiles and
+   the band. That rule is stale against the skill's own 2.0.0 anatomy; see
+   PROTOTYPE.md. Inner surfaces stay at radius-sm, which is correct nesting. */
+.rmx-tile[data-ws-tile] {
+  border-radius: var(--radius-md);
+  box-shadow: var(--ws-shadow);
+  overflow: hidden;
+}
+.rmx-tile[data-ws-tile] > .rmx-tile__header {
+  min-height: 44px;
+  padding: var(--spacing-xs) var(--spacing-md);
+  gap: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-disabled);
+}
+.rmx-tile[data-ws-tile] > .rmx-tile__body { gap: var(--spacing-sm); }
+
+/* Title is Web/Paragraph/L/SemiBold — 16 / 600 / 24 in --text-secondary (navy).
+   Emma's call on 2026-09-10, following production.
+
+   The library disagrees: Header Style=Workspace (node 7331:5299, harvested for
+   skill 2.0.0) carries Web/Heading/M/Regular — 20 / 400 / 28 in --text-primary
+   (#666). That was tried and reverted, because a grey regular title does not
+   hold a card the way the shipped app's navy semibold does. This is now a
+   design-system question rather than a screen decision; see PROTOTYPE.md.
+   (rmx.css's own .rmx-tile__title is 14/600 navy, which is the Content
+   header's size, so it is wrong for a Workspace tile either way.) */
+.rmx-tile[data-ws-tile] .rmx-tile__title {
+  font: var(--type-paragraph-l-semibold);
+  color: var(--text-secondary);
+}
+
+/* Header icon square. Tints are the real Lozenge fills, which is what
+   Foundations provides for a tinted surface at this weight. */
+.ws-hicon {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+}
+.ws-hicon--brand { background: var(--component-lozenge-brand); color: var(--icon-brand); }
+.ws-hicon--navy { background: var(--component-lozenge-brand); color: var(--text-secondary); }
+.ws-hicon--attention { background: var(--component-lozenge-caution); color: var(--icon-attention); }
+.ws-hicon--success { background: var(--component-lozenge-success); color: var(--icon-success); }
+
+/* Header icon buttons — the kabob / customise / expand affordances a Tile
+   header carries. Deliberately not .rmx-btn: a Button is 36px and these are
+   24px icon targets inside a 44px header. */
+.ws-iconbtn {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--icon-tertiary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ws-iconbtn:hover { background: var(--border-disabled); color: var(--icon-brand); }
+
+/* Body variants. The Tile slot ships 16px padding, which is right for the
+   area flow; a row list wants 8 so the rows' own padding does the work. */
+.ws-body--list { padding: var(--spacing-xs); gap: 0; }
+.ws-body--flow { padding: var(--spacing-sm); }
+
+/* ---------- My Favorites / My Reports: area blocks ----------
+   Multi-column so the blocks flow into two columns on a wide card and
+   collapse to one when the card is narrow. */
+.ws-areaflow { column-width: 288px; column-gap: var(--spacing-sm); }
+.ws-area {
+  break-inside: avoid;
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-disabled);
+  border-radius: var(--radius-sm);
+  background: var(--background-tile);
+}
+.ws-area__head {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+.ws-area__name { font: var(--type-paragraph-s-semibold); color: var(--text-secondary); }
+/* Solid squares with white Express product glyphs — the same treatment
+   production uses in these tiles. */
+.ws-area__icon {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--text-inverse);
+}
+.ws-area__icon--blue { background: var(--icon-brand); }
+.ws-area__icon--green { background: var(--icon-success); }
+.ws-area__icon--orange { background: var(--icon-attention); }
+.ws-area__links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-xxs);
+}
+.ws-area__links > a { font: var(--type-paragraph-s-regular); }
+
+/* ---------- My Mentions ---------- */
+.ws-mention {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: var(--spacing-sm);
+  align-items: start;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.ws-mention:hover { background: var(--container-tertiary); }
+.ws-mention__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+.ws-mention__who { font: var(--type-paragraph-s-semibold); color: var(--text-secondary); }
+.ws-mention__when { font: var(--type-label-s-regular); color: var(--text-disabled); }
+.ws-mention__body {
+  margin-top: var(--spacing-xxs);
+  font: var(--type-paragraph-s-regular);
+  color: var(--text-primary);
+}
+/* Avatar — solid circle, white uppercase initials, ~2.5:1 circle-to-text
+   (40px circle / 16px text), radius-round. */
+[data-rmx-component="Avatar"] {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-round);
+  color: var(--text-inverse);
+  font: var(--type-label-l-semibold);
+}
+[data-ws-avatar="brand"] { background: var(--container-secondary); }
+[data-ws-avatar="green"] { background: var(--icon-success); }
+[data-ws-avatar="orange"] { background: var(--icon-attention); }
+[data-ws-avatar="navy"] { background: var(--container-secondary-dark); }
+/* The @handle. Brand-tinted rather than the export's peach, which had no
+   token behind it. */
+.ws-handle {
+  padding: 0 var(--spacing-xxs);
+  border-radius: var(--radius-sm);
+  background: var(--component-lozenge-brand);
+  color: var(--text-link);
+  font: var(--type-paragraph-s-semibold);
+}
+
+/* ---------- My Tasks ---------- */
+.ws-taskbar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-xs) 0;
+}
+.ws-taskbar__spacer { flex: 1; }
+
+/* Toggle Switch — 132x36, two 66px segments; the selected segment fills
+   --border-disabled with a --border-secondary border and a SemiBold label.
+   rmx.css ships no recipe for this component yet, so it lives here. The
+   element carries no class, only data-rmx-component, so tagging it as the
+   real component stays truthful. */
+[data-rmx-component="Toggle Switch"] {
+  display: inline-flex;
+  flex: none;
+  width: 132px;
+  height: 36px;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+[data-rmx-component="Toggle Switch"] > button {
+  width: 66px;
+  border: 0;
+  background: var(--container-primary);
+  color: var(--text-primary);
+  font: var(--type-label-m-regular);
+  cursor: pointer;
+}
+[data-rmx-component="Toggle Switch"] > button[aria-pressed="true"] {
+  background: var(--border-disabled);
+  color: var(--text-secondary);
+  font: var(--type-label-m-semibold);
+  box-shadow: inset 0 0 0 1px var(--border-secondary);
+}
+
+.ws-tasklist { display: flex; flex-direction: column; gap: var(--spacing-xs); padding: var(--spacing-xs); }
+.ws-task {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  gap: var(--spacing-sm);
+  align-items: start;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-disabled);
+  border-radius: var(--radius-sm);
+  background: var(--background-tile);
+}
+.ws-task:hover { box-shadow: var(--ws-shadow-hover); }
+/* Overdue rows take the real error tint, faded to the tile surface — the
+   export's move, on the token. */
+.ws-task[data-overdue="true"] {
+  border-color: var(--component-lozenge-error);
+  background: linear-gradient(135deg, var(--component-lozenge-error) 0%, var(--background-tile) 65%);
+}
+.ws-task[data-done="true"] {
+  opacity: .55;
+  background: var(--container-tertiary);
+  border-color: var(--border-disabled);
+}
+.ws-task[data-done="true"] .ws-task__title { text-decoration: line-through; }
+.ws-task__title { font: var(--type-paragraph-s-semibold); color: var(--text-secondary); }
+.ws-task__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-xxs);
+  min-width: 0;
+}
+.ws-task__context {
+  font: var(--type-label-s-regular);
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ws-task__due { font: var(--type-label-m-semibold); color: var(--text-disabled); white-space: nowrap; }
+.ws-task[data-overdue="true"] .ws-task__due { color: var(--text-error); }
+/* The tag Lozenge sits in a dense row, so it runs at the compact end of the
+   component rather than the 14px default. */
+.ws-task .rmx-lozenge { font: var(--type-label-s-semibold); }
+
+/* ---------- Rent Manager University ---------- */
+.ws-rmu__top {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-sm);
+  background: var(--container-tertiary);
+}
+.ws-rmu__copy { flex: 1; min-width: 0; }
+.ws-body--rmu > .rmx-btn { align-self: flex-start; }
+.ws-rmu__eyebrow {
+  font: var(--type-label-s-semibold);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--icon-attention);
+}
+.ws-rmu__figure { font: var(--type-heading-m-semibold); color: var(--text-secondary); }
+.ws-rmu__hours { font: var(--type-label-s-regular); color: var(--text-primary); }
+
+/* Percentage ring. RMX has Progress Bar (three states) and Progress Circle
+   (a step counter) — neither is a percentage ring, so this is drawn here and
+   listed in PROTOTYPE.md as a gap. */
+.ws-donut { position: relative; width: 96px; height: 96px; flex: none; }
+.ws-donut__track { stroke: var(--border-primary); }
+.ws-donut__fill { stroke: var(--border-secondary); }
+.ws-donut__value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: var(--type-heading-l-semibold);
+  color: var(--text-secondary);
+}
+
+.ws-course {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: var(--spacing-sm);
+  align-items: center;
+  width: 100%;
+  padding: var(--spacing-xs);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.ws-course:hover { background: var(--container-tertiary); }
+.ws-course__icon {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--component-lozenge-brand);
+  color: var(--icon-brand);
+}
+.ws-course[data-started="true"] .ws-course__icon {
+  background: var(--border-secondary);
+  color: var(--text-inverse);
+}
+.ws-course__title {
+  font: var(--type-paragraph-s-semibold);
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ws-course__meta { font: var(--type-label-s-regular); color: var(--text-disabled); }
+.ws-course__meta b { font: var(--type-label-s-semibold); color: var(--text-link); }
+
+.ws-progress {
+  height: 4px;
+  margin-top: var(--spacing-xxs);
+  border-radius: var(--radius-lg);
+  background: var(--border-disabled);
+  overflow: hidden;
+}
+.ws-progress > span { display: block; height: 100%; background: var(--border-secondary); }
+
+/* ---------- corrections to rmx.css, scoped to this screen ----------
+   The .rmx-btn font override that lived here is gone: skill 2.0.0 corrected
+   .rmx-btn to Web/Label/M/Regular upstream.
+
+   Still outstanding: .rmx-btn--text is 36px tall where Button
+   Type=Action text measures 20px with zero padding. This screen uses
+   .rmx-text--link for action text, so nothing here depends on it. */
+
+/* Context Bar action text. The trailing slot takes Context Bar Items, one of
+   which is a text action (Content=Tour Action) — that is what "My Dashboard"
+   is here, not an icon. It must not inherit the bar's white-on-white field
+   rule, and it keeps the bar's 20px icon size. */
+.rmx-contextbar__trailing > [data-rmx-component="Context Bar Item"] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xxs);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text-inverse);
+  font: var(--type-label-m-regular);
+}
+
+
+/* ---------- action text and links carry no underline ----------
+   Emma's call, 2026-09-10: blue action text is never underlined, in the
+   default state or on hover.
+
+   Two separate causes, so two fixes. The area links were underlined in their
+   DEFAULT state simply because they are <a> elements and neither rmx.css nor
+   proto.css resets the browser default — .rmx-text--link only ADDS an
+   underline on hover. And rmx.css deliberately underlines .rmx-btn--text and
+   .rmx-btn--underline labels on hover.
+
+   Note this contradicts RMX Foundations, which names a text style
+   Web/Paragraph/S/Special/Underline and describes it as "Use for links on
+   hover". Flagged in PROTOTYPE.md — the style and the rule cannot both stand. */
+.rmx-text--link,
+.rmx-text--link:hover,
+.rmx-btn--text .rmx-btn__label,
+.rmx-btn--text:hover .rmx-btn__label,
+.rmx-btn--underline .rmx-btn__label,
+.rmx-contextbar__trailing > [data-rmx-component="Context Bar Item"] .rmx-btn__label,
+.rmx-contextbar__trailing > [data-rmx-component="Context Bar Item"]:hover .rmx-btn__label {
+  text-decoration: none;
+}
+
+/* ---------- small structural fixes ---------- */
+
+/* rmx.css colours the tick white when the box is checked but never hides it
+   when it is not, so an unchecked Checkbox renders a gray tick. Same fix the
+   tenant-register prototype carries; belongs in rmx.css. */
+.rmx-check:not([data-checked="true"]) .rmx-check__box > svg { visibility: hidden; }
+
+/* The course row is a button, so its lines need to be blocks. */
+.ws-course > span:last-child { min-width: 0; }
+.ws-course__title,
+.ws-course__meta,
+.ws-progress { display: block; }
+
+/* ============================================================
+   Responsive
+   ------------------------------------------------------------
+   The page fills the viewport. Three steps:
+
+     >= 1280   two columns, 32px gutter
+     900-1279  two columns, 24px gutter; the app bar's three equal columns
+               give way so Command Launch keeps its width
+     < 900     one column, 16px gutter, and the cards reorder so the work
+               comes before the menus — which is the order the export's own
+               one-column layout specified
+
+   Nothing here is a breakpoint invented for its own sake: 1280 and 900 are
+   where the two-column card grid and the app bar respectively stop fitting.
+   ============================================================ */
+
+/* The 64px gutter holds down to the one-column breakpoint; below that it would
+   cost more content width than it buys. */
+@media (max-width: 899px) {
+  :root { --ws-page-pad: var(--spacing-2xl); }
+}
+
+@media (max-width: 899px) {
+  .ws-grid { grid-template-columns: minmax(0, 1fr); }
+  /* display:contents dissolves the column wrappers so the five tiles become
+     direct grid children and can be reordered across what were two columns. */
+  .ws-col { display: contents; }
+  .ws-ann { order: 0; }
+  [data-ws-order="1"] { order: 1; }
+  [data-ws-order="2"] { order: 2; }
+  [data-ws-order="3"] { order: 3; }
+  [data-ws-order="4"] { order: 4; }
+  [data-ws-order="5"] { order: 5; }
+
+  .ws-band__inner { padding: var(--spacing-xl) var(--ws-page-pad); }
+  .ws-band__title { font: var(--type-heading-l-semibold); }
+
+  /* One area column, so the blocks stop being squeezed. */
+  .ws-areaflow { column-width: auto; columns: 1; }
+
+  /* The app bar stays three columns — that is what centres Command Launch —
+     but the middle one takes double weight so the search field keeps a usable
+     width, and Company Code gives up its space, being the least load-bearing
+     thing in the bar. The library has no responsive Header variant; see
+     PROTOTYPE.md, "Worth raising". */
+  .rmx-appbar__launch { flex: 2 0 0; }
+  .rmx-appbar__code { display: none; }
+}
+
+@media (max-width: 599px) {
+  :root { --ws-page-pad: var(--spacing-md); }
+  .ws-band__actions { width: 100%; }
+  .ws-rmu__top { flex-wrap: wrap; }
+
+  /* Stack the band rather than letting flex-wrap interleave the chip between
+     the title and the body. */
+  .ws-ann__panel {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+  .ws-ann__copy { min-width: 0; }
+
+  /* Phone-width app bar. RMX has no responsive Header variant — the component
+     is authored at a fixed desktop width — so this is a stopgap that stops it
+     visibly breaking, not a design. Two rules: keep the wordmark on one line
+     (it was wrapping to "Re / Manager" and colliding with the icons), and drop
+     the three Command Launch icon buttons, which are the only things in the bar
+     that lead nowhere in this prototype anyway. See PROTOTYPE.md,
+     "Worth raising". */
+  /* The logo is a vector at a fixed 175x32, and the bar clips rather than
+     scrolls, so at phone width it was cut mid-wordmark. Let it scale in its
+     column instead — the viewBox keeps it proportional. */
+  .rmx-appbar__logo { width: 100%; max-width: 175px; height: auto; }
+  .rmx-appbar__icons { display: none; }
+}
