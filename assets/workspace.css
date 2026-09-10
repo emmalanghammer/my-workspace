@@ -39,16 +39,31 @@
      (Tasks Enhancements 4098:74461). */
   --shadow-xs: 0 4px 6px rgba(0, 0, 0, .04);
 
-  /* dropshadow-md, the named effect style on Tile Style=Workspace, read off
-     node 4075:109757. Replaces the shadow this file previously invented. */
+  /* ---- the real Foundations effect styles ----
+     Read straight off the RMX Foundations style definitions on 2026-09-10
+     (getStyleByIdAsync via the nodes that carry them on the Components file's
+     "Cards & Tiles" page), because every version of these this prototype had
+     been carrying was missing layers. dropshadow-sm had two of its three,
+     dropshadow-md was a different shape entirely, and dropshadow-lg had two
+     of its four. Figma's shadow radius is the CSS blur and its spread is the
+     CSS spread; the colour is #4C4C4C throughout.
+
+       dropshadow-sm  "Used for subtle separation"
+       dropshadow-md  "Most commonly used."
+       dropshadow-lg  "Used mainly for My Workspace tiles" — see item 28 */
+  --ws-shadow-sm:
+    2px 2px 12px -5px rgba(76, 76, 76, .08),
+    0 4px 15px -5px rgba(76, 76, 76, .08),
+    0 -1px 20px -5px rgba(76, 76, 76, .02);
   --ws-shadow:
-    0 -2px 10px rgba(76, 76, 76, .08),
-    0 4px 5px rgba(76, 76, 76, .10),
-    1px 2px 6px rgba(76, 76, 76, .10);
-  --ws-shadow-hover:
-    0 -2px 10px rgba(76, 76, 76, .12),
-    0 6px 10px rgba(76, 76, 76, .14),
-    1px 2px 6px rgba(76, 76, 76, .12);
+    1px 2px 12px 1px rgba(76, 76, 76, .10),
+    0 4px 10px -10px rgba(76, 76, 76, .10),
+    0 -2px 20px -5px rgba(76, 76, 76, .08);
+  --ws-shadow-lg:
+    1px 2px 12px 1px rgba(76, 76, 76, .14),
+    0 10px 10px -5px rgba(76, 76, 76, .15),
+    0 -2px 20px -10px rgba(76, 76, 76, .06),
+    0 0 5px -10px rgba(76, 76, 76, .05);
   /* Derived from --icon-attention (#f58220). Warm glow behind the welcome band. */
   --ws-glow: rgba(245, 130, 32, .28);
   /* Overdue-row fill. Emma asked for the light red lighter still, and
@@ -742,7 +757,11 @@
      2026-09-10. The checkbox inside keeps its own pointer from rmx.css. */
   cursor: pointer;
 }
-.ws-task:hover { box-shadow: var(--ws-shadow-hover); }
+/* Hover is dropshadow-sm — "Used for subtle separation", which is what a row
+   lifting under the cursor should be. Emma's call, 2026-09-10: the previous
+   hover was an invented shadow heavier than the tile's own, so a row appeared
+   to float above the card containing it. */
+.ws-task:hover { box-shadow: var(--ws-shadow-sm); }
 
 /* High Priority flag, next to the task name. Same harvested glyph the Tasks
    register uses for the same purpose (14x16, --icon-error), so a task reads

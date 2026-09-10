@@ -103,9 +103,22 @@
   --register-header: #737373; --register-hairline: #ebf1f5; --alert-chip: #bc2a30;
   --sp-xxs: 4px; --sp-xs: 8px; --sp-sm: 12px; --sp-md: 16px; --sp-lg: 20px; --sp-xl: 24px; --sp-2xl: 32px; --sp-3xl: 40px;
   --r-xs: 2px; --r-sm: 4px; --r-md: 8px;
-  --shadow-sm: 2px 2px 12px -5px rgba(76,76,76,.08), 0 4px 15px -5px rgba(76,76,76,.08);
-  --shadow-md: 0 0 2.5px rgba(76,76,76,.05), 0 -2px 10px rgba(76,76,76,.06), 0 10px 5px rgba(76,76,76,.15), 1px 2px 6px rgba(76,76,76,.14);
-  --shadow-lg: 1px 2px 12px 1px rgba(76,76,76,.14), 0 10px 10px -5px rgba(76,76,76,.15);
+  /* The three named Foundations effect styles, read off their own
+     definitions 2026-09-10 -- the versions this file carried were each
+     missing layers. See assets/workspace.css for the harvest note. */
+  --shadow-sm:
+    2px 2px 12px -5px rgba(76,76,76,.08),
+    0 4px 15px -5px rgba(76,76,76,.08),
+    0 -1px 20px -5px rgba(76,76,76,.02);
+  --shadow-md:
+    1px 2px 12px 1px rgba(76,76,76,.10),
+    0 4px 10px -10px rgba(76,76,76,.10),
+    0 -2px 20px -5px rgba(76,76,76,.08);
+  --shadow-lg:
+    1px 2px 12px 1px rgba(76,76,76,.14),
+    0 10px 10px -5px rgba(76,76,76,.15),
+    0 -2px 20px -10px rgba(76,76,76,.06),
+    0 0 5px -10px rgba(76,76,76,.05);
   --shadow-toast: 0 3px 6px rgba(0,0,0,.25);
   /* Foundations effect style `dropshadow-xs` — carried by the Add Task component. */
   --shadow-xs: 0 4px 6px rgba(0,0,0,.04);

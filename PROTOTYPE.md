@@ -1038,6 +1038,34 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
 
+## The row hover is dropshadow-sm — and the shadows were all wrong
+
+Emma's call: make the task-row hover less aggressive and use `dropshadow-sm`
+from Foundations. Going to fetch it turned up something bigger.
+
+`dropshadow-sm` is real, and its description is exactly the intent — "Used
+for subtle separation". But **every shadow this prototype carried was an
+approximation**, and each was missing layers:
+
+| | Was | Actually |
+|---|---|---|
+| `dropshadow-sm` | 2 layers | **3** |
+| `dropshadow-md` | a different shape entirely (4 layers, closer to lg) | **3** |
+| `dropshadow-lg` | 2 layers | **4** |
+
+The real definitions are now in all three stylesheets, read straight off the
+Foundations styles rather than off an instance or the skill's cache.
+`importStyleByKeyAsync` is blocked in read-only mode, so the route was
+`getStyleByIdAsync` against the nodes that carry each style on the Components
+file's "Cards & Tiles" page — the same workaround the Mega Menu build needed
+for `importComponentByKeyAsync`. Figma's shadow radius is the CSS blur and its
+spread the CSS spread; the colour is `#4C4C4C` at every level.
+
+The hover itself: it had been an invented shadow *heavier* than the tile's
+own, so a row appeared to float above the card containing it — which is
+what read as aggressive. It is `dropshadow-sm` now, and the tile picked up
+the corrected `dropshadow-md` in the same pass.
+
 ## Add Link's search field: no placeholder, and it looks disabled
 
 Emma's call: remove the placeholder and keep the field disabled until a type
@@ -1507,3 +1535,12 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     family probably wants a second, paler step for row and section grounds,
     not just the chip-strength one: the same gap will appear the first time
     anything needs a pale green or amber row.
+28. **`dropshadow-lg`'s description says it is for My Workspace tiles, but
+    the tile instance uses `dropshadow-md`.** The style's own description in
+    Foundations reads "Used mainly for My Workspace tiles", while
+    `Tile Style=Workspace` on node 4075:109757 carries `dropshadow-md`
+    ("Most commonly used"). One of the two is stale. This prototype follows
+    the instance, because that is what the frame actually draws — but if lg
+    is the intended tile shadow, the component wants updating, and if md is,
+    the description does. Worth a look either way: they are visibly
+    different, lg being four layers and noticeably deeper.
