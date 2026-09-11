@@ -129,7 +129,7 @@ var ENTITIES = {
    the frame shows in that column. */
 var CATEGORIES = ['<Unassigned>', 'Leasing', 'Maintenance', 'Payables', 'Receivables', 'General'];
 
-var state = { entityKey:null, entity:null, notes:[], editIndex:null,
+var state = { entityKey:null, entity:null, notes:[], editIndex:null, onChange:null,
               filters:{user:null, category:null, type:null, attachOnly:false},
               files:[], followup:false };
 
@@ -157,7 +157,12 @@ function initialsFor(name){
     .map(function(part){ return part.charAt(0).toUpperCase(); }).join('');
 }
 function taggableUsers(){
-  var list = USERS.slice();
+  /* A host screen that keeps its own list of people passes it in on the
+     record (`users`), and it wins -- otherwise this file's list and the
+     host's drift apart, which is the bug the Tasks page had between its two
+     user lists. Note authors are added either way. */
+  var base = (state.entity && state.entity.users) || USERS;
+  var list = base.slice();
   (state.notes || []).forEach(function(n){
     if (!n.user) return;
     var known = list.some(function(u){ return u.name === n.user; });
@@ -321,7 +326,10 @@ function openRowMenu(e, idx){
     el.addEventListener('click', function(){
       menu.hidden = true;
       if (el.getAttribute('data-a') === 'edit') { openNote(idx); }
-      else { state.notes.splice(idx, 1); renderNotes(); toast('Note deleted'); }
+      else {
+        state.notes.splice(idx, 1); renderNotes(); toast('Note deleted');
+        if (state.onChange) state.onChange(state.notes);
+      }
     });
   });
   var r = e.currentTarget.getBoundingClientRect();
@@ -434,6 +442,7 @@ function saveNote(){
   };
   if (state.editIndex === null) { state.notes.unshift(data); toast('Note added'); }
   else { state.notes[state.editIndex] = data; toast('Note saved'); }
+  if (state.onChange) state.onChange(state.notes);
   closeNote();
   renderNotes();
 }
@@ -568,10 +577,18 @@ function toast(msg){
     });
   }
 
-  function open(key) {
+  /* `key` may be one of this file's own records, or a record object handed in
+     by the host screen -- a task, say, which the Tasks page opens history for.
+     `opts.onChange(notes)` reports every add/edit/delete back, so a host that
+     owns the record can persist it; `opts.addNote` opens the Note dialog
+     straight away, for an "Add Note" affordance that should land there. */
+  function open(key, opts) {
     inject();
-    state.entityKey = key;
-    state.entity = ENTITIES[key] || ENTITIES['tenant-marcia-clark'];
+    opts = opts || {};
+    var record = (key && typeof key === 'object') ? key : (ENTITIES[key] || ENTITIES['tenant-marcia-clark']);
+    state.onChange = opts.onChange || null;
+    state.entityKey = (key && typeof key === 'object') ? (key.key || 'record') : key;
+    state.entity = record;
     /* A fresh copy every time it opens: the prototype has no server to
        persist an edit to, so a half-finished one should not survive. */
     state.notes = JSON.parse(JSON.stringify(state.entity.notes));
@@ -584,6 +601,7 @@ function toast(msg){
     renderScoreboard();
     renderNotes();
     document.getElementById('hnOverlay').hidden = false;
+    if (opts.addNote) openNote(null);
   }
   function closeOverlay() {
     var el = document.getElementById('hnOverlay');

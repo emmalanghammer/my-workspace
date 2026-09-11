@@ -84,6 +84,7 @@
 <link rel="stylesheet" href="../assets/rmx.css">
 <link rel="stylesheet" href="../assets/megamenu.css">
 <link rel="stylesheet" href="../assets/datetime.css">
+<link rel="stylesheet" href="../assets/history-notes.css">
 <style>
 /* ============================================================
    RMX (Rent Manager Express) starter stylesheet — inlined from
@@ -848,7 +849,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
           </div>
         </div>
         <div class="tile">
-          <div class="tile-header orange"><h3>History / Notes</h3><div class="actions"><a>Add Note <span class="material-symbols-outlined icon-16">open_in_new</span></a></div></div>
+          <div class="tile-header orange"><h3>History / Notes</h3><div class="actions"><a onclick="openTaskHistory(true)">Add Note <span class="material-symbols-outlined icon-16">open_in_new</span></a></div></div>
           <div class="tile-body" id="historyNotesBody">
             <table class="hn-table"><thead><tr><th style="width:70px;">Date</th><th style="width:60px;">Type</th><th>Note</th></tr></thead><tbody id="historyBody"></tbody></table>
             <div class="checklist-empty hidden" id="historyEmpty">No History Notes found.</div>
@@ -1152,6 +1153,26 @@ let otherTasks = [
   { id:'o8', title:'Review owner details for FMHP', flag:false, colorBar:'blue', completed:false,
     action:'Post Owner Checks', actionDetails:null, dueDate:'07/25/25', dueTime:'07:30 AM', overdue:true,
     assigned:['jcameron','canderson'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
+  /* The same New Vendor Onboarding process as it looks to someone watching
+     it rather than working it: Tony found the vendor on the 5th, Dave created
+     the account on the 8th, and Chris's step has sat untouched since. The
+     checklist is expanded inline so the stalled item and its owner are
+     visible from the register, without opening anything. */
+  { id:'o-vendor-onboarding', title:'New Vendor Onboarding', flag:false, colorBar:'blue', completed:false,
+    action:null, actionDetails:null, dueDate:'09/10/26', dueTime:'05:00 PM', overdue:true,
+    assigned:['cgriesinger'], link:'', linkOverflow:0, workflow:'Vendor Onboarding',
+    showProgress:true, expandChecklist:true, externalCal:false,
+    links:[{label:'Vendor', value:'Anderson Mechanical', removable:true}],
+    checklist:[
+      {text:'Find new preferred vendor for services',         assigned:['tlittle'],     done:true,  doneDate:'09/05/26 02:10 PM'},
+      {text:'Create vendor account in system',                assigned:['dhegemann'],   done:true,  doneDate:'09/08/26 09:40 AM'},
+      {text:'Send new vendor agreement & W-9',                assigned:['cgriesinger'], done:false, dueDate:'09/09/26 05:00 PM'},
+      {text:'Confirm COI, W-9, & payment method are on file', assigned:['aferryman'],   done:false}
+    ],
+    history:[
+      {date:'09/08/26 09:40 AM', type:'System', avatar:'dhegemann', text:'Vendor account created in the system'},
+      {date:'09/05/26 02:10 PM', type:'System', avatar:'tlittle',   text:'Preferred vendor selected — Anderson Mechanical'}
+    ] },
   { id:'o9', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'07/05/25', dueTime:'07:30 AM', overdue:true,
     assigned:['canderson'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
@@ -1242,7 +1263,7 @@ function childRowHTML(c, dataset, parentId, idx){
     <td class="col-color"></td>
     <td class="col-task" style="padding-left:24px;">${box}${c.text}</td>
     <td class="col-action"></td>
-    <td class="col-due"></td>
+    <td class="col-due" style="color:${c.done ? 'var(--text-primary)' : 'var(--rmx-red)'}">${c.doneDate || c.dueDate || ''}</td>
     <td class="col-assigned"><div class="avatars">${checklistAvatars(c).map(avatarHTML).join('')}</div></td>
     <td class="col-link"></td>
     <td class="col-workflow"></td>
@@ -1301,7 +1322,14 @@ function toggleChecklistRow(dataset, parentId, idx){
   renderRegister();
 }
 function renderRegister(){
-  const list = state.activeTab==='my' ? myTasks : otherTasks;
+  /* Other Users' Tasks shows the people you picked in the Select Other Users
+     overlay, and only them -- it was showing everyone regardless, which made
+     that overlay decorative. A task counts if any of its assignees is
+     selected, so a task held by a role shows for whoever selected that role. */
+  let list = state.activeTab==='my' ? myTasks : otherTasks;
+  if (state.activeTab === 'other' && state.selectedUserKeys.size) {
+    list = list.filter(t => (t.assigned || []).some(k => state.selectedUserKeys.has(k)));
+  }
   const q = (document.getElementById('searchInput').value||'').toLowerCase().trim();
   const filtered = q ? list.filter(t=>t.title.toLowerCase().includes(q)) : list;
   let html = '';
@@ -1312,7 +1340,7 @@ function renderRegister(){
   document.getElementById('registerBody').innerHTML = html || `<tr><td colspan="10" style="text-align:center;color:var(--text-disabled);font-style:italic;padding:24px;">No tasks match your search.</td></tr>`;
   document.getElementById('totalsLine').textContent = q
     ? `${filtered.length} of ${list.length} Tasks`
-    : (state.activeTab==='my' ? `${myTasks.length} of ${myTasks.length} Tasks` : `${otherTasks.length} of ${otherTasks.length} Tasks`);
+    : `${list.length} of ${(state.activeTab==='my' ? myTasks : otherTasks).length} Tasks`;
   renderTabCounts();
   // due-date sort indicator: My Tasks ascending, Other Users' Tasks descending (matches screenshots)
   document.getElementById('dueSortIcon').textContent = state.activeTab==='my' ? 'arrow_upward' : 'arrow_downward';
@@ -1977,8 +2005,49 @@ function renderModalHistory(){
     <tr>
       <td>${r.date}</td>
       <td>${r.type}</td>
-      <td><div class="hn-note-cell"><span class="hn-avatar">${r.avatar.initials}</span>${r.text}</div></td>
+      <td><div class="hn-note-cell"><span class="hn-avatar">${assigneeInitials(r.avatar)}</span>${r.text}</div></td>
     </tr>`).join('');
+}
+
+/* ---- History / Notes, for a task ----
+   The same overlay My Workspace opens from a mention (assets/history-notes.js),
+   pointed at the task instead of a tenant or an issue -- so a note tagging
+   someone is the same thing here as it is there, chips and all. Notes written
+   in it come back through onChange and land on the task, which is what keeps
+   the modal's own History tile in step. */
+function taskHistoryRecord(t){
+  const linked = (t.links || []).map(l => ({ icon:'properties', text:`${l.label}: ${l.value}` }));
+  return {
+    key: 'task-' + t.id,
+    kind: 'Task',
+    name: t.title,
+    /* This screen owns the list of who exists, so it hands it over rather
+       than letting the overlay fall back to its own copy. */
+    users: USERS.map(u => ({ initials:u.initials, name:u.name, uname:u.uname })),
+    items: (t.workflow ? [{icon:'units', text:t.workflow}] : []).concat(linked),
+    notes: (t.history || []).map(h => ({
+      type: h.type, date: h.date, category: '<Unassigned>',
+      user: assigneeName(h.avatar), note: h.text, files: []
+    }))
+  };
+}
+function openTaskHistory(addNote){
+  const t = state.modalTask;
+  if (!t) { toast('Save this task before adding a note'); return; }
+  RMXHistory.open(taskHistoryRecord(t), {
+    addNote: !!addNote,
+    onChange: function (notes) {
+      /* Back into the task's own shape, so the modal's History tile and the
+         overlay never disagree about what has been written. */
+      t.history = notes.map(n => ({
+        date: n.date, type: n.type,
+        avatar: (USERS.find(u => u.name === n.user) || {}).key || 'tlittle',
+        text: n.note
+      }));
+      state.modalHistory = t.history.slice();
+      renderModalHistory();
+    }
+  });
 }
 
 /* ---- Task Checklist tile ---- */
@@ -2268,5 +2337,6 @@ if (new URLSearchParams(location.search).get('embed') === '1') {
    built; it just no longer triggers feedback here. */
 </script>
 <script src="../assets/datetime.js"></script>
+<script src="../assets/history-notes.js"></script>
 <script src="../assets/megamenu.js"></script>
 </body></html>

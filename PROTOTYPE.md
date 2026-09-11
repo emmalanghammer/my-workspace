@@ -1038,6 +1038,46 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
 
+## Scene 4 — oversight, down to the checklist item
+
+Emma's scene, 2026-09-11: Tony checks Other Users' Tasks, sees which specific
+checklist item is stalled and who owns it, and leaves a note tagging that
+person.
+
+**The same vendor onboarding process, seen from the outside.** A second copy
+lives in `otherTasks`, in flight: Tony found the vendor on the 5th, Dave
+created the account on the 8th, and Chris's step has sat since — the task is
+his, 2/4, and overdue. Its checklist is expanded inline, so the stalled item
+and its owner are readable straight off the register without opening
+anything, which is the whole point of the scene.
+
+**Checklist rows carry their own date** now — a completed item shows when it
+was done, an open one shows when it was due, in red. That is what makes "three
+days after Dave created the vendor" something you can see rather than
+something the presenter has to assert.
+
+**Add Note opens the real History / Notes overlay**, pointed at the task
+instead of a tenant or an issue. It was an unwired link in the tile header.
+Tony types `@chris`, gets a blue chip (he is tagging someone else), saves, and
+the note comes back onto the task and into the modal's own History tile —
+`onChange` reports every write to the host, so the overlay and the tile cannot
+disagree about what has been written.
+
+Three things had to be fixed to get there:
+
+- **The Select Other Users overlay was decorative.** You picked people and
+  then saw every other user's tasks regardless. It filters now — a task shows
+  if any of its assignees was picked, so a role-held task shows for whoever
+  picked that role. The totals line counts what is shown.
+- **The overlay kept its own list of people**, so Chris — who exists on the
+  Tasks page — could not be tagged. A host screen now passes its own list in
+  on the record and it wins. That is the same two-lists bug as before, one
+  layer up, and worth watching for wherever a shared asset holds data of its
+  own.
+- **The History tile was broken by the assignee-key refactor**: it still read
+  `.initials` off what had become a key string, so every avatar in it rendered
+  blank. Fixed.
+
 ## Scene 3 — creating a task and handing it to a role
 
 Emma's scene, 2026-09-11: Tony creates a task for Owner Klydon's W-9, gives it
