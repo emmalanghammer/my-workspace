@@ -2329,67 +2329,32 @@ skill names this exact mistake — *"a checked checkbox is orange,
 on the Tasks screen had the wrong one. One line, and both screens were wrong
 together, so nothing looked out of place enough to notice.
 
-# My Workspace goes back to the production UI
+## The register fills its page
 
-Feedback Emma brought back on 2026-09-11: drop the My Tasks tile and use the
-original My Workspace. So the site's home page is now the production screen from
-RMX-Pages `4969:70308` — My Favorites, My Reports, Announcements, My Training —
-and the proposal that replaced it is preserved rather than deleted.
+Emma's call, 2026-09-11. Sizing the columns to their content fixed the
+horizontal scroll and left the opposite problem: on a wide window the register
+stopped at 1388px and the rest of the page was a dead strip.
 
-## What happened to the old one
+Every column but Tasks keeps the width it needs; **Tasks takes whatever is
+left**. At 1800px it runs to 762px and the table fills the page; below the sum
+of the fixed columns the table still scrolls rather than crushing anything.
 
-Nothing was thrown away. The whole prototype as it stood — the hero band, the
-My Tasks tile with its mini quick-add bar and role queue, the customise flow,
-all of it — is on the **`v1-tasks-tile`** branch and the **`v1-tasks-tile`**
-tag, both pushed to GitHub. The tag is the one to trust: a branch can move, a
-tag cannot. To look at it:
+## Announcements and My Training start hidden
 
-    git checkout v1-tasks-tile
+Also Emma's, and it explains something the reference build had drawn but never
+wired. The frame puts two links in the bottom-right corner — Announcements and
+My Training — because those two tiles are *hidden*; that corner is where a
+hidden tile waits. Both the crossed-eye in each tile's header and both links
+were `data-rmx-todo`, so neither end did anything and both tiles were always
+up, which made the links look like decoration.
 
-and to come back, `git checkout main`. The live site serves `main`, so the link
-people already have keeps working and now shows this version.
+They start hidden now. A link brings its tile back, the crossed-eye puts it
+away again, and the bar itself disappears once there is nothing left in it to
+offer. One thing fixed on the way past: the second link read "My Workspace",
+and the frame says My Training — which is the tile it actually restores.
 
-## What the new home page is
-
-`screens/my-workspace-original.html` had been in the repo since the first round
-as the reference rebuild of the production screen. It *is* the home page now —
-moved to the site root with its asset paths fixed, and the old path left as a
-redirect so any existing link still lands somewhere. Three things changed in
-the move:
-
-- **The Mega Menu is real here.** It was a `data-rmx-todo` on the reference
-  build, because that screen was a baseline and not part of the flow. It is the
-  only way to the Tasks register now, so it works: Menu → Services → Tasks.
-  The logo goes home from anywhere, as it does on every other screen.
-- **The greeting is Tony, not Charlie.** The frame's avatar reads DS and its
-  greeting reads Charlie, and the reference build followed it exactly. This
-  page now carries mentions addressed to @Tony, so it says Tony. A deliberate
-  deviation, and the alternative was a page that greets one person and is
-  written to another.
-- **The prototype-only "reference baseline" banner is gone.** It said this
-  screen was not part of the main flow. It is the main flow.
-
-## The one deviation from the frame
-
-**My Mentions stays.** Emma's call: remove the My Tasks tile, keep Mentions.
-The frame has four tiles and no Mentions — this has five — because Mentions is
-how you reach a record's History / Notes, which is a real piece of the
-prototype and has nowhere else to be reached from. It leads the row, being the
-one tile about something waiting on you, and it carries the original screen's
-tile anatomy (`ows-overline`, the 44px Workspace header, the 580px tile) rather
-than the proposal's, so it reads as part of the page rather than a graft.
-
-`assets/workspace.css` is still loaded, but only for what is inside that tile —
-the mention rows, the header icon, the count. The two workspace stylesheets
-scope their tile rules by attribute (`[data-ows-tile]` against `[data-ws-tile]`)
-so they do not collide, which is why this works at all.
-
-## What is unchanged
-
-The Tasks register, Task Details, the History / Notes overlay, the shared task
-state between screens, the Mega Menu, the date pickers, the action list — all
-of it is untouched and all of it still works. What went is one tile and the
-page it sat on.
+**Services leads My Favorites.** It was the last card in its column, so
+reaching Tasks — the one built screen in that tile — meant scrolling.
 
 ---
 
@@ -2620,3 +2585,67 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     cannot both hold, and a prototype following either one looks wrong to
     whoever read the other. Emma's call here was blue; the losing document
     wants correcting either way.
+
+---
+
+# My Workspace goes back to the production UI
+
+Feedback Emma brought back on 2026-09-11: drop the My Tasks tile and use the
+original My Workspace. So the site's home page is now the production screen from
+RMX-Pages `4969:70308` — My Favorites, My Reports, Announcements, My Training —
+and the proposal that replaced it is preserved rather than deleted.
+
+## What happened to the old one
+
+Nothing was thrown away. The whole prototype as it stood — the hero band, the
+My Tasks tile with its mini quick-add bar and role queue, the customise flow,
+all of it — is on the **`v1-tasks-tile`** branch and the **`v1-tasks-tile`**
+tag, both pushed to GitHub. The tag is the one to trust: a branch can move, a
+tag cannot. To look at it:
+
+    git checkout v1-tasks-tile
+
+and to come back, `git checkout main`. The live site serves `main`, so the link
+people already have keeps working and now shows this version.
+
+## What the new home page is
+
+`screens/my-workspace-original.html` had been in the repo since the first round
+as the reference rebuild of the production screen. It *is* the home page now —
+moved to the site root with its asset paths fixed, and the old path left as a
+redirect so any existing link still lands somewhere. Three things changed in
+the move:
+
+- **The Mega Menu is real here.** It was a `data-rmx-todo` on the reference
+  build, because that screen was a baseline and not part of the flow. It is the
+  only way to the Tasks register now, so it works: Menu → Services → Tasks.
+  The logo goes home from anywhere, as it does on every other screen.
+- **The greeting is Tony, not Charlie.** The frame's avatar reads DS and its
+  greeting reads Charlie, and the reference build followed it exactly. This
+  page now carries mentions addressed to @Tony, so it says Tony. A deliberate
+  deviation, and the alternative was a page that greets one person and is
+  written to another.
+- **The prototype-only "reference baseline" banner is gone.** It said this
+  screen was not part of the main flow. It is the main flow.
+
+## The one deviation from the frame
+
+**My Mentions stays.** Emma's call: remove the My Tasks tile, keep Mentions.
+The frame has four tiles and no Mentions — this has five — because Mentions is
+how you reach a record's History / Notes, which is a real piece of the
+prototype and has nowhere else to be reached from. It leads the row, being the
+one tile about something waiting on you, and it carries the original screen's
+tile anatomy (`ows-overline`, the 44px Workspace header, the 580px tile) rather
+than the proposal's, so it reads as part of the page rather than a graft.
+
+`assets/workspace.css` is still loaded, but only for what is inside that tile —
+the mention rows, the header icon, the count. The two workspace stylesheets
+scope their tile rules by attribute (`[data-ows-tile]` against `[data-ws-tile]`)
+so they do not collide, which is why this works at all.
+
+## What is unchanged
+
+The Tasks register, Task Details, the History / Notes overlay, the shared task
+state between screens, the Mega Menu, the date pickers, the action list — all
+of it is untouched and all of it still works. What went is one tile and the
+page it sat on.
