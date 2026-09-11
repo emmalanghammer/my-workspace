@@ -6,16 +6,21 @@
 #   /          the `main` branch  — the site everyone has the link to
 #   /preview/  the `original-workspace` branch — the version being reviewed
 #
-# A push to either branch rebuilds both, so the preview is never stale and
-# main is never surprised. Changing which version is "the" site is one line:
-# swap the two branch names in the checkout steps below.
+# Only `main` can trigger this. GitHub's `github-pages` environment refuses a
+# deployment from any other branch, so a push to `original-workspace` fails
+# before it runs a step -- the preview is refreshed by a push to main, or by
+# running this workflow by hand from the Actions tab (Run workflow), which
+# always re-reads both branches.
+#
+# Changing which version is "the" site is one line: swap the two branch names
+# in the checkout steps below.
 name: Deploy static content to Pages
 
 on:
   push:
-    branches: ["main", "original-workspace"]
+    branches: ["main"]
 
-  # Lets you re-run a deploy by hand from the Actions tab.
+  # Refreshes the preview after a push to original-workspace.
   workflow_dispatch:
 
 permissions:
