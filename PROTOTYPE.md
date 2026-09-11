@@ -2402,6 +2402,25 @@ Tenants, prospects and owners are untouched — Daniel Smith, Marcia Clark,
 Nicole Brandt, Renee Vogel, Sally Klydon and the rest are content Emma chose
 herself, and several are load-bearing in the demo's scenes.
 
+## The production UI is the site
+
+Emma's call, 2026-09-11. `main` now serves the original My Workspace, so the
+link everyone already has shows it:
+
+| | |
+|---|---|
+| `emmalanghammer.github.io/my-workspace/` | the production My Workspace UI |
+| `…/my-workspace/preview/` | the earlier version, with the My Tasks tile |
+
+The earlier version is not gone and not only recoverable — it stays openable at
+`/preview/`, published from the **`v1-tasks-tile`** tag. A tag rather than a
+branch on purpose: a branch can move, a tag cannot, so that URL shows the same
+thing next month as it does today.
+
+Both come out of one build, so neither can drift from the other. Swapping which
+one is "the" site again is two lines in `.github/workflows/static.yml` — the
+refs the two checkout steps use.
+
 ---
 
 # Worth raising with the design system

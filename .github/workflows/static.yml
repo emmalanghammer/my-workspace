@@ -3,24 +3,25 @@
 # Two things are published from one artifact, so both are always live and
 # always in step:
 #
-#   /          the `main` branch  — the site everyone has the link to
-#   /preview/  the `original-workspace` branch — the version being reviewed
+#   /          the `main` branch — the site everyone has the link to, now the
+#              production My Workspace UI
+#   /preview/  the `v1-tasks-tile` tag — the earlier version, the one with the
+#              My Tasks tile on the Workspace, kept openable rather than only
+#              recoverable
 #
 # Only `main` can trigger this. GitHub's `github-pages` environment refuses a
-# deployment from any other branch, so a push to `original-workspace` fails
-# before it runs a step -- the preview is refreshed by a push to main, or by
-# running this workflow by hand from the Actions tab (Run workflow), which
-# always re-reads both branches.
+# deployment from any other branch, so the archive is republished whenever main
+# deploys, or by running this workflow by hand from the Actions tab.
 #
-# Changing which version is "the" site is one line: swap the two branch names
-# in the checkout steps below.
+# Changing which version is "the" site is one line: swap the two refs in the
+# checkout steps below.
 name: Deploy static content to Pages
 
 on:
   push:
     branches: ["main"]
 
-  # Refreshes the preview after a push to original-workspace.
+  # Republishes both by hand, without waiting for a push.
   workflow_dispatch:
 
 permissions:
@@ -45,10 +46,10 @@ jobs:
           ref: main
           path: site
 
-      - name: Check out the preview (original-workspace)
+      - name: Check out the archived version (v1-tasks-tile)
         uses: actions/checkout@v4
         with:
-          ref: original-workspace
+          ref: v1-tasks-tile
           path: preview
 
       - name: Assemble
