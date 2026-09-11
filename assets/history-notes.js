@@ -40,12 +40,12 @@ var ME = 'Tony Little';
    the two screens agree about who exists. See PROTOTYPE.md on the two
    conflicting user lists in the Tasks data. */
 var USERS = [
-  {initials:'AA', name:'Alan Anderson',   uname:'aanderson'},
-  {initials:'AB', name:'Adam Bryan',      uname:'abryan'},
-  {initials:'BC', name:'Becky Carle',     uname:'bcarle'},
-  {initials:'CA', name:'Charlie Apegian', uname:'capegian'},
-  {initials:'DG', name:'Danielle Gardin', uname:'dgardin'},
-  {initials:'EL', name:'Emma Langhammer', uname:'elanghammer'},
+  {initials:'AA', name:'Maren Delacroix',   uname:'mdelacroix'},
+  {initials:'AB', name:'Emeka Nwosu',      uname:'enwosu'},
+  {initials:'BC', name:'Beatrix Arriaga',     uname:'barriaga'},
+  {initials:'CA', name:'Tamsin Oyelaran', uname:'toyelaran'},
+  {initials:'DG', name:'Anouk Verhoeven', uname:'averhoeven'},
+  {initials:'EL', name:'Delphine Okonjo', uname:'dokonjo'},
   {initials:'TL', name:'Tony Little',     uname:'tlittle'}
 ];
 
@@ -58,13 +58,13 @@ var ENTITIES = {
       {icon:'units',      text:'Riverview #204'}
     ],
     notes: [
-      {type:'Vendor Coordination', date:'09/10/25 08:42 AM', category:'Maintenance', user:'Diego Alvarez',
+      {type:'Vendor Coordination', date:'09/10/25 08:42 AM', category:'Maintenance', user:'Otto Grimaldi',
        note:'Carpet vendor quote received — $1,840 for unit and hallway. @Tony can you confirm the carpet vendor before I close this issue?', files:['quote_riverview_204.pdf']},
-      {type:'Tenant Contact', date:'09/08/25 04:15 PM', category:'Maintenance', user:'Becky Carle',
+      {type:'Tenant Contact', date:'09/08/25 04:15 PM', category:'Maintenance', user:'Beatrix Arriaga',
        note:'Left voicemail for the tenant about access on Thursday morning.', files:[]},
-      {type:'Inspection', date:'09/05/25 11:20 AM', category:'<Unassigned>', user:'Alan Anderson',
+      {type:'Inspection', date:'09/05/25 11:20 AM', category:'<Unassigned>', user:'Maren Delacroix',
        note:'Walked the unit. Carpet in the living room is past wear-and-tear; padding is dry, no sign of a leak.', files:['img_4321.jpg']},
-      {type:'Issue Created', date:'09/04/25 09:03 AM', category:'<Unassigned>', user:'Danielle Gardin',
+      {type:'Issue Created', date:'09/04/25 09:03 AM', category:'<Unassigned>', user:'Anouk Verhoeven',
        note:'Tenant reported the carpet lifting near the patio door.', files:[]}
     ]
   },
@@ -81,17 +81,17 @@ var ENTITIES = {
     status: {label:'Current'},
     balance: '0.00',
     notes: [
-      {type:'Tenant Contact', date:'09/10/25 03:40 PM', category:'Leasing', user:'Karen Hsu',
+      {type:'Tenant Contact', date:'09/10/25 03:40 PM', category:'Leasing', user:'Zara Bellweather',
        note:'She is planning to add a roommate in the next six months and wants the process in writing before she commits. @Tony she’s adding a roommate within six months and wants the steps in writing.', files:[]},
-      {type:'Tenant Contact', date:'09/10/25 02:15 PM', category:'Leasing', user:'Karen Hsu',
+      {type:'Tenant Contact', date:'09/10/25 02:15 PM', category:'Leasing', user:'Zara Bellweather',
        note:'Called about adding her sister to the lease sometime after the new year. Walked her through it at a high level — application and screening for the new occupant, then a lease amendment, and the deposit recalculated at two occupants. She asked for it in writing.', files:[]},
-      {type:'Billing', date:'09/10/25 09:12 AM', category:'Receivables', user:'Karen Hsu',
+      {type:'Billing', date:'09/10/25 09:12 AM', category:'Receivables', user:'Zara Bellweather',
        note:'Credit issued for the duplicate charge on the August statement.', files:[]},
-      {type:'Statement Dispute', date:'09/09/25 02:48 PM', category:'Receivables', user:'Karen Hsu',
+      {type:'Statement Dispute', date:'09/09/25 02:48 PM', category:'Receivables', user:'Zara Bellweather',
        note:'Tenant called about a duplicate charge on her statement. Verified — the same $45 pet fee posted twice on 08/31.', files:['statement_aug.pdf']},
-      {type:'Lease', date:'06/01/25 10:00 AM', category:'Leasing', user:'Emma Langhammer',
+      {type:'Lease', date:'06/01/25 10:00 AM', category:'Leasing', user:'Delphine Okonjo',
        note:'Renewal signed through 05/31/26 at $1,265.', files:[]},
-      {type:'Web Account Update', date:'03/24/25 03:24 PM', category:'<Unassigned>', user:'Adam Bryan',
+      {type:'Web Account Update', date:'03/24/25 03:24 PM', category:'<Unassigned>', user:'Emeka Nwosu',
        note:'Tenant portal login reset at her request.', files:[]}
     ]
   },
@@ -104,11 +104,11 @@ var ENTITIES = {
     ],
     balance: '640.00',
     notes: [
-      {type:'Payment Setup', date:'09/10/25 06:30 AM', category:'Payables', user:'Anthony Park',
+      {type:'Payment Setup', date:'09/10/25 06:30 AM', category:'Payables', user:'Sunniva Holt',
        note:'flagging @Tony — they want autopay set up before next visit.', files:[]},
-      {type:'Service Visit', date:'08/28/25 01:15 PM', category:'Maintenance', user:'Alan Anderson',
+      {type:'Service Visit', date:'08/28/25 01:15 PM', category:'Maintenance', user:'Maren Delacroix',
        note:'Quarterly treatment completed at Flagstone. Invoice 8841 received.', files:['inv_8841.pdf']},
-      {type:'Contract', date:'01/15/25 08:00 AM', category:'<Unassigned>', user:'Charlie Apegian',
+      {type:'Contract', date:'01/15/25 08:00 AM', category:'<Unassigned>', user:'Tamsin Oyelaran',
        note:'Annual contract renewed — quarterly treatment across three properties.', files:[]}
     ]
   },
@@ -122,13 +122,13 @@ var ENTITIES = {
       {icon:'call',         text:'513-555-7741'}
     ],
     notes: [
-      {type:'Quote', date:'09/10/25 11:05 AM', category:'Leasing', user:'Danielle Gardin',
+      {type:'Quote', date:'09/10/25 11:05 AM', category:'Leasing', user:'Anouk Verhoeven',
        note:'She wants to see the unit priced with the covered space in the rent, not as a separate line. @Tony Nicole wants the quote repriced with the covered parking space included. Can you add it?', files:[]},
-      {type:'Showing', date:'09/09/25 04:30 PM', category:'Leasing', user:'Danielle Gardin',
+      {type:'Showing', date:'09/09/25 04:30 PM', category:'Leasing', user:'Anouk Verhoeven',
        note:'Toured #212. Liked the unit, asked twice about covered parking — she leaves for a job site before six and does not want to scrape in the winter. One garage space is open at $45.', files:[]},
-      {type:'Quote', date:'09/09/25 02:10 PM', category:'Leasing', user:'Danielle Gardin',
+      {type:'Quote', date:'09/09/25 02:10 PM', category:'Leasing', user:'Anouk Verhoeven',
        note:'Quoted $1,310 for #212, 12-month term, move-in 10/01. Parking not included.', files:['quote_riverview_212.pdf']},
-      {type:'Inquiry', date:'09/06/25 08:45 AM', category:'Leasing', user:'Brittany Fischer',
+      {type:'Inquiry', date:'09/06/25 08:45 AM', category:'Leasing', user:'Soren Quill',
        note:'Web inquiry — two bedroom, October move-in, no pets.', files:[]}
     ]
   },
@@ -143,13 +143,13 @@ var ENTITIES = {
       {icon:'call',         text:'513-555-9063'}
     ],
     notes: [
-      {type:'Lead Transfer', date:'09/10/25 09:20 AM', category:'Leasing', user:'Ali Ferryman',
+      {type:'Lead Transfer', date:'09/10/25 09:20 AM', category:'Leasing', user:'Ines Kowalczyk',
        note:'Flagstone has no dog run and the nearest park is a fifteen minute drive. Brookside has the fenced run off the south lot. @Tony she really wants a dog park — nothing at Flagstone fits. Can you move the lead to Brookside?', files:[]},
-      {type:'Prospect Contact', date:'09/09/25 05:40 PM', category:'Leasing', user:'Ali Ferryman',
+      {type:'Prospect Contact', date:'09/09/25 05:40 PM', category:'Leasing', user:'Ines Kowalczyk',
        note:'Followed up after the tour. She was straight about it — the dog run is the deciding factor, two large dogs, and she will keep looking without one.', files:[]},
-      {type:'Showing', date:'09/09/25 10:00 AM', category:'Leasing', user:'Ali Ferryman',
+      {type:'Showing', date:'09/09/25 10:00 AM', category:'Leasing', user:'Ines Kowalczyk',
        note:'Toured Flagstone Lot 12. Liked the townhome and the price; her first question at the door was where the dogs go.', files:[]},
-      {type:'Inquiry', date:'09/07/25 07:15 PM', category:'Leasing', user:'Brittany Fischer',
+      {type:'Inquiry', date:'09/07/25 07:15 PM', category:'Leasing', user:'Soren Quill',
        note:'Web inquiry — three bedroom, November move-in, two dogs (60lb and 45lb).', files:[]}
     ]
   },
@@ -166,13 +166,13 @@ var ENTITIES = {
     status: {label:'Current'},
     balance: '0.00',
     notes: [
-      {type:'Pet Request', date:'09/11/25 08:50 AM', category:'Leasing', user:'Becky Carle',
+      {type:'Pet Request', date:'09/11/25 08:50 AM', category:'Leasing', user:'Beatrix Arriaga',
        note:'Vet records and the renter’s policy are attached. @Tony he wants to get a dog — 40lb lab mix. Pet addendum or do we need the deposit first?', files:['vaccination_record.pdf','renters_policy.pdf']},
-      {type:'Tenant Contact', date:'09/10/25 04:20 PM', category:'Leasing', user:'Becky Carle',
+      {type:'Tenant Contact', date:'09/10/25 04:20 PM', category:'Leasing', user:'Beatrix Arriaga',
        note:'Came into the office about adding a dog — a two year old lab mix, about 40lb, from the shelter on Vine. Told him the breed is fine and the weight is under the limit, and that we would need vet records and proof of renter’s insurance listing the dog.', files:[]},
-      {type:'Lease', date:'07/01/25 10:00 AM', category:'Leasing', user:'Emma Langhammer',
+      {type:'Lease', date:'07/01/25 10:00 AM', category:'Leasing', user:'Delphine Okonjo',
        note:'Signed through 06/30/26 at $1,180. No pets on the original lease.', files:[]},
-      {type:'Move In', date:'07/01/25 09:00 AM', category:'<Unassigned>', user:'Alan Anderson',
+      {type:'Move In', date:'07/01/25 09:00 AM', category:'<Unassigned>', user:'Maren Delacroix',
        note:'Move-in inspection completed with the tenant. No exceptions noted.', files:['moveIn_107B.pdf']}
     ]
   },
@@ -186,13 +186,13 @@ var ENTITIES = {
     ],
     balance: '0.00',
     notes: [
-      {type:'Management Agreement', date:'09/10/25 01:30 PM', category:'<Unassigned>', user:'Dave Hegemann',
+      {type:'Management Agreement', date:'09/10/25 01:30 PM', category:'<Unassigned>', user:'Cyrus Nakamura',
        note:'She wants it ready to sign the week she closes, so rents can be collected in October. @Tony she closes on the Westbrook fourplex on the 30th and wants the management agreement started.', files:[]},
-      {type:'Owner Contact', date:'09/10/25 11:45 AM', category:'<Unassigned>', user:'Dave Hegemann',
+      {type:'Owner Contact', date:'09/10/25 11:45 AM', category:'<Unassigned>', user:'Cyrus Nakamura',
        note:'Called to say the Westbrook Ave fourplex is under contract, closing 09/30. Four units, three occupied, currently self-managed. She wants us on it from day one — same terms as her other two.', files:[]},
-      {type:'Statement', date:'09/01/25 06:00 AM', category:'<Unassigned>', user:'Karen Hsu',
+      {type:'Statement', date:'09/01/25 06:00 AM', category:'<Unassigned>', user:'Zara Bellweather',
        note:'August owner statement sent. Distribution $4,206.18.', files:['owner_stmt_aug.pdf']},
-      {type:'Management Agreement', date:'02/14/24 09:00 AM', category:'<Unassigned>', user:'Emma Langhammer',
+      {type:'Management Agreement', date:'02/14/24 09:00 AM', category:'<Unassigned>', user:'Delphine Okonjo',
        note:'Agreement signed for both existing properties at 8% of collected rent.', files:[]}
     ]
   }
@@ -221,8 +221,8 @@ function chipHTML(name){
 }
 /* Who can be tagged: the user list, plus anyone who has written a note on
    this record. Emma's call, 2026-09-10 -- "include any users who have added
-   notes as users available to @ tag in a note." Karen Hsu, Diego Alvarez,
-   Anthony Park and Diego Alvarez all show up as note authors without being in
+   notes as users available to @ tag in a note." Zara Bellweather, Otto Grimaldi,
+   Sunniva Holt and Otto Grimaldi all show up as note authors without being in
    the user list, and it reads oddly to get a note from someone you cannot
    reply to. Derived entries carry no username: the record gives us a name,
    not a login. */
