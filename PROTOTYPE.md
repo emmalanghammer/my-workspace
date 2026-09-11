@@ -2303,6 +2303,32 @@ and showed a text caret; so did the collapsed quick-add bar. Both point now.
 Audited the rest of both screens rather than fixing only the two reported —
 everything else with a click handler already pointed.
 
+## Bubbles say who they are, and a checked box is the right orange
+
+Emma's calls, 2026-09-11.
+
+**Hovering a bubble names the person; hovering a "+N" names all of them.** The
+single bubbles had a native `title`, which is slow and unstyled; the "+N" had
+nothing at all, because it could not have had anything — it was a literal
+`'+2'` sitting in the data with no people behind it. The cluster is computed
+now: two bubbles and a "+N" carrying the names of the rest, so the tooltip has
+something true to say. A register cell clips its overflow, so the tooltip is a
+fixed-position element on `<body>` rather than a child of the cell.
+
+**The Assigned To column centres**, header and bubbles together.
+
+**A checklist item's checkbox is the same control wherever you meet it.** In
+the register it was a 16px green box; in Task Details a 20px orange one. Green
+belongs to the task-done control on the row above it, and the two meaning
+different things is the point — so the register's now matches Task Details.
+
+**And that turned up a real one.** `.chkbox.checked` was filled with
+`--rmx-marketing` (#f79b4d) rather than `Icon/icon-attention` (#f58220). The
+skill names this exact mistake — *"a checked checkbox is orange,
+`--icon-attention`, **not** the marketing orange"* — and every checked checkbox
+on the Tasks screen had the wrong one. One line, and both screens were wrong
+together, so nothing looked out of place enough to notice.
+
 # My Workspace goes back to the production UI
 
 Feedback Emma brought back on 2026-09-11: drop the My Tasks tile and use the

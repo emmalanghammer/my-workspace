@@ -195,7 +195,12 @@ a:hover { text-decoration:none; }
 /* Checkbox / radio */
 .check{display:inline-flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;user-select:none;}
 .chkbox{width:20px;height:20px;flex:none;border:2px solid #b3b3b3;border-radius:var(--r-xs);background:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;}
-.chkbox.checked{background:var(--rmx-marketing);border-color:var(--rmx-marketing);}
+/* Icon/icon-attention (#f58220), not the marketing orange (#f79b4d). The
+   skill names this one by name -- "a checked checkbox is orange,
+   --icon-attention, NOT the marketing orange" -- and this had the marketing
+   value, so every checked checkbox on the screen was a shade off. Found while
+   making the register's checklist checkbox match Task Details', 2026-09-11. */
+.chkbox.checked{background:var(--rmx-orange);border-color:var(--rmx-orange);}
 .chkbox.checked .material-symbols-outlined{font-size:16px;color:#fff;}
 .chkbox.blue.checked{background:var(--rmx-blue);border-color:var(--rmx-blue);}
 .chkbox.green.checked{background:var(--rmx-green);border-color:var(--rmx-green);}
@@ -366,7 +371,11 @@ a:hover { text-decoration:none; }
 .col-task{width:var(--col-task-w);}
 .col-action{width:var(--col-action-w);}
 .col-due{width:var(--col-due-w);}
-.col-assigned{width:var(--col-assigned-w);}
+/* The bubbles centre in their column, header included. Emma's call,
+   2026-09-11. */
+.col-assigned{width:var(--col-assigned-w);text-align:center;}
+.task-register th.col-assigned{text-align:center;}
+.col-assigned .avatars{justify-content:center;}
 .col-link{width:var(--col-link-w);}
 .col-workflow{width:var(--col-workflow-w);}
 .col-claim{width:var(--col-claim-w);text-align:center;}
@@ -380,6 +389,11 @@ a:hover { text-decoration:none; }
 .link-pill .material-symbols-outlined{font-size:16px;}
 .chk-progress{font-size:12px;color:var(--text-primary);margin-left:6px;}
 .avatars{display:inline-flex;align-items:center;justify-content:flex-start;}
+/* Register cells clip their overflow, so the bubble tooltip cannot live
+   inside one -- it is a fixed-position element on <body>, positioned from the
+   bubble it belongs to. Same look as the quick-add bar's own tooltip. */
+.av-tip{position:fixed;z-index:600;display:none;max-width:220px;padding:8px;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);background:var(--container-primary,#fff);box-shadow:0 3px 6px rgba(0,0,0,.15);font:400 14px/20px 'Roboto',sans-serif;color:var(--rmx-navy);white-space:normal;pointer-events:none;}
+.av-tip.show{display:block;}
 .avatar-bubble{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;background:var(--rmx-blue);color:#fff;margin-left:-4px;flex:none;}
 .avatar-bubble:first-child{margin-left:0;}
 /* The three user colours. A role keeps its own pale-orange outlined bubble
@@ -1302,7 +1316,7 @@ let otherTasks = [
     assigned:['bfischer'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
   { id:'o5', title:'Distribute payments to owners', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/29/26', dueTime:'08:30 AM', overdue:false,
-    assigned:['dhegemann','aferryman','+2'], link:'', linkOverflow:0, workflow:'', checklist:[] },
+    assigned:['dhegemann','aferryman','elanghammer','jcameron'], link:'', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o6', title:'Close service tickets', showProgress:true, colorBar:'green', completed:false,
     action:'View Issues', actionDetails:null, dueDate:'08/01/26', dueTime:'09:30 AM', overdue:true,
     assigned:['capegian'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
@@ -1378,7 +1392,21 @@ function avatarHTML(key, i, all){
     return `<div class="avatar-bubble plus${role ? ' notice' : ''}">${key}</div>`;
   }
   const cls = isRoleKey(key) ? 'avatar-bubble notice' : ('avatar-bubble av-' + userColor(key));
-  return `<div class="${cls}" title="${assigneeName(key)}">${assigneeInitials(key)}</div>`;
+  return `<div class="${cls}" data-names="${escAttr(assigneeName(key))}">${assigneeInitials(key)}</div>`;
+}
+/* A register cluster: two bubbles and then a "+N" for the rest. Both carry the
+   names they stand for in data-names, which the hover tooltip reads -- the +N
+   used to be a literal in the data with nobody behind it, so there was nothing
+   to show. Emma's call, 2026-09-11. */
+function avatarsHTML(keys){
+  const list = (keys || []).filter(k => !/^\+/.test(k));
+  const shown = list.slice(0, 2), rest = list.slice(2);
+  let html = shown.map((k, i) => avatarHTML(k, i, list)).join('');
+  if (rest.length) {
+    const role = list.some(isRoleKey);
+    html += `<div class="avatar-bubble plus${role ? ' notice' : ''}" data-names="${escAttr(rest.map(assigneeName).join(', '))}">+${rest.length}</div>`;
+  }
+  return html;
 }
 function colorBarHTML(c){
   if(!c) return '';
@@ -1417,7 +1445,7 @@ function taskRowHTML(t, dataset){
     <td class="col-task"><div class="task-cell"><span class="name">${t.title}</span>${flag}${progress}</div></td>
     <td class="col-action">${action}</td>
     <td class="col-due" style="color:${dueColor}">${t.dueDate} ${t.dueTime}</td>
-    <td class="col-assigned"><div class="avatars">${t.assigned.map(avatarHTML).join('')}</div></td>
+    <td class="col-assigned"><div class="avatars">${avatarsHTML(t.assigned)}</div></td>
     <td class="col-link">${linkText}${linkPill}</td>
     <td class="col-workflow">${t.workflow}</td>
     <td class="col-claim">${claim}</td>
@@ -1426,15 +1454,19 @@ function taskRowHTML(t, dataset){
 }
 function childRowHTML(c, dataset, parentId, idx){
   const box = c.done
-    ? `<div class="chkbox sm green checked" style="display:inline-flex;vertical-align:middle;margin-right:8px;" onclick="event.stopPropagation();toggleChecklistRow('${dataset}','${parentId}',${idx})"><span class="material-symbols-outlined">check</span></div>`
-    : `<div class="chkbox sm" style="display:inline-flex;vertical-align:middle;margin-right:8px;" onclick="event.stopPropagation();toggleChecklistRow('${dataset}','${parentId}',${idx})"></div>`;
+    /* The same checkbox a checklist item gets in Task Details: full size, and
+       orange when checked, because that is what a checked Checkbox is. Green
+       belongs to the task-done control on the row above it, and the two
+       meaning different things is the point. Emma's call, 2026-09-11. */
+    ? `<div class="chkbox checked" style="display:inline-flex;vertical-align:middle;margin-right:8px;" onclick="event.stopPropagation();toggleChecklistRow('${dataset}','${parentId}',${idx})"><span class="material-symbols-outlined">check</span></div>`
+    : `<div class="chkbox" style="display:inline-flex;vertical-align:middle;margin-right:8px;" onclick="event.stopPropagation();toggleChecklistRow('${dataset}','${parentId}',${idx})"></div>`;
   return `<tr class="child-row">
     <td class="col-check"></td>
     <td class="col-color"></td>
     <td class="col-task" style="padding-left:24px;">${box}${c.text}</td>
     <td class="col-action"></td>
     <td class="col-due" style="color:${c.done ? 'var(--text-primary)' : 'var(--rmx-red)'}">${c.doneDate || c.dueDate || ''}</td>
-    <td class="col-assigned"><div class="avatars">${checklistAvatars(c).map(avatarHTML).join('')}</div></td>
+    <td class="col-assigned"><div class="avatars">${avatarsHTML(checklistAvatars(c))}</div></td>
     <td class="col-link"></td>
     <td class="col-workflow"></td>
     <td class="col-claim"></td>
@@ -2796,6 +2828,39 @@ function toast(msg, variant){
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=> el.classList.remove('show'), 2600);
 }
+
+/* ---- the assignee bubble tooltip ----
+   Hovering a bubble says who it is; hovering a "+N" says who all of them are.
+   One delegated listener on the register, and one element on <body>, because
+   a register cell clips anything drawn inside it. Emma's call, 2026-09-11. */
+(function(){
+  let tip = null;
+  function el(){
+    if(!tip){ tip = document.createElement('div'); tip.className = 'av-tip'; document.body.appendChild(tip); }
+    return tip;
+  }
+  function show(bubble){
+    const names = bubble.getAttribute('data-names');
+    if(!names) return;
+    const t = el();
+    t.textContent = names;
+    t.classList.add('show');
+    const r = bubble.getBoundingClientRect();
+    const w = t.offsetWidth, h = t.offsetHeight, EDGE = 8;
+    // Above the bubble by default, below it when there is no room above.
+    const top = r.top - h - 6;
+    t.style.top = (top < EDGE ? r.bottom + 6 : top) + 'px';
+    t.style.left = Math.min(Math.max(EDGE, r.left + r.width/2 - w/2),
+                            window.innerWidth - w - EDGE) + 'px';
+  }
+  function hide(){ if(tip) tip.classList.remove('show'); }
+  document.addEventListener('mouseover', function(e){
+    const b = e.target.closest ? e.target.closest('.avatar-bubble[data-names]') : null;
+    if(b) show(b); else hide();
+  });
+  document.addEventListener('scroll', hide, true);
+  window.addEventListener('blur', hide);
+}());
 
 /* ============================================================
    INIT

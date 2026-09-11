@@ -272,6 +272,24 @@
   <div class="rmx-tile__body" data-ows-inset="24">
     <div class="ows-areas">
     <div class="ows-areas__col">
+      <!-- Services leads the column: Tasks is the one built screen in this
+           tile, and it should not take a scroll to reach. Emma's call,
+           2026-09-11. -->
+      <div class="ows-card" data-rmx-component="Card">
+        <span class="ows-card__icon" data-accent="primary" aria-hidden="true"><svg data-rmx-component="Flexible Icon"><use href="#setup"></use></svg></span>
+        <div class="ows-card__col">
+          <span class="ows-card__title rmx-type-paragraph-s-semibold">Services</span>
+          <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-rmx-component="Button" data-rmx-todo="Issues is not built in this prototype">Issues</a>
+          <!-- A real link: Tasks is a built screen, and this tile is where you would
+               reach for it. Emma's call, 2026-09-11. -->
+          <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="screens/tasks.html" data-rmx-component="Button">Tasks</a>
+          <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-rmx-component="Button" data-rmx-todo="Appointments is not built in this prototype">Appointments</a>
+          <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-rmx-component="Button" data-rmx-todo="New Issue is not built in this prototype">New Issue</a>
+          <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-rmx-component="Button" data-rmx-todo="Make-Ready Board is not built in this prototype">Make-Ready Board</a>
+          <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-rmx-component="Button" data-rmx-todo="Calendar is not built in this prototype">Calendar</a>
+        </div>
+      </div>
+
       <div class="ows-card" data-rmx-component="Card">
         <span class="ows-card__icon" data-accent="success" aria-hidden="true"><svg data-rmx-component="Flexible Icon"><use href="#rental-info"></use></svg></span>
         <div class="ows-card__col">
@@ -310,20 +328,7 @@
           <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-rmx-component="Button" data-rmx-todo="Users is not built in this prototype">Users</a>
         </div>
       </div>
-      <div class="ows-card" data-rmx-component="Card">
-        <span class="ows-card__icon" data-accent="primary" aria-hidden="true"><svg data-rmx-component="Flexible Icon"><use href="#setup"></use></svg></span>
-        <div class="ows-card__col">
-          <span class="ows-card__title rmx-type-paragraph-s-semibold">Services</span>
-          <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-rmx-component="Button" data-rmx-todo="Issues is not built in this prototype">Issues</a>
-          <!-- A real link: Tasks is a built screen, and this tile is where you would
-               reach for it. Emma's call, 2026-09-11. -->
-          <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="screens/tasks.html" data-rmx-component="Button">Tasks</a>
-          <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-rmx-component="Button" data-rmx-todo="Appointments is not built in this prototype">Appointments</a>
-          <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-rmx-component="Button" data-rmx-todo="New Issue is not built in this prototype">New Issue</a>
-          <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-rmx-component="Button" data-rmx-todo="Make-Ready Board is not built in this prototype">Make-Ready Board</a>
-          <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-rmx-component="Button" data-rmx-todo="Calendar is not built in this prototype">Calendar</a>
-        </div>
-      </div>
+      
     </div>
     <div class="ows-areas__col">
       <div class="ows-card" data-rmx-component="Card">
@@ -435,12 +440,11 @@
 
 <!-- Announcements — Tile Style=Workspace. Overline stroke notice, header 44px,
      trailing glyph visibility-off. -->
-<section class="rmx-tile" data-ows-tile="narrow" data-rmx-component="Tile">
+<section class="rmx-tile" data-ows-tile="narrow" data-rmx-component="Tile" data-ows-hideable="Announcements" hidden>
   <div class="ows-overline" data-accent="notice"></div>
   <header class="rmx-tile__header" data-rmx-component="_Tile Headers">
     <span class="rmx-tile__title rmx-type-heading-m-regular">Announcements</span>
-    <button type="button" data-ows-tile-action aria-label="Hide Announcements"
-            data-rmx-todo="Hide Announcements is not built in this prototype">
+    <button type="button" data-ows-tile-action aria-label="Hide Announcements" data-ows-hide>
       <svg class="rmx-icon"><use href="#visibility-off"></use></svg>
     </button>
   </header>
@@ -486,12 +490,11 @@
 
 <!-- My Training — Tile Style=Workspace. Overline stroke attention, header 44px,
      trailing glyph visibility-off. -->
-<section class="rmx-tile" data-ows-tile="narrow" data-rmx-component="Tile">
+<section class="rmx-tile" data-ows-tile="narrow" data-rmx-component="Tile" data-ows-hideable="My Training" hidden>
   <div class="ows-overline" data-accent="attention"></div>
   <header class="rmx-tile__header" data-rmx-component="_Tile Headers">
     <span class="rmx-tile__title rmx-type-heading-m-regular">My Training</span>
-    <button type="button" data-ows-tile-action aria-label="Hide My Training"
-            data-rmx-todo="Hide My Training is not built in this prototype">
+    <button type="button" data-ows-tile-action aria-label="Hide My Training" data-ows-hide>
       <svg class="rmx-icon"><use href="#visibility-off"></use></svg>
     </button>
   </header>
@@ -520,18 +523,50 @@
 <!-- Hidden Tiles (4969:70392) — the two tiles this user has hidden, offered
      back as action text in the bottom right corner. -->
 <div class="ows-hidden">
-  <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-ows-hidden data-rmx-component="Button"
-     data-rmx-todo="Showing the Announcements tile again is not built in this prototype">
+  <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-ows-hidden="Announcements" data-rmx-component="Button">
     <svg class="rmx-icon"><use href="#campaign-filled"></use></svg>Announcements</a>
-  <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-ows-hidden data-rmx-component="Button"
-     data-rmx-todo="Showing the My Training tile again is not built in this prototype">
-    <svg class="rmx-icon"><use href="#school-filled"></use></svg>My Workspace</a>
+  <a class="rmx-text rmx-text--link rmx-type-label-m-regular" href="#" data-ows-hidden="My Training" data-rmx-component="Button">
+    <svg class="rmx-icon"><use href="#school-filled"></use></svg>My Training</a>
 </div>
 </main>
 
 <script src="assets/app.js"></script>
 <script src="assets/history-notes.js"></script>
 <script src="assets/megamenu.js"></script>
+<script>
+/* ---- hiding a tile, and getting it back ----
+   Announcements and My Training start hidden -- which is what the two links in
+   the bottom right corner are for, and why the frame draws them there. The
+   crossed-eye in each tile's header puts it back. Emma's call, 2026-09-11:
+   both the hide button and the links were data-rmx-todo before this. */
+(function () {
+  function tile(name){ return document.querySelector('[data-ows-hideable="' + name + '"]'); }
+  function link(name){ return document.querySelector('[data-ows-hidden="' + name + '"]'); }
+  function setShown(name, shown) {
+    var t = tile(name), l = link(name);
+    if (t) t.hidden = !shown;
+    if (l) l.hidden = shown;
+    var bar = document.querySelector('.ows-hidden');
+    if (bar) {
+      // The bar itself goes when there is nothing left in it to offer.
+      var any = [].slice.call(bar.querySelectorAll('[data-ows-hidden]')).some(function (a) { return !a.hidden; });
+      bar.hidden = !any;
+    }
+  }
+  [].forEach.call(document.querySelectorAll('[data-ows-hideable]'), function (t) {
+    setShown(t.getAttribute('data-ows-hideable'), false);
+  });
+  document.addEventListener('click', function (e) {
+    var back = e.target.closest ? e.target.closest('[data-ows-hidden]') : null;
+    if (back) { e.preventDefault(); setShown(back.getAttribute('data-ows-hidden'), true); return; }
+    var hide = e.target.closest ? e.target.closest('[data-ows-hide]') : null;
+    if (hide) {
+      var t = hide.closest('[data-ows-hideable]');
+      if (t) setShown(t.getAttribute('data-ows-hideable'), false);
+    }
+  });
+}());
+</script>
 <script>
 /* Each mention opens that record's History / Notes, as an overlay on this
    page rather than a screen to navigate to -- assets/history-notes.js is the
