@@ -128,9 +128,14 @@
   --orion-gradient: linear-gradient(90deg, var(--rmx-blue), var(--rmx-green));
   --orion-bg-gradient: linear-gradient(180deg, var(--rmx-hairline), var(--rmx-blue));
   /* Register column widths — draggable via the white column-resize handles; JS updates these */
-  --col-check-w: 40px; --col-color-w: 26px; --col-task-w: 450px; --col-action-w: 317px;
-  --col-due-w: 240px; --col-assigned-w: 270px; --col-link-w: 233px; --col-workflow-w: 182px;
-  --col-claim-w: 90px; --col-kebab-w: 40px;
+  /* Sized to what the columns actually hold. They came off the frame at
+     1888px total, which no laptop shows without scrolling -- and Assigned To
+     was 270px for three 24px bubbles. Each width below is the widest real
+     value in this prototype's data plus the cell's 16px of padding, so the
+     register fits without cutting anything off. Emma's call, 2026-09-11. */
+  --col-check-w: 40px; --col-color-w: 26px; --col-task-w: 400px; --col-action-w: 200px;
+  --col-due-w: 158px; --col-assigned-w: 116px; --col-link-w: 168px; --col-workflow-w: 156px;
+  --col-claim-w: 84px; --col-kebab-w: 40px;
 }
 * { box-sizing: border-box; }
 /* Confirmed by pixel-sampling the Figma page render (multiple points, full resolution): the Tasks
@@ -253,7 +258,8 @@ a:hover { text-decoration:none; }
 /* Expanded state gets the standard focused-control treatment (blue border, still 4px radius,
    no shadow) -- Tiles/cards are border-led per design.md, never floating shadow cards. */
 .qadd-bar.expanded{border-color:var(--rmx-blue);}
-.qadd-collapsed{height:56px;display:flex;align-items:center;padding:0 16px;gap:8px;cursor:text;color:var(--text-secondary);font-size:14px;}
+/* The whole collapsed bar opens the quick-add, so it says so. */
+.qadd-collapsed{height:56px;display:flex;align-items:center;padding:0 16px;gap:8px;cursor:pointer;color:var(--text-secondary);font-size:14px;}
 .qadd-collapsed .material-symbols-outlined{color:var(--text-secondary);}
 .qadd-expanded{display:flex;flex-direction:column;}
 .qadd-row1{height:52px;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;gap:16px;}
@@ -348,6 +354,10 @@ a:hover { text-decoration:none; }
 .col-resize-handle:hover, .col-resize-handle.resizing{background:rgba(255,255,255,.5);}
 /* Register rows: 36px, white, 1px register-hairline (#EBF1F5) top and bottom -- design.md §7.2 */
 .task-register td{height:36px;font-size:14px;color:var(--text-secondary);padding:0 8px;border-top:1px solid var(--register-hairline);border-bottom:1px solid var(--register-hairline);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* A register row opens that task's details, so the cursor says so. The
+   checkbox, the kebab and the Claim button keep their own. Emma's call,
+   2026-09-11. */
+.task-register tbody tr{cursor:pointer;}
 .task-register tr:hover td{background:var(--bg-subtle);}
 .task-register tr.child-row td{background:#fbfcfd;}
 .task-register tr.child-row:hover td{background:var(--bg-subtle);}
@@ -372,6 +382,11 @@ a:hover { text-decoration:none; }
 .avatars{display:inline-flex;align-items:center;justify-content:flex-start;}
 .avatar-bubble{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;background:var(--rmx-blue);color:#fff;margin-left:-4px;flex:none;}
 .avatar-bubble:first-child{margin-left:0;}
+/* The three user colours. A role keeps its own pale-orange outlined bubble
+   below, and nothing else is orange. */
+.av-blue{background:var(--rmx-blue);}
+.av-navy{background:var(--container-secondary-dark,#13314c);}
+.av-green{background:var(--rmx-green);}
 .avatar-bubble.notice{background:var(--lozenge-notice);border:1px solid var(--rmx-orange);color:var(--rmx-navy);}
 .avatar-bubble.plus{background:var(--rmx-blue);border:1px solid var(--rmx-blue);color:#fff;}
 .avatar-bubble.plus.notice{background:var(--lozenge-notice);border-color:var(--rmx-orange);color:var(--rmx-navy);}
@@ -1274,7 +1289,7 @@ let myTasks = [
 let otherTasks = [
   { id:'o1', title:'Send an email to Daniel', flag:true, colorBar:'red', completed:false,
     action:'Send Email', actionDetails:null, dueDate:'09/23/26', dueTime:'09:30 AM', overdue:false,
-    assigned:['jcameron'], link:'Daniel Smith', linkOverflow:0, workflow:'', checklist:[] },
+    assigned:['aanderson'], link:'Daniel Smith', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o2', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/18/26', dueTime:'10:00 AM', overdue:false,
     assigned:['canderson'], link:'', linkOverflow:0, workflow:'', checklist:[] },
@@ -1287,18 +1302,18 @@ let otherTasks = [
     assigned:['bfischer'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
   { id:'o5', title:'Distribute payments to owners', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/29/26', dueTime:'08:30 AM', overdue:false,
-    assigned:['canderson','jcameron','+2'], link:'', linkOverflow:0, workflow:'', checklist:[] },
+    assigned:['dhegemann','aferryman','+2'], link:'', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o6', title:'Close service tickets', showProgress:true, colorBar:'green', completed:false,
     action:'View Issues', actionDetails:null, dueDate:'08/01/26', dueTime:'09:30 AM', overdue:true,
-    assigned:['bcarle'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
+    assigned:['capegian'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
     checklist:[ {text:'Open service issue list', assigned:['bcarle'], done:true},
                 {text:'Close all tickets', assigned:['bfischer','ascharffe'], done:false} ] },
   { id:'o7', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/30/26', dueTime:'07:30 AM', overdue:false,
-    assigned:['bcarle'], link:"Patrick O'Malley", linkOverflow:1, workflow:'', checklist:[] },
+    assigned:['dgardin'], link:"Patrick O'Malley", linkOverflow:1, workflow:'', checklist:[] },
   { id:'o8', title:'Review owner details for FMHP', flag:false, colorBar:'blue', completed:false,
     action:'Post Owner Checks', actionDetails:null, dueDate:'07/25/26', dueTime:'07:30 AM', overdue:true,
-    assigned:['jcameron','canderson'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
+    assigned:['jcameron','ascharffe'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
   /* The same New Vendor Onboarding process as it looks to someone watching
      it rather than working it: Tony found the vendor on the 5th, Dave created
      the account on the 8th, and Chris's step has sat untouched since. The
@@ -1325,7 +1340,7 @@ let otherTasks = [
     ] },
   { id:'o9', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'07/05/26', dueTime:'07:30 AM', overdue:true,
-    assigned:['canderson'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
+    assigned:['abryan'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
 ];
 
 
@@ -1362,7 +1377,7 @@ function avatarHTML(key, i, all){
     const role = (all||[]).some(k => isRoleKey(k));
     return `<div class="avatar-bubble plus${role ? ' notice' : ''}">${key}</div>`;
   }
-  const cls = isRoleKey(key) ? 'avatar-bubble notice' : 'avatar-bubble';
+  const cls = isRoleKey(key) ? 'avatar-bubble notice' : ('avatar-bubble av-' + userColor(key));
   return `<div class="${cls}" title="${assigneeName(key)}">${assigneeInitials(key)}</div>`;
 }
 function colorBarHTML(c){
@@ -1544,12 +1559,12 @@ function renderTabCounts(){
    TABS
    ============================================================ */
 function switchTab(tab){
-  /* Other Users' Tasks opens with the Quick Filters panel showing rather than
-     forcing the Select Other Users overlay in front of you -- the Assigned To
-     field in the panel is that same picker, reachable when you want it
-     instead of before you have seen anything. Emma's call, 2026-09-11. */
+  /* Switching tabs leaves the Quick Filters panel exactly as you had it.
+     Other Users' Tasks used to force it open, on the reasoning that choosing
+     whose tasks you are looking at is the first thing you do there -- but it
+     pushes the register down the page every time you switch, which is worse
+     than one extra click. Emma's call, 2026-09-11. */
   state.activeTab = tab;
-  setQuickFilters(tab === 'other');
   document.getElementById('tabMyBtn').classList.toggle('active', tab==='my');
   document.getElementById('tabOtherBtn').classList.toggle('active', tab==='other');
   document.getElementById('searchInput').value='';
@@ -1712,6 +1727,19 @@ const ROLES = [
 const MY_ROLES = ['role-pm', 'role-sa'];
 const ME_KEY = 'tlittle';
 
+/* A user's bubble colour. Three real avatar colours, the same ones the
+   Mentions tile has used since it was built -- Container/secondary blue,
+   Container/secondary-dark navy and Icon/success green -- assigned by the
+   user's position in the list, so a person is the same colour everywhere and
+   two people side by side are rarely the same. Orange is deliberately not in
+   the set: an orange bubble means a role, and that has to keep meaning only
+   that. Emma's call, 2026-09-11; the want for a real categorical ramp is
+   item 8. */
+const AVATAR_COLORS = ['blue', 'navy', 'green'];
+function userColor(k){
+  const i = USERS.findIndex(u => u.key === k);
+  return i < 0 ? 'blue' : AVATAR_COLORS[i % AVATAR_COLORS.length];
+}
 function userByKey(k){ return USERS.find(u => u.key === k) || null; }
 function roleByKey(k){ return ROLES.find(r => r.key === k) || null; }
 function isRoleKey(k){ return !!roleByKey(k); }
@@ -1773,7 +1801,7 @@ function renderModalAssignee(){
   const keys = [...modalAssignees];
   const shown = keys.slice(0, 2), overflow = keys.slice(2);
   let html = shown.map(k =>
-    `<div class="ub-avatar${isRoleKey(k) ? ' role' : ''}">${assigneeInitials(k)}</div>`).join('');
+    `<div class="ub-avatar${isRoleKey(k) ? ' role' : ' av-' + userColor(k)}">${assigneeInitials(k)}</div>`).join('');
   if (overflow.length) html += `<div class="ub-avatar plus${keys.some(isRoleKey) ? ' role' : ''}">+${overflow.length}</div>`;
   document.getElementById('modalAssignAvatars').innerHTML = html;
   const names = document.getElementById('modalAssignNames');
@@ -1813,7 +1841,7 @@ function renderAssigneeList(){
     const checked = assigneeSet().has(r.key);
     return `<div class="ad-row" onclick="toggleAssignee('${r.key}')">
       <div class="chkbox ${checked?'checked':''}">${checked?'<span class="material-symbols-outlined">check</span>':''}</div>
-      <div class="avatar${roles ? ' role' : ''}">${r.initials}</div>
+      <div class="avatar${roles ? ' role' : ' av-' + userColor(r.key)}">${r.initials}</div>
       <div class="names"><span class="name">${r.name}</span><span class="uname">${r.uname || ''}</span></div>
     </div>`;
   }).join('') || `<div class="checklist-empty">No ${roles ? 'roles' : 'users'} match your search.</div>`;
@@ -1846,7 +1874,7 @@ function renderQuickAddAssignees(){
   const shown = selected.slice(0,2);
   const overflow = selected.slice(2);
   const anyRole = selected.some(u => isRoleKey(u.key));
-  let html = shown.map(u=>`<div class="ub-avatar${isRoleKey(u.key) ? ' role' : ''}">${u.initials}<div class="user-bubble-tooltip">${u.name}</div></div>`).join('');
+  let html = shown.map(u=>`<div class="ub-avatar${isRoleKey(u.key) ? ' role' : ' av-' + userColor(u.key)}">${u.initials}<div class="user-bubble-tooltip">${u.name}</div></div>`).join('');
   if(overflow.length){
     const names = overflow.map(u=>u.name).join(', ');
     html += `<div class="ub-avatar plus${anyRole ? ' role' : ''}">+${overflow.length}<div class="user-bubble-tooltip">${names}</div></div>`;

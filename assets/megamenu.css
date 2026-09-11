@@ -145,8 +145,11 @@
   bottom: 0;
   width: 0;
   height: 0;
+  /* The notch folds under the row's right end -- solid edge on the right,
+     hypotenuse rising to meet the bar. It was mirrored, which pointed it the
+     wrong way. Emma's call, 2026-09-11. */
   border-bottom: 12px solid var(--text-secondary);
-  border-right: 13px solid transparent;
+  border-left: 13px solid transparent;
 }
 .megamenu__content {
   flex: 1;
