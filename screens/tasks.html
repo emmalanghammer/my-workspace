@@ -481,7 +481,15 @@ a:hover { text-decoration:none; }
 .cl-current-footer{text-align:right;font-size:12px;color:var(--text-primary);padding:6px 8px 0;}
 
 .details-box{border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);padding:16px;display:flex;flex-direction:column;gap:12px;}
-.details-row{display:flex;align-items:center;gap:16px;}
+/* The row aligns on the controls, not the labels, so "Make private" sits
+   level with the Assigned To field rather than with the word above it. */
+.details-row{display:flex;align-items:flex-end;gap:16px;}
+.assign-row{display:flex;align-items:center;gap:8px;}
+.assign-row .btn{flex:none;}
+/* A task sitting in a shared queue cannot be private -- 4077:78705 draws
+   the checkbox disabled while the task is still claimable. */
+.check.disabled{color:var(--text-disabled);pointer-events:none;}
+.check.disabled .chkbox{border-color:var(--text-disabled);background:var(--bg-disabled);cursor:default;}
 .details-row .assign-field{flex:1;display:flex;align-items:center;gap:8px;height:36px;padding:0 8px;background:var(--bg-subtle);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);cursor:pointer;color:var(--text-secondary);}
 .ma-avatars{display:flex;align-items:center;flex:none;}
 .ma-avatars .ub-avatar{margin-right:-6px;}
@@ -893,12 +901,20 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
       <!-- Assignee + Scheduling -->
       <div class="details-box" style="margin-bottom:20px;">
         <div class="details-row">
-          <div class="assign-field" id="modalAssignField" onclick="event.stopPropagation();openAssigneeDropdown(event,'modal')">
-            <div class="ma-avatars" id="modalAssignAvatars"></div>
-            <span style="flex:1;" id="modalAssignNames">Tony Little</span>
-            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+          <div class="field" style="flex:1;min-width:0;">
+            <label>Assigned To</label>
+            <div class="assign-row">
+              <div class="assign-field" id="modalAssignField" onclick="event.stopPropagation();openAssigneeDropdown(event,'modal')">
+                <div class="ma-avatars" id="modalAssignAvatars"></div>
+                <span style="flex:1;" id="modalAssignNames">Tony Little</span>
+                <span class="material-symbols-outlined">keyboard_arrow_down</span>
+              </div>
+              <!-- Claim sits beside the field it acts on, and only on a task
+                   held by a role you are in (4077:78705). -->
+              <button class="btn btn-primary" id="modalClaimBtn" hidden onclick="claimFromModal()">Claim</button>
+            </div>
           </div>
-          <div class="check"><div class="chkbox" id="privateCheck" onclick="toggleCheckEl(this)"></div><span>Make private</span></div>
+          <div class="check" id="privateCheckRow"><div class="chkbox" id="privateCheck" onclick="toggleCheckEl(this)"></div><span>Make private</span></div>
         </div>
         <hr class="details-divider">
         <div class="details-row">
@@ -1606,6 +1622,30 @@ function renderAssigneeTarget(){
 /* The field shows whoever the task is actually assigned to -- people and
    roles alike, in the order the task lists them -- so it agrees with the
    register's avatars. Emma's call, 2026-09-11. */
+/* Claim shows in the overlay on the same rule as the register: the task is
+   held by a role Tony is in. Claiming hands it to him, the button goes with
+   the role, and Make private becomes available because the task is no longer
+   sitting in a shared queue. */
+function renderModalClaim(){
+  const keys = [...modalAssignees];
+  const claimable = keys.some(k => isRoleKey(k) && MY_ROLES.indexOf(k) > -1);
+  document.getElementById('modalClaimBtn').hidden = !claimable;
+  const priv = document.getElementById('privateCheckRow');
+  priv.classList.toggle('disabled', claimable);
+  if (claimable) {
+    const box = document.getElementById('privateCheck');
+    box.classList.remove('checked');
+    box.innerHTML = '';
+  }
+}
+function claimFromModal(){
+  const mine = [...modalAssignees].filter(k => isRoleKey(k) && MY_ROLES.indexOf(k) > -1);
+  if (!mine.length) return;
+  modalAssignees = new Set([...modalAssignees].filter(k => mine.indexOf(k) === -1));
+  modalAssignees.add(ME_KEY);
+  renderModalAssignee();
+  toast('Task claimed', 'success');
+}
 function renderModalAssignee(){
   const keys = [...modalAssignees];
   const shown = keys.slice(0, 2), overflow = keys.slice(2);
@@ -1616,6 +1656,7 @@ function renderModalAssignee(){
   const names = document.getElementById('modalAssignNames');
   names.textContent = keys.length ? keys.map(assigneeName).join(', ') : 'Unassigned';
   names.classList.toggle('empty', keys.length === 0);
+  renderModalClaim();
 }
 function openAssigneeDropdown(e, target){
   assigneeTarget = target || 'quickadd';

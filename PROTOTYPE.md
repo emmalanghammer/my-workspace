@@ -1697,6 +1697,32 @@ register's header is sticky now, since its rows scroll.
   that opened them until the stack was set deliberately: overlay 520, Note
   dialog 540, menus 560, toast 580.
 
+## Claim, from inside the task as well as the register
+
+Emma's call, 2026-09-11, against frame `4077:78705`: a claimable task should
+offer Claim next to its Assigned To field, not only on the register row.
+
+The frame settles three things the register version did not have to answer:
+
+- **The field is labelled.** Assigned To sat unlabelled in the details row
+  before, between a labelled Due Date and an unlabelled checkbox. The frame
+  labels it, so it is labelled now, and the row aligns on the field's baseline
+  rather than the top of the group — otherwise Make private floated up level
+  with the label.
+- **The button is a Primary, immediately right of the field**, sized to its
+  own content while the field takes the remaining width.
+- **Make private is disabled while the task is held by a role**, which is not
+  a detail I would have guessed — and it is the right call: a task sitting in
+  a shared queue cannot be private, because the people it is waiting on are
+  the ones private would hide it from. It greys out, loses its tick, and comes
+  back the moment the task belongs to a person.
+
+Claim is derived exactly as it is on the register — any assignee that is a
+role Tony belongs to — so a task cannot show the button in one place and not
+the other. Clicking it drops the roles Tony is in, leaves anyone else on the
+task, adds Tony, and fires the same green toast. It does not save the task;
+Save still does that, so Cancel still backs it out.
+
 ---
 
 # Worth raising with the design system
