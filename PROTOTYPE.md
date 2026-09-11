@@ -1845,6 +1845,15 @@ Two judgement calls worth knowing:
 his to take, not yet his to do, so they read as what is left rather than what
 is next. The Claim button moved ahead of the due date in the row.
 
+**A queue row is an ordinary task row.** It had a grey ground, no checkbox and
+no hover, on the reasoning that a task you have not claimed is not yours to
+tick. Emma's call went the other way, and it is the better one: people finish
+things and then record them, so a row you can see is a row you can close. Same
+white ground, same checkbox, same hover as the rest of the list, with one extra
+column for Claim. Ticking one strikes it through without adding it to the open
+count — it was never counted there — and claiming one moves the row itself
+rather than rebuilding it, so its checkbox, flag, link and id all come with it.
+
 **Every queue row is a real register task.** Two of them were workspace-only
 markup, so clicking one did nothing while the third opened details — now
 "Send renewal reminders" and "Walk vacant units at Flagstone" are records in

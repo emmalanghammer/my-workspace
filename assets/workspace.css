@@ -765,10 +765,11 @@
 .ws-task:hover { box-shadow: var(--ws-shadow-sm); }
 
 /* ---- role queue ----
-   What the tile offers once Tony's own list is clear: unassigned tasks
-   sitting in a role he belongs to, claimable without leaving the workspace.
-   Emma's scene, 2026-09-11. A claim row has no checkbox -- it is not his to
-   tick yet -- so it drops the checkbox column and ends in the Claim button. */
+   Tasks sitting in a role Tony belongs to, claimable without leaving the
+   workspace. A queue row is an ordinary task row -- same white ground, same
+   checkbox, tickable before it is claimed if that is what happened -- with
+   one extra column for Claim, ahead of the due date. Emma's calls,
+   2026-09-11. */
 .ws-claimlist {
   display: flex;
   flex-direction: column;
@@ -781,17 +782,7 @@
   text-transform: uppercase;
   letter-spacing: .4px;
 }
-.ws-task--claim {
-  grid-template-columns: 1fr auto auto;
-  align-items: center;
-  background: var(--container-tertiary);
-  cursor: default;
-}
-.ws-task--claim:hover { box-shadow: none; }
-/* A queue row that is also a real register task opens its details like any
-   other row, so it gets the pointer and the hover back. */
-.ws-task--claim[data-ws-task-id] { cursor: pointer; }
-.ws-task--claim[data-ws-task-id]:hover { box-shadow: var(--ws-shadow-sm); }
+.ws-task--claim { grid-template-columns: 20px 1fr auto auto; }
 /* Same Claim button as the register's, so the action reads identically in
    both places. */
 .ws-claim-btn {

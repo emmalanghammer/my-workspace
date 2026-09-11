@@ -727,8 +727,11 @@
           <div class="ws-claimlist" id="wsClaimList" hidden>
             <div class="ws-claimlist__label">Property Manager queue</div>
 
-            <div class="ws-task ws-task--claim" data-ws-claim data-ws-task-id="t3"
+            <div class="ws-task ws-task--claim" data-overdue="false" data-done="false" data-ws-claim data-ws-task-id="t3"
                  data-flag="true" data-due="09/15/26 07:30 AM">
+              <span class="rmx-check" data-rmx-component="Checkbox" data-checked="false" role="checkbox" aria-checked="false" tabindex="0">
+                <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
+              </span>
               <div>
                 <div class="ws-task__title">Record Park&rsquo;s records<svg class="ws-task__flag" viewBox="0 0 14 16" role="img" aria-label="High priority"><use href="#flag-priority"></use></svg></div>
               </div>
@@ -736,8 +739,11 @@
               <span class="ws-task__due">09/15/26 07:30 AM</span>
             </div>
 
-            <div class="ws-task ws-task--claim" data-ws-claim data-ws-task-id="t-walk-vacant"
+            <div class="ws-task ws-task--claim" data-overdue="false" data-done="false" data-ws-claim data-ws-task-id="t-walk-vacant"
                  data-due="09/17/26 05:00 PM">
+              <span class="rmx-check" data-rmx-component="Checkbox" data-checked="false" role="checkbox" aria-checked="false" tabindex="0">
+                <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
+              </span>
               <div>
                 <div class="ws-task__title">Walk vacant units at Flagstone before Friday</div>
                 <div class="ws-task__meta">
@@ -748,8 +754,11 @@
               <span class="ws-task__due">09/17/26 05:00 PM</span>
             </div>
 
-            <div class="ws-task ws-task--claim" data-ws-claim data-ws-task-id="t-renewal-reminders"
+            <div class="ws-task ws-task--claim" data-overdue="false" data-done="false" data-ws-claim data-ws-task-id="t-renewal-reminders"
                  data-due="09/22/26 05:00 PM">
+              <span class="rmx-check" data-rmx-component="Checkbox" data-checked="false" role="checkbox" aria-checked="false" tabindex="0">
+                <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
+              </span>
               <div>
                 <div class="ws-task__title">Send renewal reminders &mdash; properties ending in 30 days</div>
               </div>
@@ -1015,9 +1024,6 @@
     btn.remove();
     card.classList.remove('ws-task--claim');
     card.removeAttribute('data-ws-claim');
-    card.setAttribute('data-overdue', 'false');
-    card.setAttribute('data-done', 'false');
-    card.insertAdjacentHTML('afterbegin', CHECK_MARKUP);
     list.appendChild(card);
     orderTasks();
     paint();
