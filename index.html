@@ -1034,10 +1034,15 @@
       openNewTaskFrame(v);
     });
   });
-  // clicking away closes an empty bar, same as the full bar on the Tasks page
+  /* Clicking away closes an empty bar, same as the full bar on the Tasks
+     page -- but a date or time picker is the bar's own UI even though it is
+     appended to <body>, so a click inside one is not a click away. Without
+     this, choosing a time closed the bar you were filling in. Emma's call,
+     2026-09-11. */
   document.addEventListener('click', function (e) {
     if (qadd.hidden || qaddInput.value.trim()) return;
     if (qadd.contains(e.target) || e.target.closest('#wsQaddBtn')) return;
+    if (e.target.closest('.dt-panel')) return;
     closeQadd();
   });
 

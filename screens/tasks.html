@@ -252,6 +252,9 @@ a:hover { text-decoration:none; }
 .ub-avatars{display:inline-flex;align-items:center;gap:4px;}
 .ub-avatar{position:relative;width:24px;height:24px;border-radius:50%;background:var(--rmx-blue);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex:none;cursor:pointer;}
 .ub-avatar.plus{background:#fff;border:1px solid var(--rmx-blue);color:var(--rmx-blue);font-size:12px;}
+/* A role is orange in the Assignee field and in the dropdown list, the same
+   as its bubble in the register. */
+.ub-avatar.role{background:var(--lozenge-notice);border:1px solid var(--rmx-orange);color:var(--rmx-navy);}
 .ub-avatar:hover .user-bubble-tooltip{display:block;}
 /* Users Bubbles: hovering the avatar shows a name tooltip; clicking it reveals a "+" that opens
    the Assigned To dropdown, per node 4543:100018's "Users Bubbles" component. */
@@ -279,6 +282,7 @@ a:hover { text-decoration:none; }
 .ad-row{display:flex;align-items:center;gap:4px;padding:8px;cursor:pointer;}
 .ad-row:hover{background:var(--bg-hover);}
 .ad-row .avatar{width:24px;height:24px;border-radius:50%;background:var(--rmx-blue);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex:none;margin-left:8px;}
+.ad-row .avatar.role{background:var(--lozenge-notice);border:1px solid var(--rmx-orange);color:var(--rmx-navy);}
 .ad-row .names{display:flex;flex-direction:column;margin-left:8px;line-height:1.3;}
 .ad-row .names .name{font-size:14px;color:var(--rmx-navy);line-height:20px;}
 .ad-row .names .uname{font-size:10px;color:var(--text-primary);}
@@ -938,8 +942,8 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
 <!-- Assigned To dropdown (node 4015:69959) — "User Roles" tab is visual-only in this prototype, no separate role list -->
 <div class="assignee-dropdown" id="assigneeDropdown" hidden onclick="event.stopPropagation()">
   <div class="ad-tabs">
-    <div class="ad-tab active" id="adTabUsers" onclick="this.classList.add('active');document.getElementById('adTabRoles').classList.remove('active')">Users</div>
-    <div class="ad-tab" id="adTabRoles" onclick="this.classList.add('active');document.getElementById('adTabUsers').classList.remove('active')">User Roles</div>
+    <div class="ad-tab active" id="adTabUsers" onclick="setAssigneeTab('users')">Users</div>
+    <div class="ad-tab" id="adTabRoles" onclick="setAssigneeTab('roles')">User Roles</div>
   </div>
   <div class="ad-search-row">
     <div class="chkbox"></div>
@@ -983,34 +987,27 @@ const PET_LINKS = () => ([
   {label:'Unit', value:'107B', removable:true},
 ]);
 const PET_HISTORY = () => ([
-  {date:'08/08/25', type:'System', avatar:av('TL','blue'), text:'Tony Little claimed task'},
-  {date:'07/22/25', type:'System', avatar:av('AS','blue'), text:'Amy Scharffe assigned task to Property Manager'},
-  {date:'07/21/25', type:'System', avatar:av('AS','blue'), text:'Amy Scharffe claimed task'},
-  {date:'07/19/25', type:'System', avatar:av('CA','blue'), text:'Carly Anderson created task'},
+  {date:'08/08/25', type:'System', avatar:'tlittle', text:'Tony Little claimed task'},
+  {date:'07/22/25', type:'System', avatar:'ascharffe', text:'Amy Scharffe assigned task to Property Manager'},
+  {date:'07/21/25', type:'System', avatar:'ascharffe', text:'Amy Scharffe claimed task'},
+  {date:'07/19/25', type:'System', avatar:'canderson', text:'Carly Anderson created task'},
 ]);
 
-function av(initials, style){ return {initials, style}; }
 /* A checklist item has exactly one home -- task.checklist. The register draws
    it as an inline row under its parent task (initials bubbles) and the Task
    Details tile draws the same item as a table row (a name in Assigned To), so
    both read and write the same array and a tick in one shows up in the other.
    Emma's call, 2026-09-10: "those are checklist items not tasks".
-   Names resolve from the two real user lists; an initials bubble the prototype
-   data has no record for (SA) falls back to its own initials rather than
-   having a person invented for it. See PROTOTYPE.md. */
-function nameForInitials(init){
-  const u = ASSIGNEE_USERS.find(x=>x.initials===init); if(u) return u.name;
-  const r = ROLE_USERS.find(x=>x.initials===init);     if(r) return r.label;
-  return init;
-}
+   Both sides speak the same assignee keys, so a name resolves the same way
+   wherever it is drawn. */
 function checklistAvatars(it){
   if(it.assigned) return it.assigned;
-  const u = ASSIGNEE_USERS.find(x=>x.name===it.assignee);
-  return u ? [av(u.initials,'blue')] : [];
+  const u = USERS.find(x => x.name === it.assignee);
+  return u ? [u.key] : [];
 }
 function checklistAssigneeText(it){
   if(it.assignee) return it.assignee;
-  return (it.assigned||[]).map(a=>nameForInitials(a.initials)).join(', ');
+  return (it.assigned || []).map(assigneeName).join(', ');
 }
 function checklistProgress(t){
   const items = t.checklist || [];
@@ -1026,27 +1023,27 @@ function checklistProgress(t){
 let myWorkspaceTasks = [
   { id:'ws-post-notice', title:"Post 3-day notice — Flagstone Lot 3", flag:true, colorBar:'red', completed:false,
     action:null, actionDetails:null, dueDate:'09/08/25', dueTime:'09:00 AM', overdue:true,
-    assigned:[av('TL','blue')], link:"Patrick O'Malley", linkOverflow:0, workflow:'Eviction', claim:false,
+    assigned:['tlittle'], link:"Patrick O'Malley", linkOverflow:0, workflow:'Eviction',
     checklist:[], externalCal:false, links:[{label:'Tenant', value:"Patrick O'Malley", removable:false}] },
   { id:'ws-carpet-vendor', title:'Approve carpet vendor quote', flag:false, colorBar:'green', completed:false,
     action:null, actionDetails:null, dueDate:'09/09/25', dueTime:'05:00 PM', overdue:true,
-    assigned:[av('TL','blue')], link:'Riverview #204', linkOverflow:0, workflow:'Unit Renovation', claim:false,
+    assigned:['tlittle'], link:'Riverview #204', linkOverflow:0, workflow:'Unit Renovation',
     checklist:[], externalCal:false, links:[{label:'Unit', value:'Riverview #204', removable:false}] },
   { id:'ws-marcia-clark', title:"Return Marcia Clark's call", flag:false, colorBar:'blue', completed:false,
     action:null, actionDetails:null, dueDate:'09/10/25', dueTime:'04:00 PM', overdue:false,
-    assigned:[av('TL','blue')], link:'', linkOverflow:0, workflow:'', claim:false,
+    assigned:['tlittle'], link:'', linkOverflow:0, workflow:'',
     checklist:[], externalCal:false },
   { id:'ws-hvac-scope', title:'Sign off on Brookside HVAC scope', flag:false, colorBar:'orange', completed:false,
     action:null, actionDetails:null, dueDate:'09/10/25', dueTime:'05:00 PM', overdue:false,
-    assigned:[av('TL','blue')], link:'Anderson Mechanical', linkOverflow:0, workflow:'Vendor', claim:false,
+    assigned:['tlittle'], link:'Anderson Mechanical', linkOverflow:0, workflow:'Vendor',
     checklist:[], externalCal:false, links:[{label:'Vendor', value:'Anderson Mechanical', removable:false}] },
   { id:'ws-rent-roll', title:'Review May rent roll variance', flag:false, colorBar:'blue', completed:false,
     action:null, actionDetails:null, dueDate:'09/12/25', dueTime:'05:00 PM', overdue:false,
-    assigned:[av('TL','blue')], link:'', linkOverflow:0, workflow:'Reporting', claim:false,
+    assigned:['tlittle'], link:'', linkOverflow:0, workflow:'Reporting',
     checklist:[], externalCal:false },
   { id:'ws-tomas-renewal', title:'Draft renewal — Tomas Webber', flag:false, colorBar:'green', completed:false,
     action:null, actionDetails:null, dueDate:'09/17/25', dueTime:'05:00 PM', overdue:false,
-    assigned:[av('TL','blue')], link:'Tomas Webber', linkOverflow:0, workflow:'Leasing', claim:false,
+    assigned:['tlittle'], link:'Tomas Webber', linkOverflow:0, workflow:'Leasing',
     // The Link column carried a value with no typed link record behind it, so
     // the Links tile opened empty on a task the register said was linked.
     // Added 2026-09-10 while making the My Workspace tile show only real links.
@@ -1059,45 +1056,45 @@ let myTasks = [
 
   { id:'t-approve-pet', title:'Approve Daniel for Pet', flag:true, colorBar:null, completed:false,
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/17/25', dueTime:'11:00 AM', overdue:false,
-    assigned:[av('TL','blue')], link:'', linkOverflow:0, workflow:'', claim:false,
+    assigned:['tlittle'], link:'', linkOverflow:0, workflow:'',
     checklist: PET_CHECKLIST(), externalCal:true, links: PET_LINKS(), history: PET_HISTORY() },
   { id:'t1', title:'Assign ticket to maintenance staff', flag:true, colorBar:'red', completed:false,
     action:'View Issues', actionDetails:null, dueDate:'07/05/25', dueTime:'07:30 AM', overdue:true,
-    assigned:[av('TL','blue')], link:'Daniel Smith', linkOverflow:0, workflow:'', claim:false,
+    assigned:['tlittle'], link:'Daniel Smith', linkOverflow:0, workflow:'',
     checklist:[], externalCal:false },
   { id:'t2', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'07/25/25', dueTime:'07:30 AM', overdue:true,
-    assigned:[av('CA','blue'),av('TL','blue'),av('+2','plus')], link:'', linkOverflow:0, workflow:'', claim:false,
+    assigned:['canderson','tlittle','+2'], link:'', linkOverflow:0, workflow:'',
     checklist:[], externalCal:false },
   { id:'t3', title:"Record Park's records", flag:true, colorBar:null, completed:false,
     action:'Add Journal', actionDetails:null, dueDate:'07/31/25', dueTime:'07:30 AM', overdue:false,
-    assigned:[av('PM','notice')], link:'PARK', linkOverflow:0, workflow:'Property Renovation', claim:false,
+    assigned:['role-pm'], link:'PARK', linkOverflow:0, workflow:'Property Renovation',
     checklist:[], externalCal:false },
   { id:'t4', title:'View vendors', flag:false, colorBar:null, completed:false,
     action:'History / Note Follow-Up', actionDetails:null, dueDate:'08/01/25', dueTime:'09:30 AM', overdue:false,
-    assigned:[av('PM','notice')], link:"Bob's Appliances", linkOverflow:2, workflow:'Vendor Contract Renewal', claim:true,
+    assigned:['role-pm'], link:"Bob's Appliances", linkOverflow:2, workflow:'Vendor Contract Renewal',
     checklist:[], externalCal:false },
   { id:'t5', title:'Close completed service ticket', flag:false, colorBar:null, completed:true,
     action:null, actionDetails:null, dueDate:'08/07/25', dueTime:'08:30 AM', overdue:false,
-    assigned:[av('TL','blue')], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', claim:false,
+    assigned:['tlittle'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation',
     checklist:[], externalCal:false },
   { id:'t6', title:'Distribute payments to owners', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'08/31/25', dueTime:'02:00 PM', overdue:false,
-    assigned:[av('TL','blue')], link:'', linkOverflow:0, workflow:'', claim:false,
+    assigned:['tlittle'], link:'', linkOverflow:0, workflow:'',
     checklist:[], externalCal:false },
   { id:'t7', title:'Close service tickets', flag:false, colorBar:null, completed:false,
     action:'View Issues', actionDetails:null, dueDate:'09/10/25', dueTime:'05:05 PM', overdue:false,
-    assigned:[av('SA','notice')], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', claim:true,
+    assigned:['role-sa'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
     externalCal:false, showProgress:true, expandChecklist:true,
-    checklist:[ {text:'Open service issue list', assigned:[av('TL','blue')], done:false},
-                {text:'Close all tickets', assigned:[av('PM','notice'),av('SA','notice')], done:false} ] },
+    checklist:[ {text:'Open service issue list', assigned:['tlittle'], done:false},
+                {text:'Close all tickets', assigned:['role-pm','role-sa'], done:false} ] },
   { id:'t-receipts', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:true,
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/15/25', dueTime:'10:00 AM', overdue:false,
-    assigned:[av('TL','blue')], link:"Patrick O'Malley", linkOverflow:1, workflow:'', claim:false,
+    assigned:['tlittle'], link:"Patrick O'Malley", linkOverflow:1, workflow:'',
     checklist: PET_CHECKLIST(), externalCal:true },
   { id:'t9', title:'Review owner details for FMHP', flag:false, colorBar:'blue', completed:false,
     action:'Post Owner Checks', actionDetails:null, dueDate:'09/16/25', dueTime:'10:00 AM', overdue:false,
-    assigned:[av('PM','notice'),av('SA','notice')], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', claim:true,
+    assigned:['role-pm','role-sa'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation',
     checklist:[], externalCal:false },
 ];
 
@@ -1105,46 +1102,36 @@ let myTasks = [
 let otherTasks = [
   { id:'o1', title:'Send an email to Daniel', flag:true, colorBar:'red', completed:false,
     action:'Send Email', actionDetails:null, dueDate:'09/20/25', dueTime:'09:30 AM', overdue:false,
-    assigned:[av('JC','blue')], link:'Daniel Smith', linkOverflow:0, workflow:'', claim:false, checklist:[] },
+    assigned:['jcameron'], link:'Daniel Smith', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o2', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/16/25', dueTime:'10:00 AM', overdue:false,
-    assigned:[av('CA','blue')], link:'', linkOverflow:0, workflow:'', claim:false, checklist:[] },
+    assigned:['canderson'], link:'', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o3', title:"Record Park's records", flag:true, showProgress:true, colorBar:'green', completed:false,
     action:'Enter a Journal', actionDetails:null, dueDate:'09/15/25', dueTime:'10:00 AM', overdue:false,
-    assigned:[av('BC','blue')], link:'', linkOverflow:0, workflow:'', claim:false,
-    checklist:[ {text:'Attach the signed records to the property', assigned:[av('BC','blue')], done:false} ] },
+    assigned:['bcarle'], link:'', linkOverflow:0, workflow:'',
+    checklist:[ {text:'Attach the signed records to the property', assigned:['bcarle'], done:false} ] },
   { id:'o4', title:'Close completed service ticket', flag:false, colorBar:'green', completed:false,
     action:null, actionDetails:null, dueDate:'08/31/25', dueTime:'02:00 PM', overdue:false,
-    assigned:[av('BF','blue')], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', claim:false, checklist:[] },
+    assigned:['bfischer'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
   { id:'o5', title:'Distribute payments to owners', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'08/07/25', dueTime:'08:30 AM', overdue:false,
-    assigned:[av('CA','blue'),av('JC','blue'),av('+2','plus')], link:'', linkOverflow:0, workflow:'', claim:false, checklist:[] },
+    assigned:['canderson','jcameron','+2'], link:'', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o6', title:'Close service tickets', showProgress:true, colorBar:'green', completed:false,
     action:'View Issues', actionDetails:null, dueDate:'08/01/25', dueTime:'09:30 AM', overdue:true,
-    assigned:[av('BC','blue')], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', claim:false,
-    checklist:[ {text:'Open service issue list', assigned:[av('BC','blue')], done:true},
-                {text:'Close all tickets', assigned:[av('PM','notice'),av('SA','notice')], done:false} ] },
+    assigned:['bcarle'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
+    checklist:[ {text:'Open service issue list', assigned:['bcarle'], done:true},
+                {text:'Close all tickets', assigned:['role-pm','role-sa'], done:false} ] },
   { id:'o7', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'07/31/25', dueTime:'07:30 AM', overdue:false,
-    assigned:[av('BC','blue')], link:"Patrick O'Malley", linkOverflow:1, workflow:'', claim:false, checklist:[] },
+    assigned:['bcarle'], link:"Patrick O'Malley", linkOverflow:1, workflow:'', checklist:[] },
   { id:'o8', title:'Review owner details for FMHP', flag:false, colorBar:'blue', completed:false,
     action:'Post Owner Checks', actionDetails:null, dueDate:'07/25/25', dueTime:'07:30 AM', overdue:true,
-    assigned:[av('JC','blue'),av('CA','blue')], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', claim:false, checklist:[] },
+    assigned:['jcameron','canderson'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
   { id:'o9', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'07/05/25', dueTime:'07:30 AM', overdue:true,
-    assigned:[av('CA','blue')], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', claim:false, checklist:[] },
+    assigned:['canderson'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
 ];
 
-const ROLE_USERS = [
-  {key:'admin', initials:'AD', label:'Administrator', style:'notice', chip:'Admin User'},
-  {key:'leasing', initials:'LA', label:'Leasing Agent', style:'notice', chip:'Leasing Agent'},
-  {key:'pm', initials:'PM', label:'Property Manager', style:'notice', chip:'Property Manager'},
-  {key:'ascharffe', initials:'AS', label:'ascharffe', style:'blue', chip:'Amy Scharffe'},
-  {key:'bcarle', initials:'BC', label:'bcarle', style:'blue', chip:'Becky Carle'},
-  {key:'bfischer', initials:'BF', label:'bfischer', style:'blue', chip:'Brittany Fischer'},
-  {key:'canderson', initials:'CA', label:'canderson', style:'blue', chip:'Carly Anderson'},
-  {key:'jcameron', initials:'JC', label:'jcameron', style:'blue', chip:'Jonathan Cameron'},
-];
 
 let state = {
   activeTab: 'my',
@@ -1169,10 +1156,12 @@ let state = {
 /* ============================================================
    RENDER: REGISTER
    ============================================================ */
-function avatarHTML(a){
-  if(a.style==='plus') return `<div class="avatar-bubble plus">${a.initials}</div>`;
-  const cls = a.style==='notice' ? 'avatar-bubble notice' : 'avatar-bubble';
-  return `<div class="${cls}">${a.initials}</div>`;
+/* An avatar is a key now: a person renders blue, a role orange, and a bare
+   "+N" is the overflow marker rather than anybody. */
+function avatarHTML(key){
+  if(/^\+/.test(key)) return `<div class="avatar-bubble plus">${key}</div>`;
+  const cls = isRoleKey(key) ? 'avatar-bubble notice' : 'avatar-bubble';
+  return `<div class="${cls}" title="${assigneeName(key)}">${assigneeInitials(key)}</div>`;
 }
 function colorBarHTML(c){
   if(!c) return '';
@@ -1193,7 +1182,10 @@ function taskRowHTML(t, dataset){
   const progress = prog ? `<span class="chk-progress">${prog}</span>` : '';
   const action = t.action ? `<a onclick="event.stopPropagation()">${t.action}</a>` : '';
   const linkPill = t.linkOverflow ? `<span class="link-pill" onclick="event.stopPropagation()">+${t.linkOverflow}<span class="material-symbols-outlined">arrow_drop_down</span></span>` : '';
-  const claim = t.claim ? `<span class="claim-btn" onclick="event.stopPropagation()">Claim</span>` : '';
+  /* Claim shows on any task held by a role Tony is in -- an orange bubble --
+     rather than on tasks flagged claimable by hand. Emma's call, 2026-09-11. */
+  const claim = claimableRoles(t).length
+    ? `<span class="claim-btn" onclick="event.stopPropagation();claimTask('${dataset}','${t.id}')">Claim</span>` : '';
   return `<tr onclick="openTaskModal('${dataset}','${t.id}')">
     <td class="col-check">${checkedIcon}</td>
     <td class="col-color">${colorBarHTML(t.colorBar)}</td>
@@ -1223,6 +1215,23 @@ function childRowHTML(c, dataset, parentId, idx){
     <td class="col-claim"></td>
     <td class="col-kebab"></td>
   </tr>`;
+}
+/* The roles on a task that Tony actually holds. Claim appears when this is
+   non-empty and does exactly one thing: hands the task to Tony, dropping the
+   role that was holding it and leaving any other people on it alone. */
+function claimableRoles(t){
+  return (t.assigned || []).filter(k => isRoleKey(k) && MY_ROLES.indexOf(k) > -1);
+}
+function claimTask(dataset, id){
+  const list = dataset === 'my' ? myTasks : otherTasks;
+  const t = list.find(x => x.id === id);
+  if (!t) return;
+  const mine = claimableRoles(t);
+  if (!mine.length) return;
+  t.assigned = (t.assigned || []).filter(k => mine.indexOf(k) === -1);
+  if (t.assigned.indexOf(ME_KEY) === -1) t.assigned.unshift(ME_KEY);
+  renderRegister();
+  toast('Task claimed');
 }
 function toggleRowComplete(dataset, id){
   const list = dataset==='my' ? myTasks : otherTasks;
@@ -1354,7 +1363,7 @@ function quickAddMoreDetails(){
 function makeBlankTask(title){
   return { id:'t-'+Date.now(), title, flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/17/25', dueTime:'11:00 AM', overdue:false,
-    assigned:[av('TL','blue')], link:'', linkOverflow:0, workflow:'', claim:false, checklist:[], externalCal:false };
+    assigned:['tlittle'], link:'', linkOverflow:0, workflow:'', checklist:[], externalCal:false };
 }
 // click-outside collapses the empty quick-add bar
 document.addEventListener('click', (e)=>{
@@ -1368,15 +1377,56 @@ document.addEventListener('click', (e)=>{
    together; a single click anywhere in it opens the Assigned To dropdown. */
 
 /* ---- Assigned To dropdown (opened from the Users Bubbles "+") ---- */
-const ASSIGNEE_USERS = [
-  {key:'aanderson', initials:'AA', name:'Alan Anderson', uname:'aanderson'},
-  {key:'abryan', initials:'AB', name:'Adam Bryan', uname:'abryan'},
-  {key:'bcarle', initials:'BC', name:'Becky Carle', uname:'bcarle'},
-  {key:'capegian', initials:'CA', name:'Charlie Apegian', uname:'capegian'},
-  {key:'dgardin', initials:'DG', name:'Danielle Gardin', uname:'dgardin'},
-  {key:'elanghammer', initials:'EL', name:'Emma Langhammer', uname:'elanghammer'},
-  {key:'tlittle', initials:'TL', name:'Tony Little', uname:'tlittle'},
+/* ---- who exists ----
+   One list of people and one of roles, replacing the two overlapping lists
+   this file used to carry. Those disagreed -- `CA` was Charlie Apegian in one
+   and Carly Anderson in the other -- and the old "Roles" list was really
+   three roles plus five people wearing a role's clothes.
+
+   Tasks reference a **key** now, never a pair of initials, which is what
+   makes the disagreement go away: two people are allowed to share initials
+   (Carly Anderson and Charlie Apegian both show CA) because the record says
+   which one it is. Emma's call, 2026-09-11. */
+const USERS = [
+  {key:'aanderson',   initials:'AA', name:'Alan Anderson',     uname:'aanderson'},
+  {key:'abryan',      initials:'AB', name:'Adam Bryan',        uname:'abryan'},
+  {key:'ascharffe',   initials:'AS', name:'Amy Scharffe',      uname:'ascharffe'},
+  {key:'bcarle',      initials:'BC', name:'Becky Carle',       uname:'bcarle'},
+  {key:'bfischer',    initials:'BF', name:'Brittany Fischer',  uname:'bfischer'},
+  {key:'canderson',   initials:'CA', name:'Carly Anderson',    uname:'canderson'},
+  {key:'capegian',    initials:'CA', name:'Charlie Apegian',   uname:'capegian'},
+  {key:'dgardin',     initials:'DG', name:'Danielle Gardin',   uname:'dgardin'},
+  {key:'elanghammer', initials:'EL', name:'Emma Langhammer',   uname:'elanghammer'},
+  {key:'jcameron',    initials:'JC', name:'Jonathan Cameron',  uname:'jcameron'},
+  {key:'tlittle',     initials:'TL', name:'Tony Little',       uname:'tlittle'},
 ];
+/* Roles are what an orange bubble means, and what Claim claims from.
+   `role-sa` is the one piece of this the data never named -- an orange SA on
+   four tasks, matching no role anyone wrote down. Kept visible rather than
+   quietly folded into another role; see PROTOTYPE.md item 30. */
+const ROLES = [
+  {key:'role-admin',   initials:'AD', name:'Administrator'},
+  {key:'role-leasing', initials:'LA', name:'Leasing Agent'},
+  {key:'role-pm',      initials:'PM', name:'Property Manager'},
+  {key:'role-sa',      initials:'SA', name:'SA'},
+];
+/* The roles Tony holds -- a task assigned to one of these is claimable. */
+const MY_ROLES = ['role-pm', 'role-sa'];
+const ME_KEY = 'tlittle';
+
+function userByKey(k){ return USERS.find(u => u.key === k) || null; }
+function roleByKey(k){ return ROLES.find(r => r.key === k) || null; }
+function isRoleKey(k){ return !!roleByKey(k); }
+function assigneeName(k){
+  const u = userByKey(k); if (u) return u.name;
+  const r = roleByKey(k); if (r) return r.name;
+  return k;
+}
+function assigneeInitials(k){
+  const u = userByKey(k); if (u) return u.initials;
+  const r = roleByKey(k); if (r) return r.initials;
+  return k;
+}
 let assigneeSelected = new Set(['tlittle']);
 /* The Assigned To dropdown is shared by the quick-add bar's Users Bubbles and
    the Task Details Assignee field. It keeps a separate selection per trigger
@@ -1389,35 +1439,51 @@ function assigneeSet(){ return assigneeTarget==='modal' ? modalAssignees : assig
 function renderAssigneeTarget(){
   if(assigneeTarget==='modal') renderModalAssignee(); else renderQuickAddAssignees();
 }
+/* The field shows whoever the task is actually assigned to -- people and
+   roles alike, in the order the task lists them -- so it agrees with the
+   register's avatars. Emma's call, 2026-09-11. */
 function renderModalAssignee(){
-  const selected = ASSIGNEE_USERS.filter(u=>modalAssignees.has(u.key));
-  const shown = selected.slice(0,2), overflow = selected.slice(2);
-  let html = shown.map(u=>`<div class="ub-avatar">${u.initials}</div>`).join('');
-  if(overflow.length) html += `<div class="ub-avatar plus">+${overflow.length}</div>`;
+  const keys = [...modalAssignees];
+  const shown = keys.slice(0, 2), overflow = keys.slice(2);
+  let html = shown.map(k =>
+    `<div class="ub-avatar${isRoleKey(k) ? ' role' : ''}">${assigneeInitials(k)}</div>`).join('');
+  if (overflow.length) html += `<div class="ub-avatar plus">+${overflow.length}</div>`;
   document.getElementById('modalAssignAvatars').innerHTML = html;
   const names = document.getElementById('modalAssignNames');
-  names.textContent = selected.length ? selected.map(u=>u.name).join(', ') : 'Unassigned';
-  names.classList.toggle('empty', selected.length===0);
+  names.textContent = keys.length ? keys.map(assigneeName).join(', ') : 'Unassigned';
+  names.classList.toggle('empty', keys.length === 0);
 }
 function openAssigneeDropdown(e, target){
   assigneeTarget = target || 'quickadd';
   const panel = document.getElementById('assigneeDropdown');
   panel.hidden = false;
-  renderAssigneeList();
+  setAssigneeTab('users');
   // the quick-add bar anchors on its bubble cluster; the modal field is its own anchor
   positionPanel(panel, e.currentTarget.closest('.user-bubble-wrap') || e.currentTarget);
 }
+/* Users and User Roles are two lists over one selection, so switching tabs
+   changes what you are choosing from without losing what you have already
+   chosen. Emma's call, 2026-09-11. */
+let assigneeTab = 'users';
+function setAssigneeTab(tab){
+  assigneeTab = tab;
+  document.getElementById('adTabUsers').classList.toggle('active', tab === 'users');
+  document.getElementById('adTabRoles').classList.toggle('active', tab === 'roles');
+  renderAssigneeList();
+}
 function renderAssigneeList(){
-  const q = (document.getElementById('adSearchInput').value||'').toLowerCase().trim();
-  const list = ASSIGNEE_USERS.filter(u => !q || u.name.toLowerCase().includes(q) || u.uname.toLowerCase().includes(q));
-  document.getElementById('adList').innerHTML = list.map(u=>{
-    const checked = assigneeSet().has(u.key);
-    return `<div class="ad-row" onclick="toggleAssignee('${u.key}')">
+  const q = (document.getElementById('adSearchInput').value || '').toLowerCase().trim();
+  const roles = assigneeTab === 'roles';
+  const rows = (roles ? ROLES : USERS).filter(r =>
+    !q || r.name.toLowerCase().includes(q) || (r.uname || '').toLowerCase().includes(q));
+  document.getElementById('adList').innerHTML = rows.map(r => {
+    const checked = assigneeSet().has(r.key);
+    return `<div class="ad-row" onclick="toggleAssignee('${r.key}')">
       <div class="chkbox ${checked?'checked':''}">${checked?'<span class="material-symbols-outlined">check</span>':''}</div>
-      <div class="avatar">${u.initials}</div>
-      <div class="names"><span class="name">${u.name}</span><span class="uname">${u.uname}</span></div>
+      <div class="avatar${roles ? ' role' : ''}">${r.initials}</div>
+      <div class="names"><span class="name">${r.name}</span><span class="uname">${r.uname || ''}</span></div>
     </div>`;
-  }).join('') || `<div class="checklist-empty">No users match your search.</div>`;
+  }).join('') || `<div class="checklist-empty">No ${roles ? 'roles' : 'users'} match your search.</div>`;
   document.getElementById('adSelCount').textContent = assigneeSet().size;
 }
 function toggleAssignee(key){
@@ -1433,7 +1499,7 @@ function clearAssignees(){
 }
 /* Renders the Users Bubbles cluster in the quick-add bar: up to 2 avatars, then a "+N" overflow bubble */
 function renderQuickAddAssignees(){
-  const selected = ASSIGNEE_USERS.filter(u=>assigneeSelected.has(u.key));
+  const selected = [...assigneeSelected].map(k => ({ key:k, initials:assigneeInitials(k), name:assigneeName(k) }));
   const shown = selected.slice(0,2);
   const overflow = selected.slice(2);
   let html = shown.map(u=>`<div class="ub-avatar">${u.initials}<div class="user-bubble-tooltip">${u.name}</div></div>`).join('');
@@ -1465,14 +1531,14 @@ function closeUsersModal(){
 }
 function renderUserList(){
   const q = (document.getElementById('userSearchInput').value||'').toLowerCase().trim();
-  const rows = ROLE_USERS.filter(u=>!q || u.label.toLowerCase().includes(q));
+  const rows = USERS.concat(ROLES).filter(u => !q || u.name.toLowerCase().includes(q));
   document.getElementById('userListBox').innerHTML = rows.map(u=>{
     const checked = state.selectedUserKeys.has(u.key);
-    const avatarCls = u.style==='notice' ? 'role-avatar' : 'user-avatar';
+    const avatarCls = isRoleKey(u.key) ? 'role-avatar' : 'user-avatar';
     return `<div class="userlist-row" onclick="toggleUserKey('${u.key}')">
       <div class="chkbox ${checked?'checked':''}" style="width:20px;height:20px;">${checked?'<span class="material-symbols-outlined">check</span>':''}</div>
       <div class="${avatarCls}">${u.initials}</div>
-      <span>${u.label}</span>
+      <span>${u.name}</span>
     </div>`;
   }).join('');
   renderSelectedChips();
@@ -1488,8 +1554,8 @@ function renderSelectedChips(){
   const clear = document.getElementById('clearAllLink');
   clear.style.pointerEvents = n>0 ? 'auto' : 'none';
   clear.style.color = n>0 ? 'var(--rmx-blue)' : 'rgba(0,141,213,.5)';
-  document.getElementById('selectedBox').innerHTML = ROLE_USERS.filter(u=>state.selectedUserKeys.has(u.key)).map(u=>
-    `<div class="user-chip">${u.chip}<span class="material-symbols-outlined" onclick="toggleUserKey('${u.key}');renderUserList()">close</span></div>`
+  document.getElementById('selectedBox').innerHTML = [...state.selectedUserKeys].map(k =>
+    `<div class="user-chip">${assigneeName(k)}<span class="material-symbols-outlined" onclick="toggleUserKey('${k}');renderUserList()">close</span></div>`
   ).join('');
   const saveBtn = document.getElementById('usersSaveBtn');
   saveBtn.disabled = n===0;
@@ -1541,19 +1607,13 @@ function openTaskModal(dataset, id, prefillTitle){
   state.modalDone = task ? !!task.completed : false;
   state.modalExternalCal = task ? !!task.externalCal : false;
   state.modalLinks = task ? JSON.parse(JSON.stringify(task.links||[])) : [];
-  /* My Tasks are the signed-in user's tasks, and the signed-in user is Tony
-     Little -- the app bar's avatar, "Good morning, Tony", every @Tony
-     mention. Emma's call, 2026-09-10: "any task opened from the my tasks
-     should be assigned to tony". A new task belongs to whoever is creating
-     it, so it opens the same way.
-
-     Other Users' Tasks are by definition not Tony's, and this field cannot
-     say whose they are: the register's avatars take initials from ROLE_USERS
-     while this dropdown lists ASSIGNEE_USERS, and the two disagree -- `CA` is
-     Charlie Apegian in one and Carly Anderson in the other. It shows the
-     italic "Unassigned" placeholder rather than a name that might be the
-     wrong person. Resolving that needs one user list. See PROTOTYPE.md. */
-  modalAssignees = new Set(state.modalDataset === 'other' ? [] : ['tlittle']);
+  /* The field shows exactly who the register shows -- the task's own
+     assignees, people and roles alike. It could not before, because the two
+     user lists disagreed about who `CA` was; tasks reference keys now, so
+     there is nothing left to guess. Emma's call, 2026-09-11: "make sure it
+     displays the right person according to the register". A new task belongs
+     to whoever is creating it. */
+  modalAssignees = new Set(task ? (task.assigned || []).filter(k => !/^\+/.test(k)) : [ME_KEY]);
   state.modalHistory = task ? JSON.parse(JSON.stringify(task.history||[])) : [];
   state.checklistFilter = 'incomplete';
   state.linkAddOpen = false;

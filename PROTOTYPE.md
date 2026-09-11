@@ -1038,6 +1038,42 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
 
+## Claim, and one list of who exists
+
+Three of Emma's calls on 2026-09-11, and together they finally settle the
+two-user-list problem this file has been flagging since the Assignee field
+was built.
+
+**Tasks reference a key now, never a pair of initials.** The old data stored
+`av('CA','blue')` and left the reader to work out which `CA` that was — and
+the two lists disagreed: `ASSIGNEE_USERS` said Charlie Apegian,
+`ROLE_USERS` said Carly Anderson. Keys make the question disappear. Two
+people are *allowed* to share initials, and both of those now sit in one
+`USERS` list showing `CA`, because the record says which is which. The old
+"Roles" list — three real roles plus five people wearing a role's clothes —
+is now `ROLES`, three roles and the unnamed one below.
+
+**Claim is derived, not authored.** It used to be a hand-set `claim: true` on
+three tasks. It now appears on any task held by a role Tony is in, which is
+exactly the tasks showing an orange bubble — verified: the set of rows with a
+Claim button and the set with an orange avatar are identical, four rows.
+Clicking it hands the task to Tony: the role that was holding it comes off,
+anyone else on it stays, and the button goes with it.
+
+**The Assignee field shows what the register shows.** It could not before, for
+the `CA` reason; it can now. A task on a role reads "Property Manager" with
+an orange bubble, a task on two people reads both their names. **Users and
+User Roles are two lists over one selection**, so switching tabs changes what
+you are choosing from without losing what you have already chosen — picking a
+role, switching to Users and picking a person leaves all three on the task.
+
+**One thing needs your answer:** `SA`. It is an orange bubble on four tasks
+and matches no role anyone has written down. It is carried as a role named
+"SA" — visible in the Roles tab, claimable like any other — rather than
+folded into Property Manager, because guessing what it stands for is exactly
+the kind of quiet invention that makes a prototype wrong in a way nobody
+catches. Item 30.
+
 ## Real date and time pickers on the quick-add bar
 
 Emma's call, 2026-09-11: default the due date to today an hour later, and open
@@ -1068,6 +1104,11 @@ any screen picks them up with two lines and opens them against any element:
 
     RMXDateTime.openDate(anchor, { value: '09/11/26', onPick: fn })
     RMXDateTime.openTime(anchor, { value: '09:25 AM', onPick: fn })
+
+A picker is the bar's own UI even though it is appended to `<body>`, so the
+quick-add bar's click-outside handler ignores clicks inside one — without
+that, choosing a time closed the bar you were filling in. Emma's call,
+2026-09-11. Clicking genuinely away still closes an empty bar.
 
 They reuse the clamp-and-flip placement from the Tasks screen, so a picker
 near the bottom of the window flips above its field instead of running off the
@@ -1631,3 +1672,10 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     Every screen that needs one therefore composes its own from the dropdown
     pattern, which is how they drift. A Time Picker beside the Date Picker
     would close it.
+30. **`SA` is an orange assignee that matches no role.** It appears on four
+    tasks in this prototype's data, styled as a role, and there is no
+    Administrator / Leasing Agent / Property Manager it corresponds to. It is
+    carried as a role named "SA" rather than guessed at. Either it is a real
+    role that wants naming, or those four tasks belong to one of the three
+    that exist — a one-line answer either way, and not one a prototype should
+    invent.
