@@ -1306,6 +1306,22 @@ let myTasks = [
     action:null, actionDetails:null, dueDate:'09/17/26', dueTime:'05:00 PM', overdue:false,
     assigned:['role-pm'], link:'Flagstone Townhomes', linkOverflow:0, workflow:'Leasing',
     checklist:[], externalCal:false, links:[{label:'Property', value:'Flagstone Townhomes', removable:false}] },
+  /* The task behind the Workspace's first mention. Its History / Notes carries
+     the @Tony that mention shows, so clicking the mention lands on this task
+     with the overlay already open -- the note is *on the task*, not on the
+     tenant, and the Workspace should not pretend otherwise. Emma's call,
+     2026-09-11. */
+  { id:'t-movein-credit', title:'Apply the new move-in credit', flag:false, colorBar:'green', completed:false,
+    action:null, actionDetails:null, dueDate:'09/19/26', dueTime:'09:00 AM', overdue:false,
+    assigned:['tlittle'], link:'Charlie Apegian', linkOverflow:0, workflow:'Leasing',
+    checklist:[], externalCal:false,
+    links:[{label:'Tenant', value:'Charlie Apegian', removable:false}],
+    history:[
+      {date:'09/11/26 09:40 AM', type:'Note', avatar:'ncole',
+       text:'@Tony Can you confirm the resident applies for the new move in credit?'},
+      {date:'09/10/26 03:15 PM', type:'System', avatar:'ncole',
+       text:'Nathan Cole created task'},
+    ] },
   { id:'t-receipts', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:true,
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/17/26', dueTime:'10:00 AM', overdue:false,
     assigned:['tlittle'], link:"Patrick O'Malley", linkOverflow:1, workflow:'',
@@ -2946,6 +2962,10 @@ function openFromQueryParam(){
   if (!task) return;
   const dataset = myTasks.includes(task) ? 'my' : 'other';
   openTaskModal(dataset, task.id);
+  /* ?notes=1 -- arrived from a mention that lives in this task's History /
+     Notes, so the overlay opens on top of Task Details rather than leaving you
+     to find it. Emma's call, 2026-09-11. */
+  if (params.get('notes') === '1') openTaskHistory('all');
 }
 
 // Embedded mode (?embed=1) — My Workspace frames this page in an iframe

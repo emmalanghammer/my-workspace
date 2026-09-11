@@ -2496,6 +2496,28 @@ long before this one became the site.
 the app is wrong about that style; the prototype has now followed the app on
 both screens it ever drew, which is a preference, not an answer.
 
+## A mention that lives on a task
+
+Emma's content, 2026-09-11. The other four mentions are notes on records — a
+tenant, two prospects, an owner — and they open that record's History / Notes
+as an overlay on the Workspace. This one is a note on a **task**, and it
+behaves differently because it is different:
+
+> **Nathan Cole** · Task · Apply the new move-in credit
+> **@Tony** Can you confirm the resident applies for the new move in credit?
+
+Clicking it leaves the Workspace for the Tasks register, opens that task's
+Task Details, and puts its History / Notes on top — three things in one move,
+because the note you clicked is in that overlay and nowhere else. A new
+`?notes=1` on the task's own deep link is what does the last part, alongside
+the `?open=` the tile rows have used since the first round.
+
+The task is **Apply the new move-in credit**, assigned to Tony, linked to
+**Tenant: Charlie Apegian**, and its history carries the note verbatim plus the
+system entry that created it. Closing the overlay leaves you on Task Details
+with the tenant link right there, which is the point of going to the register
+rather than opening a panel on the Workspace.
+
 ---
 
 # Worth raising with the design system

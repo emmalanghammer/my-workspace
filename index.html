@@ -199,14 +199,18 @@
                works across: two tenants, two prospects, an owner. Each opens
                that record's own History / Notes. Emma's content, 2026-09-11. -->
 
-          <div class="ws-mention" data-ws-entity="tenant-daniel-smith" tabindex="0" role="button">
+          <!-- This one is a note on a *task*, not on a record, so it does not
+               open an overlay here: it goes to the Tasks register, opens that
+               task's details and puts its History / Notes on top. Emma's call,
+               2026-09-11. -->
+          <div class="ws-mention" data-ws-task="t-movein-credit" tabindex="0" role="button">
             <span data-rmx-component="Avatar" data-ws-avatar="green">NC</span>
             <div>
               <div class="ws-mention__meta">
                 <span class="ws-mention__who">Nathan Cole</span>
-                <span class="ws-mention__when">Tenant &middot; Daniel Smith &middot; 20 min ago</span>
+                <span class="ws-mention__when">Task &middot; Apply the new move-in credit &middot; 20 min ago</span>
               </div>
-              <div class="ws-mention__body"><span class="ws-handle">@Tony</span> he wants to get a dog &mdash; 40lb lab mix. Pet addendum or do we need the deposit first?</div>
+              <div class="ws-mention__body"><span class="ws-handle">@Tony</span> Can you confirm the resident applies for the new move in credit?</div>
             </div>
           </div>
 
@@ -575,6 +579,9 @@
   var list = document.querySelector('[data-ws-mentions]');
   if (!list) return;
   function open(row) {
+    // A note on a task lives on the Tasks register, so that is where it goes.
+    var task = row.getAttribute('data-ws-task');
+    if (task) { location.href = 'screens/tasks.html?open=' + encodeURIComponent(task) + '&notes=1'; return; }
     var key = row.getAttribute('data-ws-entity');
     if (key && window.RMXHistory) RMXHistory.open(key);
   }
