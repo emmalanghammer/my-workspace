@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "my-workspace",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "exec python3 \"/Users/emmalanghammer/claude/my-workspace/.claude/dev-server.py\" \"$PORT\" \"/Users/emmalanghammer/claude/my-workspace\""
+      ],
+      "autoPort": true
+    }
+  ]
+}
