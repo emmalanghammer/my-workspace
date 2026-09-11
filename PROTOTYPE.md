@@ -283,8 +283,8 @@ Everything on the page is realistic Express content, but none of it is wired:
 
 - **No data.** Tenants, properties, vendors and figures are fixed strings. The
   same people hold the same facts across the screen (Marcia Clark's duplicate
-  charge is both Zara Bellweather's mention and a task; Riverview #204's carpet is
-  both Otto Grimaldi's mention and a task), so it reads as one afternoon.
+  charge is both Erin Caldwell's mention and a task; Riverview #204's carpet is
+  both Wesley Barnes's mention and a task), so it reads as one afternoon.
 - **My Favorites and My Reports are not customisable.** The tune icon on each
   says so. Which areas and links appear is the export's curation.
 - **The announcement carousel does not auto-advance** and has no source. Two
@@ -420,7 +420,7 @@ share a title by coincidence but not an identity. Emma's call, 2026-09-10:
   `ws-carpet-vendor`, `ws-marcia-clark`, `ws-hvac-scope`, `ws-rent-roll`,
   `ws-tomas-renewal`) are real entries in `myTasks`, prepended ahead of the
   artifact's own ten, assigned to `TL` (Tony, this prototype's signed-in
-  persona) rather than Delphine Okonjo. Tony was also added to
+  persona) rather than Paige Sullivan. Tony was also added to
   `ASSIGNEE_USERS` so the Assigned To dropdown can find him.
 - **Clicking a `.ws-task` row on My Workspace** (anywhere but its Checkbox)
   navigates to `screens/tasks.html?open=<id>`, which opens that exact task's
@@ -921,7 +921,7 @@ Two things that fell out of unifying them:
   the Checklist tile's Assigned To column shows "Property Manager, SA" — the
   names that resolve, and the raw initials for the one that doesn't. Left
   visible rather than having a person invented for it. It may just be `AS`
-  (Wren Castellano, a real record) typed backwards, but that is a guess and it
+  (Hannah Brooks, a real record) typed backwards, but that is a guess and it
   is Emma's to make.
 
 ## The logo is the way home
@@ -976,7 +976,7 @@ italic grey is allowed to mean.
 **The field opens on the current user rather than on the task's own
 assignees, and that is deliberate.** The register's avatars take initials from
 `ROLE_USERS` while this dropdown lists `ASSIGNEE_USERS`, and the two lists
-disagree: `CA` is **Tamsin Oyelaran** in one and **Rafa Delgado** in the
+disagree: `CA` is **Laura Bennett** in one and **Jason Reeves** in the
 other, `JC` and `AS` exist only in the first, `AA`, `AB`, `DG` and `TL` only
 in the second. Seeding the field from a task would mean choosing which list
 wins, and a task assigned to `JC` would either show a name the Users tab
@@ -1237,9 +1237,9 @@ process task whose four checklist items each belong to a different person:
 | | |
 |---|---|
 | Find new preferred vendor for services | Tony Little |
-| Create vendor account in system | Cyrus Nakamura |
-| Send new vendor agreement & W-9 | Milo Fairbanks |
-| Confirm COI, W-9, & payment method are on file | Ines Kowalczyk |
+| Create vendor account in system | Brian Hollis |
+| Send new vendor agreement & W-9 | Aaron Mitchell |
+| Confirm COI, W-9, & payment method are on file | Derek Shaw |
 
 **The task follows its checklist.** Whoever owns the first item still open
 owns the task, recomputed on every tick — so Tony ticking his own item leaves
@@ -1254,7 +1254,7 @@ their own assignees behaves this way, and tasks whose items carry none are
 untouched. Saving now persists `assigned` too, which it did not before — the
 Assignee field became editable a round ago and its changes were being dropped.
 
-Cyrus Nakamura, Milo Fairbanks and Ines Kowalczyk are new people in `USERS`.
+Brian Hollis, Aaron Mitchell and Derek Shaw are new people in `USERS`.
 Nothing in the UI explains the hand-off; that belongs to whoever is
 presenting it.
 
@@ -1266,8 +1266,8 @@ was built.
 
 **Tasks reference a key now, never a pair of initials.** The old data stored
 `av('CA','blue')` and left the reader to work out which `CA` that was — and
-the two lists disagreed: `ASSIGNEE_USERS` said Tamsin Oyelaran,
-`ROLE_USERS` said Rafa Delgado. Keys make the question disappear. Two
+the two lists disagreed: `ASSIGNEE_USERS` said Laura Bennett,
+`ROLE_USERS` said Jason Reeves. Keys make the question disappear. Two
 people are *allowed* to share initials, and both of those now sit in one
 `USERS` list showing `CA`, because the record says which is which. The old
 "Roles" list — three real roles plus five people wearing a role's clothes —
@@ -1417,7 +1417,7 @@ so the field is still named for a screen reader.
 Emma's correction: "make-ready's don't exist they're just issues." The word
 was sitting in two record-shaped slots and both are wrong:
 
-- The Otto Grimaldi mention read **"Make-Ready · Riverview #204"**, in the
+- The Wesley Barnes mention read **"Make-Ready · Riverview #204"**, in the
   same slot where the other three mentions name a real record type — Tenant,
   Vendor, Owner Prospect. It reads "Issue" now. Its message said "before I
   close this **WO**", which is the same mistake spelled differently, so that
@@ -1457,7 +1457,7 @@ in the rest of that form.
 ## The signed-in user is Tony, everywhere
 
 Emma's call: "any task opened from the my tasks should be assigned to tony."
-The Assignee field read "Delphine Okonjo" for every task — Emma is the
+The Assignee field read "Paige Sullivan" for every task — Emma is the
 designer, not the persona. Tony Little is the signed-in user on every other
 piece of this prototype: the app bar's `TL` avatar, "Good morning, Tony", all
 four `@Tony` mentions, and the six My Workspace tasks, which already said
@@ -1465,14 +1465,14 @@ four `@Tony` mentions, and the six My Workspace tasks, which already said
 
 So Tony now owns what is his: the seven My Tasks rows that said `EL`, the
 "claimed task" history entry, the checklist items on his own tasks, the
-quick-add bar's default assignee, and a brand-new task. Delphine Okonjo stays
+quick-add bar's default assignee, and a brand-new task. Paige Sullivan stays
 in the user list as a real person you can assign things to — she just no
 longer stands in for whoever is logged in.
 
 Other Users' Tasks are by definition **not** Tony's, so they open with the
 italic "Unassigned" placeholder rather than a name. That field still cannot
-say whose they are, for the reason recorded above: `CA` is Tamsin Oyelaran in
-`ASSIGNEE_USERS` and Rafa Delgado in `ROLE_USERS`, and the register draws
+say whose they are, for the reason recorded above: `CA` is Laura Bennett in
+`ASSIGNEE_USERS` and Jason Reeves in `ROLE_USERS`, and the register draws
 its avatars from the second list while the dropdown lists the first. One user
 list fixes it and it needs Emma's answer on `CA`.
 
@@ -1590,8 +1590,8 @@ Two rules that file lives by, because a host screen includes it:
   that has its own `.btn`, `.toast` and `.chkbox`, and its own `call` and
   `mail` icons.
 
-What each mention opens: the Otto Grimaldi mention is about an **Issue**
-(Riverview #204's carpet), Zara Bellweather's is about a **Tenant**, Sunniva Holt's
+What each mention opens: the Wesley Barnes mention is about an **Issue**
+(Riverview #204's carpet), Erin Caldwell's is about a **Tenant**, Corinne Vaughn's
 a **Vendor**, Sally Klydon's an **Owner Prospect**. Each has a Scoreboard,
 its own notes, and every note is clickable — the row or its kebab opens Note
 Details, and **Add** opens the same dialog empty. There is no separate "new
@@ -1617,7 +1617,7 @@ the caret carries on after it.
 **Who you can tag is per record.** Emma's call: "include any users who have
 added notes as users available to @ tag in a note." The list is the seven
 users plus anyone who has written a note on the record you are looking at, so
-Zara Bellweather is taggable on Marcia Clark's history, Otto Grimaldi on the Issue,
+Erin Caldwell is taggable on Marcia Clark's history, Wesley Barnes on the Issue,
 Sally Klydon on the prospect — none of whom is in `ASSIGNEE_USERS`. It reads
 oddly to get a note from someone you cannot reply to. Derived entries show a
 name and initials but no username, because the note record gives us a name
@@ -1809,11 +1809,11 @@ prospects, an owner.
 
 | Who tagged him | Record | What it is |
 |---|---|---|
-| Beatrix Arriaga | Tenant · Daniel Smith | Wants a dog; records attached, question is addendum or deposit first |
-| Anouk Verhoeven | Prospect · Nicole Brandt | Wants the quote repriced with the covered parking space in the rent |
-| Ines Kowalczyk | Prospect · Renee Vogel | Needs a dog park; asking for the lead to move to Brookside |
-| Zara Bellweather | Tenant · Marcia Clark | Adding a roommate within six months, wants the process in writing |
-| Cyrus Nakamura | Owner · Sally Klydon | Closing on a fourplex, wants the management agreement started |
+| Nathan Cole | Tenant · Daniel Smith | Wants a dog; records attached, question is addendum or deposit first |
+| Kelsey Warner | Prospect · Nicole Brandt | Wants the quote repriced with the covered parking space in the rent |
+| Derek Shaw | Prospect · Renee Vogel | Needs a dog park; asking for the lead to move to Brookside |
+| Erin Caldwell | Tenant · Marcia Clark | Adding a roommate within six months, wants the process in writing |
+| Brian Hollis | Owner · Sally Klydon | Closing on a fourplex, wants the management agreement started |
 
 Each opens its own History / Notes, and each history is a thread rather than a
 single line — the tagged note sits on top of the two or three that led to it,
@@ -2290,7 +2290,7 @@ bubble means a role, and that has to keep meaning only that.* A real
 categorical ramp would do this properly; that gap is item 8.
 
 **Other Users' Tasks is spread across the team.** Ten rows were sharing five
-people, with Beatrix Arriaga on five of them. They now run across twelve, leaving
+people, with Nathan Cole on five of them. They now run across twelve, leaving
 the checklist owners the demo depends on exactly where they were.
 
 **Quick Filters stays as you left it.** Switching to Other Users' Tasks used to
@@ -2373,12 +2373,12 @@ Three things worth knowing:
 - **The demo script names people out loud.** Scene 2's checklist goes to Dave,
   Chris and Ali, and Scene 4 says "Chris still hasn't sent the agreement,
   three days after Dave created the vendor." Those three are now **Cyrus
-  Nakamura**, **Milo Fairbanks** and **Ines Kowalczyk**. The first pass kept
+  Nakamura**, **Aaron Mitchell** and **Derek Shaw**. The first pass kept
   Dave, Chris and Ali as first names precisely so the script would still read;
   the second call overrode that, so the script wants those three names
   swapped before the demo.
 - **The keys moved with the names.** A task referencing `'bcarle'` while the
-  register drew "Beatrix Arriaga" would have been a trap for whoever picked
+  register drew "Nathan Cole" would have been a trap for whoever picked
   this up next, so the keys are the new usernames.
 - **Earlier sections of this file now read strangely in one place.** The story
   about the two user lists disagreeing over who `CA` was depended on two
@@ -2550,7 +2550,7 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
 25. **The real product prints a note's raw mention token in the register.**
     Emma's reference screenshot of History / Notes shows the Note column
     reading `@u:53(Izzy Geza)Izzy Geza test` and
-    `@u:121(Delphine Okonjo)Delphine Okonjo reminder to add this tenants
+    `@u:121(Paige Sullivan)Paige Sullivan reminder to add this tenants
     details later` — the internal `@u:<id>(Name)` form rendered next to the
     display name instead of being resolved to the chip the Note field shows.
     An implementation bug rather than a design question, and worth passing to
