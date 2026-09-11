@@ -1228,12 +1228,14 @@ function checklistProgress(t){
   return items.filter(i=>i.done).length + '/' + items.length;
 }
 
-// The six tasks shown on My Workspace's My Tasks preview, same ids, same
-// titles, same categories/urgency, so opening one here shows the same task,
-// not a different one with the same name. Combined per Emma's call,
-// 2026-09-10. Assigned to Tony (this prototype's signed-in persona on the
-// My Workspace screen), not Paige Sullivan, since these are Tony's tasks.
-let myWorkspaceTasks = [
+// Three of the six that began as My Workspace's My Tasks preview, mirrored
+// here by id so opening one on either screen showed the same task. That tile
+// is gone (the Workspace went back to the production UI on 2026-09-11) and the
+// other three went with it when Emma capped the register at ten tasks. These
+// stayed because each carries something the register demonstrates: the overdue
+// pair the list pins to the top, and the only Vendor link in the set.
+// Assigned to Tony, this prototype's signed-in persona, not Paige Sullivan.
+let myOwnTasks = [
   { id:'ws-post-notice', title:"Post 3-day notice for Flagstone Lot 3", flag:true, colorBar:'red', completed:false,
     action:null, actionDetails:null, dueDate:'09/04/26', dueTime:'09:00 AM', overdue:true,
     assigned:['tlittle'], link:"Patrick O'Malley", linkOverflow:0, workflow:'Eviction',
@@ -1242,35 +1244,23 @@ let myWorkspaceTasks = [
     action:null, actionDetails:null, dueDate:'09/08/26', dueTime:'05:00 PM', overdue:true,
     assigned:['tlittle'], link:'Riverview #204', linkOverflow:0, workflow:'Unit Renovation',
     checklist:[], externalCal:false, links:[{label:'Unit', value:'Riverview #204', removable:false}] },
-  { id:'ws-marcia-clark', title:"Return Marcia Clark's call", flag:false, colorBar:'blue', completed:false,
-    action:null, actionDetails:null, dueDate:'09/11/26', dueTime:'04:00 PM', overdue:false,
-    assigned:['tlittle'], link:'', linkOverflow:0, workflow:'',
-    checklist:[], externalCal:false },
   { id:'ws-hvac-scope', title:'Sign off on Brookside HVAC scope', flag:false, colorBar:'orange', completed:false,
     action:null, actionDetails:null, dueDate:'09/14/26', dueTime:'05:00 PM', overdue:false,
     assigned:['tlittle'], link:'Anderson Mechanical', linkOverflow:0, workflow:'Vendor',
     checklist:[], externalCal:false, links:[{label:'Vendor', value:'Anderson Mechanical', removable:false}] },
-  { id:'ws-rent-roll', title:'Review May rent roll variance', flag:false, colorBar:'blue', completed:false,
-    action:null, actionDetails:null, dueDate:'09/16/26', dueTime:'05:00 PM', overdue:false,
-    assigned:['tlittle'], link:'', linkOverflow:0, workflow:'Reporting',
-    checklist:[], externalCal:false },
-  { id:'ws-tomas-renewal', title:'Draft renewal for Tomas Webber', flag:false, colorBar:'green', completed:false,
-    action:null, actionDetails:null, dueDate:'09/21/26', dueTime:'05:00 PM', overdue:false,
-    assigned:['tlittle'], link:'Tomas Webber', linkOverflow:0, workflow:'Leasing',
-    // The Link column carried a value with no typed link record behind it, so
-    // the Links tile opened empty on a task the register said was linked.
-    // Added 2026-09-10 while making the My Workspace tile show only real links.
-    checklist:[], externalCal:false, links:[{label:'Tenant', value:'Tomas Webber', removable:false}] },
 ];
 
 // My Tasks dataset (screenshots 03/04/05 + the "Approve Daniel for Pet" demo row from screenshot 08)
 let myTasks = [
-  ...myWorkspaceTasks,
-  /* Ten tasks, deliberately: the six the My Workspace tile mirrors (two of
-     them the overdue pair that tile counts), plus the demo scenes' own -- New
-     Vendor Onboarding, the pet approval with its template checklist and
-     history, one role-held task so Claim is reachable here too, and one
-     already-completed task. Emma's call, 2026-09-11. */
+  ...myOwnTasks,
+  /* Ten tasks, and ten is the cap: Emma's call, 2026-09-11, a register that
+     runs past a screenful stops reading as one person's list. Six are Tony's
+     own, four sit in a role queue below them, and between them they carry
+     every state the register has to show: the overdue pair pinned to the top,
+     a flagged high-priority task, one already-completed task, a Claim that is
+     reachable here as well as on the tile, and one link of each of the five
+     types (Tenant, Unit, Vendor, Property, Owner). Nothing here is filler, so
+     nothing can be cut without taking a demonstrated behaviour with it. */
 
   /* An internal process that runs through three roles in order. Each checklist
      item carries its own assignee -- a *role*, not a person -- and the task
@@ -1309,14 +1299,9 @@ let myTasks = [
     action:'Add Journal', actionDetails:null, dueDate:'09/15/26', dueTime:'07:30 AM', overdue:false,
     assigned:['role-pm'], link:'PARK', linkOverflow:0, workflow:'Property Renovation',
     checklist:[], externalCal:false },
-  /* The other two tasks in the Property Manager queue. They are the
-     Workspace tile's claim rows, and they are register tasks like any other
-     -- so clicking one there opens its real details instead of nothing.
-     Emma's call, 2026-09-11. */
-  { id:'t-renewal-reminders', title:'Send renewal reminders for properties ending in 30 days', flag:false, colorBar:'green', completed:false,
-    action:null, actionDetails:null, dueDate:'09/22/26', dueTime:'05:00 PM', overdue:false,
-    assigned:['role-pm'], link:'', linkOverflow:0, workflow:'Leasing',
-    checklist:[], externalCal:false },
+  /* The third task in the Property Manager queue, a claim row and a register
+     task like any other, so clicking one opens its real details rather than
+     nothing. Emma's call, 2026-09-11. */
   { id:'t-walk-vacant', title:'Walk vacant units at Flagstone before Friday', flag:false, colorBar:'orange', completed:false,
     action:null, actionDetails:null, dueDate:'09/17/26', dueTime:'05:00 PM', overdue:false,
     assigned:['role-pm'], link:'Flagstone Townhomes', linkOverflow:0, workflow:'Leasing',

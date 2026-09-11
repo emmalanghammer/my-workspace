@@ -2618,6 +2618,35 @@ is what My Mentions' header (`.ws-iconbtn`) was already using, so all five tiles
 agree. The same rule covers the visibility-off buttons on Announcements and My
 Training, which sit in the same slot.
 
+## Ten tasks, and ten is the cap
+
+Emma's call, 2026-09-11. My Tasks had drifted to fourteen rows and now holds
+ten, which is what Other Users' Tasks has always held. A register that runs
+past a screenful stops reading as one person's list, which is the thing this
+screen is meant to show.
+
+Four rows went. Three of them (`ws-marcia-clark`, `ws-rent-roll`,
+`ws-tomas-renewal`) were there to mirror the My Workspace My Tasks tile by id,
+and that tile no longer exists; the fourth (`t-renewal-reminders`) was the
+second of three interchangeable Property Manager queue rows. Nothing that the
+register demonstrates left with them. What is still in the ten:
+
+- the overdue pair the list pins to the top, `ws-post-notice` and
+  `ws-carpet-vendor`
+- one link of each of the five types, Tenant, Unit, Vendor, Property, Owner
+  (`ws-hvac-scope` is the only Vendor and is why it stayed over the other two)
+- a flagged high-priority task, an already-completed task, the pet approval
+  with its template checklist and history, the Month End Close hand-off, and
+  the W-9 Claim
+- six of Tony's own above four role-queue rows, so the queue still reads as a
+  section rather than a stray row
+
+Two earlier sections of this file describe tasks that are no longer in the set,
+"Return Marcia Clark's call" and "Review May rent roll variance" as the two
+rows with nothing in the Link column, and "Sign off on Brookside HVAC scope" as
+the Vendor. They are left as written: they record what was decided at the time,
+and the HVAC task is still here.
+
 ---
 
 # Worth raising with the design system
