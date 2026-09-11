@@ -1799,6 +1799,46 @@ everywhere else on this screen. `RMXHistory.open` takes a `noteOnly` option
 for the first case — the shared overlay still loads the record, it just
 doesn't show its register.
 
+## New mentions content: five records, five reasons to open one
+
+Emma's content, 2026-09-11. The old four were placeholder-shaped — a carpet
+quote, a billing credit, a vendor autopay, a proforma — and they did not say
+much about *why* a manager would open the record. These five do, and they
+spread across the record types Tony actually works: two tenants, two
+prospects, an owner.
+
+| Who tagged him | Record | What it is |
+|---|---|---|
+| Becky Carle | Tenant · Daniel Smith | Wants a dog; records attached, question is addendum or deposit first |
+| Danielle Gardin | Prospect · Sally Klydon | Wants the quote repriced with the covered parking space in the rent |
+| Ali Ferryman | Prospect · Renee Vogel | Needs a dog park; asking for the lead to move to Brookside |
+| Karen Hsu | Tenant · Marcia Clark | Adding a roommate within six months, wants the process in writing |
+| Dave Hegemann | Owner · Gerald Hupp | Closing on a fourplex, wants the management agreement started |
+
+Each opens its own History / Notes, and each history is a thread rather than a
+single line — the tagged note sits on top of the two or three that led to it,
+so opening one tells you what happened before somebody needed you. Daniel's
+carries the vet records and renter's policy as attachments; Sally's carries
+the quote PDF she wants repriced.
+
+Some of it connects to what is already here on purpose. **Daniel Smith** is
+the tenant on the register's "Approve Daniel for Pet" task, so the mention and
+the task are two views of one request. **Marcia Clark** keeps her billing
+history and gains the roommate thread above it, which is also what "Return
+Marcia Clark's call" is about.
+
+Two judgement calls worth knowing:
+
+- **Sally moved from Owner Prospect to Prospect.** She was an owner prospect
+  sending a proforma; the note you wrote puts her in a unit asking about
+  parking. The owner scenario became Gerald Hupp, a separate record, so both
+  exist rather than one being bent into the other.
+- **The Issue and Vendor records are still in the file, now unlinked.** Issue
+  #4821 and Anderson Pest Control are real, coherent histories, and the
+  register still carries a Riverview #204 task and vendor links that could
+  point at them later. Nothing on the Workspace opens them today. Say if you
+  would rather they went.
+
 ---
 
 # Worth raising with the design system

@@ -195,7 +195,7 @@
         <div class="ws-eyebrow"><span class="ws-eyebrow__dot"></span>Wednesday, May 6</div>
         <h1 class="ws-band__title">Good morning, Tony.</h1>
         <p class="ws-band__summary">
-          You have <b data-ws-hero-open>8 tasks</b> open, <b data-ws-hero-overdue>2 overdue</b>, and <b>4 mentions</b> waiting.
+          You have <b data-ws-hero-open>8 tasks</b> open, <b data-ws-hero-overdue>2 overdue</b>, and <b>5 mentions</b> waiting.
         </p>
       </div>
       <div class="ws-band__actions">
@@ -464,7 +464,7 @@
         <div class="rmx-tile__header">
           <span class="ws-hicon ws-hicon--attention"><svg class="rmx-icon rmx-icon--16"><use href="#sms"></use></svg></span>
           <span class="rmx-tile__title">My Mentions</span>
-          <span class="ws-tile-count">4</span>
+          <span class="ws-tile-count">5</span>
           <span class="rmx-tile__actions">
             <button class="ws-iconbtn" aria-label="More"
                     data-rmx-todo="The tile menu is not built in this prototype">
@@ -476,47 +476,62 @@
              about, framed the same way Task Details is. Emma's call, 2026-09-10. -->
         <div class="rmx-tile__body ws-body--list" data-ws-mentions>
 
-          <div class="ws-mention" data-ws-entity="issue-riverview-204" tabindex="0" role="button">
-            <span data-rmx-component="Avatar" data-ws-avatar="brand">DA</span>
-            <div>
-              <div class="ws-mention__meta">
-                <span class="ws-mention__who">Diego Alvarez</span>
-                <span class="ws-mention__when">Issue &middot; Riverview #204 &middot; 12 min ago</span>
-              </div>
-              <div class="ws-mention__body"><span class="ws-handle">@Tony</span> can you confirm the carpet vendor before I close this issue?</div>
-            </div>
-          </div>
+          <!-- Five threads Tony has been pulled into, one per record type he
+               works across: two tenants, two prospects, an owner. Each opens
+               that record's own History / Notes. Emma's content, 2026-09-11. -->
 
-          <div class="ws-mention" data-ws-entity="tenant-marcia-clark" tabindex="0" role="button">
-            <span data-rmx-component="Avatar" data-ws-avatar="green">KH</span>
+          <div class="ws-mention" data-ws-entity="tenant-daniel-smith" tabindex="0" role="button">
+            <span data-rmx-component="Avatar" data-ws-avatar="green">BC</span>
             <div>
               <div class="ws-mention__meta">
-                <span class="ws-mention__who">Karen Hsu</span>
-                <span class="ws-mention__when">Tenant &middot; Marcia Clark &middot; 1h ago</span>
+                <span class="ws-mention__who">Becky Carle</span>
+                <span class="ws-mention__when">Tenant &middot; Daniel Smith &middot; 20 min ago</span>
               </div>
-              <div class="ws-mention__body"><span class="ws-handle">@Tony</span> I issued the credit. Want to call her or should I?</div>
-            </div>
-          </div>
-
-          <div class="ws-mention" data-ws-entity="vendor-anderson-pest" tabindex="0" role="button">
-            <span data-rmx-component="Avatar" data-ws-avatar="orange">AP</span>
-            <div>
-              <div class="ws-mention__meta">
-                <span class="ws-mention__who">Anthony Park</span>
-                <span class="ws-mention__when">Vendor &middot; Anderson Pest Control &middot; 3h ago</span>
-              </div>
-              <div class="ws-mention__body">flagging <span class="ws-handle">@Tony</span> &mdash; they want autopay set up before next visit.</div>
+              <div class="ws-mention__body"><span class="ws-handle">@Tony</span> he wants to get a dog &mdash; 40lb lab mix. Pet addendum or do we need the deposit first?</div>
             </div>
           </div>
 
           <div class="ws-mention" data-ws-entity="prospect-sally-klydon" tabindex="0" role="button">
-            <span data-rmx-component="Avatar" data-ws-avatar="navy">SK</span>
+            <span data-rmx-component="Avatar" data-ws-avatar="brand">DG</span>
             <div>
               <div class="ws-mention__meta">
-                <span class="ws-mention__who">Sally Klydon</span>
-                <span class="ws-mention__when">Owner Prospect &middot; yesterday</span>
+                <span class="ws-mention__who">Danielle Gardin</span>
+                <span class="ws-mention__when">Prospect &middot; Sally Klydon &middot; 1h ago</span>
               </div>
-              <div class="ws-mention__body"><span class="ws-handle">@Tony</span> sending over the proforma after our meeting tomorrow.</div>
+              <div class="ws-mention__body"><span class="ws-handle">@Tony</span> Sally wants the quote repriced with the covered parking space included. Can you add it?</div>
+            </div>
+          </div>
+
+          <div class="ws-mention" data-ws-entity="prospect-renee-vogel" tabindex="0" role="button">
+            <span data-rmx-component="Avatar" data-ws-avatar="orange">AF</span>
+            <div>
+              <div class="ws-mention__meta">
+                <span class="ws-mention__who">Ali Ferryman</span>
+                <span class="ws-mention__when">Prospect &middot; Renee Vogel &middot; 3h ago</span>
+              </div>
+              <div class="ws-mention__body"><span class="ws-handle">@Tony</span> she really wants a dog park &mdash; nothing at Flagstone fits. Can you move the lead to Brookside?</div>
+            </div>
+          </div>
+
+          <div class="ws-mention" data-ws-entity="tenant-marcia-clark" tabindex="0" role="button">
+            <span data-rmx-component="Avatar" data-ws-avatar="navy">KH</span>
+            <div>
+              <div class="ws-mention__meta">
+                <span class="ws-mention__who">Karen Hsu</span>
+                <span class="ws-mention__when">Tenant &middot; Marcia Clark &middot; yesterday</span>
+              </div>
+              <div class="ws-mention__body"><span class="ws-handle">@Tony</span> she’s adding a roommate within six months and wants the steps in writing.</div>
+            </div>
+          </div>
+
+          <div class="ws-mention" data-ws-entity="owner-gerald-hupp" tabindex="0" role="button">
+            <span data-rmx-component="Avatar" data-ws-avatar="green">DH</span>
+            <div>
+              <div class="ws-mention__meta">
+                <span class="ws-mention__who">Dave Hegemann</span>
+                <span class="ws-mention__when">Owner &middot; Gerald Hupp &middot; yesterday</span>
+              </div>
+              <div class="ws-mention__body"><span class="ws-handle">@Tony</span> he closes on the Westbrook fourplex on the 30th and wants the management agreement started.</div>
             </div>
           </div>
 

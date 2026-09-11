@@ -81,8 +81,12 @@ var ENTITIES = {
     status: {label:'Current'},
     balance: '0.00',
     notes: [
+      {type:'Tenant Contact', date:'09/10/25 03:40 PM', category:'Leasing', user:'Karen Hsu',
+       note:'She is planning to add a roommate in the next six months and wants the process in writing before she commits. @Tony she’s adding a roommate within six months and wants the steps in writing.', files:[]},
+      {type:'Tenant Contact', date:'09/10/25 02:15 PM', category:'Leasing', user:'Karen Hsu',
+       note:'Called about adding her sister to the lease sometime after the new year. Walked her through it at a high level — application and screening for the new occupant, then a lease amendment, and the deposit recalculated at two occupants. She asked for it in writing.', files:[]},
       {type:'Billing', date:'09/10/25 09:12 AM', category:'Receivables', user:'Karen Hsu',
-       note:'Credit issued for the duplicate charge on the August statement. @Tony I issued the credit. Want to call her or should I?', files:[]},
+       note:'Credit issued for the duplicate charge on the August statement.', files:[]},
       {type:'Statement Dispute', date:'09/09/25 02:48 PM', category:'Receivables', user:'Karen Hsu',
        note:'Tenant called about a duplicate charge on her statement. Verified — the same $45 pet fee posted twice on 08/31.', files:['statement_aug.pdf']},
       {type:'Lease', date:'06/01/25 10:00 AM', category:'Leasing', user:'Emma Langhammer',
@@ -109,17 +113,87 @@ var ENTITIES = {
     ]
   },
   'prospect-sally-klydon': {
-    kind: 'Owner Prospect',
+    kind: 'Prospect',
     name: 'Sally Klydon',
     items: [
+      {icon:'properties',   text:'Riverview Apartments'},
+      {icon:'units',        text:'Riverview #212'},
       {icon:'mail-outline', text:'sklydon@example.com'},
       {icon:'call',         text:'513-555-7741'}
     ],
     notes: [
-      {type:'Proforma', date:'09/09/25 04:55 PM', category:'<Unassigned>', user:'Sally Klydon',
-       note:'@Tony sending over the proforma after our meeting tomorrow.', files:[]},
-      {type:'Meeting', date:'09/09/25 09:00 AM', category:'<Unassigned>', user:'Tony Little',
-       note:'Intro call — 14 doors across two buildings, currently self-managed. Wants a management proposal by the end of the month.', files:[]}
+      {type:'Quote', date:'09/10/25 11:05 AM', category:'Leasing', user:'Danielle Gardin',
+       note:'She wants to see the unit priced with the covered space in the rent, not as a separate line. @Tony Sally wants the quote repriced with the covered parking space included. Can you add it?', files:[]},
+      {type:'Showing', date:'09/09/25 04:30 PM', category:'Leasing', user:'Danielle Gardin',
+       note:'Toured #212. Liked the unit, asked twice about covered parking — she leaves for a job site before six and does not want to scrape in the winter. One garage space is open at $45.', files:[]},
+      {type:'Quote', date:'09/09/25 02:10 PM', category:'Leasing', user:'Danielle Gardin',
+       note:'Quoted $1,310 for #212, 12-month term, move-in 10/01. Parking not included.', files:['quote_riverview_212.pdf']},
+      {type:'Inquiry', date:'09/06/25 08:45 AM', category:'Leasing', user:'Brittany Fischer',
+       note:'Web inquiry — two bedroom, October move-in, no pets.', files:[]}
+    ]
+  },
+  /* The prospect this property cannot suit: the note that matters is the one
+     handing the lead somewhere that can. */
+  'prospect-renee-vogel': {
+    kind: 'Prospect',
+    name: 'Renee Vogel',
+    items: [
+      {icon:'properties',   text:'Flagstone Townhomes'},
+      {icon:'mail-outline', text:'rvogel@example.com'},
+      {icon:'call',         text:'513-555-9063'}
+    ],
+    notes: [
+      {type:'Lead Transfer', date:'09/10/25 09:20 AM', category:'Leasing', user:'Ali Ferryman',
+       note:'Flagstone has no dog run and the nearest park is a fifteen minute drive. Brookside has the fenced run off the south lot. @Tony she really wants a dog park — nothing at Flagstone fits. Can you move the lead to Brookside?', files:[]},
+      {type:'Prospect Contact', date:'09/09/25 05:40 PM', category:'Leasing', user:'Ali Ferryman',
+       note:'Followed up after the tour. She was straight about it — the dog run is the deciding factor, two large dogs, and she will keep looking without one.', files:[]},
+      {type:'Showing', date:'09/09/25 10:00 AM', category:'Leasing', user:'Ali Ferryman',
+       note:'Toured Flagstone Lot 12. Liked the townhome and the price; her first question at the door was where the dogs go.', files:[]},
+      {type:'Inquiry', date:'09/07/25 07:15 PM', category:'Leasing', user:'Brittany Fischer',
+       note:'Web inquiry — three bedroom, November move-in, two dogs (60lb and 45lb).', files:[]}
+    ]
+  },
+  'tenant-daniel-smith': {
+    kind: 'Tenant',
+    name: 'Daniel Smith',
+    items: [
+      {icon:'properties',   text:'Flagstone Townhomes'},
+      {icon:'units',        text:'Flagstone 107B'},
+      {icon:'mail-outline', text:'dsmith@example.com'},
+      {icon:'call',         text:'513-555-0427'},
+      {icon:'sms-outlined', text:''}
+    ],
+    status: {label:'Current'},
+    balance: '0.00',
+    notes: [
+      {type:'Pet Request', date:'09/11/25 08:50 AM', category:'Leasing', user:'Becky Carle',
+       note:'Vet records and the renter’s policy are attached. @Tony he wants to get a dog — 40lb lab mix. Pet addendum or do we need the deposit first?', files:['vaccination_record.pdf','renters_policy.pdf']},
+      {type:'Tenant Contact', date:'09/10/25 04:20 PM', category:'Leasing', user:'Becky Carle',
+       note:'Came into the office about adding a dog — a two year old lab mix, about 40lb, from the shelter on Vine. Told him the breed is fine and the weight is under the limit, and that we would need vet records and proof of renter’s insurance listing the dog.', files:[]},
+      {type:'Lease', date:'07/01/25 10:00 AM', category:'Leasing', user:'Emma Langhammer',
+       note:'Signed through 06/30/26 at $1,180. No pets on the original lease.', files:[]},
+      {type:'Move In', date:'07/01/25 09:00 AM', category:'<Unassigned>', user:'Alan Anderson',
+       note:'Move-in inspection completed with the tenant. No exceptions noted.', files:['moveIn_107B.pdf']}
+    ]
+  },
+  'owner-gerald-hupp': {
+    kind: 'Owner',
+    name: 'Gerald Hupp',
+    items: [
+      {icon:'properties',   text:'Hupp Holdings — 2 properties'},
+      {icon:'mail-outline', text:'ghupp@example.com'},
+      {icon:'call',         text:'513-555-3318'}
+    ],
+    balance: '0.00',
+    notes: [
+      {type:'Management Agreement', date:'09/10/25 01:30 PM', category:'<Unassigned>', user:'Dave Hegemann',
+       note:'He wants it ready to sign the week he closes, so rents can be collected in October. @Tony he closes on the Westbrook fourplex on the 30th and wants the management agreement started.', files:[]},
+      {type:'Owner Contact', date:'09/10/25 11:45 AM', category:'<Unassigned>', user:'Dave Hegemann',
+       note:'Called to say the Westbrook Ave fourplex is under contract, closing 09/30. Four units, three occupied, currently self-managed. He wants us on it from day one — same terms as his other two.', files:[]},
+      {type:'Statement', date:'09/01/25 06:00 AM', category:'<Unassigned>', user:'Karen Hsu',
+       note:'August owner statement sent. Distribution $4,206.18.', files:['owner_stmt_aug.pdf']},
+      {type:'Management Agreement', date:'02/14/24 09:00 AM', category:'<Unassigned>', user:'Emma Langhammer',
+       note:'Agreement signed for both existing properties at 8% of collected rent.', files:[]}
     ]
   }
 };
