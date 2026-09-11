@@ -1054,6 +1054,20 @@ let myWorkspaceTasks = [
 let myTasks = [
   ...myWorkspaceTasks,
 
+  /* An internal process that runs through four people in order. Each
+     checklist item carries its own assignee, and the task follows the first
+     item still open -- so ticking yours hands it on rather than leaving you
+     to chase the next person. */
+  { id:'t-vendor-onboarding', title:'New Vendor Onboarding', flag:false, colorBar:'blue', completed:false,
+    action:null, actionDetails:null, dueDate:'09/19/26', dueTime:'05:00 PM', overdue:false,
+    assigned:['tlittle'], link:'', linkOverflow:0, workflow:'Vendor Onboarding',
+    showProgress:true, externalCal:false,
+    checklist:[
+      {text:'Find new preferred vendor for services',            assigned:['tlittle'],     done:false},
+      {text:'Create vendor account in system',                   assigned:['dhegemann'],   done:false},
+      {text:'Send new vendor agreement & W-9',                   assigned:['cgriesinger'], done:false},
+      {text:'Confirm COI, W-9, & payment method are on file',    assigned:['aferryman'],   done:false}
+    ] },
   { id:'t-approve-pet', title:'Approve Daniel for Pet', flag:true, colorBar:null, completed:false,
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/17/25', dueTime:'11:00 AM', overdue:false,
     assigned:['tlittle'], link:'', linkOverflow:0, workflow:'',
@@ -1231,7 +1245,7 @@ function claimTask(dataset, id){
   t.assigned = (t.assigned || []).filter(k => mine.indexOf(k) === -1);
   if (t.assigned.indexOf(ME_KEY) === -1) t.assigned.unshift(ME_KEY);
   renderRegister();
-  toast('Task claimed');
+  toast('Task claimed', 'success');
 }
 function toggleRowComplete(dataset, id){
   const list = dataset==='my' ? myTasks : otherTasks;
@@ -1244,11 +1258,26 @@ function toggleRowComplete(dataset, id){
 /* Ticking an inline checklist item shows no toast -- it is a checklist item,
    not a task, so nothing has been closed. Emma's call, 2026-09-10. The
    progress count on the parent row updates instead, which is the feedback. */
+/* A checklist whose items carry their own assignees is a baton: the task
+   belongs to whoever owns the first item still open. Recomputed after every
+   tick, so unticking hands it back rather than stranding it. Tasks whose
+   items carry no assignee are untouched. */
+function checklistOwner(items){
+  const next = (items || []).find(i => !i.done);
+  if (!next) return null;
+  const keys = (next.assigned || []).filter(k => !/^\+/.test(k));
+  return keys.length ? keys.slice() : null;
+}
+function advanceAssignment(t){
+  const owner = checklistOwner(t.checklist);
+  if (owner) t.assigned = owner;
+}
 function toggleChecklistRow(dataset, parentId, idx){
   const list = dataset==='my' ? myTasks : otherTasks;
   const t = list.find(x=>x.id===parentId);
   if(!t || !t.checklist || !t.checklist[idx]) return;
   t.checklist[idx].done = !t.checklist[idx].done;
+  advanceAssignment(t);
   renderRegister();
 }
 function renderRegister(){
@@ -1395,7 +1424,10 @@ const USERS = [
   {key:'bfischer',    initials:'BF', name:'Brittany Fischer',  uname:'bfischer'},
   {key:'canderson',   initials:'CA', name:'Carly Anderson',    uname:'canderson'},
   {key:'capegian',    initials:'CA', name:'Charlie Apegian',   uname:'capegian'},
+  {key:'aferryman',   initials:'AF', name:'Ali Ferryman',       uname:'aferryman'},
+  {key:'cgriesinger', initials:'CG', name:'Chris Griesinger',   uname:'cgriesinger'},
   {key:'dgardin',     initials:'DG', name:'Danielle Gardin',   uname:'dgardin'},
+  {key:'dhegemann',   initials:'DH', name:'Dave Hegemann',      uname:'dhegemann'},
   {key:'elanghammer', initials:'EL', name:'Emma Langhammer',   uname:'elanghammer'},
   {key:'jcameron',    initials:'JC', name:'Jonathan Cameron',  uname:'jcameron'},
   {key:'tlittle',     initials:'TL', name:'Tony Little',       uname:'tlittle'},
@@ -1965,6 +1997,13 @@ function renderModalChecklist(){
 function toggleChecklistItem(i){
   state.modalChecklist[i].done = !state.modalChecklist[i].done;
   renderModalChecklist();
+  /* The Assignee field follows the checklist: tick your item and the task is
+     already the next person's. */
+  const owner = checklistOwner(state.modalChecklist);
+  if (owner) {
+    modalAssignees = new Set(owner);
+    renderModalAssignee();
+  }
 }
 let checklistItemMenuIdx = null;
 function openChecklistItemMenu(e, idx){
@@ -2012,6 +2051,7 @@ function saveTask(mode){
     action: state.modalActionLabel, actionDetails: state.modalActionDetails,
     checklist: state.modalChecklist, externalCal: state.modalExternalCal,
     links: state.modalLinks, history: state.modalHistory,
+    assigned: [...modalAssignees],
   };
   if(state.modalIsNew){
     const t = makeBlankTask(title);

@@ -1038,6 +1038,35 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
 
+## New Vendor Onboarding — a task that hands itself on
+
+A demo scene of Emma's, 2026-09-11. "New Vendor Onboarding" is an internal
+process task whose four checklist items each belong to a different person:
+
+| | |
+|---|---|
+| Find new preferred vendor for services | Tony Little |
+| Create vendor account in system | Dave Hegemann |
+| Send new vendor agreement & W-9 | Chris Griesinger |
+| Confirm COI, W-9, & payment method are on file | Ali Ferryman |
+
+**The task follows its checklist.** Whoever owns the first item still open
+owns the task, recomputed on every tick — so Tony ticking his own item leaves
+the task assigned to Dave, without Tony touching the Assignee field. It is
+symmetrical: unticking hands it back. Verified end to end — Tony → Dave →
+Chris → Ali as each item is ticked, back to Tony when the first is unticked,
+and the register agrees after a save (the row's avatar goes TL → DH and the
+progress count 0/4 → 1/4).
+
+This is general, not scripted for one task: any checklist whose items carry
+their own assignees behaves this way, and tasks whose items carry none are
+untouched. Saving now persists `assigned` too, which it did not before — the
+Assignee field became editable a round ago and its changes were being dropped.
+
+Dave Hegemann, Chris Griesinger and Ali Ferryman are new people in `USERS`.
+Nothing in the UI explains the hand-off; that belongs to whoever is
+presenting it.
+
 ## Claim, and one list of who exists
 
 Three of Emma's calls on 2026-09-11, and together they finally settle the
