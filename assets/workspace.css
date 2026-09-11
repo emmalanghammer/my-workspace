@@ -636,6 +636,8 @@
   overflow: hidden;
   cursor: pointer;
 }
+/* Both halves are buttons now -- each opens its own picker -- so they reset
+   the browser's button styling and keep the field's look. */
 .ws-qadd__dt .f {
   flex: 1;
   min-width: 0;
@@ -645,16 +647,25 @@
   font: var(--type-label-m-regular);
   color: var(--text-secondary);
   white-space: nowrap;
+  border: 0;
+  background: none;
+  cursor: pointer;
 }
+.ws-qadd__dt .f.is-empty { font-style: italic; color: var(--text-disabled); }
 .ws-qadd__dt .i {
   flex: none;
   width: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 0;
   border-left: 1px solid var(--border-primary);
+  background: none;
+  padding: 0;
   color: var(--text-primary);
+  cursor: pointer;
 }
+.ws-qadd__dt .f:hover, .ws-qadd__dt .i:hover { background: var(--background-hover); }
 .ws-qadd__addaction {
   display: inline-flex;
   align-items: center;

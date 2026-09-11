@@ -1038,6 +1038,48 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
 
+## Real date and time pickers on the quick-add bar
+
+Emma's call, 2026-09-11: default the due date to today an hour later, and open
+a picker from each field.
+
+**The default is exact.** Today's date, and the time an hour from now — not
+rounded to a tidy quarter hour, because "an hour later" means an hour later.
+It recomputes every time the bar is opened rather than at page load, so a tab
+left sitting all morning still offers an hour from *now*.
+
+**The calendar is the real component**, not a hand-drawn grid: RMX Components
+`Date Picker`, `Style=Calendar` (157:2396), transcribed down to its 288px
+width, the 32px day cell with 8px padding, the alternating row ground on
+`--component/input-default`, the selected day as a 32x36 `--container/secondary`
+block at `--radius/xs`, and the Today / Clear footer under a 272px divider.
+That striping is worth a note: RMX registers are never striped, and this grid
+is, because the component itself is.
+
+**The time list is not a component, because there isn't one.** The Date & Time
+page carries Date Pickers and their sub-parts and nothing else — no Time
+Picker at any size. Rather than invent one, the time field uses the documented
+dropdown pattern: an input-shaped trigger and a floating white panel, 96
+entries at quarter-hour steps, scrolled to the nearest one on open. Raised as
+item 29.
+
+Both live in `assets/datetime.{css,js}`, self-injecting and `dt-`prefixed, so
+any screen picks them up with two lines and opens them against any element:
+
+    RMXDateTime.openDate(anchor, { value: '09/11/26', onPick: fn })
+    RMXDateTime.openTime(anchor, { value: '09:25 AM', onPick: fn })
+
+They reuse the clamp-and-flip placement from the Tasks screen, so a picker
+near the bottom of the window flips above its field instead of running off the
+edge. **The Task Details due date, the Tasks page's own quick-add bar and Note
+Details' Start Date and Time are all still plain text** — they can each adopt
+this with one call, and should, but that is a separate pass rather than
+something to fold in silently.
+
+Verified end to end: picking 09/18/26 and 02:30 PM put "09/18/26 02:30 PM" on
+the task that was then added, and reopening the bar reset the fields to an
+hour from the current minute.
+
 ## Floating panels stay inside the viewport
 
 Emma: "the scroll for the assigned to dropdown is getting cut off, I need to
@@ -1582,3 +1624,10 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     is the intended tile shadow, the component wants updating, and if md is,
     the description does. Worth a look either way: they are visibly
     different, lg being four layers and noticeably deeper.
+29. **There is no Time Picker component.** RMX Components' "Date & Time" page
+    carries the `Date Picker` set (Date Paginator, Calendar, Date Range) and
+    its sub-parts, and nothing for time — yet time fields are everywhere: a
+    task's due time, Note Details' Start Date and Time, the quick-add bar.
+    Every screen that needs one therefore composes its own from the dropdown
+    pattern, which is how they drift. A Time Picker beside the Date Picker
+    would close it.
