@@ -1953,6 +1953,31 @@ Three things worth knowing:
 Also: **Make private centres on the Assigned To field.** It was aligned to the
 field's bottom edge, which sat it low against a 36px input.
 
+## The History / Notes tile runs flush, per 3502:94985
+
+Emma's call, 2026-09-11, on the padding. The frame is unambiguous: the tile's
+content area carries `Spacing/none`, so the register runs edge to edge and only
+the tile header keeps its 8px. The prototype was giving it the standard 16px
+tile padding, which inset the register and cost it most of the Note column.
+
+Read straight off the frame:
+
+- **Header row:** 32px, 8px of its own padding, a `Border/primary` rule
+  underneath, 14px SemiBold navy.
+- **Rows:** 40px, 8px sides, and **no separators** — the register in this tile
+  is spaced, not ruled.
+- **Note cell:** a 24px `Container/secondary` avatar, 4px gap, then the text.
+
+Two judgement calls the frame forced:
+
+- **Date and Type hug their content.** They were fixed at 70px and 60px, which
+  wrapped a date onto two lines the moment a note carried a time. They size to
+  their text now and the Note column takes what is left.
+- **The tile prints the date without the time.** The frame shows `08/08/25`,
+  and printing `09/11/26 10:10 AM` widened the column enough to push every note
+  onto two lines in a tile this narrow. The full timestamp is still there in
+  the History / Notes overlay's own register, which has the width for it.
+
 ---
 
 # Worth raising with the design system

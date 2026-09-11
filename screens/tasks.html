@@ -565,9 +565,19 @@ a:hover { text-decoration:none; }
 .uploader{border:1px dashed var(--rmx-hairline);border-radius:var(--r-sm);padding:20px;text-align:center;color:var(--text-primary);font-size:14px;background:var(--bg-subtle);}
 .uploader .material-symbols-outlined{font-size:28px;color:var(--icon-muted);display:block;margin:0 auto 6px;}
 .uploader a{color:var(--rmx-blue);}
-.hn-table{width:100%;border-collapse:collapse;}
-.hn-table th{text-align:left;font-size:14px;font-weight:600;color:var(--rmx-navy);padding:4px 4px 8px;}
-.hn-table td{padding:6px 4px;font-size:14px;color:var(--text-secondary);border-top:1px solid var(--register-hairline);}
+/* The History / Notes register runs flush to the tile, exactly as 3502:94985
+   draws it: the tile's content area carries no padding of its own, the header
+   row is 32px with 8px of its own and a Border/primary rule under it, and the
+   rows are 40px with 8px sides and no separators between them. The Date and
+   Type columns hug their text so a note carrying a time does not wrap.
+   Emma's call, 2026-09-11. */
+#historyNotesBody{padding:0;gap:0;}
+.hn-table{width:100%;border-collapse:collapse;table-layout:auto;}
+.hn-table th{text-align:left;font-size:14px;line-height:16px;font-weight:600;color:var(--rmx-navy);height:32px;padding:8px;border-bottom:1px solid var(--rmx-hairline);background:#fff;}
+.hn-table td{height:40px;padding:0 8px;font-size:14px;color:var(--text-secondary);white-space:nowrap;}
+.hn-table th:first-child,.hn-table td:first-child,
+.hn-table th:nth-child(2),.hn-table td:nth-child(2){width:1%;}
+.hn-table td:last-child{white-space:normal;}
 .hn-note-cell{display:flex;align-items:center;gap:4px;}
 .hn-avatar{width:24px;height:24px;border-radius:50%;background:var(--rmx-blue);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex:none;}
 
@@ -1007,7 +1017,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
         <div class="tile">
           <div class="tile-header orange"><h3>History / Notes</h3><div class="actions"><a onclick="openTaskHistory('note')">Add Note</a><a class="tile-header__jump" title="Open History / Notes" onclick="openTaskHistory('all')"><span class="material-symbols-outlined icon-16">open_in_new</span></a></div></div>
           <div class="tile-body" id="historyNotesBody">
-            <table class="hn-table"><thead><tr><th style="width:70px;">Date</th><th style="width:60px;">Type</th><th>Note</th></tr></thead><tbody id="historyBody"></tbody></table>
+            <table class="hn-table"><thead><tr><th>Date</th><th>Type</th><th>Note</th></tr></thead><tbody id="historyBody"></tbody></table>
             <div class="checklist-empty hidden" id="historyEmpty">No History Notes found.</div>
           </div>
         </div>
@@ -2302,9 +2312,13 @@ function renderModalHistory(){
     return;
   }
   empty.classList.add('hidden');
+  /* Date only, as 3502:94985 shows it: a note written in the overlay carries
+     a time, and printing it here widens the column enough to squeeze every
+     note onto two lines. The full timestamp is in the overlay's own register,
+     which has the width for it. */
   body.innerHTML = rows.map(r=>`
     <tr>
-      <td>${r.date}</td>
+      <td>${String(r.date).split(' ')[0]}</td>
       <td>${r.type}</td>
       <td><div class="hn-note-cell"><span class="hn-avatar">${assigneeInitials(r.avatar)}</span>${r.text}</div></td>
     </tr>`).join('');
