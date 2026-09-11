@@ -2166,6 +2166,26 @@ Two details that fall out of the panel's own model:
   closed.** Close "Return Marcia Clark's call", untick, Apply, and My Tasks
   goes from twelve rows to ten with the totals line reading "10 of 12 Tasks".
 
+## The second walkthrough, and the one thing it broke
+
+Emma walked the flow again after the cross-screen state landed, 2026-09-11.
+Everything held, and the sync made the scenes carry: the task quick-added in
+Scene 1 is on the Workspace tile by Scene 5, the task handed to Dave in Scene 2
+is gone from it, and the Accounting task from Scene 3 never appears on it at
+all.
+
+**One thing the sync broke.** Scene 2's task now moves to Other Users' Tasks
+when Tony hands it on — and landed directly beside the record Scene 4 inspects,
+both titled "New Vendor Onboarding", differing only by owner, due date and
+progress. Two identical rows is a puzzle, not a register. The Scene 4 record is
+named after its own vendor now — **New Vendor Onboarding — Anderson
+Mechanical** — which its own history already said it was. They read as two
+onboardings in flight, which is what they are.
+
+*If you would rather they were literally the same task at two points in time,
+that is a different build: Scene 4's state would have to be reached by ticking
+Dave's item as well as Tony's, live in the demo.*
+
 ---
 
 # Worth raising with the design system
