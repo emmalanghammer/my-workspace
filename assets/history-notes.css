@@ -145,6 +145,16 @@
 .hn-chkbox .hn-ico { width:16px;height:16px; color:#fff; display:none; }
 .hn-chkbox.checked { background:var(--icon-attention,#f58220); border-color:var(--icon-attention,#f58220); }
 .hn-chkbox.checked .hn-ico { display:block; }
+/* Checkbox State=Blue — the two filter checkboxes, read off the frame's own
+   instances (I4628:44305;...;4628:44246 and ...44247): a 2px #008dd5 box on
+   white at Radius/xs, with the label in Text/text-link instead of the grey a
+   Default checkbox uses. Checked follows the same variant, so the tick lands
+   on blue rather than the orange a Default checkbox gets. Scoped, not global:
+   Note Details' own checkboxes are Default grey in 3779:60444 and stay that
+   way. Emma's call, 2026-09-11. */
+.hn-check--blue { color:var(--text-link); }
+.hn-check--blue .hn-chkbox { border-color:var(--rmx-blue); }
+.hn-check--blue .hn-chkbox.checked { background:var(--rmx-blue); border-color:var(--rmx-blue); }
 .hn-row2 { flex:none; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
 .hn-row2__right { display:flex; align-items:center; gap:16px; margin-left:auto; }
 .hn-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; height:36px; padding:0 16px; border:none; border-radius:var(--r-sm); font:400 14px 'Roboto',sans-serif; cursor:pointer; white-space:nowrap; }

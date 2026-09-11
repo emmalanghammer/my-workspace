@@ -1891,6 +1891,30 @@ the rest in a Pill.** Gerald Hupp read "Hupp Holdings — 2 properties", which
 names neither; it reads "Brookside Apartments +1" now. The Pill is RMX's own —
 20px, Radius/lg, white on a Border/secondary hairline.
 
+## The two filter checkboxes are Checkbox State=Blue
+
+Emma's call, 2026-09-11, and it turned up a bug underneath it.
+
+The frame's own instances say what they are: a 2px `#008dd5` box on white at
+Radius/xs, and the label in `Text/text-link` rather than the grey a Default
+checkbox uses — read off `I4628:44305;…;4628:44246` ("Only Notes with
+Attachments") and `…;4628:44247` ("Unit Notes"). Checked follows the same
+variant, so the tick lands on blue, not on the orange a Default checkbox gets.
+
+**Scoped, not global.** Note Details' own checkboxes — Lock Information, Pin,
+Show on payments tab, and Follow-up Date — are Default grey in `3779:60444`,
+checked in the frame before changing anything, so they stay grey. Two
+checkboxes on one screen are deliberately different components and the
+prototype now says so.
+
+**And they had never actually ticked.** `toggleAttachOnly` and `toggleCheck`
+both queried `.chkbox` while the markup carries `.hn-chkbox` — a leftover from
+the round where this stylesheet was regenerated with prefixed class names.
+Every checkbox in the overlay was inert, silently, because the handler was
+toggling a class on nothing. Fixed in three places; "Only Notes with
+Attachments" now filters the register (four notes to two on Daniel Smith's
+record), and the Note dialog's three checkboxes tick.
+
 ---
 
 # Worth raising with the design system
