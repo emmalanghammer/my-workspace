@@ -201,7 +201,13 @@ a:hover { text-decoration:none; }
 /* Toggle switch (segmented) */
 .toggle-switch{display:inline-flex;}
 .toggle-switch button{min-width:66px;height:36px;padding:0 16px;background:#fff;border:1px solid var(--rmx-hairline);font:400 14px 'Roboto',sans-serif;color:var(--text-primary);cursor:pointer;}
-.toggle-switch button:first-child{border-radius:var(--r-sm) 0 0 var(--r-sm);border-right:none;}
+/* The first segment dropped its right border so the two would not double up,
+   which left no line between them at all. It keeps one -- blue while it is
+   the active segment, so the divider matches the outline it belongs to.
+   Emma's call, 2026-09-11. */
+.toggle-switch button:first-child{border-radius:var(--r-sm) 0 0 var(--r-sm);border-right:1px solid var(--rmx-hairline);}
+.toggle-switch button:first-child.active{border-right-color:var(--rmx-blue);}
+.toggle-switch button:first-child.active + button{border-left:none;}
 .toggle-switch button:last-child{border-radius:0 var(--r-sm) var(--r-sm) 0;}
 .toggle-switch button.active{background:var(--bg-hover);border-color:var(--rmx-blue);font-weight:600;}
 
@@ -380,7 +386,9 @@ a:hover { text-decoration:none; }
 .qf-row{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;}
 /* High Priority is a toggle: white with grey text until it is on, then the
    error Lozenge tint with navy text -- the component's two states. */
-.qf-hp{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px;border:0;border-radius:var(--r-sm);background:var(--bg-surface);color:var(--text-primary);font:400 14px 'Roboto',sans-serif;cursor:pointer;}
+/* Unselected is flat on whatever it sits on -- the white fill read as a
+   selected state against the Quick Filters panel. Emma's call, 2026-09-11. */
+.qf-hp{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px;border:0;border-radius:var(--r-sm);background:transparent;color:var(--text-primary);font:400 14px 'Roboto',sans-serif;cursor:pointer;}
 .qf-hp .hp-flag{opacity:.45;}
 .qf-hp.active{background:var(--lozenge-error);color:var(--rmx-navy);}
 .qf-hp.active .hp-flag{opacity:1;}
@@ -1168,27 +1176,27 @@ function checklistProgress(t){
 // My Workspace screen), not Emma Langhammer, since these are Tony's tasks.
 let myWorkspaceTasks = [
   { id:'ws-post-notice', title:"Post 3-day notice — Flagstone Lot 3", flag:true, colorBar:'red', completed:false,
-    action:null, actionDetails:null, dueDate:'09/08/25', dueTime:'09:00 AM', overdue:true,
+    action:null, actionDetails:null, dueDate:'09/04/26', dueTime:'09:00 AM', overdue:true,
     assigned:['tlittle'], link:"Patrick O'Malley", linkOverflow:0, workflow:'Eviction',
     checklist:[], externalCal:false, links:[{label:'Tenant', value:"Patrick O'Malley", removable:false}] },
   { id:'ws-carpet-vendor', title:'Approve carpet vendor quote', flag:false, colorBar:'green', completed:false,
-    action:null, actionDetails:null, dueDate:'09/09/25', dueTime:'05:00 PM', overdue:true,
+    action:null, actionDetails:null, dueDate:'09/08/26', dueTime:'05:00 PM', overdue:true,
     assigned:['tlittle'], link:'Riverview #204', linkOverflow:0, workflow:'Unit Renovation',
     checklist:[], externalCal:false, links:[{label:'Unit', value:'Riverview #204', removable:false}] },
   { id:'ws-marcia-clark', title:"Return Marcia Clark's call", flag:false, colorBar:'blue', completed:false,
-    action:null, actionDetails:null, dueDate:'09/10/25', dueTime:'04:00 PM', overdue:false,
+    action:null, actionDetails:null, dueDate:'09/11/26', dueTime:'04:00 PM', overdue:false,
     assigned:['tlittle'], link:'', linkOverflow:0, workflow:'',
     checklist:[], externalCal:false },
   { id:'ws-hvac-scope', title:'Sign off on Brookside HVAC scope', flag:false, colorBar:'orange', completed:false,
-    action:null, actionDetails:null, dueDate:'09/10/25', dueTime:'05:00 PM', overdue:false,
+    action:null, actionDetails:null, dueDate:'09/14/26', dueTime:'05:00 PM', overdue:false,
     assigned:['tlittle'], link:'Anderson Mechanical', linkOverflow:0, workflow:'Vendor',
     checklist:[], externalCal:false, links:[{label:'Vendor', value:'Anderson Mechanical', removable:false}] },
   { id:'ws-rent-roll', title:'Review May rent roll variance', flag:false, colorBar:'blue', completed:false,
-    action:null, actionDetails:null, dueDate:'09/12/25', dueTime:'05:00 PM', overdue:false,
+    action:null, actionDetails:null, dueDate:'09/16/26', dueTime:'05:00 PM', overdue:false,
     assigned:['tlittle'], link:'', linkOverflow:0, workflow:'Reporting',
     checklist:[], externalCal:false },
   { id:'ws-tomas-renewal', title:'Draft renewal — Tomas Webber', flag:false, colorBar:'green', completed:false,
-    action:null, actionDetails:null, dueDate:'09/17/25', dueTime:'05:00 PM', overdue:false,
+    action:null, actionDetails:null, dueDate:'09/21/26', dueTime:'05:00 PM', overdue:false,
     assigned:['tlittle'], link:'Tomas Webber', linkOverflow:0, workflow:'Leasing',
     // The Link column carried a value with no typed link record behind it, so
     // the Links tile opened empty on a task the register said was linked.
@@ -1210,7 +1218,7 @@ let myTasks = [
      item still open -- so ticking yours hands it on rather than leaving you
      to chase the next person. */
   { id:'t-vendor-onboarding', title:'New Vendor Onboarding', flag:false, colorBar:'blue', completed:false,
-    action:null, actionDetails:null, dueDate:'09/19/26', dueTime:'05:00 PM', overdue:false,
+    action:null, actionDetails:null, dueDate:'09/25/26', dueTime:'05:00 PM', overdue:false,
     assigned:['tlittle'], link:'', linkOverflow:0, workflow:'Vendor Onboarding',
     showProgress:true, externalCal:false,
     checklist:[
@@ -1220,15 +1228,27 @@ let myTasks = [
       {text:'Confirm COI, W-9, & payment method are on file',    assigned:['aferryman'],   done:false}
     ] },
   { id:'t-approve-pet', title:'Approve Daniel for Pet', flag:true, colorBar:null, completed:false,
-    action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/17/25', dueTime:'11:00 AM', overdue:false,
+    action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/18/26', dueTime:'11:00 AM', overdue:false,
     assigned:['tlittle'], link:'', linkOverflow:0, workflow:'',
     checklist: PET_CHECKLIST(), externalCal:true, links: PET_LINKS(), history: PET_HISTORY() },
   { id:'t3', title:"Record Park's records", flag:true, colorBar:null, completed:false,
-    action:'Add Journal', actionDetails:null, dueDate:'07/31/25', dueTime:'07:30 AM', overdue:false,
+    action:'Add Journal', actionDetails:null, dueDate:'09/15/26', dueTime:'07:30 AM', overdue:false,
     assigned:['role-pm'], link:'PARK', linkOverflow:0, workflow:'Property Renovation',
     checklist:[], externalCal:false },
+  /* The other two tasks in the Property Manager queue. They are the
+     Workspace tile's claim rows, and they are register tasks like any other
+     -- so clicking one there opens its real details instead of nothing.
+     Emma's call, 2026-09-11. */
+  { id:'t-renewal-reminders', title:'Send renewal reminders — properties ending in 30 days', flag:false, colorBar:'green', completed:false,
+    action:null, actionDetails:null, dueDate:'09/22/26', dueTime:'05:00 PM', overdue:false,
+    assigned:['role-pm'], link:'', linkOverflow:0, workflow:'Leasing',
+    checklist:[], externalCal:false },
+  { id:'t-walk-vacant', title:'Walk vacant units at Flagstone before Friday', flag:false, colorBar:'orange', completed:false,
+    action:null, actionDetails:null, dueDate:'09/17/26', dueTime:'05:00 PM', overdue:false,
+    assigned:['role-pm'], link:'Flagstone Townhomes', linkOverflow:0, workflow:'Leasing',
+    checklist:[], externalCal:false, links:[{label:'Property', value:'Flagstone Townhomes', removable:false}] },
   { id:'t-receipts', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:true,
-    action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/15/25', dueTime:'10:00 AM', overdue:false,
+    action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/17/26', dueTime:'10:00 AM', overdue:false,
     assigned:['tlittle'], link:"Patrick O'Malley", linkOverflow:1, workflow:'',
     checklist: PET_CHECKLIST(), externalCal:true },
 ];
@@ -1236,31 +1256,31 @@ let myTasks = [
 // Other Users' Tasks dataset (screenshot 10) — fixed, per simplification #5 above.
 let otherTasks = [
   { id:'o1', title:'Send an email to Daniel', flag:true, colorBar:'red', completed:false,
-    action:'Send Email', actionDetails:null, dueDate:'09/20/25', dueTime:'09:30 AM', overdue:false,
+    action:'Send Email', actionDetails:null, dueDate:'09/23/26', dueTime:'09:30 AM', overdue:false,
     assigned:['jcameron'], link:'Daniel Smith', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o2', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
-    action:null, actionDetails:null, dueDate:'09/16/25', dueTime:'10:00 AM', overdue:false,
+    action:null, actionDetails:null, dueDate:'09/18/26', dueTime:'10:00 AM', overdue:false,
     assigned:['canderson'], link:'', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o3', title:"Record Park's records", flag:true, showProgress:true, colorBar:'green', completed:false,
-    action:'Enter a Journal', actionDetails:null, dueDate:'09/15/25', dueTime:'10:00 AM', overdue:false,
+    action:'Enter a Journal', actionDetails:null, dueDate:'09/17/26', dueTime:'10:00 AM', overdue:false,
     assigned:['bcarle'], link:'', linkOverflow:0, workflow:'',
     checklist:[ {text:'Attach the signed records to the property', assigned:['bcarle'], done:false} ] },
   { id:'o4', title:'Close completed service ticket', flag:false, colorBar:'green', completed:false,
-    action:null, actionDetails:null, dueDate:'08/31/25', dueTime:'02:00 PM', overdue:false,
+    action:null, actionDetails:null, dueDate:'09/24/26', dueTime:'02:00 PM', overdue:false,
     assigned:['bfischer'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
   { id:'o5', title:'Distribute payments to owners', flag:false, colorBar:null, completed:false,
-    action:null, actionDetails:null, dueDate:'08/07/25', dueTime:'08:30 AM', overdue:false,
+    action:null, actionDetails:null, dueDate:'09/29/26', dueTime:'08:30 AM', overdue:false,
     assigned:['canderson','jcameron','+2'], link:'', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o6', title:'Close service tickets', showProgress:true, colorBar:'green', completed:false,
-    action:'View Issues', actionDetails:null, dueDate:'08/01/25', dueTime:'09:30 AM', overdue:true,
+    action:'View Issues', actionDetails:null, dueDate:'08/01/26', dueTime:'09:30 AM', overdue:true,
     assigned:['bcarle'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
     checklist:[ {text:'Open service issue list', assigned:['bcarle'], done:true},
                 {text:'Close all tickets', assigned:['bfischer','ascharffe'], done:false} ] },
   { id:'o7', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:false,
-    action:null, actionDetails:null, dueDate:'07/31/25', dueTime:'07:30 AM', overdue:false,
+    action:null, actionDetails:null, dueDate:'09/30/26', dueTime:'07:30 AM', overdue:false,
     assigned:['bcarle'], link:"Patrick O'Malley", linkOverflow:1, workflow:'', checklist:[] },
   { id:'o8', title:'Review owner details for FMHP', flag:false, colorBar:'blue', completed:false,
-    action:'Post Owner Checks', actionDetails:null, dueDate:'07/25/25', dueTime:'07:30 AM', overdue:true,
+    action:'Post Owner Checks', actionDetails:null, dueDate:'07/25/26', dueTime:'07:30 AM', overdue:true,
     assigned:['jcameron','canderson'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
   /* The same New Vendor Onboarding process as it looks to someone watching
      it rather than working it: Tony found the vendor on the 5th, Dave created
@@ -1283,7 +1303,7 @@ let otherTasks = [
       {date:'09/05/26 02:10 PM', type:'System', avatar:'tlittle',   text:'Preferred vendor selected — Anderson Mechanical'}
     ] },
   { id:'o9', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
-    action:null, actionDetails:null, dueDate:'07/05/25', dueTime:'07:30 AM', overdue:true,
+    action:null, actionDetails:null, dueDate:'07/05/26', dueTime:'07:30 AM', overdue:true,
     assigned:['canderson'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
 ];
 
@@ -1511,6 +1531,7 @@ function switchTab(tab){
   document.getElementById('tabMyBtn').classList.toggle('active', tab==='my');
   document.getElementById('tabOtherBtn').classList.toggle('active', tab==='other');
   document.getElementById('searchInput').value='';
+  renderQfAssignedLabel();
   renderRegister();
 }
 
@@ -1842,6 +1863,12 @@ function resetQuickFilters(){
 /* The Assigned To field is the Select Other Users picker, worn as an input --
    one implementation, and the field reports what it holds. */
 function renderQfAssignedLabel(){
+  /* On My Tasks the answer is not a choice -- the tab *is* the filter, so the
+     field says who it is rather than "All Selected". Emma's call, 2026-09-11. */
+  if(state.activeTab !== 'other'){
+    document.getElementById('qfAssignedLabel').textContent = assigneeName(ME_KEY);
+    return;
+  }
   const n = state.selectedUserKeys.size;
   document.getElementById('qfAssignedLabel').textContent = n ? n + ' Selected' : 'All Selected';
 }

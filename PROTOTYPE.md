@@ -1839,6 +1839,49 @@ Two judgement calls worth knowing:
   point at them later. Nothing on the Workspace opens them today. Say if you
   would rather they went.
 
+## Six corrections, 2026-09-11
+
+**The role queue sits below Tony's own tasks now, not above them.** They are
+his to take, not yet his to do, so they read as what is left rather than what
+is next. The Claim button moved ahead of the due date in the row.
+
+**Every queue row is a real register task.** Two of them were workspace-only
+markup, so clicking one did nothing while the third opened details — now
+"Send renewal reminders" and "Walk vacant units at Flagstone" are records in
+the register's data, held by Property Manager like "Record Park's records".
+That has two consequences worth knowing: the register's My Tasks is **twelve**
+rather than the ten you asked for a round ago (the extra two are these,
+claimable rather than assigned), and claiming from the tile now *moves* the row
+instead of rebuilding it, so its title, flag, link and id all survive the move
+and its details still open afterwards.
+
+**Every due date that is not overdue is in the future.** Most of the data was
+written against 2025 and today is 09/11/26, so rows sat weeks past due while
+showing no overdue styling. Twenty-nine dates were moved across both screens.
+Only the four tasks actually flagged overdue are in the past now, which is
+also the only way the red rows mean anything. The completed task is dated
+ahead too — closed early, rather than closed late with no warning on it.
+
+**Quick Filters' Assigned To says "Tony Little" on My Tasks.** The tab *is*
+the filter there, so "All Selected" was answering a question nobody asked. It
+goes back to the count on Other Users' Tasks, where choosing is the point.
+
+**An unselected High Priority chip has no fill.** It was white on the panel's
+pale blue ground, which read as switched on. It is flat now and only takes the
+pink when it is actually on. *The open question from earlier rounds still
+stands: default and hover match the spec, and selected reuses the hover pink,
+so the two are still hard to tell apart — worth a decision when you have one.*
+
+**The Toggle Switch has its middle line back.** The first segment had dropped
+its right border so the two would not double up, which left no divider at all.
+It keeps one now, blue while that segment is active so the line matches the
+outline it belongs to.
+
+**A Scoreboard item that stands for several records names the first and counts
+the rest in a Pill.** Gerald Hupp read "Hupp Holdings — 2 properties", which
+names neither; it reads "Brookside Apartments +1" now. The Pill is RMX's own —
+20px, Radius/lg, white on a Border/secondary hairline.
+
 ---
 
 # Worth raising with the design system

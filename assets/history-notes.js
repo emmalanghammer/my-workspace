@@ -180,7 +180,7 @@ var ENTITIES = {
     kind: 'Owner',
     name: 'Gerald Hupp',
     items: [
-      {icon:'properties',   text:'Hupp Holdings — 2 properties'},
+      {icon:'properties',   text:'Brookside Apartments', more:1},
       {icon:'mail-outline', text:'ghupp@example.com'},
       {icon:'call',         text:'513-555-3318'}
     ],
@@ -284,9 +284,14 @@ function setNoteField(text){
 function renderScoreboard(){
   var e = state.entity;
   document.getElementById('scName').textContent = e.name;
+  /* An item that stands for several records names the first and counts the
+     rest in a Pill -- "Brookside Apartments +1", not "2 properties", so the
+     one you are looking at is the one it says. Emma's call, 2026-09-11. */
   document.getElementById('scItems').innerHTML = e.items.map(function(it){
     return '<span class="hn-score__item"><svg><use href="#' + it.icon + '"></use></svg>' +
-           (it.text ? esc(it.text) : '') + '</span>';
+           (it.text ? esc(it.text) : '') +
+           (it.more ? '<span class="hn-pill" data-rmx-component="Pill">+' + it.more + '</span>' : '') +
+           '</span>';
   }).join('');
   var trail = '';
   if (e.status) {

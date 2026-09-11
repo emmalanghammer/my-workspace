@@ -257,3 +257,9 @@
   .hn-score__content { padding:12px 16px; }
   .hn-score__lead { gap:16px; }
 }
+
+/* Pill — RMX's own: 20px tall, Radius/lg, white on a Border/secondary hairline.
+   Used in the Scoreboard when one item stands for more than one record. */
+.hn-pill { display:inline-flex; align-items:center; height:20px; padding:0 8px; margin-left:4px;
+  border:1px solid var(--rmx-hairline); border-radius:999px;
+  background:var(--container-primary,#fff); font-size:14px; color:var(--rmx-navy); }
