@@ -127,9 +127,12 @@
   text-align: left;
   background: none;
   border: none;
-  padding: 0 20px;
+  /* Spacing/xs vertical, Spacing/md horizontal, and Web/Heading/S/Regular --
+     18px on 24px, not the 14px this carried. Read off the component
+     (I4077:83118;2548:15171;10084:3716). */
+  padding: 8px 16px;
   color: var(--mm-blue);
-  font: 400 14px/1 'Roboto', sans-serif;
+  font: 400 18px/24px 'Roboto', sans-serif;
   cursor: pointer;
   position: relative;
 }
@@ -141,15 +144,17 @@
 .megamenu__sidebar-item--active::after {
   content: '';
   position: absolute;
-  right: -13px;
-  bottom: 0;
-  width: 0;
-  height: 0;
-  /* The notch folds under the row's right end -- solid edge on the right,
-     hypotenuse rising to meet the bar. It was mirrored, which pointed it the
-     wrong way. Emma's call, 2026-09-11. */
-  border-bottom: 12px solid var(--text-secondary);
-  border-left: 13px solid transparent;
+  right: 0;
+  bottom: -12px;
+  width: 13px;
+  height: 12px;
+  /* The real Corner asset from the component, not a CSS border triangle:
+     13x12, Container/secondary-dark, sitting at the bar's right edge and
+     hanging 12px below it. The component draws it flipped
+     (-scale-y-100 rotate-180); that flip is baked into the path here, so
+     nothing needs transforming. Emma's call, 2026-09-11 -- twice, because
+     the hand-rolled triangle was never going to be right. */
+  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMiIgdmlld0JveD0iMCAwIDEzIDEyIiBmaWxsPSJub25lIj48cGF0aCBkPSJNMTMgMEgwVjEyTDEzIDBaIiBmaWxsPSIjMTMzMTRDIi8+PC9zdmc+") no-repeat;
 }
 .megamenu__content {
   flex: 1;

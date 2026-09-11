@@ -134,8 +134,14 @@
    loads after type.css, so it wins over the type class on the element. The
    Workspace variant's own style is Web/Heading/M/Regular in text-primary. */
 .rmx-tile[data-ows-tile] .rmx-tile__title {
-  font: var(--type-heading-m-regular);
-  color: var(--text-primary);
+  /* Web/Paragraph/L/SemiBold, navy. Header Style=Workspace in the library says
+     Heading/M/Regular -- 20px, grey -- and every shipped My Workspace tile
+     draws a navy SemiBold title nearer 16px. Emma called it the same way on
+     the proposal screen months before this one became the site, and called it
+     again on 2026-09-11: smaller. Still item 4: one of the library and the
+     app is wrong and a prototype cannot settle which. */
+  font: var(--type-paragraph-l-semibold);
+  color: var(--text-secondary);
 }
 
 [data-ows-tile-action] {

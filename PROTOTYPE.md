@@ -2466,6 +2466,36 @@ is item 8 — this is the third feature in this prototype to run into it.
 people rewrote every name but left the initials in the Mentions tile's markup,
 so Nathan Cole was wearing BC. Five of them, corrected.
 
+## The Mega Menu's selected row, harvested rather than approximated
+
+Emma, twice: it still looked wrong. It was, and flipping the triangle the first
+time was treating the symptom. Read off the component itself —
+`I4077:83118;2548:15171;10084:3716`, the selected `_Mega Menu Banner Items` in
+RMX-Pages `4077:83115` — three things were off, not one:
+
+- **The notch is an asset, not a CSS triangle.** A real 13x12 `Corner` SVG
+  filled `Container/secondary-dark`, sitting at `right: 0` and hanging 12px
+  below the bar — under its right end, not beyond it. The component draws it
+  flipped (`-scale-y-100 rotate-180`); that flip is baked into the path here so
+  nothing needs transforming. Two rounds of hand-rolling a border triangle got
+  the shape wrong twice, which is the lesson: harvest it.
+- **The text is 18px, not 14px.** Web/Heading/S/Regular, 18 on 24.
+- **The padding is Spacing/xs by Spacing/md** — 8 and 16 — not `0 20px`.
+
+The blue was right all along: `Background/background-megamenu`, #0071AA.
+
+## The tile titles are 16px SemiBold navy
+
+Emma's call, 2026-09-11. `Header Style=Workspace` says Heading/M/Regular —
+20px, grey — and every shipped My Workspace tile draws a navy SemiBold title
+nearer 16px. They are `Web/Paragraph/L/SemiBold` in `--text-secondary` now,
+which is a real named style and the same call Emma made on the proposal screen
+long before this one became the site.
+
+**Item 4 is still open, and this does not close it.** One of the library and
+the app is wrong about that style; the prototype has now followed the app on
+both screens it ever drew, which is a preference, not an answer.
+
 ---
 
 # Worth raising with the design system
