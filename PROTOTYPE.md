@@ -2512,6 +2512,12 @@ because the note you clicked is in that overlay and nowhere else. A new
 `?notes=1` on the task's own deep link is what does the last part, alongside
 the `?open=` the tile rows have used since the first round.
 
+**The Scoreboard shows only what the task is linked to.** It had been printing
+the workflow alongside it — "Leasing", wearing a building icon, reading like a
+record. The Scoreboard names the record you are looking at, and a workflow is
+not a record. A task with no link now shows nothing there rather than an empty
+row.
+
 The task is **Apply the new move-in credit**, assigned to Tony, linked to
 **Tenant: Charlie Apegian**, and its history carries the note verbatim plus the
 system entry that created it. Closing the overlay leaves you on Task Details

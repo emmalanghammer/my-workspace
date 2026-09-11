@@ -2496,7 +2496,11 @@ function taskHistoryRecord(t){
     /* This screen owns the list of who exists, so it hands it over rather
        than letting the overlay fall back to its own copy. */
     users: USERS.map(u => ({ initials:u.initials, name:u.name, uname:u.uname })),
-    items: (t.workflow ? [{icon:'units', text:t.workflow}] : []).concat(linked),
+    /* Only what the task is linked to. The Scoreboard names the record you
+       are looking at, and a workflow is not a record -- it was sitting there
+       wearing a building icon and reading like one. Emma's call,
+       2026-09-11. */
+    items: linked,
     notes: (t.history || []).map(h => ({
       type: h.type, date: h.date, category: '<Unassigned>',
       user: assigneeName(h.avatar), note: h.text, files: []
