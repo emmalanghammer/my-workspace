@@ -225,7 +225,14 @@
   }
 
   /* ---------- toasts ----------
-     RMX.toast('Charge added', 'success')  — success | failure | neutral    */
+     RMX.toast('Charge added', 'success')  — success | failure | neutral
+
+     One at a time: a new toast REPLACES whatever is showing rather than
+     queueing under it. Emma's call, 2026-09-11 — clearing a list of tasks
+     fires one per task, and six stacked toasts buried the page. The dismiss
+     timer is per-toast and re-armed on each call, so a replaced toast takes
+     its own timer with it.                                                  */
+  let toastTimer = null;
   function toast(message, kind = 'neutral', ms = 3200) {
     let stack = $('.rmx-toaststack');
     if (!stack) {
@@ -237,8 +244,9 @@
     el.className = 'rmx-toast' + (kind === 'neutral' ? '' : ` rmx-toast--${kind}`);
     el.setAttribute('role', 'status');
     el.textContent = message;
-    stack.appendChild(el);
-    setTimeout(() => { el.remove(); }, ms);
+    stack.replaceChildren(el);
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { el.remove(); }, ms);
     return el;
   }
 

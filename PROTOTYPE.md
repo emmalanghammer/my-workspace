@@ -1038,6 +1038,25 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
 
+## Two small ones
+
+**A toast replaces the one before it.** Emma's call, 2026-09-11: clearing a
+list fired one toast per task and six stacked up over the welcome band. The
+shared `assets/app.js` now shows the most recent and drops the rest, with the
+dismiss timer re-armed each call. This is a change to the skill's own
+foundation file rather than to this prototype, so it is worth Emma deciding
+whether it belongs upstream — every prototype built from the skill stacks
+toasts today.
+
+**Input value text is navy, not grey.** `--text-secondary` inside any
+input-shaped control, which is what the real Input Field draws; grey belongs
+to the label beside it, not the value inside it. Applied to every field on the
+screen rather than the one Emma caught — Action detail fields, due date and
+time, Reminder, Assignee, Display, Saved Filters and the whole Quick Filters
+panel. Placeholders stay italic `--text-disabled`, and a disabled field still
+greys out: checked after the change, values navy, labels grey, the disabled
+Add Link search still `#b3b3b3` on `#f2f2f2`.
+
 ## Other Users' Tasks opens with Quick Filters
 
 Built from Tasks Enhancements `3502:93452` / `3703:121005`, Emma's call,
