@@ -3021,7 +3021,16 @@ if (new URLSearchParams(location.search).get('embed') === '1') {
    2026-09-10: toasts are reserved for a completed action (see toast() calls
    above: task added/saved/deleted/closed, checklist populated, tab
    switched). The data-rmx-todo attribute stays as a marker of what isn't
-   built; it just no longer triggers feedback here. */
+   built; it just no longer triggers feedback here.
+
+   What it does get is the element's own tooltip, so hovering still tells you
+   the thing is out of scope rather than broken. Same handling as My
+   Workspace, which stopped toasting on 2026-09-11. */
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('[data-rmx-todo]').forEach(function(el){
+    if (!el.hasAttribute('title')) el.setAttribute('title', el.dataset.rmxTodo);
+  });
+});
 </script>
 <script src="../assets/taskstate.js"></script>
 <script src="../assets/actions.js"></script>

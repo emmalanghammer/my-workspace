@@ -233,11 +233,12 @@
      timer is per-toast and re-armed on each call, so a replaced toast takes
      its own timer with it.                                                  */
   let toastTimer = null;
-  /* Green by default. Every toast these prototypes raise reports something
-     that finished, and Toast State=Success is what that looks like; a caller
-     that genuinely needs the navy State=Action ground can still ask for
-     'neutral'. Emma's call, 2026-09-11 -- see PROTOTYPE.md on whether this
-     belongs upstream in the skill. */
+  /* Green, and only green. A toast confirms that something finished, which is
+     Toast State=Success; nothing in these prototypes raises one for any other
+     reason. The navy State=Action ground is still reachable as 'neutral' for a
+     caller that has a real use for it, but an unbuilt affordance is not one:
+     see todos() below. Emma's call, 2026-09-11 -- see PROTOTYPE.md on whether
+     this belongs upstream in the skill. */
   function toast(message, kind = 'success', ms = 3200) {
     let stack = $('.rmx-toaststack');
     if (!stack) {
@@ -256,14 +257,20 @@
   }
 
   /* ---------- unwired affordances ----------
-     Anything marked data-rmx-todo says so instead of doing nothing
-     silently, a stakeholder clicking a dead button assumes it is broken. */
+     Anything marked data-rmx-todo still says so rather than dying silently,
+     but it says it in the element's own tooltip, not in a toast. Emma's call,
+     2026-09-11: a toast is a green confirmation that something happened, so
+     raising one to report that nothing happened reads as a success the first
+     time you see it. The marker attribute stays, it is what the audit and a
+     developer read; only the announcement changed. */
   function todos() {
+    document.querySelectorAll('[data-rmx-todo]').forEach(el => {
+      if (!el.hasAttribute('title')) el.setAttribute('title', el.dataset.rmxTodo);
+    });
     document.addEventListener('click', e => {
       const el = e.target.closest('[data-rmx-todo]');
       if (!el) return;
       e.preventDefault();
-      toast(el.dataset.rmxTodo || 'Not built in this prototype', 'neutral');
     });
   }
 

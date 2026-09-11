@@ -144,13 +144,18 @@
   color: var(--text-secondary);
 }
 
+/* Icon/icon-tertiary, not icon-brand. The tile header's trailing kebab is
+   chrome, not an interactive accent: blue reads as a link sitting beside the
+   title and pulls the eye off the tile's own content. Emma's call,
+   2026-09-11; matches the My Mentions header, which is .ws-iconbtn and was
+   already tertiary. */
 [data-ows-tile-action] {
   display: inline-flex;
   align-items: center;
   padding: 0;
   border: 0;
   background: none;
-  color: var(--icon-brand);
+  color: var(--icon-tertiary);
   cursor: pointer;
 }
 

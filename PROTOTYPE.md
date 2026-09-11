@@ -2587,6 +2587,37 @@ showed for the same state.
 Comments and this file went through a rule rather than a reading, so the prose
 is occasionally blunter than it was. Nothing about the build changed.
 
+## A toast only ever says something happened
+
+Emma's call, 2026-09-11. Two changes off one pass over the Workspace.
+
+**Nothing unbuilt raises a toast any more.** `app.js` used to catch every click
+on a `data-rmx-todo` element and toast its message on the neutral ground. Two
+problems with that. The toast is green in these prototypes, so a green banner
+that reports that nothing happened reads as a success the first time you see
+it; and the neutral variant exists for Toast `State=Action`, which is a toast
+that is asking something, not one that is apologising. The marker attribute
+stays exactly where it was, it is what a developer and the audit read. What it
+now does is fill the element's own `title`, so hovering an out-of-scope button
+still tells you it is out of scope instead of leaving you to click a dead
+control. The Tasks register already had no such toast, from the same call on
+2026-09-10; it now fills the tooltips the same way, so the two screens behave
+alike.
+
+**This is a deviation from the skill**, which says an unwired affordance should
+say so on click. The rule it is protecting still holds, a stakeholder should
+never think a button is broken; a tooltip carries that without spending the
+confirmation channel on it. Worth raising as a change to the skill rather than
+a local exception, since every RMX prototype hits it.
+
+**The tile header kebabs are grey.** `[data-ows-tile-action]` was
+`Icon/icon-brand`. The trailing glyph in a Tile header is chrome, not an
+interactive accent, and in blue it reads as a link sitting beside the title and
+pulls the eye off the tile's own content. It is `Icon/icon-tertiary` now, which
+is what My Mentions' header (`.ws-iconbtn`) was already using, so all five tiles
+agree. The same rule covers the visibility-off buttons on Announcements and My
+Training, which sit in the same slot.
+
 ---
 
 # Worth raising with the design system
@@ -2816,6 +2847,15 @@ and **for Emma to decide on**, none of it was worked around quietly. Items
     cannot both hold, and a prototype following either one looks wrong to
     whoever read the other. Emma's call here was blue; the losing document
     wants correcting either way.
+
+35. **A green Toast is the only feedback channel these screens have.** With
+    unbuilt affordances no longer toasting, two messages are left that are not
+    confirmations of anything: "Task name is required" when you save a task
+    with an empty name, and "Save this task before adding a note". Both are
+    green, both report a refusal. The right answer is Input Field
+    `State=Error` on the field itself, but its anatomy is not recorded in
+    `data/components.json` and it was not harvested for this prototype, so it
+    has been flagged rather than approximated. Emma's to call.
 
 ---
 
