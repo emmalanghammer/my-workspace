@@ -2186,6 +2186,29 @@ onboardings in flight, which is what they are.
 that is a different build: Scene 4's state would have to be reached by ticking
 Dave's item as well as Tony's, live in the demo.*
 
+## A task ticked on the tile opens complete
+
+Emma's call, 2026-09-11. The shared state was recording the tick correctly, and
+Task Details opened showing the task still open. Two separate reasons, both
+about *when* rather than *what*.
+
+**The overlay was reading the data before the sync applied it.** The query-param
+opener ran inline at the end of the register's script, while `applySharedState()`
+waited for `DOMContentLoaded` — so a task opened from My Workspace was drawn
+from the shipped data and nothing the Workspace had recorded reached it. The
+opener is a named function now, called after the state is applied.
+
+**And the frame would not reload for the same task twice.** Setting an iframe's
+`src` to the value it already has does not re-run the page, so opening a task,
+ticking it, and opening it again showed the state from the first opening. The
+overlay's URL carries a reload token now — it reads the shared state on load,
+so it has to actually load.
+
+Same shape as the actions-panel bug from earlier in the day: the thing was
+right, the order was wrong. Anything that depends on a shared asset or shared
+state has to run after the document, and anything that reads state on load has
+to be made to load.
+
 ---
 
 # Worth raising with the design system

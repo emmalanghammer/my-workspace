@@ -916,8 +916,13 @@
   var taskFrame = document.getElementById('wsTaskFrame');
   var taskFrameFrame = document.getElementById('wsTaskFrameFrame');
 
+  /* `t` is a reload token, not decoration: opening the same task twice would
+     otherwise reuse the frame without re-running the page, and the second
+     opening would show the state from the first. The overlay reads the shared
+     task state on load, so it has to actually load. Emma's call, 2026-09-11. */
   function openTaskFrame(id) {
-    taskFrameFrame.src = 'screens/tasks.html?embed=1&open=' + encodeURIComponent(id);
+    taskFrameFrame.src = 'screens/tasks.html?embed=1&open=' +
+                         encodeURIComponent(id) + '&t=' + Date.now();
     taskFrame.hidden = false;
   }
   // Same frame, new-task mode -- used by the mini Add Task bar's
@@ -934,6 +939,7 @@
     if (opts.time)   q.push('time=' + encodeURIComponent(opts.time));
     if (opts.action) q.push('action=' + encodeURIComponent(opts.action));
     if (opts.token)  q.push('token=' + encodeURIComponent(opts.token));
+    q.push('t=' + Date.now());
     taskFrameFrame.src = 'screens/tasks.html?' + q.join('&');
     taskFrame.hidden = false;
   }

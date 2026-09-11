@@ -2783,12 +2783,16 @@ document.addEventListener('DOMContentLoaded', function(){
   resetQaddDue();
   // The actions panel's own rows, from the one list both screens read.
   document.getElementById('actionsPanel').insertAdjacentHTML('beforeend', RMXActions.markup());
+  /* After the shared state, never before it: a task ticked on the Workspace
+     tile has to arrive at Task Details already complete, and opening the modal
+     inline meant opening it from the shipped data. Emma's call, 2026-09-11. */
+  openFromQueryParam();
 });
 
 // Arrived from My Workspace's My Tasks preview — open that task's details
 // directly, so "open a task's details" lands on the actual task, not the
 // bare register. Emma's call, 2026-09-10.
-(function openFromQueryParam(){
+function openFromQueryParam(){
   const params = new URLSearchParams(location.search);
   // ?new=<title> -- My Workspace's mini Add Task bar handing over a typed
   // name via "Add More Details". Same modal, new-task mode, title prefilled.
@@ -2813,7 +2817,7 @@ document.addEventListener('DOMContentLoaded', function(){
   if (!task) return;
   const dataset = myTasks.includes(task) ? 'my' : 'other';
   openTaskModal(dataset, task.id);
-})();
+}
 
 // Embedded mode (?embed=1) — My Workspace frames this page in an iframe
 // overlay so a task's details open in place, not as a real navigation (see
