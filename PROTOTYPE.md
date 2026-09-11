@@ -1995,6 +1995,41 @@ Two consequences worth noting:
 - **If you somehow reach the menu with nothing available**, it says so rather
   than rendering empty.
 
+## Add Action, on both bars, from one list
+
+Emma's call, 2026-09-11: the Workspace tile's Add Action "freaks out" — it did
+not open a dropdown at all. It threw the half-filled bar away and opened the
+full Task Details overlay, because the button was still wired to the same
+handler as "Add More Details" from the round where the mini bar was built.
+
+It opens the real Select an Action list now, and once something is picked the
+control *is* the action: its name in navy with a blue x that clears it.
+Picking leaves the bar open, the same way choosing a time does.
+
+**The same gap was on the register, quieter.** Its quick-add bar opened the
+menu correctly and then did nothing with what you picked — `pickActionItem`
+only handled the modal. It shows the action now, and a task added from the bar
+carries it, so quick-adding "Draft the addendum letter" with Write Letter puts
+Write Letter in the register's Action column.
+
+**One list, `assets/actions.js`.** Three groups and twenty-six items, the real
+New Action UI's own. The register was carrying them as hard-coded markup and
+My Workspace had no copy at all; both read the shared file now — the register
+generates its existing panel's rows from `RMXActions.markup()`, and My
+Workspace opens the self-contained `RMXActions.open()` panel, which clamps and
+flips inside the viewport like the date pickers do. That keeps the register's
+panel exactly as the frame sizes it (to the field that opens it, with its
+collapsible groups) while making sure a new action only has to be added once.
+
+**One thing this nearly shipped broken.** The shared scripts load after the
+inline block, so filling the register's panel at init threw `RMXActions is not
+defined` — and because that line sat above `renderRegister()`, it took the
+whole cold load with it: the register rendered empty and only came back when
+something else re-rendered it. It waits for `DOMContentLoaded` now, next to the
+quick-add bar's date default, which waits for `assets/datetime.js` for exactly
+the same reason. Worth remembering as a shape: anything touching a shared asset
+has to run after the document, not inline.
+
 ---
 
 # Worth raising with the design system

@@ -679,6 +679,10 @@
   white-space: nowrap;
   cursor: pointer;
 }
+/* Once an action is picked the control is the action: its name in navy with
+   an x that clears it, rather than a second control beside it. */
+.ws-qadd__addaction.is-set { color: var(--text-secondary); }
+.ws-qadd__addaction.is-set .rmx-icon { order: 2; color: var(--text-link); }
 /* Both links stay put and go grey until there is a name to add, exactly as
    they do on the full bar. Never underlined, in either state. */
 .ws-qadd__actions button {

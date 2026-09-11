@@ -431,6 +431,10 @@ a:hover { text-decoration:none; }
 .hp-chip.active{background:var(--lozenge-error);color:var(--rmx-navy);}
 .hp-chip:not(.active):hover{background:var(--lozenge-error);color:var(--rmx-navy);}
 .select-action-link{display:inline-flex;align-items:center;gap:2px;color:var(--rmx-blue);font-size:14px;cursor:pointer;}
+/* Once an action is picked the link is the action: its name in navy with a
+   blue x that clears it. Emma's call, 2026-09-11. */
+.select-action-link.is-set{color:var(--text-secondary);}
+.select-action-link.is-set .material-symbols-outlined{color:var(--rmx-blue);font-size:18px;}
 
 /* Action card: per the "2.2.5 Task Details - Desktop" mock, a selected action lives in its own
    bordered/padded card with a "Action <name> x" row, a divider, then the detail fields. */
@@ -719,7 +723,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
             <div class="ub-avatars" id="qaddAvatars"></div>
             <span class="material-symbols-outlined plus-icon">add</span>
           </div>
-          <a class="select-action-link" style="white-space:nowrap;" onclick="event.stopPropagation();openActionsMenu(event,'quickadd')"><span class="material-symbols-outlined">add</span>Add Action</a>
+          <a class="select-action-link" id="qaddActionLink" style="white-space:nowrap;" onclick="onQaddActionClick(event)"><span class="material-symbols-outlined">add</span>Add Action</a>
         </div>
         <div class="qadd-row2-right">
           <a id="qaddAddLink" class="muted" onclick="quickAddTask()">Add Task</a>
@@ -1065,35 +1069,8 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
       <input id="actionSearchInput" type="text" placeholder="Search actions" oninput="filterActions()" aria-label="Search actions">
     </div>
   </div>
-  <div class="fp-section-label" onclick="toggleActionGroup(this)"><span class="material-symbols-outlined">keyboard_arrow_down</span>Communication</div>
-  <div class="fp-item" onclick="pickActionItem('Publish Signable Documents')">Publish Signable Documents</div>
-  <div class="fp-item" onclick="pickActionItem('Send Email')">Send Email</div>
-  <div class="fp-item" onclick="pickActionItem('Send Text')">Send Text</div>
-  <div class="fp-item" onclick="pickActionItem('Write Letter')">Write Letter</div>
-  <div class="fp-section-label" onclick="toggleActionGroup(this)"><span class="material-symbols-outlined">keyboard_arrow_down</span>Financial</div>
-  <div class="fp-item" onclick="pickActionItem('Batch Owner Reports')">Batch Owner Reports</div>
-  <div class="fp-item" onclick="pickActionItem('Enter a Invoice')">Enter a Invoice</div>
-  <div class="fp-item" onclick="pickActionItem('Enter a Journal')">Enter a Journal</div>
-  <div class="fp-item" onclick="pickActionItem('Make Deposit')">Make Deposit</div>
-  <div class="fp-item" onclick="pickActionItem('Modify Recurring Charges')">Modify Recurring Charges</div>
-  <div class="fp-item" onclick="pickActionItem('Post Late Fees')">Post Late Fees</div>
-  <div class="fp-item" onclick="pickActionItem('Post Management Fees')">Post Management Fees</div>
-  <div class="fp-item" onclick="pickActionItem('Post Owner Checks')">Post Owner Checks</div>
-  <div class="fp-item" onclick="pickActionItem('Post Recurring Charges')">Post Recurring Charges</div>
-  <div class="fp-item" onclick="pickActionItem('Post Recurring ePay Payments')">Post Recurring ePay Payments</div>
-  <div class="fp-item" onclick="pickActionItem('Post Utilities')">Post Utilities</div>
-  <div class="fp-item" onclick="pickActionItem('Print Checks')">Print Checks</div>
-  <div class="fp-item" onclick="pickActionItem('Write A Check')">Write A Check</div>
-  <div class="fp-section-label" onclick="toggleActionGroup(this)"><span class="material-symbols-outlined">keyboard_arrow_down</span>View</div>
-  <div class="fp-item" onclick="pickActionItem('View Bank Register')">View Bank Register</div>
-  <div class="fp-item" onclick="pickActionItem('View Bills')">View Bills</div>
-  <div class="fp-item" onclick="pickActionItem('View Tenants')">View Tenants</div>
-  <div class="fp-item" onclick="pickActionItem('View Meter Readings')">View Meter Readings</div>
-  <div class="fp-item" onclick="pickActionItem('View Owners')">View Owners</div>
-  <div class="fp-item" onclick="pickActionItem('View Properties')">View Properties</div>
-  <div class="fp-item" onclick="pickActionItem('View Issues')">View Issues</div>
-  <div class="fp-item" onclick="pickActionItem('View Units')">View Units</div>
-  <div class="fp-item" onclick="pickActionItem('View Vendors')">View Vendors</div>
+  <!-- Groups and items are written in by assets/actions.js, so the register
+       and My Workspace offer one list rather than two copies of it. -->
 </div>
 
 <div class="float-panel" id="addChecklistPanel" hidden style="min-width:200px;">
@@ -1594,6 +1571,8 @@ function expandQuickAdd(){
      whoever is signed in. Emma's call, 2026-09-11 -- the bar is for adding
      the next thing, not for inheriting the last thing. */
   resetQaddDue();
+  qaddAction = null;
+  renderQaddAction();
   assigneeSelected = new Set([ME_KEY]);
   renderQuickAddAssignees();
   state.quickAddExpanded = true;
@@ -1640,7 +1619,8 @@ function makeBlankTask(title){
      date, time and assignee fields are showing is what the task gets. */
   const who = [...assigneeSelected];
   return { id:'t-'+Date.now(), title, flag:false, colorBar:null, completed:false,
-    action:null, actionDetails:null, dueDate:qaddDue.date, dueTime:qaddDue.time, overdue:false,
+    action:qaddAction, actionDetails:COMMUNICATION_ACTION_DEMOS[qaddAction] ? {...COMMUNICATION_ACTION_DEMOS[qaddAction]} : null,
+    dueDate:qaddDue.date, dueTime:qaddDue.time, overdue:false,
     assigned:who.length ? who : [ME_KEY], link:'', linkOverflow:0, workflow:'', checklist:[], externalCal:false };
 }
 // click-outside collapses the empty quick-add bar
@@ -2195,7 +2175,26 @@ function pickActionItem(label){
     const demo = COMMUNICATION_ACTION_DEMOS[label];
     state.modalActionDetails = demo ? {...demo} : null;
     renderActionArea();
+    return;
   }
+  /* The quick-add bar kept no record of what you picked, so choosing an action
+     there did nothing at all. It shows the action now, with an x to clear it.
+     Emma's call, 2026-09-11. */
+  qaddAction = label;
+  renderQaddAction();
+}
+let qaddAction = null;
+function renderQaddAction(){
+  const el = document.getElementById('qaddActionLink');
+  el.innerHTML = qaddAction
+    ? `${qaddAction}<span class="material-symbols-outlined">close</span>`
+    : `<span class="material-symbols-outlined">add</span>Add Action`;
+  el.classList.toggle('is-set', !!qaddAction);
+}
+function onQaddActionClick(e){
+  e.stopPropagation();
+  if(qaddAction){ qaddAction = null; renderQaddAction(); return; }
+  openActionsMenu(e, 'quickadd');
 }
 
 /* ---- Details tile: Links ----
@@ -2696,8 +2695,15 @@ renderRegister();
 renderQuickAddAssignees();
 renderQfAssignedLabel();
 initColumnResize();
-// assets/datetime.js loads after this block, so the default has to wait for it.
-document.addEventListener('DOMContentLoaded', resetQaddDue);
+/* assets/datetime.js and assets/actions.js are loaded after this block, so
+   anything that needs them waits for the document. Doing this inline threw
+   `RMXActions is not defined` and took the rest of init down with it, which
+   left the register empty on a cold load. */
+document.addEventListener('DOMContentLoaded', function(){
+  resetQaddDue();
+  // The actions panel's own rows, from the one list both screens read.
+  document.getElementById('actionsPanel').insertAdjacentHTML('beforeend', RMXActions.markup());
+});
 
 // Arrived from My Workspace's My Tasks preview — open that task's details
 // directly, so "open a task's details" lands on the actual task, not the
@@ -2733,6 +2739,7 @@ if (new URLSearchParams(location.search).get('embed') === '1') {
    switched). The data-rmx-todo attribute stays as a marker of what isn't
    built; it just no longer triggers feedback here. */
 </script>
+<script src="../assets/actions.js"></script>
 <script src="../assets/datetime.js"></script>
 <script src="../assets/history-notes.js"></script>
 <script src="../assets/megamenu.js"></script>
