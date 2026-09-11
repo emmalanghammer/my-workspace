@@ -2146,6 +2146,26 @@ only to ones made on the tile. The count and the greeting drop to match. If
 you would rather see it struck through at the bottom instead, that is the same
 one-line switch it was before.
 
+## Closed Tasks is a real filter now
+
+Emma's call, 2026-09-11. It had been the one checkbox in Quick Filters honestly
+marked as not built — the note on it said a ticked task stays visible here, so
+there was nothing for it to reveal. That reasoning had the default backwards.
+
+**It starts ticked.** The register shows everything, closed tasks included,
+struck through where you left them — which is what makes ticking one legible.
+Untick Closed Tasks, hit Apply, and they go. Tick it back, Apply, and they
+return. Reset puts the tick back with everything else.
+
+Two details that fall out of the panel's own model:
+
+- **Unticking on its own changes nothing.** Quick Filters are staged, not
+  live — that is what Apply and Reset mean — so the register does not move
+  until you apply.
+- **It covers tasks closed during the visit, not just the one that shipped
+  closed.** Close "Return Marcia Clark's call", untick, Apply, and My Tasks
+  goes from twelve rows to ten with the totals line reading "10 of 12 Tasks".
+
 ---
 
 # Worth raising with the design system
