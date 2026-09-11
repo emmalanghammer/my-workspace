@@ -30,11 +30,18 @@
   padding: var(--spacing-2xl) 64px;       /* 32 / 64 */
   border-bottom: 1px solid var(--border-primary);
   min-height: calc(100vh - 88px);
+  /* The ground art is a 1920x844 band. Sized to the element it would be
+     stretched to whatever the page is tall -- on a long page that magnifies it
+     until it reads as flat colour, which is what it was doing. Attached to the
+     viewport instead, it stays the size the frame draws it at, edge to edge
+     and flush under the Context Bar, however far the page scrolls. Emma's
+     call, 2026-09-11. */
   background-color: var(--container-primary);
   background-image: var(--art-workspace-ground);
   background-size: cover;
   background-position: top center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 /* ---- welcome ----------------------------------------------

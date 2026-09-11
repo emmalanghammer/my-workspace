@@ -2421,6 +2421,37 @@ Both come out of one build, so neither can drift from the other. Swapping which
 one is "the" site again is two lines in `.github/workflows/static.yml` — the
 refs the two checkout steps use.
 
+## The ground art, and who is which colour
+
+**The background was there all along and looked like nothing.** The frame's
+ground is a 1920x844 band, and sizing it to cover the *element* meant stretching
+it to whatever the page happened to be tall — on a long page that magnifies it
+until it reads as flat white, which is what you were seeing. It covers the
+**viewport** now, so it stays the size the frame draws it at, edge to edge and
+flush under the Context Bar, however far the page scrolls.
+
+**Tony has a colour nobody else uses,** and it is `Container/secondary` — the
+token the app bar's own avatar is filled with. So his bubble in a row and his
+avatar in the corner are the same colour *by construction* rather than by
+coincidence: change one and the other follows.
+
+**Everyone else draws from four more.** `Container/secondary-dark`,
+`Icon/success`, `Component/command-launch` and `Container/tertiary-dark`. What
+is deliberately missing says as much as what is there:
+
+- **`Icon/attention` and the marketing orange** — an orange bubble means a
+  role, and that has to keep meaning only that.
+- **`Icon/error`** — red means something went wrong.
+- **`Icon/notice`** — at a glance, amber reads as the role orange.
+
+Four colours for thirteen people is not variety, it is what is left after the
+semantic ones are spoken for. **A real categorical ramp is the fix**, and that
+is item 8 — this is the third feature in this prototype to run into it.
+
+**And the mention avatars' initials had not followed their names.** Renaming the
+people rewrote every name but left the initials in the Mentions tile's markup,
+so Nathan Cole was wearing BC. Five of them, corrected.
+
 ---
 
 # Worth raising with the design system

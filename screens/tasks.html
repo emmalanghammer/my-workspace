@@ -400,11 +400,20 @@ a:hover { text-decoration:none; }
 .av-tip.show{display:block;}
 .avatar-bubble{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;background:var(--rmx-blue);color:#fff;margin-left:-4px;flex:none;}
 .avatar-bubble:first-child{margin-left:0;}
-/* The three user colours. A role keeps its own pale-orange outlined bubble
-   below, and nothing else is orange. */
-.av-blue{background:var(--rmx-blue);}
+/* User bubble colours. Five real Foundations fills, and every one of them
+   earns its place: Container/secondary for the signed-in user (the app bar
+   avatar's own token), then Container/secondary-dark, Icon/success,
+   Component/command-launch and Container/tertiary-dark for everyone else.
+   Deliberately absent: Icon/attention and the marketing orange, because an
+   orange bubble means a role; Icon/error, because red means something went
+   wrong; Icon/notice, because at a glance amber reads as the role orange.
+   That leaves four for thirteen people -- a real categorical ramp is what
+   would fix it properly, which is item 8. */
+.av-me{background:var(--container-secondary,#008dd5);}
 .av-navy{background:var(--container-secondary-dark,#13314c);}
 .av-green{background:var(--rmx-green);}
+.av-slate{background:var(--component-command-launch,#425a70);}
+.av-grey{background:var(--container-tertiary-dark,#737373);}
 .avatar-bubble.notice{background:var(--lozenge-notice);border:1px solid var(--rmx-orange);color:var(--rmx-navy);}
 .avatar-bubble.plus{background:var(--rmx-blue);border:1px solid var(--rmx-blue);color:#fff;}
 .avatar-bubble.plus.notice{background:var(--lozenge-notice);border-color:var(--rmx-orange);color:var(--rmx-navy);}
@@ -1771,10 +1780,16 @@ const ME_KEY = 'tlittle';
    the set: an orange bubble means a role, and that has to keep meaning only
    that. Emma's call, 2026-09-11; the want for a real categorical ramp is
    item 8. */
-const AVATAR_COLORS = ['blue', 'navy', 'green'];
+const AVATAR_COLORS = ['navy', 'green', 'slate', 'grey'];
 function userColor(k){
+  /* The signed-in user has a colour of his own that nobody else uses, and it
+     is Container/secondary -- the token the app bar's own avatar is filled
+     with, so the bubble in a row and the avatar in the corner are the same
+     colour by construction rather than by coincidence. Emma's call,
+     2026-09-11. */
+  if (k === ME_KEY) return 'me';
   const i = USERS.findIndex(u => u.key === k);
-  return i < 0 ? 'blue' : AVATAR_COLORS[i % AVATAR_COLORS.length];
+  return i < 0 ? 'navy' : AVATAR_COLORS[i % AVATAR_COLORS.length];
 }
 function userByKey(k){ return USERS.find(u => u.key === k) || null; }
 function roleByKey(k){ return ROLES.find(r => r.key === k) || null; }
