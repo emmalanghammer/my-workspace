@@ -1966,7 +1966,11 @@ function rowKebabAction(label){
 /* ============================================================
    NEW TASK / TASK DETAILS MODAL
    ============================================================ */
-function openTaskModal(dataset, id, prefillTitle){
+let embedToken = null;
+function openTaskModal(dataset, id, prefill){
+  // The third argument is the typed name, or everything the mini bar held.
+  const pre = typeof prefill === 'string' ? {title: prefill} : (prefill || {});
+  const prefillTitle = pre.title;
   const list = dataset==='my' ? myTasks : (dataset==='other' ? otherTasks : null);
   const task = list ? list.find(t=>t.id===id) : null;
   state.modalTask = task || null;
@@ -1974,8 +1978,9 @@ function openTaskModal(dataset, id, prefillTitle){
   state.modalDataset = dataset;
   state.modalChecklist = task ? JSON.parse(JSON.stringify(task.checklist||[])) : [];
   clEditIdx = null;   // a half-finished edit does not survive opening another task
-  state.modalActionLabel = task ? task.action : null;
-  state.modalActionDetails = task ? task.actionDetails : null;
+  state.modalActionLabel = task ? task.action : (pre.action || null);
+  state.modalActionDetails = task ? task.actionDetails
+    : (COMMUNICATION_ACTION_DEMOS[pre.action] ? {...COMMUNICATION_ACTION_DEMOS[pre.action]} : null);
   state.actionPicking = false;
   state.modalHighPriority = task ? !!task.flag : false;
   state.modalDone = task ? !!task.completed : false;
@@ -2019,8 +2024,10 @@ function openTaskModal(dataset, id, prefillTitle){
      the task now -- same values the register's Due Date column prints, and
      the makeBlankTask default for a new one. Found while making the My
      Workspace tile show real due dates, 2026-09-10. */
-  document.getElementById('dueDateVal').textContent = task ? task.dueDate : RMXDateTime.defaults().date;
-  document.getElementById('dueTimeVal').textContent = task ? task.dueTime : RMXDateTime.defaults().time;
+  document.getElementById('dueDateVal').textContent =
+    task ? task.dueDate : (pre.date || RMXDateTime.defaults().date);
+  document.getElementById('dueTimeVal').textContent =
+    task ? task.dueTime : (pre.time || RMXDateTime.defaults().time);
   state.modalColorBar = task ? (task.colorBar || null) : null;
   renderDisplayField();
 
@@ -2607,10 +2614,12 @@ function saveTask(mode){
      flag on the tile reflects the saved state rather than the state it had
      when the page loaded. Emma's call, 2026-09-10: "display the high priority
      flag icon next to the task name if the task is saved as high priority". */
-  if (!state.modalIsNew && window.self !== window.top && state.modalTask) {
+  if (window.self !== window.top && (state.modalTask || embedToken)) {
     try {
       window.parent.postMessage({ source: 'rmx-tasks', type: 'saved',
-        id: state.modalTask.id, flag: !!taskData.flag, title: taskData.title }, '*');
+        id: state.modalTask ? state.modalTask.id : null,
+        token: state.modalIsNew ? embedToken : null,
+        flag: !!taskData.flag, title: taskData.title }, '*');
     } catch (e) {}
   }
   if(mode==='new'){
@@ -2712,8 +2721,21 @@ document.addEventListener('DOMContentLoaded', function(){
   const params = new URLSearchParams(location.search);
   // ?new=<title> -- My Workspace's mini Add Task bar handing over a typed
   // name via "Add More Details". Same modal, new-task mode, title prefilled.
+  /* My Workspace's mini bar hands over everything it held, not just the
+     typed name -- so a task created there opens as the same task rather than
+     an empty form. `token` comes back with the saved message so the Workspace
+     can find the row it belongs to. Emma's call, 2026-09-11. */
   const fresh = params.get('new');
-  if (fresh) { openTaskModal(null, null, fresh); return; }
+  if (fresh !== null) {
+    embedToken = params.get('token');
+    openTaskModal(null, null, {
+      title:  fresh,
+      date:   params.get('due'),
+      time:   params.get('time'),
+      action: params.get('action')
+    });
+    return;
+  }
   const id = params.get('open');
   if (!id) return;
   const task = myTasks.find(t => t.id === id) || otherTasks.find(t => t.id === id);

@@ -921,8 +921,19 @@
   }
   // Same frame, new-task mode -- used by the mini Add Task bar's
   // "Add More Details", which has a name typed but nothing else set.
-  function openNewTaskFrame(title) {
-    taskFrameFrame.src = 'screens/tasks.html?embed=1&new=' + encodeURIComponent(title);
+  /* A task typed into the mini bar has no record on the register, so it opens
+     as a New Task prefilled with everything the bar held -- title, due date and
+     time, the action -- rather than as a blank form or as nothing at all.
+     `token` is how the row is found again when the overlay reports what was
+     saved. Emma's call, 2026-09-11. */
+  function openNewTaskFrame(opts) {
+    if (typeof opts === 'string') opts = { title: opts };
+    var q = ['embed=1', 'new=' + encodeURIComponent(opts.title || '')];
+    if (opts.date)   q.push('due=' + encodeURIComponent(opts.date));
+    if (opts.time)   q.push('time=' + encodeURIComponent(opts.time));
+    if (opts.action) q.push('action=' + encodeURIComponent(opts.action));
+    if (opts.token)  q.push('token=' + encodeURIComponent(opts.token));
+    taskFrameFrame.src = 'screens/tasks.html?' + q.join('&');
     taskFrame.hidden = false;
   }
 
@@ -964,8 +975,11 @@
      with the same harvested glyph the Tasks register uses (#flag-priority).
      Emma's call, 2026-09-10. */
   function applySavedTask(msg) {
-    var row = document.querySelector('[data-ws-task-id="' + msg.id + '"]');
+    var row = msg.token
+      ? document.querySelector('[data-ws-new-token="' + msg.token + '"]')
+      : document.querySelector('[data-ws-task-id="' + msg.id + '"]');
     if (!row) return;
+    if (msg.token && msg.title) row.setAttribute('data-ws-new-title', msg.title);
     var title = row.querySelector('.ws-task__title');
     var flag = title.querySelector('.ws-task__flag');
     if (msg.title) {
@@ -1138,6 +1152,14 @@
     row.className = 'ws-task';
     row.setAttribute('data-overdue', 'false');
     row.setAttribute('data-done', 'false');
+    /* No register record, but not nothing either: the row carries what the bar
+       held, so clicking it opens those values again. */
+    row.setAttribute('data-ws-new', '');
+    row.setAttribute('data-ws-new-token', 'n' + Date.now());
+    row.setAttribute('data-ws-new-title', title);
+    row.setAttribute('data-ws-new-date', opts.due ? String(opts.due).split(' ')[0] : qaddDue.date);
+    row.setAttribute('data-ws-new-time', opts.due ? String(opts.due).split(' ').slice(1).join(' ') : qaddDue.time);
+    if (qaddActionLabel) row.setAttribute('data-ws-new-action', qaddActionLabel);
     row.innerHTML = CHECK_MARKUP +
       '<div><div class="ws-task__title"></div>' +
       (opts.context ? '<div class="ws-task__meta"><span class="ws-task__context"></span></div>' : '') +
@@ -1173,15 +1195,10 @@
   qaddMore.addEventListener('click', function () {
     var v = qaddInput.value.trim();
     if (!v) return;
+    var opts = { title: v, date: qaddDue.date, time: qaddDue.time, action: qaddActionLabel };
     closeQadd();
-    openNewTaskFrame(v);
+    openNewTaskFrame(opts);
   });
-  /* The date/time, assignee and Add Action controls show the same defaults the
-     Tasks page's quick-add bar shows, and clicking any of them opens the full
-     Task Details form with whatever has been typed so far -- that form is
-     where those three fields are actually editable, and porting its three
-     floating panels onto this page would mean a second copy of each. Same
-     handoff "Add More Details" makes, so there is one code path. */
   /* ---- the mini bar's Add Action ----
      The real Select an Action list, from the shared assets/actions.js, and
      once something is picked the control says what it is with an x to clear
@@ -1235,8 +1252,18 @@
     if (e.target.closest('.rmx-check')) return;
     if (e.target.closest('.ws-claim-btn')) return;
     var row = e.target.closest ? e.target.closest('.ws-task') : null;
-    var id = row && row.getAttribute('data-ws-task-id');
-    if (id) openTaskFrame(id);
+    if (!row) return;
+    var id = row.getAttribute('data-ws-task-id');
+    if (id) { openTaskFrame(id); return; }
+    if (row.hasAttribute('data-ws-new')) {
+      openNewTaskFrame({
+        title:  row.getAttribute('data-ws-new-title'),
+        date:   row.getAttribute('data-ws-new-date'),
+        time:   row.getAttribute('data-ws-new-time'),
+        action: row.getAttribute('data-ws-new-action'),
+        token:  row.getAttribute('data-ws-new-token')
+      });
+    }
   });
 
   tile.addEventListener('rmx:change', function (e) {

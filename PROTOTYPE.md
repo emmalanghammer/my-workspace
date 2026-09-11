@@ -2030,6 +2030,34 @@ quick-add bar's date default, which waits for `assets/datetime.js` for exactly
 the same reason. Worth remembering as a shape: anything touching a shared asset
 has to run after the document, not inline.
 
+## A task added from the mini bar opens like any other
+
+Emma, 2026-09-11: *why can't I click on a task to open the details if it was
+created via the quick add task?* Because it had nothing to open — the row was
+built with no id, on the reasoning that a task typed on the Workspace has no
+record on the register for the overlay to look up. True, and beside the point:
+you had just typed it, so the details are the ones you typed.
+
+The row carries them now. Its title, due date, time and action sit on it as
+data attributes, and clicking it opens the overlay as a New Task prefilled with
+exactly those — not a blank form, and not nothing. "Add More Details" goes
+through the same call, so the two ways of reaching the form are one code path
+and both bring the whole bar with them rather than just the typed name.
+
+**It reports back.** Renaming or flagging the task in the overlay updates the
+row it came from, the same way saving a real task does. That needed a handle:
+the row gets a `token`, the overlay takes it in the query string and returns it
+with the saved message, and the Workspace finds the row by token when there is
+no id to find it by. Saving also rewrites the stored title, so reopening the
+row shows the name you gave it rather than the one you typed first.
+
+**A note on what bit me here.** The overlay first opened with the title and
+dates prefilled but no action, which looked like a bug in the prefill and was
+not: the iframe was serving a cached `screens/tasks.html`. Loading the same URL
+directly proved the code correct. Third time this session that a cached asset
+made working code look broken — verify against a fresh fetch before changing
+anything.
+
 ---
 
 # Worth raising with the design system
