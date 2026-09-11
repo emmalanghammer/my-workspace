@@ -2329,6 +2329,33 @@ skill names this exact mistake — *"a checked checkbox is orange,
 on the Tasks screen had the wrong one. One line, and both screens were wrong
 together, so nothing looked out of place enough to notice.
 
+## The register fills its page
+
+Emma's call, 2026-09-11. Sizing the columns to their content fixed the
+horizontal scroll and left the opposite problem: on a wide window the register
+stopped at 1388px and the rest of the page was a dead strip.
+
+Every column but Tasks keeps the width it needs; **Tasks takes whatever is
+left**. At 1800px it runs to 762px and the table fills the page; below the sum
+of the fixed columns the table still scrolls rather than crushing anything.
+
+## Announcements and My Training start hidden
+
+Also Emma's, and it explains something the reference build had drawn but never
+wired. The frame puts two links in the bottom-right corner — Announcements and
+My Training — because those two tiles are *hidden*; that corner is where a
+hidden tile waits. Both the crossed-eye in each tile's header and both links
+were `data-rmx-todo`, so neither end did anything and both tiles were always
+up, which made the links look like decoration.
+
+They start hidden now. A link brings its tile back, the crossed-eye puts it
+away again, and the bar itself disappears once there is nothing left in it to
+offer. One thing fixed on the way past: the second link read "My Workspace",
+and the frame says My Training — which is the tile it actually restores.
+
+**Services leads My Favorites.** It was the last card in its column, so
+reaching Tasks — the one built screen in that tile — meant scrolling.
+
 ---
 
 # Worth raising with the design system

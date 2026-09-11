@@ -350,7 +350,11 @@ a:hover { text-decoration:none; }
 .tasks-toolbar .right{display:flex;align-items:center;gap:8px;}
 
 /* Register */
-.task-register{width:calc(var(--col-check-w) + var(--col-color-w) + var(--col-task-w) + var(--col-action-w) + var(--col-due-w) + var(--col-assigned-w) + var(--col-link-w) + var(--col-workflow-w) + var(--col-claim-w) + var(--col-kebab-w));border-collapse:collapse;background:var(--bg-surface);table-layout:fixed;}
+/* The register fills its page. Every column but Tasks is sized to what it
+   holds; Tasks takes whatever is left, so a wide window has no dead strip
+   down its right-hand side and a narrow one still scrolls rather than
+   crushing anything. Emma's call, 2026-09-11. */
+.task-register{width:100%;min-width:calc(var(--col-check-w) + var(--col-color-w) + var(--col-task-w) + var(--col-action-w) + var(--col-due-w) + var(--col-assigned-w) + var(--col-link-w) + var(--col-workflow-w) + var(--col-claim-w) + var(--col-kebab-w));border-collapse:collapse;background:var(--bg-surface);table-layout:fixed;}
 .task-register th{position:relative;height:28px;background:var(--register-header);font-size:12.6px;font-weight:500;letter-spacing:1.1px;color:#fff;text-align:left;padding:4px 8px;border-right:0.5px solid rgba(255,255,255,.5);}
 .task-register th:last-child{border-right:none;}
 .task-register th .material-symbols-outlined{font-size:16px;color:#fff;vertical-align:-3px;}
@@ -368,7 +372,7 @@ a:hover { text-decoration:none; }
 .task-register tr.child-row:hover td{background:var(--bg-subtle);}
 .col-check{width:var(--col-check-w);}
 .col-color{width:var(--col-color-w);padding:0 8px!important;}
-.col-task{width:var(--col-task-w);}
+.col-task{width:auto;min-width:var(--col-task-w);}
 .col-action{width:var(--col-action-w);}
 .col-due{width:var(--col-due-w);}
 /* The bubbles centre in their column, header included. Emma's call,
