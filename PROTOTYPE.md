@@ -2430,6 +2430,20 @@ until it reads as flat white, which is what you were seeing. It covers the
 **viewport** now, so it stays the size the frame draws it at, edge to edge and
 flush under the Context Bar, however far the page scrolls.
 
+**And it is vector now, so it cannot go soft.** Emma pointed at the source:
+`RMX_Background`, Theme=Light Device=Web, in RMX Iconography (`6:4644`) — the
+component itself rather than the instance placed in the page frame. It had been
+a PNG since the first round, on the reasoning that the vector is tens of kB of
+individual dots. It is, and it does not matter: a raster scaled past its natural
+width goes blurry, which is what she was looking at. The SVG is 57 kB against
+the PNG's 62.
+
+It is composed here from the component's own five layers — the wash, the dot
+field, the hatching and the two wave groups, each at its own offset and the
+component's 50% opacity — rather than taken from the flat export, because that
+export nests everything in masks a `background-image` cannot use. Every path is
+the library's; nothing is redrawn.
+
 **Tony has a colour nobody else uses,** and it is `Container/secondary` — the
 token the app bar's own avatar is filled with. So his bubble in a row and his
 avatar in the corner are the same colour *by construction* rather than by
