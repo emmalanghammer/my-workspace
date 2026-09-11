@@ -2264,6 +2264,45 @@ to the skill's `app.js` — the first was making a toast replace rather than
 stack. Both look like they belong in the skill rather than in this prototype;
 `check.mjs` reports the file as drifted either way.
 
+## Six fixes off a pass over the register and the menu
+
+Emma's list, 2026-09-11.
+
+**The register fits now.** Its columns came off the frame at 1888px in total,
+which no laptop shows without scrolling — and Assigned To was 270px to hold
+three 24px bubbles. Every column is sized to the widest value this prototype's
+data actually puts in it plus the cell's padding: 1888px becomes **1388px**,
+and nothing truncates (checked cell by cell, not by eye).
+
+**The Mega Menu's notch was mirrored.** The active category's fold hung off the
+bottom-right with its solid edge on the left, which pointed it the wrong way.
+Flipped.
+
+**Tasks is in My Favorites, under Services.** It is a real screen and that tile
+is where you would reach for it, so it is a real link rather than another `#`.
+
+**Users have different coloured bubbles.** Three colours — the same
+Container/secondary blue, Container/secondary-dark navy and Icon/success green
+the Mentions tile has used since it was built — assigned by the user's position
+in the list, so a person is the same colour everywhere and two people side by
+side are rarely the same. *Orange is deliberately not in the set: an orange
+bubble means a role, and that has to keep meaning only that.* A real
+categorical ramp would do this properly; that gap is item 8.
+
+**Other Users' Tasks is spread across the team.** Ten rows were sharing five
+people, with Becky Carle on five of them. They now run across twelve, leaving
+the checklist owners the demo depends on exactly where they were.
+
+**Quick Filters stays as you left it.** Switching to Other Users' Tasks used to
+force the panel open, on the reasoning that choosing whose tasks you are
+looking at is the first thing you do there. It pushes the register down the
+page every time you switch, which is worse than one extra click.
+
+**And the cursor tells the truth.** A register row opens that task's details
+and showed a text caret; so did the collapsed quick-add bar. Both point now.
+Audited the rest of both screens rather than fixing only the two reported —
+everything else with a click handler already pointed.
+
 ---
 
 # Worth raising with the design system
