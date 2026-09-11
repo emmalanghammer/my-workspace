@@ -1192,9 +1192,9 @@ const PET_LINKS = () => ([
 ]);
 const PET_HISTORY = () => ([
   {date:'08/08/25', type:'System', avatar:'tlittle', text:'Tony Little claimed task'},
-  {date:'07/22/25', type:'System', avatar:'ascharffe', text:'Amy Scharffe assigned task to Property Manager'},
-  {date:'07/21/25', type:'System', avatar:'ascharffe', text:'Amy Scharffe claimed task'},
-  {date:'07/19/25', type:'System', avatar:'canderson', text:'Carly Anderson created task'},
+  {date:'07/22/25', type:'System', avatar:'wcastellano', text:'Wren Castellano assigned task to Property Manager'},
+  {date:'07/21/25', type:'System', avatar:'wcastellano', text:'Wren Castellano claimed task'},
+  {date:'07/19/25', type:'System', avatar:'rdelgado', text:'Rafa Delgado created task'},
 ]);
 
 /* A checklist item has exactly one home -- task.checklist. The register draws
@@ -1223,7 +1223,7 @@ function checklistProgress(t){
 // titles, same categories/urgency, so opening one here shows the same task,
 // not a different one with the same name. Combined per Emma's call,
 // 2026-09-10. Assigned to Tony (this prototype's signed-in persona on the
-// My Workspace screen), not Emma Langhammer, since these are Tony's tasks.
+// My Workspace screen), not Delphine Okonjo, since these are Tony's tasks.
 let myWorkspaceTasks = [
   { id:'ws-post-notice', title:"Post 3-day notice — Flagstone Lot 3", flag:true, colorBar:'red', completed:false,
     action:null, actionDetails:null, dueDate:'09/04/26', dueTime:'09:00 AM', overdue:true,
@@ -1273,9 +1273,9 @@ let myTasks = [
     showProgress:true, externalCal:false,
     checklist:[
       {text:'Find new preferred vendor for services',            assigned:['tlittle'],     done:false},
-      {text:'Create vendor account in system',                   assigned:['dhegemann'],   done:false},
-      {text:'Send new vendor agreement & W-9',                   assigned:['cgriesinger'], done:false},
-      {text:'Confirm COI, W-9, & payment method are on file',    assigned:['aferryman'],   done:false}
+      {text:'Create vendor account in system',                   assigned:['cnakamura'],   done:false},
+      {text:'Send new vendor agreement & W-9',                   assigned:['mfairbanks'], done:false},
+      {text:'Confirm COI, W-9, & payment method are on file',    assigned:['ikowalczyk'],   done:false}
     ] },
   { id:'t-approve-pet', title:'Approve Daniel for Pet', flag:true, colorBar:null, completed:false,
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/18/26', dueTime:'11:00 AM', overdue:false,
@@ -1307,31 +1307,31 @@ let myTasks = [
 let otherTasks = [
   { id:'o1', title:'Send an email to Daniel', flag:true, colorBar:'red', completed:false,
     action:'Send Email', actionDetails:null, dueDate:'09/23/26', dueTime:'09:30 AM', overdue:false,
-    assigned:['aanderson'], link:'Daniel Smith', linkOverflow:0, workflow:'', checklist:[] },
+    assigned:['mdelacroix'], link:'Daniel Smith', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o2', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/18/26', dueTime:'10:00 AM', overdue:false,
-    assigned:['canderson'], link:'', linkOverflow:0, workflow:'', checklist:[] },
+    assigned:['rdelgado'], link:'', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o3', title:"Record Park's records", flag:true, showProgress:true, colorBar:'green', completed:false,
     action:'Enter a Journal', actionDetails:null, dueDate:'09/17/26', dueTime:'10:00 AM', overdue:false,
-    assigned:['bcarle'], link:'', linkOverflow:0, workflow:'',
-    checklist:[ {text:'Attach the signed records to the property', assigned:['bcarle'], done:false} ] },
+    assigned:['barriaga'], link:'', linkOverflow:0, workflow:'',
+    checklist:[ {text:'Attach the signed records to the property', assigned:['barriaga'], done:false} ] },
   { id:'o4', title:'Close completed service ticket', flag:false, colorBar:'green', completed:false,
     action:null, actionDetails:null, dueDate:'09/24/26', dueTime:'02:00 PM', overdue:false,
-    assigned:['bfischer'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
+    assigned:['squill'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
   { id:'o5', title:'Distribute payments to owners', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/29/26', dueTime:'08:30 AM', overdue:false,
-    assigned:['dhegemann','aferryman','elanghammer','jcameron'], link:'', linkOverflow:0, workflow:'', checklist:[] },
+    assigned:['cnakamura','ikowalczyk','dokonjo','gpryce'], link:'', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o6', title:'Close service tickets', showProgress:true, colorBar:'green', completed:false,
     action:'View Issues', actionDetails:null, dueDate:'08/01/26', dueTime:'09:30 AM', overdue:true,
-    assigned:['capegian'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
-    checklist:[ {text:'Open service issue list', assigned:['bcarle'], done:true},
-                {text:'Close all tickets', assigned:['bfischer','ascharffe'], done:false} ] },
+    assigned:['toyelaran'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
+    checklist:[ {text:'Open service issue list', assigned:['barriaga'], done:true},
+                {text:'Close all tickets', assigned:['squill','wcastellano'], done:false} ] },
   { id:'o7', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/30/26', dueTime:'07:30 AM', overdue:false,
-    assigned:['dgardin'], link:"Patrick O'Malley", linkOverflow:1, workflow:'', checklist:[] },
+    assigned:['averhoeven'], link:"Patrick O'Malley", linkOverflow:1, workflow:'', checklist:[] },
   { id:'o8', title:'Review owner details for FMHP', flag:false, colorBar:'blue', completed:false,
     action:'Post Owner Checks', actionDetails:null, dueDate:'07/25/26', dueTime:'07:30 AM', overdue:true,
-    assigned:['jcameron','ascharffe'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
+    assigned:['gpryce','wcastellano'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
   /* The same New Vendor Onboarding process as it looks to someone watching
      it rather than working it: Tony found the vendor on the 5th, Dave created
      the account on the 8th, and Chris's step has sat untouched since. The
@@ -1343,22 +1343,22 @@ let otherTasks = [
      says the vendor is Anderson Mechanical. Emma's walkthrough, 2026-09-11. */
   { id:'o-vendor-onboarding', title:'New Vendor Onboarding — Anderson Mechanical', flag:false, colorBar:'blue', completed:false,
     action:null, actionDetails:null, dueDate:'09/10/26', dueTime:'05:00 PM', overdue:true,
-    assigned:['cgriesinger'], link:'', linkOverflow:0, workflow:'Vendor Onboarding',
+    assigned:['mfairbanks'], link:'', linkOverflow:0, workflow:'Vendor Onboarding',
     showProgress:true, expandChecklist:true, externalCal:false,
     links:[{label:'Vendor', value:'Anderson Mechanical', removable:true}],
     checklist:[
       {text:'Find new preferred vendor for services',         assigned:['tlittle'],     done:true,  doneDate:'09/05/26 02:10 PM'},
-      {text:'Create vendor account in system',                assigned:['dhegemann'],   done:true,  doneDate:'09/08/26 09:40 AM'},
-      {text:'Send new vendor agreement & W-9',                assigned:['cgriesinger'], done:false, dueDate:'09/09/26 05:00 PM'},
-      {text:'Confirm COI, W-9, & payment method are on file', assigned:['aferryman'],   done:false}
+      {text:'Create vendor account in system',                assigned:['cnakamura'],   done:true,  doneDate:'09/08/26 09:40 AM'},
+      {text:'Send new vendor agreement & W-9',                assigned:['mfairbanks'], done:false, dueDate:'09/09/26 05:00 PM'},
+      {text:'Confirm COI, W-9, & payment method are on file', assigned:['ikowalczyk'],   done:false}
     ],
     history:[
-      {date:'09/08/26 09:40 AM', type:'System', avatar:'dhegemann', text:'Vendor account created in the system'},
+      {date:'09/08/26 09:40 AM', type:'System', avatar:'cnakamura', text:'Vendor account created in the system'},
       {date:'09/05/26 02:10 PM', type:'System', avatar:'tlittle',   text:'Preferred vendor selected — Anderson Mechanical'}
     ] },
   { id:'o9', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'07/05/26', dueTime:'07:30 AM', overdue:true,
-    assigned:['abryan'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
+    assigned:['enwosu'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
 ];
 
 
@@ -1724,29 +1724,29 @@ document.addEventListener('click', (e)=>{
 /* ---- Assigned To dropdown (opened from the Users Bubbles "+") ---- */
 /* ---- who exists ----
    One list of people and one of roles, replacing the two overlapping lists
-   this file used to carry. Those disagreed -- `CA` was Charlie Apegian in one
-   and Carly Anderson in the other -- and the old "Roles" list was really
+   this file used to carry. Those disagreed -- `CA` was Tamsin Oyelaran in one
+   and Rafa Delgado in the other -- and the old "Roles" list was really
    three roles plus five people wearing a role's clothes.
 
    Tasks reference a **key** now, never a pair of initials, which is what
    makes the disagreement go away: two people are allowed to share initials
-   (Carly Anderson and Charlie Apegian both show CA) because the record says
+   (Rafa Delgado and Tamsin Oyelaran both show CA) because the record says
    which one it is. Emma's call, 2026-09-11. */
 const USERS = [
-  {key:'aanderson',   initials:'AA', name:'Alan Anderson',     uname:'aanderson'},
-  {key:'abryan',      initials:'AB', name:'Adam Bryan',        uname:'abryan'},
-  {key:'ascharffe',   initials:'AS', name:'Amy Scharffe',      uname:'ascharffe'},
-  {key:'bcarle',      initials:'BC', name:'Becky Carle',       uname:'bcarle'},
-  {key:'bfischer',    initials:'BF', name:'Brittany Fischer',  uname:'bfischer'},
-  {key:'canderson',   initials:'CA', name:'Carly Anderson',    uname:'canderson'},
-  {key:'capegian',    initials:'CA', name:'Charlie Apegian',   uname:'capegian'},
-  {key:'aferryman',   initials:'AF', name:'Ali Ferryman',       uname:'aferryman'},
-  {key:'cgriesinger', initials:'CG', name:'Chris Griesinger',   uname:'cgriesinger'},
-  {key:'dgardin',     initials:'DG', name:'Danielle Gardin',   uname:'dgardin'},
-  {key:'dhegemann',   initials:'DH', name:'Dave Hegemann',      uname:'dhegemann'},
-  {key:'elanghammer', initials:'EL', name:'Emma Langhammer',   uname:'elanghammer'},
-  {key:'jcameron',    initials:'JC', name:'Jonathan Cameron',  uname:'jcameron'},
-  {key:'tlittle',     initials:'TL', name:'Tony Little',       uname:'tlittle'},
+  {key:'mdelacroix',  initials:'MD', name:'Maren Delacroix', uname:'mdelacroix'},
+  {key:'enwosu',      initials:'EN', name:'Emeka Nwosu',     uname:'enwosu'},
+  {key:'wcastellano', initials:'WC', name:'Wren Castellano', uname:'wcastellano'},
+  {key:'barriaga',    initials:'BA', name:'Beatrix Arriaga', uname:'barriaga'},
+  {key:'squill',      initials:'SQ', name:'Soren Quill',     uname:'squill'},
+  {key:'rdelgado',    initials:'RD', name:'Rafa Delgado',    uname:'rdelgado'},
+  {key:'toyelaran',   initials:'TO', name:'Tamsin Oyelaran', uname:'toyelaran'},
+  {key:'ikowalczyk',  initials:'IK', name:'Ines Kowalczyk',  uname:'ikowalczyk'},
+  {key:'mfairbanks',  initials:'MF', name:'Milo Fairbanks',  uname:'mfairbanks'},
+  {key:'averhoeven',  initials:'AV', name:'Anouk Verhoeven', uname:'averhoeven'},
+  {key:'cnakamura',   initials:'CN', name:'Cyrus Nakamura',  uname:'cnakamura'},
+  {key:'dokonjo',     initials:'DO', name:'Delphine Okonjo', uname:'dokonjo'},
+  {key:'gpryce',      initials:'GP', name:'Gideon Pryce',    uname:'gpryce'},
+  {key:'tlittle',     initials:'TL', name:'Tony Little',     uname:'tlittle'},
 ];
 /* Roles are what an orange bubble means, and what Claim claims from.
    `role-sa` is the one piece of this the data never named -- an orange SA on
