@@ -2368,6 +2368,16 @@ authors, in the mention authors and in the text of the system notes. **Tony
 Little is the only name that survives**, because he is the signed-in persona
 the whole demo is told through.
 
+They read as ordinary American names, on Emma's follow-up — the first
+invented set was varied to the point of being distracting in a
+property-management demo.
+
+**And Tony is off Other Users' Tasks entirely.** The oversight record still
+carried him on its first checklist item and in the matching system note, left
+over from when that record was a copy of the task he hands on in Scene 2. It
+is a different vendor's onboarding now, run end to end by other people, which
+is what that tab is for.
+
 Three things worth knowing:
 
 - **The demo script names people out loud.** Scene 2's checklist goes to Dave,
