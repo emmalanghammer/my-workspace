@@ -2689,6 +2689,31 @@ register prints and `links` is the real record list, and nothing makes them
 agree. Worth collapsing to one field, which is a change to the data model
 rather than to a screen.
 
+## The local server no longer caches
+
+Emma, 2026-09-11: "why does it look like the old UI when i load the server".
+The code was current and the server was serving the right folder. The browser
+was showing a copy from before the last few rounds of changes.
+
+Python's stock `http.server` sends `Last-Modified` and nothing else: no
+`Cache-Control`, no `ETag`. Faced with a response like that a browser applies
+heuristic freshness, usually a tenth of the time since the file was last
+modified, and serves it from its own cache **without asking the server whether
+it changed**. On a prototype edited every few minutes that reliably shows you
+the previous version, and it looks exactly like the work not having landed.
+It cost several rounds this session, on `index.html`, `app.js`,
+`history-notes.js` and the stylesheets in turn, each one diagnosed separately
+before the pattern was obvious.
+
+`.claude/dev-server.py` replaces it and sends `no-store` on everything.
+Nothing about a prototype is worth caching: it is read on localhost, every file
+is small, and a stale screen is the one failure that is indistinguishable from
+a bug. `.claude/launch.json` points at it, so the preview uses it from now on.
+
+A page already in the cache from before the change stays there until it is
+fetched once more, so the very first load after this needs a hard reload
+(Cmd+Shift+R). After that it never needs one again.
+
 ---
 
 # Worth raising with the design system
