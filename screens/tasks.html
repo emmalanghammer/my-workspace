@@ -1422,6 +1422,7 @@ function claimTask(dataset, id){
   if (!mine.length) return;
   t.assigned = (t.assigned || []).filter(k => mine.indexOf(k) === -1);
   if (t.assigned.indexOf(ME_KEY) === -1) t.assigned.unshift(ME_KEY);
+  RMXTaskState.patch(t.id, {assigned: t.assigned.slice()});
   renderRegister();
   toast('Task claimed', 'success');
 }
@@ -1430,6 +1431,7 @@ function toggleRowComplete(dataset, id){
   const t = list.find(x=>x.id===id);
   if(!t) return;
   t.completed = !t.completed;
+  RMXTaskState.patch(t.id, {completed: t.completed});
   renderRegister();
   if(t.completed) toast('Task closed successfully', 'success');
 }
@@ -1615,7 +1617,9 @@ function setQuickAddLinksEnabled(enabled){
 function quickAddTask(){
   const v = document.getElementById('qaddInput').value.trim();
   if(!v) return;
-  myTasks.unshift(makeBlankTask(v));
+  const t = makeBlankTask(v);
+  myTasks.unshift(t);
+  RMXTaskState.addCreated(t);
   collapseQuickAdd();
   renderRegister();
   toast('Task added');
@@ -2614,11 +2618,13 @@ function saveTask(mode){
     const t = makeBlankTask(title);
     Object.assign(t, taskData);
     myTasks.unshift(t);
+    RMXTaskState.addCreated(t);
     toast('Task created');
   } else {
     const list = state.modalDataset==='my' ? myTasks : otherTasks;
     const idx = list.findIndex(t=>t.id===state.modalTask.id);
     if(idx>-1) Object.assign(list[idx], taskData);
+    RMXTaskState.patch(state.modalTask.id, taskData);
     toast('Task saved');
   }
   /* Which tab a task belongs to is a fact about who holds it, not about which
@@ -2749,7 +2755,23 @@ initColumnResize();
    anything that needs them waits for the document. Doing this inline threw
    `RMXActions is not defined` and took the rest of init down with it, which
    left the register empty on a cold load. */
+/* Whatever happened on My Workspace -- a task closed on the tile, one claimed
+   from the role queue, one added to the mini bar -- is applied before this
+   screen draws, so the two never disagree about a task. Emma's call,
+   2026-09-11. */
+function applySharedState(){
+  RMXTaskState.created().forEach(function(t){
+    if(!myTasks.some(x=>x.id===t.id) && !otherTasks.some(x=>x.id===t.id)) myTasks.unshift(t);
+  });
+  RMXTaskState.apply(myTasks);
+  RMXTaskState.apply(otherTasks);
+  // A shared change can move a task between the tabs, same as a save does.
+  myTasks.concat(otherTasks).slice().forEach(rehomeTask);
+  renderRegister();
+}
+
 document.addEventListener('DOMContentLoaded', function(){
+  applySharedState();
   resetQaddDue();
   // The actions panel's own rows, from the one list both screens read.
   document.getElementById('actionsPanel').insertAdjacentHTML('beforeend', RMXActions.markup());
@@ -2802,6 +2824,7 @@ if (new URLSearchParams(location.search).get('embed') === '1') {
    switched). The data-rmx-todo attribute stays as a marker of what isn't
    built; it just no longer triggers feedback here. */
 </script>
+<script src="../assets/taskstate.js"></script>
 <script src="../assets/actions.js"></script>
 <script src="../assets/datetime.js"></script>
 <script src="../assets/history-notes.js"></script>

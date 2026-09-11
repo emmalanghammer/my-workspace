@@ -2109,6 +2109,43 @@ frame's own counter reads 0/50, so that is the product's limit and not this
 prototype's. Typed in full it truncates to "…Precision Heating & C". A shorter
 line is the fix; the field is not.
 
+## The two screens agree about a task
+
+Emma's call, 2026-09-11: *is it possible to keep the data consistent across
+screens?* It is, and it now is. Close a task on the register, walk to My
+Workspace, and the Workspace already knows.
+
+`assets/taskstate.js` is deliberately thin — an overlay of what *changed*, not
+a database. Per task id it records the fields a person can actually change, and
+separately the tasks created during the visit. Each screen still ships with its
+own starting data and still owns its own rendering; it just applies whatever
+the other one recorded before it draws, and records its own changes as it goes.
+
+What crosses, in both directions:
+
+- **Completing a task.** Ticked on the register, or on the tile.
+- **Renaming, flagging, re-dating** — anything a save writes.
+- **Claiming.** Claimed on the register, and the tile's queue row moves into
+  the list, drops its Claim button and gains a checkbox. Claimed on the tile,
+  and the register has it on My Tasks.
+- **Handing a task on.** Tick your checklist item and save, and the task is off
+  the tile and on Other Users' Tasks wherever you look next.
+- **Creating one.** Quick-added on the register, and it is on the tile with its
+  real id, so clicking it opens its real details.
+
+**sessionStorage, not localStorage, and that is the point.** State lives as long
+as the tab does, so a demo keeps everything you did while you move between
+screens, and a fresh tab always starts from the same known set — no clearing
+anything between run-throughs. Every read and write is wrapped, so a browser
+with storage blocked loses the syncing rather than the prototype.
+
+**One consequence worth stating.** A task closed on the register does not
+appear on the Workspace tile at all, because the tile shows what is still open
+— your earlier call, and it now applies to closures made anywhere rather than
+only to ones made on the tile. The count and the greeting drop to match. If
+you would rather see it struck through at the bottom instead, that is the same
+one-line switch it was before.
+
 ---
 
 # Worth raising with the design system

@@ -869,6 +869,7 @@
 <script src="assets/megamenu.js"></script>
 <script src="assets/history-notes.js"></script>
 <script src="assets/datetime.js"></script>
+<script src="assets/taskstate.js"></script>
 <script src="assets/actions.js"></script>
 <script>
 /* Behaviour assets/app.js does not cover. app.js still owns the Checkboxes
@@ -1053,6 +1054,9 @@
     btn.remove();
     card.classList.remove('ws-task--claim');
     card.removeAttribute('data-ws-claim');
+    if (card.getAttribute('data-ws-task-id')) {
+      RMXTaskState.patch(card.getAttribute('data-ws-task-id'), { assigned: ['tlittle'] });
+    }
     list.appendChild(card);
     orderTasks();
     paint();
@@ -1280,6 +1284,9 @@
     if (!row) return;
     var checked = !!(e.detail && e.detail.checked);
     row.setAttribute('data-done', String(checked));
+    if (row.getAttribute('data-ws-task-id')) {
+      RMXTaskState.patch(row.getAttribute('data-ws-task-id'), { completed: checked });
+    }
     // A closed task sinks to the bottom the moment it is closed, not the next
     // time something else re-sorts the list.
     orderTasks();
@@ -1287,10 +1294,87 @@
     if (checked && window.RMX) RMX.toast('Task closed successfully', 'success');
   });
 
-  /* ...and it is only there until you come back. The tile is a list of what
-     is still open, so a task that was already closed when the page loaded
-     does not appear at all -- the register is where closed tasks live, and it
-     keeps every one of them. Emma's call, 2026-09-11. */
+  /* ---- what the register recorded ----
+     Both screens write to assets/taskstate.js, so a task closed, renamed,
+     flagged, claimed or handed on over there arrives here already changed.
+     Emma's call, 2026-09-11: keep the data consistent across screens. */
+  function heldByMe(keys) {
+    return (keys || []).some(function (k) {
+      return k === 'tlittle' || k === 'role-pm' || k === 'role-sa';
+    });
+  }
+  function claimableByMe(keys) {
+    return (keys || []).some(function (k) { return k === 'role-pm' || k === 'role-sa'; });
+  }
+  function applySharedState() {
+    [].slice.call(tile.querySelectorAll('.ws-task[data-ws-task-id]')).forEach(function (row) {
+      var p = RMXTaskState.get(row.getAttribute('data-ws-task-id'));
+      if (!p) return;
+      if (typeof p.completed === 'boolean') {
+        row.setAttribute('data-done', String(p.completed));
+        var box = row.querySelector('.rmx-check');
+        if (box) {
+          box.setAttribute('data-checked', String(p.completed));
+          box.setAttribute('aria-checked', String(p.completed));
+        }
+      }
+      var title = row.querySelector('.ws-task__title');
+      if (p.title && title.firstChild) title.firstChild.nodeValue = p.title;
+      if (typeof p.flag === 'boolean') {
+        var flag = title.querySelector('.ws-task__flag');
+        if (p.flag && !flag) {
+          title.insertAdjacentHTML('beforeend',
+            '<svg class="ws-task__flag" viewBox="0 0 14 16" role="img" aria-label="High priority">' +
+            '<use href="#flag-priority"></use></svg>');
+        } else if (!p.flag && flag) { flag.remove(); }
+      }
+      if (p.dueDate) row.querySelector('.ws-task__due').textContent = p.dueDate + ' ' + (p.dueTime || '');
+      if (!p.assigned) return;
+      /* Handed to someone else on the register -- the tile is My Tasks, so it
+         goes, exactly as it does when the hand-off happens in the overlay. */
+      if (!heldByMe(p.assigned)) { row.remove(); return; }
+      /* Claimed on the register: it is no longer queue work, so the row leaves
+         the queue for the list and loses its Claim button. */
+      if (row.classList.contains('ws-task--claim') && !claimableByMe(p.assigned)) {
+        var btn = row.querySelector('.ws-claim-btn');
+        if (btn) btn.remove();
+        row.classList.remove('ws-task--claim');
+        row.removeAttribute('data-ws-claim');
+        list.appendChild(row);
+      }
+    });
+  }
+  applySharedState();
+
+  /* A task created on the register belongs on the tile too, if it is Tony's.
+     It carries a real id, so clicking it opens its real details. */
+  RMXTaskState.created().forEach(function (t) {
+    if (t.completed) return;
+    var keys = t.assigned || [];
+    if (!keys.some(function (k) { return k === 'tlittle' || k === 'role-pm' || k === 'role-sa'; })) return;
+    if (list.querySelector('[data-ws-task-id="' + t.id + '"]')) return;
+    var row = document.createElement('div');
+    row.className = 'ws-task';
+    row.setAttribute('data-overdue', String(!!t.overdue));
+    row.setAttribute('data-done', 'false');
+    row.setAttribute('data-ws-task-id', t.id);
+    row.innerHTML = CHECK_MARKUP +
+      '<div><div class="ws-task__title"></div></div>' +
+      '<span class="ws-task__due"></span>';
+    row.querySelector('.ws-task__title').textContent = t.title;
+    if (t.flag) {
+      row.querySelector('.ws-task__title').insertAdjacentHTML('beforeend',
+        '<svg class="ws-task__flag" viewBox="0 0 14 16" role="img" aria-label="High priority">' +
+        '<use href="#flag-priority"></use></svg>');
+    }
+    row.querySelector('.ws-task__due').textContent = (t.dueDate || '') + ' ' + (t.dueTime || '');
+    list.appendChild(row);
+  });
+
+  /* ...and a closed task is only on the tile until you come back. The tile is
+     a list of what is still open, so one that was already closed when the page
+     loaded does not appear at all -- the register is where closed tasks live,
+     and it keeps every one of them. Emma's call, 2026-09-11. */
   [].slice.call(list.querySelectorAll('.ws-task[data-done="true"]'))
     .forEach(function (row) { row.remove(); });
 
