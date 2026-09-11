@@ -764,6 +764,47 @@
    to float above the card containing it. */
 .ws-task:hover { box-shadow: var(--ws-shadow-sm); }
 
+/* ---- role queue ----
+   What the tile offers once Tony's own list is clear: unassigned tasks
+   sitting in a role he belongs to, claimable without leaving the workspace.
+   Emma's scene, 2026-09-11. A claim row has no checkbox -- it is not his to
+   tick yet -- so it drops the checkbox column and ends in the Claim button. */
+.ws-claimlist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs);
+}
+.ws-claimlist__label {
+  font: var(--type-label-s-semibold);
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+.ws-task--claim {
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  background: var(--container-tertiary);
+  cursor: default;
+}
+.ws-task--claim:hover { box-shadow: none; }
+/* Same Claim button as the register's, so the action reads identically in
+   both places. */
+.ws-claim-btn {
+  height: 20px;
+  padding: 0 10px;
+  flex: none;
+  border: 1px solid var(--background-primary-button);
+  border-radius: var(--radius-sm);
+  background: var(--background-primary-button);
+  color: var(--text-inverse);
+  font: var(--type-label-s-regular);
+  cursor: pointer;
+}
+/* rmx.css gives the Primary button no hover state and Foundations has no
+   hover token for it, so this one doesn't invent a colour either -- see
+   design-system item 31. */
+
 /* High Priority flag, next to the task name. Same harvested glyph the Tasks
    register uses for the same purpose (14x16, --icon-error), so a task reads
    the same in both places. Emma's call, 2026-09-10. Category Lozenges came

@@ -592,6 +592,36 @@
             </div>
           </div>
 
+          <!-- Role queue. Hidden while Tony still has open tasks of his own;
+               it surfaces once his list is clear, so the tile stops being a
+               to-do list and starts offering him the next thing. Each row is
+               claimable straight from here. Emma's scene, 2026-09-11. -->
+          <div class="ws-claimlist" id="wsClaimList" hidden>
+            <div class="ws-claimlist__label">Unassigned &middot; Property Manager queue</div>
+
+            <div class="ws-task ws-task--claim" data-ws-claim
+                 data-title="Send renewal reminders &mdash; properties ending in 30 days"
+                 data-context="All properties" data-due="09/15/26 05:00 PM">
+              <div>
+                <div class="ws-task__title">Send renewal reminders &mdash; properties ending in 30 days</div>
+                <div class="ws-task__meta"><span class="ws-task__context">All properties</span></div>
+              </div>
+              <span class="ws-task__due">09/15/26 05:00 PM</span>
+              <button type="button" class="ws-claim-btn">Claim</button>
+            </div>
+
+            <div class="ws-task ws-task--claim" data-ws-claim
+                 data-title="Walk vacant units at Flagstone before Friday"
+                 data-context="Flagstone" data-due="09/12/26 05:00 PM">
+              <div>
+                <div class="ws-task__title">Walk vacant units at Flagstone before Friday</div>
+                <div class="ws-task__meta"><span class="ws-task__context">Flagstone</span></div>
+              </div>
+              <span class="ws-task__due">09/12/26 05:00 PM</span>
+              <button type="button" class="ws-claim-btn">Claim</button>
+            </div>
+          </div>
+
           <div class="ws-tasklist">
 
             <div class="ws-task" data-overdue="true" data-done="false" data-ws-task-id="ws-post-notice">
@@ -887,6 +917,8 @@
   var overdueChip = tile.querySelector('[data-ws-overdue-count]');
   var filter = 'all';
 
+  var claimList = document.getElementById('wsClaimList');
+
   function paint() {
     rows.forEach(function (r) {
       r.hidden = filter === 'overdue' && r.getAttribute('data-overdue') !== 'true';
@@ -896,7 +928,27 @@
     openCount.textContent = String(open.length);
     overdueChip.hidden = overdue.length === 0;
     overdueChip.textContent = overdue.length + ' overdue';
+    /* The role queue is the tile's answer to "what now?" -- so it surfaces
+       only once nothing of Tony's own is left open, and never under the
+       Overdue filter, where an unassigned task has no business appearing. */
+    var claimable = claimList.querySelectorAll('[data-ws-claim]').length;
+    claimList.hidden = !(open.length === 0 && filter === 'all' && claimable > 0);
   }
+
+  /* Claiming from the tile: the task becomes one of Tony's in place, without
+     a trip to the register. Emma's scene, 2026-09-11. */
+  claimList.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('.ws-claim-btn') : null;
+    if (!btn) return;
+    var card = btn.closest('[data-ws-claim]');
+    addTaskRow(card.getAttribute('data-title'), {
+      context: card.getAttribute('data-context'),
+      due: card.getAttribute('data-due')
+    });
+    card.remove();
+    paint();
+    if (window.RMX) RMX.toast('Task claimed', 'success');
+  });
 
   /* ---- Mini Add Task bar ----
      The tile header's "+" opens it; typing a name enables both links; Enter
@@ -977,7 +1029,8 @@
   });
   resetDue();
 
-  function addTaskRow(title) {
+  function addTaskRow(title, opts) {
+    opts = opts || {};
     var row = document.createElement('div');
     row.className = 'ws-task';
     row.setAttribute('data-overdue', 'false');
@@ -987,10 +1040,13 @@
       ' role="checkbox" aria-checked="false" tabindex="0">' +
       '<span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true">' +
       '<use href="#check"></use></svg></span></span>' +
-      '<div><div class="ws-task__title"></div></div>' +
+      '<div><div class="ws-task__title"></div>' +
+      (opts.context ? '<div class="ws-task__meta"><span class="ws-task__context"></span></div>' : '') +
+      '</div>' +
       '<span class="ws-task__due"></span>';
-    row.querySelector('.ws-task__due').textContent = (qaddDue.date + ' ' + qaddDue.time).trim();
+    row.querySelector('.ws-task__due').textContent = opts.due || (qaddDue.date + ' ' + qaddDue.time).trim();
     row.querySelector('.ws-task__title').textContent = title;
+    if (opts.context) row.querySelector('.ws-task__context').textContent = opts.context;
     list.insertBefore(row, list.firstElementChild);
     orderTasks();   // a new task is not overdue, so it lands below the overdue ones
     paint();

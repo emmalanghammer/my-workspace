@@ -1038,6 +1038,31 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
 
+## Scene 5 — clear the list, then claim what's left
+
+Emma's scene, 2026-09-11. Tony works his My Tasks tile down to nothing, and
+the tile then offers him what he is eligible to pick up.
+
+**The role queue only surfaces when there is nothing of his own left open.**
+That is the whole idea: while he has work, the tile is a to-do list; once he
+hasn't, it becomes the place that offers him the next thing. It stays hidden
+under the Overdue filter too, where an unassigned task has no business being.
+
+**Claim works from the tile**, with no trip to the register — the task moves
+into My Tasks in place, keeping its due date and its context, and the queue
+hides again because he now has something open. Verified: six open → tick them
+all → open 0 and the queue appears → Claim → open 1, the task in the list at
+09/15/26 05:00 PM against "All properties", one card left in the queue.
+
+A claim row has no checkbox — it is not his to tick yet — so it drops the
+checkbox column and ends in the Claim button, which is the same button the
+register uses so the action reads identically in both places.
+
+**This lives on the tile only.** The register's ten tasks are untouched;
+Claim is already demonstrable there on "Record Park's records". Keeping the
+queue local to My Workspace is what stops the tile and the register
+disagreeing about how many tasks Tony has.
+
 ## My Tasks is ten tasks
 
 Emma's call, 2026-09-11. It had grown to seventeen, which made every scene a
@@ -1807,3 +1832,9 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     role that wants naming, or those four tasks belong to one of the three
     that exist — a one-line answer either way, and not one a prototype should
     invent.
+31. **The Primary button has no hover state.** `rmx.css` gives Secondary one
+    (`--border-disabled`) and Primary none, and Foundations carries no
+    `primary-button-hover` token to build one from. Every primary action in
+    the product is therefore inert under the cursor. Either the token is
+    missing or the state is deliberate, but one blue button that never
+    responds next to a Secondary that does reads as an oversight.
