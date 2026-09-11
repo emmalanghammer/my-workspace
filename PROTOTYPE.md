@@ -2209,6 +2209,29 @@ right, the order was wrong. Anything that depends on a shared asset or shared
 state has to run after the document, and anything that reads state on load has
 to be made to load.
 
+## Blue when selected, and no tab bar over one list
+
+Emma's calls, 2026-09-11.
+
+**The Assigned To dropdown's active tab underlines blue.** It had been orange
+on the strength of a note in this prototype's own CSS citing design.md §7.1 —
+"tabs underline in RMX orange, never blue". The skill's visual DNA says the
+opposite in as many words: the one brand blue carries "primary buttons, links,
+active borders, selected states — and active tabs". Two written rules, one
+contradicting the other, and the prototype had followed the wrong one. Item 34.
+
+**A checklist item's picker has no tab bar.** It offers Users only, because an
+item cannot go to a role — so the panel opened with a single "Users" tab, which
+is a label pretending to be a choice. It opens straight into the search and the
+list now.
+
+**The edit field keeps the browser's focus ring off.** The orange ring around a
+checklist item being edited was the browser's own `:focus-visible` indicator,
+not anything in the stylesheet. Every other input on this screen suppresses it
+and shows a blue border instead; this one does too now. *Not visually verified —
+the automated browser never holds OS focus, so `:focus` does not match there.
+The rule is the same one the rest of the screen's inputs use.*
+
 ---
 
 # Worth raising with the design system
@@ -2430,3 +2453,11 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     This prototype fills it with the colour of the cluster it belongs to —
     blue among users, orange among roles — on Emma's call. Either Inline
     Avatar Group wants an overflow item, or the pattern wants writing down.
+34. **The design docs disagree about active tabs.** This prototype's CSS
+    carried an orange tab underline citing design.md §7.1 — "tabs underline in
+    RMX orange, never blue" — while the rmx-prototype skill's visual DNA lists
+    active tabs among the things the single brand blue carries, alongside
+    primary buttons, links and selected states. Both are written down, they
+    cannot both hold, and a prototype following either one looks wrong to
+    whoever read the other. Emma's call here was blue; the losing document
+    wants correcting either way.

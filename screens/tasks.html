@@ -293,8 +293,14 @@ a:hover { text-decoration:none; }
 .assignee-dropdown[hidden]{display:none;}
 .ad-tabs{display:flex;}
 .ad-tab{flex:1;text-align:center;padding:16px 8px;font:600 14px/1 'Roboto',sans-serif;color:var(--text-primary);border-bottom:1px solid var(--rmx-hairline);cursor:pointer;}
-/* Tabs underline in RMX orange when active, never blue (design.md §7.1) */
-.ad-tab.active{color:var(--rmx-navy);border-bottom:2px solid var(--rmx-orange);}
+/* Blue when active. This carried an orange underline on the strength of
+   design.md §7.1 ("tabs underline in RMX orange, never blue"), which the
+   skill's own visual DNA contradicts -- it lists active tabs among the things
+   the one brand blue carries. Emma's call, 2026-09-11: blue. Item 34. */
+.ad-tab.active{color:var(--rmx-navy);border-bottom:2px solid var(--rmx-blue);}
+/* One list, no tabs: a checklist item can only go to a person, so there is
+   nothing to choose between and a lone "Users" tab is just a label. */
+.assignee-dropdown.one-list .ad-tabs{display:none;}
 .ad-search-row{display:flex;align-items:center;gap:4px;padding:8px;border-bottom:1px solid var(--rmx-hairline);}
 .ad-search-row .input{flex:1;height:36px;}
 .ad-list{flex:1;min-height:0;max-height:288px;overflow-y:auto;}
@@ -485,6 +491,9 @@ a:hover { text-decoration:none; }
    dropdown trigger, both sized to the 36px cell rather than opening a second
    overlay on top of Task Details. Emma's call, 2026-09-11. */
 .cl-edit-input{width:100%;height:28px;padding:0 8px;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);background:#fff;font:400 14px 'Roboto',sans-serif;color:var(--text-secondary);}
+/* The native focus ring is the browser's, not ours, and it is not blue. Every
+   other input on this screen replaces it with a blue border; so does this one. */
+.cl-edit-input:focus{outline:none;border-color:var(--rmx-blue);}
 .cl-assign{display:flex;align-items:center;gap:4px;height:28px;padding:0 8px;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);background:#fff;color:var(--text-secondary);cursor:pointer;}
 .cl-assign .material-symbols-outlined{font-size:18px;color:var(--icon-muted);margin-left:auto;}
 .cl-assign .empty{font-style:italic;color:var(--text-disabled);}
@@ -1771,8 +1780,11 @@ function openAssigneeDropdown(e, target){
   assigneeTarget = target || 'quickadd';
   const panel = document.getElementById('assigneeDropdown');
   panel.hidden = false;
-  // A checklist item cannot go to a role, so the Roles tab is not offered.
-  document.getElementById('adTabRoles').hidden = assigneeTarget === 'checklist';
+  // A checklist item cannot go to a role, so neither the Roles tab nor the
+  // tab bar it sits in is offered -- one list needs no chooser.
+  const oneList = assigneeTarget === 'checklist';
+  document.getElementById('adTabRoles').hidden = oneList;
+  panel.classList.toggle('one-list', oneList);
   setAssigneeTab('users');
   // the quick-add bar anchors on its bubble cluster; the modal field is its own anchor
   positionPanel(panel, e.currentTarget.closest('.user-bubble-wrap') || e.currentTarget);
