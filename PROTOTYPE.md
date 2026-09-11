@@ -1038,6 +1038,40 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
 
+## Scene 3 — creating a task and handing it to a role
+
+Emma's scene, 2026-09-11: Tony creates a task for Owner Klydon's W-9, gives it
+a category and a due date, assigns it to **Accounting** rather than a person,
+links it to the owner, and saves it into the shared queue. Four things had to
+become real for that walkthrough to hold up.
+
+- **Accounting is a role.** Added to `ROLES` and offered in the dropdown's
+  User Roles tab. It is deliberately *not* in `MY_ROLES` — Tony is handing the
+  task away, so Claim must not appear on it afterwards, and it doesn't.
+- **Owner is a link type.** `Tenant / Unit / Property / Owner / Vendor` now,
+  with Sally Klydon among the owner records — the same Sally Klydon the
+  mentions tile links to, so the record reads the same wherever you meet it.
+  Typing "kly" finds her.
+- **Display is a real category picker.** It was static text with a navy
+  swatch. It now offers five categories and sets the task's colour bar in the
+  register, using the four colours `colorBarHTML` already allows rather than a
+  new palette.
+- **The due date and time open the real pickers.** The Task Details overlay
+  adopted `assets/datetime.{css,js}`, which is what that shared file was for —
+  the calendar in the overlay is the same RMX Date Picker as the one on the My
+  Workspace quick-add bar. A new task defaults to today an hour from now, the
+  same as the quick-add bar.
+
+**The Link column and the Links tile are one thing now.** Linking a record in
+the overlay put it in the tile but left the register's Link column empty,
+because they were separate fields — the same split the checklist had. The
+column reads the `links` array where a task has one, shows the first with a
+`+N` for the rest, and falls back to the older free-text `link` otherwise, so
+no existing row moved.
+
+Everything the overlay edits now actually saves: due date, time, category and
+assignees were all being dropped on save before this pass.
+
 ## New Vendor Onboarding — a task that hands itself on
 
 A demo scene of Emma's, 2026-09-11. "New Vendor Onboarding" is an internal

@@ -83,6 +83,7 @@
 <link rel="stylesheet" href="../assets/type.css">
 <link rel="stylesheet" href="../assets/rmx.css">
 <link rel="stylesheet" href="../assets/megamenu.css">
+<link rel="stylesheet" href="../assets/datetime.css">
 <style>
 /* ============================================================
    RMX (Rent Manager Express) starter stylesheet — inlined from
@@ -797,8 +798,14 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
         </div>
         <hr class="details-divider">
         <div class="details-row">
-          <div class="field" style="flex:1;"><label>Due Date *</label><div class="input"><span id="dueDateVal" style="flex:1;">09/17/25</span><span class="material-symbols-outlined">calendar_today</span></div></div>
-          <div class="field" style="flex:1;"><label>Time</label><div class="input"><span id="dueTimeVal" style="flex:1;">11:00 AM</span><span class="material-symbols-outlined">schedule</span></div></div>
+          <div class="field" style="flex:1;"><label>Due Date *</label>
+            <div class="input" style="cursor:pointer;" data-dt-trigger onclick="event.stopPropagation();openDueDate(event)">
+              <span id="dueDateVal" style="flex:1;">09/17/25</span><span class="material-symbols-outlined">calendar_today</span>
+            </div></div>
+          <div class="field" style="flex:1;"><label>Time</label>
+            <div class="input" style="cursor:pointer;" data-dt-trigger onclick="event.stopPropagation();openDueTime(event)">
+              <span id="dueTimeVal" style="flex:1;">11:00 AM</span><span class="material-symbols-outlined">schedule</span>
+            </div></div>
           <div class="field" style="flex:1;"><label>Reminder</label><div class="input" style="cursor:pointer;"><span style="flex:1;">At event start</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div></div>
         </div>
         <div class="recurring-row" id="recurringCollapsed">
@@ -828,7 +835,11 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
             </div>
             <div>
               <label style="font-size:14px;color:var(--text-primary);display:block;margin-bottom:6px;">Display</label>
-              <div class="input" style="cursor:pointer;"><span class="color-swatch"></span><span style="flex:1;">Default</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div>
+              <div class="input" id="displayField" style="cursor:pointer;" onclick="event.stopPropagation();openDisplayMenu(event)">
+                <span class="color-swatch" id="displaySwatch"></span>
+                <span style="flex:1;" id="displayName">Default</span>
+                <span class="material-symbols-outlined">keyboard_arrow_down</span>
+              </div>
             </div>
             <div>
               <label style="font-size:14px;color:var(--text-primary);display:block;margin-bottom:6px;">Attachments</label>
@@ -1164,6 +1175,7 @@ let state = {
   saveNewRequested: false,
   linkAddOpen: false,
   linkAddType: null,
+  modalColorBar: null,
   actionPicking: false,
 };
 
@@ -1195,7 +1207,15 @@ function taskRowHTML(t, dataset){
   const prog = checklistProgress(t);
   const progress = prog ? `<span class="chk-progress">${prog}</span>` : '';
   const action = t.action ? `<a onclick="event.stopPropagation()">${t.action}</a>` : '';
-  const linkPill = t.linkOverflow ? `<span class="link-pill" onclick="event.stopPropagation()">+${t.linkOverflow}<span class="material-symbols-outlined">arrow_drop_down</span></span>` : '';
+  /* The Link column and the Links tile are one thing: a task that carries
+     `links` shows the first of them here with a +N for the rest, so linking a
+     record in the overlay puts it on the row. `link` is the older free-text
+     field and still wins where a task has no `links` array -- same
+     unification the checklist got. */
+  const linkList = (t.links || []).filter(l => l && l.value);
+  const linkText = linkList.length ? linkList[0].value : (t.link || '');
+  const overflow = linkList.length ? linkList.length - 1 : (t.linkOverflow || 0);
+  const linkPill = overflow ? `<span class="link-pill" title="${linkList.slice(1).map(l=>l.value).join(', ')}" onclick="event.stopPropagation()">+${overflow}<span class="material-symbols-outlined">arrow_drop_down</span></span>` : '';
   /* Claim shows on any task held by a role Tony is in -- an orange bubble --
      rather than on tasks flagged claimable by hand. Emma's call, 2026-09-11. */
   const claim = claimableRoles(t).length
@@ -1207,7 +1227,7 @@ function taskRowHTML(t, dataset){
     <td class="col-action">${action}</td>
     <td class="col-due" style="color:${dueColor}">${t.dueDate} ${t.dueTime}</td>
     <td class="col-assigned"><div class="avatars">${t.assigned.map(avatarHTML).join('')}</div></td>
-    <td class="col-link">${t.link}${linkPill}</td>
+    <td class="col-link">${linkText}${linkPill}</td>
     <td class="col-workflow">${t.workflow}</td>
     <td class="col-claim">${claim}</td>
     <td class="col-kebab"><span class="material-symbols-outlined kebab-btn" onclick="event.stopPropagation();openRowKebab(event,'${dataset}','${t.id}')">more_vert</span></td>
@@ -1437,6 +1457,7 @@ const USERS = [
    four tasks, matching no role anyone wrote down. Kept visible rather than
    quietly folded into another role; see PROTOTYPE.md item 30. */
 const ROLES = [
+  {key:'role-accounting', initials:'AC', name:'Accounting'},
   {key:'role-admin',   initials:'AD', name:'Administrator'},
   {key:'role-leasing', initials:'LA', name:'Leasing Agent'},
   {key:'role-pm',      initials:'PM', name:'Property Manager'},
@@ -1677,8 +1698,10 @@ function openTaskModal(dataset, id, prefillTitle){
      the task now -- same values the register's Due Date column prints, and
      the makeBlankTask default for a new one. Found while making the My
      Workspace tile show real due dates, 2026-09-10. */
-  document.getElementById('dueDateVal').textContent = task ? task.dueDate : '09/17/25';
-  document.getElementById('dueTimeVal').textContent = task ? task.dueTime : '11:00 AM';
+  document.getElementById('dueDateVal').textContent = task ? task.dueDate : RMXDateTime.defaults().date;
+  document.getElementById('dueTimeVal').textContent = task ? task.dueTime : RMXDateTime.defaults().time;
+  state.modalColorBar = task ? (task.colorBar || null) : null;
+  renderDisplayField();
 
   document.getElementById('deleteBtn').classList.toggle('hidden', !task);
   document.getElementById('saveBtn').classList.toggle('hidden', !task);
@@ -1841,11 +1864,12 @@ function pickActionItem(label){
    drawn from names already used elsewhere in this prototype's own data
    (myTasks/otherTasks link and vendor fields, My Workspace's task rows) —
    nothing invented for this feature specifically. Emma's call, 2026-09-10. */
-const LINK_TYPES = ['Tenant', 'Unit', 'Property', 'Vendor'];
+const LINK_TYPES = ['Tenant', 'Unit', 'Property', 'Owner', 'Vendor'];
 const LINK_RECORDS = {
   Tenant: ['Daniel Smith', "Patrick O'Malley", 'Marcia Clark', 'Tomas Webber'],
   Unit: ['107B', 'Riverview #204', 'Lot 3'],
   Property: ['Riverview Apartments', 'FMHP', 'HH', 'PARK', 'BUCK'],
+  Owner: ['Sally Klydon', 'Gerald Pruitt', 'Meridian Holdings LLC', 'Ruth Vance'],
   Vendor: ["Anderson Mechanical", "Bob's Appliances", 'Anderson Pest Control'],
 };
 
@@ -2042,6 +2066,55 @@ function saveTemplateChecklist(andNew){
   if(andNew){ /* "Save & New" re-opens the dialog for another template pick */ setTimeout(openTemplateDialog, 50); }
 }
 
+/* ---- Due date and time ----
+   The same pickers the My Workspace quick-add bar uses (assets/datetime.js),
+   which is the point of their living in a shared file: the calendar is the
+   real RMX Date Picker in both places. Editing here writes straight to the
+   task on save. */
+function openDueDate(e){
+  RMXDateTime.openDate(e.currentTarget, {
+    value: document.getElementById('dueDateVal').textContent,
+    onPick: v => { document.getElementById('dueDateVal').textContent = v || '—'; }
+  });
+}
+function openDueTime(e){
+  RMXDateTime.openTime(e.currentTarget, {
+    value: document.getElementById('dueTimeVal').textContent,
+    onPick: v => { document.getElementById('dueTimeVal').textContent = v; }
+  });
+}
+
+/* ---- Display ----
+   The task's category, and the colour of its bar in the register. The four
+   colours are the ones colorBarHTML already allows -- the standard status
+   tokens -- rather than a new palette. */
+const DISPLAY_CATEGORIES = [
+  {key:null,     name:'Default',    swatch:'#13314c'},
+  {key:'red',    name:'Urgent',     swatch:'#eb343c'},
+  {key:'orange', name:'Maintenance',swatch:'#f58220'},
+  {key:'green',  name:'Leasing',    swatch:'#6eb744'},
+  {key:'blue',   name:'Accounting', swatch:'#008dd5'},
+];
+function renderDisplayField(){
+  const cat = DISPLAY_CATEGORIES.find(c => c.key === state.modalColorBar) || DISPLAY_CATEGORIES[0];
+  document.getElementById('displayName').textContent = cat.name;
+  document.getElementById('displaySwatch').style.background = cat.swatch;
+}
+function openDisplayMenu(e){
+  const panel = document.getElementById('linkTypePanel');
+  panel.innerHTML = DISPLAY_CATEGORIES.map((c, i) =>
+    `<div class="fp-plain-item" onclick="pickDisplay(${i})">
+       <span class="color-swatch" style="background:${c.swatch}"></span>${c.name}
+     </div>`).join('');
+  panel.hidden = false;
+  positionPanel(panel, e.currentTarget);
+}
+function pickDisplay(i){
+  state.modalColorBar = DISPLAY_CATEGORIES[i].key;
+  document.getElementById('linkTypePanel').hidden = true;
+  renderDisplayField();
+}
+
 /* ---- Save / Delete ---- */
 function saveTask(mode){
   const title = document.getElementById('taskTitleInput').value.trim();
@@ -2052,6 +2125,9 @@ function saveTask(mode){
     checklist: state.modalChecklist, externalCal: state.modalExternalCal,
     links: state.modalLinks, history: state.modalHistory,
     assigned: [...modalAssignees],
+    dueDate: document.getElementById('dueDateVal').textContent,
+    dueTime: document.getElementById('dueTimeVal').textContent,
+    colorBar: state.modalColorBar,
   };
   if(state.modalIsNew){
     const t = makeBlankTask(title);
@@ -2191,5 +2267,6 @@ if (new URLSearchParams(location.search).get('embed') === '1') {
    switched). The data-rmx-todo attribute stays as a marker of what isn't
    built; it just no longer triggers feedback here. */
 </script>
+<script src="../assets/datetime.js"></script>
 <script src="../assets/megamenu.js"></script>
 </body></html>
