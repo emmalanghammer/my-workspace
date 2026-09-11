@@ -592,6 +592,8 @@ a:hover { text-decoration:none; }
 .fp-divider{height:1px;background:var(--rmx-hairline);margin:6px 0;}
 .fp-plain-item{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:14px;color:var(--text-secondary);cursor:pointer;white-space:nowrap;}
 .fp-plain-item:hover{background:var(--bg-hover);}
+.fp-plain-item.disabled{color:var(--text-disabled);font-style:italic;cursor:default;}
+.fp-plain-item.disabled:hover{background:transparent;}
 /* The Actions Dropdown is as wide as the field that opens it (the frame's is
    1088px under a 1088px input), not a narrow menu -- openActionsMenu sets the
    width. 499px is the frame's own height, so the list scrolls at the same
@@ -2240,7 +2242,10 @@ function renderModalLinks(){
       <span class="material-symbols-outlined link-cancel-x" onclick="closeLinkAdd()">close</span>
     </div>` : '';
 
-  box.innerHTML = rows + addRow + `<a onclick="openLinkAdd()"><span class="material-symbols-outlined icon-16">add</span>Add Link</a>`;
+  // Nothing left to link once every type is used, so the action goes with it.
+  const addLink = (!state.linkAddOpen && availableLinkTypes().length === 0) ? ''
+    : `<a onclick="openLinkAdd()"><span class="material-symbols-outlined icon-16">add</span>Add Link</a>`;
+  box.innerHTML = rows + addRow + addLink;
 
   if (state.linkAddOpen && state.linkAddType) {
     const input = document.getElementById('linkSearchInput');
@@ -2263,9 +2268,19 @@ function closeLinkAdd(){
   document.getElementById('linkResultsPanel').hidden = true;
   renderModalLinks();
 }
+/* One link of each type per task, so a type already on the task is not
+   offered again -- a task linked to Anderson Mechanical does not get a second
+   Vendor. Emma's call, 2026-09-11. */
+function availableLinkTypes(){
+  const used = state.modalLinks.map(l => l.label);
+  return LINK_TYPES.filter(t => used.indexOf(t) === -1);
+}
 function openLinkTypeMenu(e){
   const panel = document.getElementById('linkTypePanel');
-  panel.innerHTML = LINK_TYPES.map(t => `<div class="fp-plain-item" onclick="pickLinkType('${t}')">${t}</div>`).join('');
+  const types = availableLinkTypes();
+  panel.innerHTML = types.length
+    ? types.map(t => `<div class="fp-plain-item" onclick="pickLinkType('${t}')">${t}</div>`).join('')
+    : `<div class="fp-plain-item disabled">Every type is already linked</div>`;
   panel.hidden = false;
   positionPanel(panel, e.currentTarget);
 }

@@ -1978,6 +1978,23 @@ Two judgement calls the frame forced:
   onto two lines in a tile this narrow. The full timestamp is still there in
   the History / Notes overlay's own register, which has the width for it.
 
+## One link of each type per task
+
+Emma's call, 2026-09-11. The Type dropdown offered all five every time, so a
+task already linked to Anderson Mechanical could be given a second Vendor.
+
+A type already on the task is no longer offered — open Add Link on "Sign off on
+Brookside HVAC scope", which carries a Vendor, and the list is Tenant, Unit,
+Property, Owner. Remove that link and Vendor comes back, since the constraint
+is read off the task's current links rather than stored anywhere.
+
+Two consequences worth noting:
+
+- **Add Link disappears when all five are used.** There is nothing left to
+  link, so offering the action would open a dropdown with nothing in it.
+- **If you somehow reach the menu with nothing available**, it says so rather
+  than rendering empty.
+
 ---
 
 # Worth raising with the design system
