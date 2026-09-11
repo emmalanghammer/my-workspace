@@ -2609,6 +2609,11 @@ function saveTask(mode){
     if(idx>-1) Object.assign(list[idx], taskData);
     toast('Task saved');
   }
+  /* Which tab a task belongs to is a fact about who holds it, not about which
+     array it started in. Ticking your checklist item hands the task on, so
+     saving it moves the task out of My Tasks and into Other Users' Tasks --
+     and back again if it comes to you. Emma's call, 2026-09-11. */
+  const handedOver = rehomeTask(state.modalTask || myTasks[0]);
   renderRegister();
   /* Framed by My Workspace? Tell it what was saved, so a task's High Priority
      flag on the tile reflects the saved state rather than the state it had
@@ -2619,6 +2624,8 @@ function saveTask(mode){
       window.parent.postMessage({ source: 'rmx-tasks', type: 'saved',
         id: state.modalTask ? state.modalTask.id : null,
         token: state.modalIsNew ? embedToken : null,
+        // Handed to someone else: the Workspace tile is My Tasks, so it goes.
+        handedOver: handedOver,
         flag: !!taskData.flag, title: taskData.title }, '*');
     } catch (e) {}
   }
@@ -2629,6 +2636,28 @@ function saveTask(mode){
     closeTaskModal();
   }
 }
+/* Mine if I hold it, or one of my roles does. A task that is neither belongs
+   on Other Users' Tasks. Returns true if it moved off My Tasks. */
+function isMine(t){
+  const keys = (t.assigned || []).filter(k => !/^\+/.test(k));
+  return keys.some(k => k === ME_KEY || MY_ROLES.indexOf(k) > -1);
+}
+function rehomeTask(t){
+  if (!t) return false;
+  const mine = isMine(t);
+  const inMy = myTasks.indexOf(t);
+  const inOther = otherTasks.indexOf(t);
+  if (mine && inMy === -1) {
+    if (inOther > -1) otherTasks.splice(inOther, 1);
+    myTasks.unshift(t);
+  } else if (!mine && inMy > -1) {
+    myTasks.splice(inMy, 1);
+    if (inOther === -1) otherTasks.unshift(t);
+    return true;
+  }
+  return false;
+}
+
 function deleteTask(){
   if(!confirm('Delete this task?')) return;
   const list = state.modalDataset==='my' ? myTasks : otherTasks;

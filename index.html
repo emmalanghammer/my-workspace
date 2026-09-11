@@ -979,6 +979,15 @@
       ? document.querySelector('[data-ws-new-token="' + msg.token + '"]')
       : document.querySelector('[data-ws-task-id="' + msg.id + '"]');
     if (!row) return;
+    /* Saved into someone else's hands -- ticking your checklist item hands the
+       task on -- so it leaves the tile, which is My Tasks and nothing else.
+       Emma's call, 2026-09-11. */
+    if (msg.handedOver) {
+      row.remove();
+      orderTasks();
+      paint();
+      return;
+    }
     if (msg.token && msg.title) row.setAttribute('data-ws-new-title', msg.title);
     var title = row.querySelector('.ws-task__title');
     var flag = title.querySelector('.ws-task__flag');

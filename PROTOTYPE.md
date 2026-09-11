@@ -2058,6 +2058,33 @@ directly proved the code correct. Third time this session that a cached asset
 made working code look broken — verify against a fresh fetch before changing
 anything.
 
+## Handing a task on takes it off My Tasks
+
+Emma's call, 2026-09-11, completing the baton pass. Ticking your checklist item
+already moved the Assignee field to the next person — but the task stayed on My
+Tasks and on the Workspace tile, which made the hand-off look like a label
+change rather than the task actually leaving.
+
+**Which tab a task belongs to is now a fact about who holds it.** Saving asks
+one question: is any assignee me, or a role I am in? If yes it belongs on My
+Tasks; if no it belongs on Other Users' Tasks, and the task moves between the
+two datasets accordingly. So ticking Tony's item on New Vendor Onboarding and
+saving takes My Tasks from twelve to eleven and the task appears under Dave
+Hegemann on the other tab.
+
+It works in every direction, not just the demo's:
+
+- **Claim keeps a task**, because claiming makes you an assignee.
+- **Reassigning a task away by hand moves it**, the same as ticking an item
+  does — there is one rule, not a special case for checklists.
+- **An ordinary save moves nothing**, because the answer to the question has
+  not changed.
+
+**The Workspace tile follows.** The overlay's saved message carries a
+`handedOver` flag, and a tile row that gets one removes itself, drops out of
+the open count and out of the greeting. The tile is My Tasks; a task that is no
+longer Tony's has no business on it.
+
 ---
 
 # Worth raising with the design system
