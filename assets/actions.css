@@ -1,5 +1,5 @@
 /* ============================================================
-   RMX Actions panel — the self-contained "Select an Action" list
+   RMX Actions panel, the self-contained "Select an Action" list
    ============================================================
    Used by My Workspace's mini Add Task bar. The Tasks register draws its own
    panel (sized to the field that opens it) and only borrows the list; see

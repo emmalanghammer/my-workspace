@@ -1,4 +1,4 @@
-/* RMX prototype behaviour layer — the same file in every prototype.
+/* RMX prototype behaviour layer, the same file in every prototype.
 
    Screens stay declarative: you write markup with data- attributes, this
    wires the behaviour. Nothing here is app logic, and nothing here invents
@@ -6,7 +6,7 @@
 
    Why it exists: without it, each designer hand-writes a different toggle
    in each screen and the prototypes stop behaving alike. It is also the
-   part a developer can throw away cleanly — the markup is the deliverable,
+   part a developer can throw away cleanly, the markup is the deliverable,
    this is the fake wiring around it.
 
    Never use alert(), confirm() or prompt() in a prototype. Use RMX.toast().
@@ -37,7 +37,7 @@
   }
 
   /* ---------- dropdowns ----------
-     Never a native <select> — that is an audit error. Instead:
+     Never a native <select>, that is an audit error. Instead:
      <div data-rmx-dropdown>
        <button class="rmx-field__box" data-rmx-trigger>Status<svg …></button>
        <div class="rmx-menu" data-rmx-menu hidden>
@@ -135,7 +135,7 @@
   /* ---------- checkboxes, radios, register select-all ----------
      RMX draws its own; a native one is an audit error. A checked box is
      orange (--icon-attention) except the select-all above a register,
-     which is blue — that is the rmx-check--register modifier, not a
+     which is blue, that is the rmx-check--register modifier, not a
      colour you set here.                                                  */
   function choices() {
     document.addEventListener('click', e => {
@@ -188,7 +188,7 @@
     });
   }
 
-  /* Striping is OPT-IN and always was in the design system — a register is
+  /* Striping is OPT-IN and always was in the design system, a register is
      not striped unless the design says so. Earlier this ran on every register
      automatically, which put zebra stripes on screens nobody asked for.
      Opt in per table with <table class="rmx-register" data-rmx-striped>. */
@@ -225,10 +225,10 @@
   }
 
   /* ---------- toasts ----------
-     RMX.toast('Charge added', 'success')  — success | failure | neutral
+     RMX.toast('Charge added', 'success') : success | failure | neutral
 
      One at a time: a new toast REPLACES whatever is showing rather than
-     queueing under it. Emma's call, 2026-09-11 — clearing a list of tasks
+     queueing under it. Emma's call, 2026-09-11: clearing a list of tasks
      fires one per task, and six stacked toasts buried the page. The dismiss
      timer is per-toast and re-armed on each call, so a replaced toast takes
      its own timer with it.                                                  */
@@ -257,7 +257,7 @@
 
   /* ---------- unwired affordances ----------
      Anything marked data-rmx-todo says so instead of doing nothing
-     silently — a stakeholder clicking a dead button assumes it is broken. */
+     silently, a stakeholder clicking a dead button assumes it is broken. */
   function todos() {
     document.addEventListener('click', e => {
       const el = e.target.closest('[data-rmx-todo]');

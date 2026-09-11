@@ -1,5 +1,5 @@
 /* ============================================================
-   RMX Actions — the "Select an Action" list, in one place
+   RMX Actions, the "Select an Action" list, in one place
    ============================================================
    The Tasks register and My Workspace both offer "Add Action", and both were
    carrying their own copy of the list: the register as hard-coded markup in
@@ -16,8 +16,8 @@
      RMXActions.open(anchor, onPick)   a self-contained panel, for a host with none
 
    The self-contained panel is what My Workspace uses. The register keeps its
-   own panel — it is sized to the field that opens it and carries the modal's
-   collapsible groups — and feeds it from RMXActions.markup().
+   own panel, it is sized to the field that opens it and carries the modal's
+   collapsible groups, and feeds it from RMXActions.markup().
    ============================================================ */
 (function () {
   'use strict';
@@ -104,7 +104,7 @@
   }
 
   /* Measure, then flip above the anchor if the natural height will not fit
-     below it — the same clamp the date pickers use, for the same reason. */
+     below it, the same clamp the date pickers use, for the same reason. */
   function position() {
     var GAP = 4, EDGE = 12;
     var r = anchorEl.getBoundingClientRect();

@@ -1,5 +1,5 @@
 /* ============================================================
-   screens/my-workspace-original.html — prototype-local layer
+   screens/my-workspace-original.html, prototype-local layer
    ------------------------------------------------------------
    Every number here was measured off ONE Figma frame:
    RMX Pages (fileKey 5XEzI94nmZsWE7rQQ7OIHP) → page "General
@@ -13,7 +13,7 @@
 
    Colour, spacing, radius and type come from tokens.css and
    type.css. The three exceptions are marked UNBOUND and are
-   logged in PROTOTYPE.md — they are values the Figma frame
+   logged in PROTOTYPE.md, they are values the Figma frame
    itself carries with no variable behind them.
    ============================================================ */
 
@@ -65,7 +65,7 @@
    Tile Row (4969:70320): HORIZONTAL, gap 16, 1792 wide, tiles
    580 tall at 558 / 558 / 314 / 314. The row is centre-aligned
    in the frame, so on a wider window the tiles keep their
-   widths rather than stretching — hence the max-widths.       */
+   widths rather than stretching, hence the max-widths.       */
 .ows-row {
   display: flex;
   flex-wrap: wrap;
@@ -94,12 +94,12 @@
 
 /* Overline (I…;4075:109743): a 4px frame carrying a 4px top
    stroke. Blue on Favorites, green on Reports, notice on
-   Announcements, attention on My Training — four real border
+   Announcements, attention on My Training: four real border
    tokens, one per tile, exactly as the frame has them.
 
    Border/border-success (#a8d48f) and Border/border-notice
-   (#f79b4d) are real Foundations variables — both read straight
-   off the Overline's bound stroke — but tokens.css does not
+   (#f79b4d) are real Foundations variables, both read straight
+   off the Overline's bound stroke, but tokens.css does not
    carry either yet. They are written as var() with the measured
    value as the fallback rather than added to tokens.css, so a
    `check.mjs --fix` refresh of the foundation cannot silently
@@ -117,7 +117,7 @@
 /* _Tile Headers, Header Style=Workspace (I…;7331:5299):
    44px, HORIZONTAL, space-between, padding 8/16, title
    Web/Heading/M/Regular in text-primary, one 20px trailing
-   Material Icon in Color=Brand. No bottom rule — the Content
+   Material Icon in Color=Brand. No bottom rule, the Content
    header's 2px border-secondary belongs to a different variant
    and rmx.css's .rmx-tile__header encodes that one. */
 .rmx-tile[data-ows-tile] > .rmx-tile__header {
@@ -155,7 +155,7 @@
 }
 
 /* content slot (I…;10590:12725): VERTICAL, gap 16, padding 16.
-   In the frame the content is taller than the slot and clips —
+   In the frame the content is taller than the slot and clips,
    that is this page scrolling, so the slot scrolls here.
 
    My Favorites is the one tile whose content sits 24 from the
@@ -234,13 +234,13 @@
   padding-block: var(--spacing-xs);
 }
 
-/* Title: Web/Paragraph/S/SemiBold in text-primary — grey, not
+/* Title: Web/Paragraph/S/SemiBold in text-primary, grey, not
    navy. That is what the frame measures. */
 .ows-card__title { color: var(--text-primary); }
 
 /* Every menu entry is Button Type=Action text, 16px tall, its
    label Web/Label/M/Regular in text-link. No underline, in
-   either state — Emma's rule, 2026-09-10. */
+   either state, Emma's rule, 2026-09-10. */
 .ows-page .rmx-text--link,
 .ows-hidden .rmx-text--link {
   display: inline-flex;
@@ -257,7 +257,7 @@
 }
 
 /* rmx.css underlines .rmx-text--link on hover. Blue action text carries no
-   underline in either state — Emma's rule, 2026-09-10. */
+   underline in either state, Emma's rule, 2026-09-10. */
 .ows-page .rmx-text--link:hover,
 .ows-hidden .rmx-text--link:hover { text-decoration: none; }
 
@@ -270,7 +270,7 @@
   gap: var(--spacing-md);
 }
 
-/* Announcement Dashboard Card — the same Card component, its
+/* Announcement Dashboard Card, the same Card component, its
    content slot at gap 8, padding 8/12. */
 .ows-ann {
   display: flex;
@@ -303,19 +303,19 @@
 .ows-ann__date  { color: var(--text-disabled); }
 
 /* Lozenge State=Success, Size=24, Type=Status, Background?=True
-   — but with its fill overridden in the frame to #195ca4, which
+  , but with its fill overridden in the frame to #195ca4, which
    no Foundations variable carries. UNBOUND: kept because the
    badge reads dark blue on the shipped page and State=Success
    would render it green. Logged in PROTOTYPE.md.
 
    The badge measures 47 x 20 in the frame with 4/8 padding
-   around a 16px label — 20 is the height that wins, so it is
+   around a 16px label, 20 is the height that wins, so it is
    set here and the vertical padding left to the flex centring. */
 .rmx-lozenge[data-ows-new] {
   flex: none;
   height: 20px;
   padding-block: 0;
-  background: #195ca4;                    /* UNBOUND — frame value */
+  background: #195ca4;                    /* UNBOUND, frame value */
   color: var(--text-inverse);
   line-height: 1;
 }
@@ -352,7 +352,7 @@
    carries a second white surface with effect style
    dropshadow-lg, VERTICAL, gap 16, padding 24/12/32/12,
    centre-aligned. The frame gives that inner surface a 5px
-   radius, which no token backs — radius-sm here, logged.      */
+   radius, which no token backs: radius-sm here, logged.      */
 .ows-training {
   display: flex;
   flex-direction: column;
@@ -397,7 +397,7 @@
 /* Input Field Style=Express measures container-primary, not the
    component-input-default fill rmx.css gives every input. The
    override is scoped to this card. Its placeholder is a Text
-   Placeholder Style=Regular in the frame — upright, not the
+   Placeholder Style=Regular in the frame, upright, not the
    italic RMX placeholder. */
 .ows-training .rmx-field { width: 100%; }
 
@@ -414,14 +414,14 @@
 .ows-training .rmx-field__box > svg { color: var(--icon-tertiary); }
 
 /* Button Type=Primary with its fill overridden to
-   Icon/icon-attention in the frame — a real token, so bound. */
+   Icon/icon-attention in the frame, a real token, so bound. */
 .rmx-btn[data-ows-cta] { background: var(--icon-attention); }
 
 /* ---- the two hidden-tile links ----------------------------
    Hidden Tiles (4969:70392): HORIZONTAL, gap 16, pinned to the
    bottom right. Each is Button Type=Action text with a leading
    20px Material Icon in Color=Brand and a Web/Label/M/Regular
-   label in text-secondary — navy label, blue glyph.           */
+   label in text-secondary, navy label, blue glyph.           */
 .ows-hidden {
   display: flex;
   justify-content: flex-end;
@@ -440,7 +440,7 @@
    and rmx.css carries that width literally, so any window
    narrower than that scrolls sideways. Letting the two bars
    take the window width is the components' own overflow:clip
-   behaviour rather than a new design — the Command Launch field
+   behaviour rather than a new design, the Command Launch field
    gives up width first, then Company Code. There is no compact
    Header variant in the library; see "Worth raising". */
 .rmx-appbar,
@@ -456,7 +456,7 @@
 /* The Context Bar's trailing item here is a Button Type=Action
    text, whose label the frame sets in Web/Label/M/Regular on
    Text/text-OnDark. rmx.css puts no type on that button, so it
-   otherwise renders at the browser's 13.33px button default —
+   otherwise renders at the browser's 13.33px button default,
    the one off-ramp type size on this screen. Worth raising. */
 .rmx-contextbar__trailing button {
   display: inline-flex;
@@ -473,7 +473,7 @@
 /* Below about 760 the three columns cannot all hold their
    contents and the Company Code block starts overlapping the
    Command Launch field, so the bar drops the two things it can
-   lose — Company Code, then the icon cluster — and lets the
+   lose, Company Code, then the icon cluster: and lets the
    logo scale inside its column. THIS IS NOT A DESIGN: it is the
    smallest set of changes that stops the component visibly
    breaking, and it is the same stopgap screens/my-workspace.html
@@ -507,7 +507,7 @@
 
 /* ---------- prototype navigation strip ----------
    Not RMX, and not part of the harvested frame anatomy above. This screen is
-   a reference baseline — RMX Pages' production frame, not the proposal — so
+   a reference baseline, RMX Pages' production frame, not the proposal: so
    it lives unlinked from the main flow and only needs a way back to
    index.html, which is where the proposal lives. Kept in this file's own
    namespace since everything else on this screen is ows-*. */

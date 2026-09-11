@@ -8,7 +8,7 @@
 
    --art-workspace-ground
      RMX_Background (Theme=Light, Device=Web) from RMX
-     Iconography, fileKey doVDYRtepBULKGZntmmS5B, node 6:4644 —
+     Iconography, fileKey doVDYRtepBULKGZntmmS5B, node 6:4644,
      the component itself rather than the instance placed in the
      page frame. 1920x841, SVG.
 
@@ -17,9 +17,9 @@
      not matter: as a page background scaled past its natural
      width the raster went soft, which is exactly what Emma
      asked to fix. Composed here from the component's own five
-     layers — the wash, the dot field, the hatching and the two
+     layers, the wash, the dot field, the hatching and the two
      wave groups, at their own offsets and the component's 50%
-     opacity — because the flat export nests them in masks that
+     opacity, because the flat export nests them in masks that
      a background-image cannot use. Every path is the library's;
      nothing is redrawn.
 

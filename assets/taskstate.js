@@ -1,5 +1,5 @@
 /* ============================================================
-   RMX Task State — what the two screens agree happened
+   RMX Task State, what the two screens agree happened
    ============================================================
    My Workspace and the Tasks register are separate pages, so until now each
    started from its own copy of the data and nothing you did on one survived
@@ -7,7 +7,7 @@
    the task was still sitting there open. Emma's call, 2026-09-11.
 
    This is deliberately a thin overlay, not a database. It records only what
-   *changed* — per task id, the fields a user can actually change — plus any
+   *changed*: per task id, the fields a user can actually change, plus any
    task created during the visit. Each screen still owns its own rendering and
    still ships with its own starting data; it just applies whatever the other
    one recorded before it draws.

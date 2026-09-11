@@ -1,12 +1,12 @@
 /* ============================================================
-   History / Notes — an overlay, not a page
+   History / Notes, an overlay, not a page
    ------------------------------------------------------------
    Built from two frames in RMX-Pages and nothing else:
      * History Notes Overlay   4628:44305
      * Note Details Dialog     3779:60444
 
    It opens over whatever screen you were on, which is what it
-   is: Emma's call, 2026-09-10 — "the history notes is an
+   is: Emma's call, 2026-09-10: "the history notes is an
    overlay on the workspace not a page." Paired with
    assets/history-notes.js, which carries the markup, the
    records and the behaviour, so a screen gets the whole thing
@@ -47,7 +47,7 @@
 .hn-scrim .hn-ico,
 .hn-toast .hn-ico { width:20px;height:20px; vertical-align: middle; user-select: none; }
 /* ============================================================
-   Local tokens — the same block the Tasks screen carries, so the
+   Local tokens, the same block the Tasks screen carries, so the
    two sibling screens cannot drift. Values are Foundations'.
    ============================================================ */
 :root {
@@ -75,7 +75,7 @@
 /* ---- page ---- */
 
 /* ============================================================
-   History Notes Overlay — 4628:44305
+   History Notes Overlay, 4628:44305
    Container is background-ui-primary with a hairline and a 4px
    radius; the header, the Scoreboard, the filter rows, the
    register and the count all sit inside it.
@@ -83,7 +83,7 @@
 .hn { background:var(--bg-page); border:1px solid var(--rmx-hairline); border-radius:var(--r-sm); display:flex; flex-direction:column; max-width:1561px; margin:0 auto; overflow:hidden; }
 .hn__header { flex:none; }
 .hn__header { display:flex; align-items:center; justify-content:space-between; gap:8px; height:48px; padding:8px 16px; background:var(--bg-surface); border-bottom:1px solid var(--rmx-hairline); }
-/* 14px SemiBold in text-primary — not the 20px navy the Note Details dialog
+/* 14px SemiBold in text-primary, not the 20px navy the Note Details dialog
    uses. Two different Overlay Header variants; both are as authored. */
 .hn__title { font-size:14px; font-weight:600; color:var(--text-primary); white-space:nowrap; }
 .hn__header-icons { display:flex; align-items:center; gap:8px; flex:none; }
@@ -118,7 +118,7 @@
 .hn-input input::placeholder { font-style:italic; color:var(--text-disabled); }
 .hn-search { width:210px; }
 /* Date range: two inputs, each with its own 28px calendar cell, joined into
-   one 36px control — the Icon Field anatomy, same as the Tasks screen's
+   one 36px control, the Icon Field anatomy, same as the Tasks screen's
    date/time field. */
 .hn-daterange { display:flex; align-items:stretch; height:36px; border:1px solid var(--rmx-hairline); border-radius:var(--r-sm); overflow:hidden; background:var(--bg-surface); }
 .hn-daterange input { width:90px; min-width:0; border:0; background:transparent; outline:none; padding:0 8px; font:400 14px 'Roboto',sans-serif; color:var(--rmx-navy); }
@@ -131,7 +131,7 @@
 .hn-select--users { width:170px; }
 .hn-select--cat { width:170px; }
 .hn-select--type { width:170px; }
-/* A dropdown is never a native <select> — an input-shaped trigger plus a
+/* A dropdown is never a native <select>, an input-shaped trigger plus a
    floating white panel. */
 /* The floating menus are appended to <body>, so they are siblings of the
    overlay, not children -- they need to out-rank both it (520) and the Note
@@ -145,7 +145,7 @@
 .hn-chkbox .hn-ico { width:16px;height:16px; color:#fff; display:none; }
 .hn-chkbox.checked { background:var(--icon-attention,#f58220); border-color:var(--icon-attention,#f58220); }
 .hn-chkbox.checked .hn-ico { display:block; }
-/* Checkbox State=Blue — the two filter checkboxes, read off the frame's own
+/* Checkbox State=Blue, the two filter checkboxes, read off the frame's own
    instances (I4628:44305;...;4628:44246 and ...44247): a 2px #008dd5 box on
    white at Radius/xs, with the label in Text/text-link instead of the grey a
    Default checkbox uses. Checked follows the same variant, so the tick lands
@@ -199,14 +199,14 @@
 .hn-at--other { color:var(--rmx-blue); }
 
 /* ============================================================
-   Note Details Dialog — 3779:60444
+   Note Details Dialog, 3779:60444
    ============================================================ */
 /* Above .hn-overlay (520) -- the Note dialog opens on top of the history it
    came from, not behind it. */
 .hn-scrim { position:fixed; inset:0; z-index:540; background:rgba(19,49,76,.45); display:flex; align-items:center; justify-content:center; padding:24px; overflow:auto; }
 .hn-dialog { width:493px; max-width:96vw; max-height:92vh; display:flex; flex-direction:column; background:var(--bg-surface); border:1px solid var(--rmx-hairline); border-radius:var(--r-sm); box-shadow:var(--hn-shadow-lg); overflow:hidden; }
 .hn-dialog__header { display:flex; align-items:center; justify-content:space-between; gap:8px; height:48px; flex:none; padding:8px 16px; background:var(--bg-surface); border-bottom:1px solid var(--rmx-hairline); }
-/* 20px/28px navy Regular — Web/Heading/M/Regular */
+/* 20px/28px navy Regular, Web/Heading/M/Regular */
 .hn-dialog__title { font-size:20px; line-height:28px; color:var(--text-secondary); white-space:nowrap; }
 .hn-dialog__header .hn-ico { width:24px;height:24px; color:var(--rmx-blue); cursor:pointer; }
 .hn-dialog__body { flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:16px; padding:16px; }
@@ -270,7 +270,7 @@
   .hn-score__lead { gap:16px; }
 }
 
-/* Pill — RMX's own: 20px tall, Radius/lg, white on a Border/secondary hairline.
+/* Pill, RMX's own: 20px tall, Radius/lg, white on a Border/secondary hairline.
    Used in the Scoreboard when one item stands for more than one record. */
 .hn-pill { display:inline-flex; align-items:center; height:20px; padding:0 8px; margin-left:4px;
   border:1px solid var(--rmx-hairline); border-radius:999px;

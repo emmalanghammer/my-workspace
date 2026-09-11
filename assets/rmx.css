@@ -1,5 +1,5 @@
 /* ============================================================
-   RMX recipes — consumes assets/tokens.css. NO literal colours here.
+   RMX recipes, consumes assets/tokens.css. NO literal colours here.
    Every class is namespaced rmx- so scripts/audit.mjs can find them
    and so prototypes never collide with page styles.
 
@@ -7,7 +7,7 @@
    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 
    Icons: RMX uses a Flexible Icon component, not raw Material glyphs.
-   In HTML, use inline <svg> — see references/controls.md. Do NOT load
+   In HTML, use inline <svg>: see references/controls.md. Do NOT load
    an icon font by ligature; it degrades to visible words offline.
    ============================================================ */
 
@@ -27,7 +27,7 @@ body.rmx {
 .rmx-text--link      { color: var(--text-link); cursor: pointer; }
 .rmx-text--link:hover{ text-decoration: underline; }
 .rmx-text--label     { color: var(--text-primary); }
-/* Text Style=Italic Disabled — the ONLY use of italic gray */
+/* Text Style=Italic Disabled, the ONLY use of italic gray */
 .rmx-placeholder     { font-style: italic; color: var(--text-disabled); }
 .rmx-h1 { font: 400 24px/32px Roboto, sans-serif; color: var(--text-secondary); margin: 0; }
 .rmx-h2 { font: 400 20px/28px Roboto, sans-serif; color: var(--text-secondary); margin: 0; }
@@ -50,7 +50,7 @@ body.rmx {
 .rmx-btn--compact   { height: 24px; padding: 0 var(--spacing-xs); }
 .rmx-btn:disabled   { background: var(--background-brand-primary-disabled); cursor: default; }
 
-/* Split Button — two segments, 1px inverse divider, trailing caret segment.
+/* Split Button, two segments, 1px inverse divider, trailing caret segment.
    v1 declared this component and never implemented it. */
 .rmx-split { display: inline-flex; height: 36px; border-radius: var(--radius-sm); overflow: hidden; }
 .rmx-split > .rmx-split__main {
@@ -86,13 +86,13 @@ body.rmx {
   border: 2px solid var(--icon-disabled); background: var(--container-primary);
   display: inline-flex; align-items: center; justify-content: center;
 }
-/* Checked is ORANGE — icon-attention #F58220. v1's stylesheet used the
+/* Checked is ORANGE, icon-attention #F58220. v1's stylesheet used the
    marketing orange #F79B4D, which is a different token. */
 .rmx-check[data-checked="true"] .rmx-check__box {
   background: var(--icon-attention); border-color: var(--border-attention);
 }
 .rmx-check[data-checked="true"] .rmx-check__box > svg { color: var(--container-primary); }
-/* State=Blue / State=Register — the select-all above a register */
+/* State=Blue / State=Register, the select-all above a register */
 .rmx-check--blue[data-checked="true"] .rmx-check__box,
 .rmx-check--register[data-checked="true"] .rmx-check__box {
   background: var(--border-secondary); border-color: var(--border-secondary);
@@ -106,7 +106,7 @@ body.rmx {
   content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--border-secondary);
 }
 
-/* ---------- Tabs — ONE definition. Active underline is BLUE. ---------- */
+/* ---------- Tabs, ONE definition. Active underline is BLUE. ---------- */
 .rmx-tab {
   padding: var(--spacing-md) var(--spacing-xs);
   font: 600 14px/1 Roboto, sans-serif; color: var(--text-primary);
@@ -142,14 +142,14 @@ body.rmx {
 .rmx-pill {
   display: inline-flex; align-items: center; gap: var(--spacing-xxs);
   height: 20px; padding: 0 var(--spacing-xs);
-  border-radius: var(--radius-lg);                /* Radius/lg — legitimately round */
+  border-radius: var(--radius-lg);                /* Radius/lg, legitimately round */
   background: var(--container-primary); border: 1px solid var(--border-secondary);
   font-size: 14px; color: var(--text-secondary);
 }
 
 /* ---------- Register: Header + Cell + Cell Content ---------- */
 .rmx-register { width: 100%; border-collapse: collapse; background: var(--container-primary); }
-/* Header Style=Register — full-page, gray */
+/* Header Style=Register, full-page, gray */
 .rmx-register th {
   height: 28px; padding: var(--spacing-xxs) var(--spacing-xs);
   background: var(--container-tertiary-dark); color: var(--text-inverse);
@@ -157,7 +157,7 @@ body.rmx {
   border-right: .5px solid var(--container-primary); white-space: nowrap;
 }
 .rmx-register th:last-child { border-right: 0; }
-/* Header Style=Table — embedded in a Tile, white */
+/* Header Style=Table, embedded in a Tile, white */
 .rmx-register--table th {
   height: 32px; background: var(--container-primary); color: var(--text-secondary);
   border-top: 1px solid var(--border-primary); border-bottom: 1px solid var(--border-primary);
@@ -213,12 +213,12 @@ body.rmx {
 
    The structure is the part that kept going wrong: it is THREE EQUAL COLUMNS
    (flex:1 0 0 each), not a row with margin-left:auto. The search bar lands
-   centred because its column is centred — reproduce it any other way and the
+   centred because its column is centred, reproduce it any other way and the
    bar is subtly wrong on every screen.
 
    The icon cluster belongs INSIDE the Command Launch column, left of the
    search field. It is a segmented control on --component-command-launch with
-   1px gaps, rounded only on the outer ends — not three outlined buttons. */
+   1px gaps, rounded only on the outer ends: not three outlined buttons. */
 .rmx-appbar {
   display: flex; align-items: center; overflow: clip;
   height: 48px; width: var(--display-display);
@@ -232,7 +232,7 @@ body.rmx {
 .rmx-appbar__launch  { gap: var(--spacing-xs); justify-content: center; }
 .rmx-appbar__manage  { gap: var(--spacing-2xl); justify-content: flex-end; padding-block: 1px; }
 
-/* The real Rent Manager logo, node 9671:2926 — 175x32, currentColor so it
+/* The real Rent Manager logo, node 9671:2926: 175x32, currentColor so it
    takes --text-ondark. Never set the brand as a text span. */
 .rmx-appbar__logo { width: 175px; height: 32px; flex: none; fill: currentColor; }
 
@@ -252,7 +252,7 @@ body.rmx {
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
-/* Command Launch search — 454px, and its placeholder is Web/Label/S/Italic
+/* Command Launch search, 454px, and its placeholder is Web/Label/S/Italic
    (12px italic, text-ondark), not the 14px regular of a normal Input Field. */
 .rmx-appbar__search {
   display: flex; align-items: center; gap: var(--spacing-xs);
@@ -310,7 +310,7 @@ body.rmx {
 .rmx-filterrow__actions { margin-left: auto; display: flex; gap: var(--spacing-xs); }
 
 /* ---------- Feedback: three DIFFERENT components ---------- */
-/* Callout — always outlined, 40px. Type = Default | Help | Error | Warning */
+/* Callout, always outlined, 40px. Type = Default | Help | Error | Warning */
 .rmx-callout {
   display: flex; align-items: center; gap: var(--spacing-xs);
   min-height: 40px; padding: var(--spacing-xs); border-radius: var(--radius-sm);
@@ -319,13 +319,13 @@ body.rmx {
 }
 .rmx-callout--warning { border-color: var(--border-attention); }
 .rmx-callout--error   { border-color: var(--text-error); }
-/* Bulk Action — the FILLED banner above a register. Blue, not navy. */
+/* Bulk Action, the FILLED banner above a register. Blue, not navy. */
 .rmx-bulkaction {
   display: flex; align-items: center; gap: var(--spacing-xs);
   height: 48px; padding: 0 var(--spacing-md); border-radius: var(--radius-sm);
   background: var(--component-toast-brand); color: var(--text-inverse);
 }
-/* Toast — State = Success | Action | Failure. Action (blue) is the default. */
+/* Toast, State = Success | Action | Failure. Action (blue) is the default. */
 .rmx-toast {
   display: flex; align-items: center; gap: var(--spacing-xs);
   padding: var(--spacing-md); border-radius: var(--radius-sm);
@@ -335,7 +335,7 @@ body.rmx {
 }
 .rmx-toast--success { background: var(--component-toast-success); }
 .rmx-toast--failure { background: var(--text-error); }
-/* Reminder — the green surface belongs here, not to Toast. */
+/* Reminder, the green surface belongs here, not to Toast. */
 .rmx-reminder {
   display: flex; gap: var(--spacing-md); width: 376px; padding: var(--spacing-md);
   border-radius: var(--radius-sm); background: var(--component-toast-success); color: var(--text-inverse);
@@ -359,7 +359,7 @@ body.rmx {
 }
 .rmx-boardcard__bar { width: 8px; flex: none; border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
 
-/* ---------- Orion — the gradient is a BORDER, not a fill ---------- */
+/* ---------- Orion, the gradient is a BORDER, not a fill ---------- */
 .rmx-orion-surface {
   background: var(--container-primary);
   border-radius: var(--orion-radius-overlay);
@@ -387,7 +387,7 @@ body.rmx {
 
 /* Icons: sized boxes for inline SVG. */
 /* The harvested icons are FILL-based (the library exports filled paths, not
-   strokes). Without fill:currentColor they render solid black — invisible on
+   strokes). Without fill:currentColor they render solid black, invisible on
    the navy app bar, muddy everywhere else. */
 .rmx-icon { width: 20px; height: 20px; flex: none; display: inline-block; fill: currentColor; }
 .rmx-icon--16 { width: 16px; height: 16px; }

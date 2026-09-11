@@ -1,5 +1,5 @@
 /* ============================================================
-   RMX Foundations tokens — GENERATED SHAPE, PARTIALLY VERIFIED
+   RMX Foundations tokens, GENERATED SHAPE, PARTIALLY VERIFIED
    ------------------------------------------------------------
    Naming rule (reproducible by scripts/sync.md):
      Figma variable path -> lowercase -> "/" becomes "-"
@@ -12,7 +12,7 @@
    Provenance:
      [M] measured off the live component library, 27 Aug 2026
      [N] name confirmed in RMX Foundations, VALUE NOT YET VERIFIED
-         (carried from the v1 stylesheet — replace from the plugin export)
+         (carried from the v1 stylesheet, replace from the plugin export)
 
    Values marked [N] are the reason scripts/sync.md exists. Do not treat
    them as authoritative.
@@ -25,9 +25,9 @@
   --spacing-xs:   8px;    /* [M] */
   --spacing-sm:  12px;    /* [M] */
   --spacing-md:  16px;    /* [M] */
-  --spacing-lg:  20px;    /* [M] — confirmed on Header 18:2314 (Icon/User gap) */
+  --spacing-lg:  20px;    /* [M], confirmed on Header 18:2314 (Icon/User gap) */
   --spacing-xl:  24px;    /* [N] */
-  --spacing-2xl: 32px;    /* [M] — confirmed on Header 18:2314 (Manage gap) */
+  --spacing-2xl: 32px;    /* [M], confirmed on Header 18:2314 (Manage gap) */
   --spacing-3xl: 40px;    /* [N] */
   /* 4xl–9xl exist in Foundations; add them from the export. */
 
@@ -39,11 +39,11 @@
   /* ---- Text ---- */
   --text-primary:   #666666;  /* [M] default body/label gray */
   --text-secondary: #13314c;  /* [N] headings, entered values */
-  --text-link:      #008dd5;  /* [N] clickable items ONLY — not labels */
+  --text-link:      #008dd5;  /* [N] clickable items ONLY, not labels */
   --text-label:     #008dd5;  /* [N] static labels above inputs; white in dark mode */
   --text-disabled:  #b3b3b3;  /* [N] also placeholder, which is additionally italic */
-  --text-inverse:   #ffffff;  /* [M] — confirmed on Header 18:2314 (avatar initials) */
-  --text-ondark:    #ffffff;  /* [M] — confirmed on Header 18:2314 */
+  --text-inverse:   #ffffff;  /* [M], confirmed on Header 18:2314 (avatar initials) */
+  --text-ondark:    #ffffff;  /* [M], confirmed on Header 18:2314 */
   --text-onlight:   #13314c;  /* [N] */
   --text-error:     #eb343c;  /* [N] */
   --text-success:   #6eb744;  /* [N] */
@@ -61,7 +61,7 @@
   /* ---- Border ---- */
   --border-primary:   #cedbe7;  /* [M] the default hairline */
   --border-secondary: #008dd5;  /* [M] active / selected / focus, tile header underline, ACTIVE TAB */
-  --border-disabled:  #ebf1f5;  /* [M] register row hairlines — production ships #CCCCCC, see notes */
+  --border-disabled:  #ebf1f5;  /* [M] register row hairlines, production ships #CCCCCC, see notes */
   --border-attention: #f58220;  /* [M] checked checkbox stroke */
 
   /* ---- Background ---- */
@@ -102,7 +102,7 @@
   --display-display:      1920px;   /* [M] full-bleed bar width */
   --cell-height:            36px;   /* [M] authored as "Cell/Cell Heigth" (sic) */
 
-  /* ---- Orion (not Foundations variables — measured off components) ---- */
+  /* ---- Orion (not Foundations variables, measured off components) ---- */
   --orion-border-gradient: linear-gradient(90deg, #008dd5, #6eb744); /* [M] a BORDER, not a fill */
   --orion-glow:   0 0 12.6px rgba(0,141,213,.20);  /* [M] Action Bar */
   --orion-glow-lg:0 0 12.6px rgba(0,141,213,.25);  /* [M] Overlay */

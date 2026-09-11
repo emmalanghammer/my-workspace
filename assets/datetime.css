@@ -2,7 +2,7 @@
    Date & Time pickers
    ------------------------------------------------------------
    The calendar is the real RMX `Date Picker` component,
-   Style=Calendar (RMX Components 157:2396) — 288px wide, 8px
+   Style=Calendar (RMX Components 157:2396), 288px wide, 8px
    gutters over 16px, a 32px day cell with 8px padding, alternate
    rows on --component/input-default, the selected day a 32x36
    --container/secondary block at --radius/xs, and a Today /
@@ -10,9 +10,9 @@
 
    The time list is NOT a component: RMX has no Time Picker (the
    Date & Time page carries Date Pickers and their sub-parts and
-   nothing else — see PROTOTYPE.md item 29). It is composed from
-   the documented dropdown pattern instead — an input-shaped
-   trigger plus a floating white panel — rather than invented as
+   nothing else, see PROTOTYPE.md item 29). It is composed from
+   the documented dropdown pattern instead, an input-shaped
+   trigger plus a floating white panel, rather than invented as
    a new control.
 
    Paired with assets/datetime.js. Everything is dt-prefixed
@@ -58,7 +58,7 @@
 .dt-nav svg { width: 24px; height: 24px; fill: currentColor; }
 .dt-cal__grid { display: flex; flex-direction: column; gap: var(--spacing-xxs, 4px); }
 .dt-cal__row { display: flex; gap: var(--spacing-xs, 8px); }
-/* Alternate day rows carry the input-default ground — the component's own
+/* Alternate day rows carry the input-default ground, the component's own
    striping, which is why this one register-ish grid is striped when RMX
    registers never are. */
 .dt-cal__row--alt { background: var(--component-input-default, #f5f8fa); }

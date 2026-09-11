@@ -1,10 +1,10 @@
 /* ============================================================
-   Date & Time pickers — shared
+   Date & Time pickers, shared
    ------------------------------------------------------------
    The calendar is the real RMX Date Picker (Style=Calendar,
    RMX Components 157:2396), transcribed rather than approximated.
    The time list is composed from the documented dropdown
-   pattern, because RMX has no Time Picker component — see
+   pattern, because RMX has no Time Picker component, see
    PROTOTYPE.md item 29.
 
    A screen picks both up with two lines:

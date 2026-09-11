@@ -1,5 +1,5 @@
 /* ============================================================
-   History / Notes — an overlay, not a page
+   History / Notes, an overlay, not a page
    ------------------------------------------------------------
    Built from two frames in RMX-Pages and nothing else:
      * History Notes Overlay   4628:44305
@@ -52,14 +52,14 @@ var USERS = [
 var ENTITIES = {
   'issue-riverview-204': {
     kind: 'Issue',
-    name: 'Issue #4821 — Carpet replacement',
+    name: 'Issue #4821: Carpet replacement',
     items: [
       {icon:'properties', text:'Riverview Apartments'},
       {icon:'units',      text:'Riverview #204'}
     ],
     notes: [
       {type:'Vendor Coordination', date:'09/10/25 08:42 AM', category:'Maintenance', user:'Wesley Barnes',
-       note:'Carpet vendor quote received — $1,840 for unit and hallway. @Tony can you confirm the carpet vendor before I close this issue?', files:['quote_riverview_204.pdf']},
+       note:'Carpet vendor quote received, $1,840 for unit and hallway. @Tony can you confirm the carpet vendor before I close this issue?', files:['quote_riverview_204.pdf']},
       {type:'Tenant Contact', date:'09/08/25 04:15 PM', category:'Maintenance', user:'Nathan Cole',
        note:'Left voicemail for the tenant about access on Thursday morning.', files:[]},
       {type:'Inspection', date:'09/05/25 11:20 AM', category:'<Unassigned>', user:'Grace Whitaker',
@@ -84,11 +84,11 @@ var ENTITIES = {
       {type:'Tenant Contact', date:'09/10/25 03:40 PM', category:'Leasing', user:'Erin Caldwell',
        note:'She is planning to add a roommate in the next six months and wants the process in writing before she commits. @Tony she’s adding a roommate within six months and wants the steps in writing.', files:[]},
       {type:'Tenant Contact', date:'09/10/25 02:15 PM', category:'Leasing', user:'Erin Caldwell',
-       note:'Called about adding her sister to the lease sometime after the new year. Walked her through it at a high level — application and screening for the new occupant, then a lease amendment, and the deposit recalculated at two occupants. She asked for it in writing.', files:[]},
+       note:'Called about adding her sister to the lease sometime after the new year. Walked her through it at a high level: application and screening for the new occupant, then a lease amendment, and the deposit recalculated at two occupants. She asked for it in writing.', files:[]},
       {type:'Billing', date:'09/10/25 09:12 AM', category:'Receivables', user:'Erin Caldwell',
        note:'Credit issued for the duplicate charge on the August statement.', files:[]},
       {type:'Statement Dispute', date:'09/09/25 02:48 PM', category:'Receivables', user:'Erin Caldwell',
-       note:'Tenant called about a duplicate charge on her statement. Verified — the same $45 pet fee posted twice on 08/31.', files:['statement_aug.pdf']},
+       note:'Tenant called about a duplicate charge on her statement. Verified: the same $45 pet fee posted twice on 08/31.', files:['statement_aug.pdf']},
       {type:'Lease', date:'06/01/25 10:00 AM', category:'Leasing', user:'Paige Sullivan',
        note:'Renewal signed through 05/31/26 at $1,265.', files:[]},
       {type:'Web Account Update', date:'03/24/25 03:24 PM', category:'<Unassigned>', user:'Caleb Foster',
@@ -105,11 +105,11 @@ var ENTITIES = {
     balance: '640.00',
     notes: [
       {type:'Payment Setup', date:'09/10/25 06:30 AM', category:'Payables', user:'Corinne Vaughn',
-       note:'flagging @Tony — they want autopay set up before next visit.', files:[]},
+       note:'flagging @Tony, they want autopay set up before next visit.', files:[]},
       {type:'Service Visit', date:'08/28/25 01:15 PM', category:'Maintenance', user:'Grace Whitaker',
        note:'Quarterly treatment completed at Flagstone. Invoice 8841 received.', files:['inv_8841.pdf']},
       {type:'Contract', date:'01/15/25 08:00 AM', category:'<Unassigned>', user:'Laura Bennett',
-       note:'Annual contract renewed — quarterly treatment across three properties.', files:[]}
+       note:'Annual contract renewed: quarterly treatment across three properties.', files:[]}
     ]
   },
   'prospect-nicole-brandt': {
@@ -125,11 +125,11 @@ var ENTITIES = {
       {type:'Quote', date:'09/10/25 11:05 AM', category:'Leasing', user:'Kelsey Warner',
        note:'She wants to see the unit priced with the covered space in the rent, not as a separate line. @Tony Nicole wants the quote repriced with the covered parking space included. Can you add it?', files:[]},
       {type:'Showing', date:'09/09/25 04:30 PM', category:'Leasing', user:'Kelsey Warner',
-       note:'Toured #212. Liked the unit, asked twice about covered parking — she leaves for a job site before six and does not want to scrape in the winter. One garage space is open at $45.', files:[]},
+       note:'Toured #212. Liked the unit, asked twice about covered parking. She leaves for a job site before six and does not want to scrape in the winter. One garage space is open at $45.', files:[]},
       {type:'Quote', date:'09/09/25 02:10 PM', category:'Leasing', user:'Kelsey Warner',
        note:'Quoted $1,310 for #212, 12-month term, move-in 10/01. Parking not included.', files:['quote_riverview_212.pdf']},
       {type:'Inquiry', date:'09/06/25 08:45 AM', category:'Leasing', user:'Megan Doyle',
-       note:'Web inquiry — two bedroom, October move-in, no pets.', files:[]}
+       note:'Web inquiry: two bedroom, October move-in, no pets.', files:[]}
     ]
   },
   /* The prospect this property cannot suit: the note that matters is the one
@@ -144,13 +144,13 @@ var ENTITIES = {
     ],
     notes: [
       {type:'Lead Transfer', date:'09/10/25 09:20 AM', category:'Leasing', user:'Derek Shaw',
-       note:'Flagstone has no dog run and the nearest park is a fifteen minute drive. Brookside has the fenced run off the south lot. @Tony she really wants a dog park — nothing at Flagstone fits. Can you move the lead to Brookside?', files:[]},
+       note:'Flagstone has no dog run and the nearest park is a fifteen minute drive. Brookside has the fenced run off the south lot. @Tony she really wants a dog park, and nothing at Flagstone fits. Can you move the lead to Brookside?', files:[]},
       {type:'Prospect Contact', date:'09/09/25 05:40 PM', category:'Leasing', user:'Derek Shaw',
-       note:'Followed up after the tour. She was straight about it — the dog run is the deciding factor, two large dogs, and she will keep looking without one.', files:[]},
+       note:'Followed up after the tour. She was straight about it: the dog run is the deciding factor, two large dogs, and she will keep looking without one.', files:[]},
       {type:'Showing', date:'09/09/25 10:00 AM', category:'Leasing', user:'Derek Shaw',
        note:'Toured Flagstone Lot 12. Liked the townhome and the price; her first question at the door was where the dogs go.', files:[]},
       {type:'Inquiry', date:'09/07/25 07:15 PM', category:'Leasing', user:'Megan Doyle',
-       note:'Web inquiry — three bedroom, November move-in, two dogs (60lb and 45lb).', files:[]}
+       note:'Web inquiry: three bedroom, November move-in, two dogs (60lb and 45lb).', files:[]}
     ]
   },
   'tenant-daniel-smith': {
@@ -167,9 +167,9 @@ var ENTITIES = {
     balance: '0.00',
     notes: [
       {type:'Pet Request', date:'09/11/25 08:50 AM', category:'Leasing', user:'Nathan Cole',
-       note:'Vet records and the renter’s policy are attached. @Tony he wants to get a dog — 40lb lab mix. Pet addendum or do we need the deposit first?', files:['vaccination_record.pdf','renters_policy.pdf']},
+       note:'Vet records and the renter’s policy are attached. @Tony he wants to get a dog, a 40lb lab mix. Pet addendum or do we need the deposit first?', files:['vaccination_record.pdf','renters_policy.pdf']},
       {type:'Tenant Contact', date:'09/10/25 04:20 PM', category:'Leasing', user:'Nathan Cole',
-       note:'Came into the office about adding a dog — a two year old lab mix, about 40lb, from the shelter on Vine. Told him the breed is fine and the weight is under the limit, and that we would need vet records and proof of renter’s insurance listing the dog.', files:[]},
+       note:'Came into the office about adding a dog, a two year old lab mix, about 40lb, from the shelter on Vine. Told him the breed is fine and the weight is under the limit, and that we would need vet records and proof of renter’s insurance listing the dog.', files:[]},
       {type:'Lease', date:'07/01/25 10:00 AM', category:'Leasing', user:'Paige Sullivan',
        note:'Signed through 06/30/26 at $1,180. No pets on the original lease.', files:[]},
       {type:'Move In', date:'07/01/25 09:00 AM', category:'<Unassigned>', user:'Grace Whitaker',
@@ -189,7 +189,7 @@ var ENTITIES = {
       {type:'Management Agreement', date:'09/10/25 01:30 PM', category:'<Unassigned>', user:'Brian Hollis',
        note:'She wants it ready to sign the week she closes, so rents can be collected in October. @Tony she closes on the Westbrook fourplex on the 30th and wants the management agreement started.', files:[]},
       {type:'Owner Contact', date:'09/10/25 11:45 AM', category:'<Unassigned>', user:'Brian Hollis',
-       note:'Called to say the Westbrook Ave fourplex is under contract, closing 09/30. Four units, three occupied, currently self-managed. She wants us on it from day one — same terms as her other two.', files:[]},
+       note:'Called to say the Westbrook Ave fourplex is under contract, closing 09/30. Four units, three occupied, currently self-managed. She wants us on it from day one, same terms as her other two.', files:[]},
       {type:'Statement', date:'09/01/25 06:00 AM', category:'<Unassigned>', user:'Erin Caldwell',
        note:'August owner statement sent. Distribution $4,206.18.', files:['owner_stmt_aug.pdf']},
       {type:'Management Agreement', date:'02/14/24 09:00 AM', category:'<Unassigned>', user:'Paige Sullivan',
@@ -198,7 +198,7 @@ var ENTITIES = {
   }
 };
 
-/* History Category options — the list the Note Details dropdown offers.
+/* History Category options, the list the Note Details dropdown offers.
    <Unassigned> is Express's own convention for "no category", and it is what
    the frame shows in that column. */
 var CATEGORIES = ['<Unassigned>', 'Leasing', 'Maintenance', 'Payables', 'Receivables', 'General'];
@@ -527,7 +527,7 @@ function saveNote(){
 }
 
 /* ============================================================
-   @ TAGGING inside the Note field — 3779:60444
+   @ TAGGING inside the Note field, 3779:60444
    Typing "@" opens the user list; typing filters it; Enter or a
    click inserts the name. Arrow keys move through it, Escape
    closes it. The inserted "@Name" is what renders as a chip in

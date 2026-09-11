@@ -1,9 +1,9 @@
-/* RMX prototype-only styles — the same file in every prototype.
+/* RMX prototype-only styles, the same file in every prototype.
 
    Everything here is scaffolding that a real Express screen would not need:
    the scrim behind an overlay, the toast stack, the dropdown panel, the
    screen index. It is separate from rmx.css so it stays obvious what is the
-   design system and what is prototype plumbing — a developer handed this
+   design system and what is prototype plumbing, a developer handed this
    deletes proto.css and keeps rmx.css.
 
    Tokens only. No hex values. */

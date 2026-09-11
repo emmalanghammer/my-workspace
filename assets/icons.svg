@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-<!-- RMX icon core — GENERATED FROM THE LIVE LIBRARY. DO NOT EDIT BY HAND.
+<!-- RMX icon core, GENERATED FROM THE LIVE LIBRARY. DO NOT EDIT BY HAND.
      Real geometry from RMX Iconography, plus the Rent Manager logo from the
      app bar (node 9671:2926). Source of truth: data/icons-core.json.
-     Icons not here are never invented — harvest the real one into the
+     Icons not here are never invented, harvest the real one into the
      prototype's own assets/icons-local.svg. See SKILL.md, "Icons". -->
 <symbol id="keyboard-arrow-up" viewBox="0 0 20 20" fill="currentColor"><path d="M13.825 12.8417L10 9.02502L6.175 12.8417L5 11.6667L10 6.66669L15 11.6667L13.825 12.8417Z"/></symbol>
 <symbol id="keyboard-arrow-down" viewBox="0 0 20 20" fill="currentColor"><path d="M6.175 7.15833L10 10.975L13.825 7.15833L15 8.33333L10 13.3333L5 8.33333L6.175 7.15833Z"/></symbol>

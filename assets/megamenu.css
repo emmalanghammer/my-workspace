@@ -1,11 +1,11 @@
-/* RMX Mega Menu — shared between screens.
+/* RMX Mega Menu, shared between screens.
    Real Figma frame (RMX-Pages 5XEzI94nmZsWE7rQQ7OIHP, node 4077:83115),
    trued up against the frame's own SVG export. Lives here rather than in a
    single screen's stylesheet because more than one screen needs it: the app
    bar is on every screen, so its hamburger has to work on every screen.
    Depends on tokens.css + type.css, which every screen already links.
    Real Figma frame (RMX-Pages fileKey 5XEzI94nmZsWE7rQQ7OIHP, node
-   4077:83115), built in full — header tabs, all 7 Full Menu categories,
+   4077:83115), built in full: header tabs, all 7 Full Menu categories,
    their real column content and footer links. See PROTOTYPE.md, "The Mega
    Menu, built in full". z-index sits above the task-details frame (500),
    since opening the menu while a task is open should sit on top of it.
@@ -13,7 +13,7 @@
    Emma sent the frame's own SVG export (2026-09-10) to true up colors and
    spacing exactly. Two findings kept as literal values, not tokens:
    --mm-blue #0071AA is the accent used throughout this component (sidebar
-   text, active row, column-title underline) — distinct from this
+   text, active row, column-title underline): distinct from this
    prototype's usual link blue (#008dd5); and the footer's "Version" text
    is #666666 (--text-primary here), not the disabled gray it might look
    like at a glance. Both are real, read off the export, not approximated. */
@@ -50,7 +50,7 @@
    YhvzfcXOniQJ7xlC8ONzS4, node 10135:5172): a 40x40 `Express Icon / Admin
    Menu` mark, 20px gap (Spacing/lg), then the title in Web/Heading/L/Regular
    (24px/32px) at --text-secondary. The first pass used the app bar's full
-   175x32 wordmark scaled to 20px — the wrong asset; this component uses the
+   175x32 wordmark scaled to 20px, the wrong asset; this component uses the
    mark on its own, with no "Rent Manager" wordmark. */
 .megamenu__brand {
   display: flex;
@@ -107,7 +107,7 @@
   min-height: 0;
 }
 /* No scroll on the sidebar: seven fixed items (28px each, 12px apart) always
-   fit, and the frame has no scrollbar here either. It also has to not clip —
+   fit, and the frame has no scrollbar here either. It also has to not clip,
    the active row bleeds 12px into the content area and hangs a notch off its
    bottom-right corner, and an overflow value would cut both off. */
 .megamenu__sidebar {
@@ -165,7 +165,7 @@
   align-content: flex-start;
   gap: 24px;
 }
-/* Columns hug their content, as they do in the frame — its five Rental Info
+/* Columns hug their content, as they do in the frame: its five Rental Info
    columns measure 185/198/188/162/170px wide, sized to their longest item,
    not to a shared grid. A fixed basis here wrapped the last column onto a
    second row that the real menu doesn't have. */
@@ -221,13 +221,13 @@
   flex: none;
 }
 
-/* Phone-width Mega Menu — a stopgap, not a design, the same way the phone
+/* Phone-width Mega Menu, a stopgap, not a design, the same way the phone
    app bar above is. The frame is authored at a fixed 1384x541 and RMX has no
    responsive variant of it, so at 338px the desktop layout arrives with its
    header tabs clipped, the close button sitting on top of "Administration",
    and a 200px sidebar eating most of a 290px-wide menu. This stacks the
    category list above its content instead of beside it, which is how the
-   menu stops being broken at that width — it is not evidence that the real
+   menu stops being broken at that width, it is not evidence that the real
    component behaves this way. See PROTOTYPE.md, "Worth raising". */
 @media (max-width: 599px) {
   .megamenu-overlay { padding: 8px; }

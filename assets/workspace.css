@@ -1,5 +1,5 @@
 /* ============================================================
-   My Workspace — prototype-local recipes.
+   My Workspace, prototype-local recipes.
 
    This file exists because My Workspace is a NEW page: a welcome /
    landing surface that RMX Components does not yet have components for.
@@ -7,7 +7,7 @@
      (a) a real component whose recipe rmx.css does not ship yet
          (Toggle Switch, the Tile Style=Workspace overline + 44px header), or
      (b) the "splashy" card language carried over from the Claude Design
-         export, which Emma chose to keep — see PROTOTYPE.md, Deviations.
+         export, which Emma chose to keep: see PROTOTYPE.md, Deviations.
 
    Rules it obeys, so it stays a design-system prototype and not a one-off:
      - Colour, spacing and radius come from tokens.css. No literal hex.
@@ -29,8 +29,8 @@
      these are the library's own values, not chosen numbers. Reported in
      PROTOTYPE.md so they can move into tokens.css.
 
-       Radius/md    8px   — Tile Style=Dashboard's own radius
-       Spacing/6xl  64px  — (4xl 48, 8xl 80 and xxxs 2 are also referenced) */
+       Radius/md    8px  , Tile Style=Dashboard's own radius
+       Spacing/6xl  64px , (4xl 48, 8xl 80 and xxxs 2 are also referenced) */
   --radius-md: 8px;
   --spacing-4xl: 48px;
   --spacing-6xl: 64px;
@@ -50,7 +50,7 @@
 
        dropshadow-sm  "Used for subtle separation"
        dropshadow-md  "Most commonly used."
-       dropshadow-lg  "Used mainly for My Workspace tiles" — see item 28 */
+       dropshadow-lg  "Used mainly for My Workspace tiles", see item 28 */
   --ws-shadow-sm:
     2px 2px 12px -5px rgba(76, 76, 76, .08),
     0 4px 15px -5px rgba(76, 76, 76, .08),
@@ -68,9 +68,9 @@
   --ws-glow: rgba(245, 130, 32, .28);
   /* Overdue-row fill. Emma asked for the light red lighter still, and
      #fbd6d8 (--component-lozenge-error) is the lightest red Foundations
-     carries — see design-system item 27. So rather than invent a new hex,
+     carries, see design-system item 27. So rather than invent a new hex,
      this thins the real token over the tile surface: 50% of the error
-     Lozenge's own tint — Emma's number — which lands on #fdebec. The token
+     Lozenge's own tint, Emma's number, which lands on #fdebec. The token
      itself is the fallback for anything without color-mix(). */
   --ws-overdue-fill: color-mix(in srgb, var(--component-lozenge-error) 50%, var(--background-tile));
 
@@ -79,7 +79,7 @@
      queries at the bottom of this file.
 
      72px is Emma's call, 2026-09-10, and it is deliberately OFF the spacing
-     scale — Foundations goes ...40 (3xl), 48 (4xl), 64 (6xl), 80 (8xl), with
+     scale, Foundations goes ...40 (3xl), 48 (4xl), 64 (6xl), 80 (8xl), with
      nothing at 72. Declared as a literal rather than dressed up as a token,
      and reported in PROTOTYPE.md so the gap is visible rather than hidden
      behind a var() that looks official. */
@@ -97,12 +97,12 @@
    clipped bar on a narrow window. */
 .rmx-appbar__search { width: min(454px, 100%); }
 
-/* Fixed on scroll — Emma's call, 2026-09-10. Neither bar's Figma anatomy
+/* Fixed on scroll, Emma's call, 2026-09-10. Neither bar's Figma anatomy
    says anything about scroll behaviour (a static frame has none to say), so
    this is prototype judgment, not a harvested value: real Express keeps both
    bars in view while the page scrolls, and a long My Workspace should too.
-   Stacked in the order they already appear — app bar pinned to the very top,
-   Context Bar directly under it at the app bar's own 48px height — so
+   Stacked in the order they already appear, app bar pinned to the very top,
+   Context Bar directly under it at the app bar's own 48px height, so
    nothing overlaps and the page content scrolls underneath both. */
 .rmx-appbar { position: sticky; top: 0; z-index: 40; }
 .rmx-contextbar { position: sticky; top: 48px; z-index: 39; }
@@ -176,7 +176,7 @@
 }
 .ws-band__copy { flex: 1; min-width: 0; }
 
-/* Eyebrow — a glass chip with a live dot. 12px SemiBold = Web/Label/S/SemiBold. */
+/* Eyebrow, a glass chip with a live dot. 12px SemiBold = Web/Label/S/SemiBold. */
 .ws-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -225,7 +225,7 @@
 
 /* ---------- announcements band ----------
    NOT a real component. RMX has Callout (outlined, 40px), Bulk Action (the
-   blue banner above a register), Toast and Reminder — none of them is a
+   blue banner above a register), Toast and Reminder: none of them is a
    marketing announcement surface, and production My Workspace uses a plain
    Tile with a list instead. This band is the export's design, kept, and the
    gap is logged in PROTOTYPE.md rather than papered over with a component
@@ -235,7 +235,7 @@
    Claude Design export had. It does not clear WCAG AA on either gradient:
    white measures 2.59:1 on #f58220, 1.99:1 on #faa61c, 2.47:1 on #6eb744 and
    1.19:1 on #e2f1da. Orange is light enough that no size threshold rescues it.
-   Raised with Emma rather than silently reverted — see PROTOTYPE.md. */
+   Raised with Emma rather than silently reverted, see PROTOTYPE.md. */
 .ws-ann {
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-md);
@@ -306,7 +306,7 @@
 
    rmx.css's .rmx-tile__header encodes the Dashboard/Content header instead
    (36px + a 2px blue bottom stroke), so the Workspace geometry is set here.
-   That is a gap in the shipped stylesheet, not a deviation — see PROTOTYPE.md.
+   That is a gap in the shipped stylesheet, not a deviation: see PROTOTYPE.md.
    ============================================================ */
 
 /* The overline. Real element, real height, real default colour. */
@@ -318,8 +318,8 @@
 }
 
 /* Per-section accents. Every stop is a token. The two gradients the export
-   used that have no Foundations equivalent — teal for Tasks, purple for
-   Rent Manager University — drop to a solid real accent instead of being
+   used that have no Foundations equivalent, teal for Tasks, purple for
+   Rent Manager University, drop to a solid real accent instead of being
    approximated. Colours follow production My Workspace, where the same bar
    is blue on My Favorites, green on My Reports and orange on My Training. */
 .ws-overline[data-ws-accent="favorites"] {
@@ -336,8 +336,8 @@
 
 /* Workspace-tile geometry + the kept soft shadow. Reached by attribute so the
    Tile element itself carries nothing but rmx- classes. */
-/* Radius/md (8px), Emma's call on 2026-09-10. It is a real token — Tile
-   Style=Dashboard uses it — but scripts/audit.mjs still errors on any radius
+/* Radius/md (8px), Emma's call on 2026-09-10. It is a real token, Tile
+   Style=Dashboard uses it, but scripts/audit.mjs still errors on any radius
    >= 8 outside Orion, so this reports as a `radius` error on five tiles and
    the band. That rule is stale against the skill's own 2.0.0 anatomy; see
    PROTOTYPE.md. Inner surfaces stay at radius-sm, which is correct nesting. */
@@ -354,11 +354,11 @@
 }
 .rmx-tile[data-ws-tile] > .rmx-tile__body { gap: var(--spacing-sm); }
 
-/* Title is Web/Paragraph/L/SemiBold — 16 / 600 / 24 in --text-secondary (navy).
+/* Title is Web/Paragraph/L/SemiBold, 16 / 600 / 24 in --text-secondary (navy).
    Emma's call on 2026-09-10, following production.
 
    The library disagrees: Header Style=Workspace (node 7331:5299, harvested for
-   skill 2.0.0) carries Web/Heading/M/Regular — 20 / 400 / 28 in --text-primary
+   skill 2.0.0) carries Web/Heading/M/Regular, 20 / 400 / 28 in --text-primary
    (#666). That was tried and reverted, because a grey regular title does not
    hold a card the way the shipped app's navy semibold does. This is now a
    design-system question rather than a screen decision; see PROTOTYPE.md.
@@ -385,7 +385,7 @@
 .ws-hicon--attention { background: var(--component-lozenge-caution); color: var(--icon-attention); }
 .ws-hicon--success { background: var(--component-lozenge-success); color: var(--icon-success); }
 
-/* Header icon buttons — the kabob / customise / expand affordances a Tile
+/* Header icon buttons, the kabob / customise / expand affordances a Tile
    header carries. Deliberately not .rmx-btn: a Button is 36px and these are
    24px icon targets inside a 44px header. */
 /* Also used on the one real <a> in this pattern (My Tasks' "Open Tasks" jump
@@ -431,7 +431,7 @@
   margin-bottom: var(--spacing-xs);
 }
 .ws-area__name { font: var(--type-paragraph-s-semibold); color: var(--text-secondary); }
-/* Solid squares with white Express product glyphs — the same treatment
+/* Solid squares with white Express product glyphs, the same treatment
    production uses in these tiles. */
 .ws-area__icon {
   width: 32px;
@@ -482,7 +482,7 @@
   font: var(--type-paragraph-s-regular);
   color: var(--text-primary);
 }
-/* Avatar — solid circle, white uppercase initials, ~2.5:1 circle-to-text
+/* Avatar, solid circle, white uppercase initials, ~2.5:1 circle-to-text
    (40px circle / 16px text), radius-round. */
 [data-rmx-component="Avatar"] {
   width: 40px;
@@ -511,7 +511,7 @@
 
 /* ---------- My Tasks ---------- */
 /* A checked row here means "task complete," matching the Tasks screen's own
-   green-for-completed convention (its row-level .chkbox.green.checked) —
+   green-for-completed convention (its row-level .chkbox.green.checked),
    not the standard orange checked state real RMX Checkbox otherwise uses
    everywhere else in this prototype (--icon-attention). Emma's call,
    2026-09-10, scoped to this tile only; the shared orange default in
@@ -535,7 +535,7 @@
 .ws-taskbar__spacer { flex: 1; }
 
 /* Tile header counts are a plain grey number, not a Pill. Emma's call,
-   2026-09-10 — a Pill reads as a status or a filter you can act on, and these
+   2026-09-10, a Pill reads as a status or a filter you can act on, and these
    two are neither; they are just how many. The element carries no
    data-rmx-component now, because it is no longer one. */
 .ws-tile-count {
@@ -622,7 +622,7 @@
   gap: var(--spacing-md);
   margin-left: auto;
 }
-/* Date + time, one field split by two icon buttons — the component's own
+/* Date + time, one field split by two icon buttons: the component's own
    255x36 with its 28px icon cells. */
 .ws-qadd__dt {
   display: flex;
@@ -698,7 +698,7 @@
   cursor: default;
 }
 
-/* Toggle Switch — 132x36, two 66px segments; the selected segment fills
+/* Toggle Switch, 132x36, two 66px segments; the selected segment fills
    --border-disabled with a --border-secondary border and a SemiBold label.
    rmx.css ships no recipe for this component yet, so it lives here. The
    element carries no class, only data-rmx-component, so tagging it as the
@@ -738,8 +738,8 @@
   box-shadow: inset 0 0 0 1px var(--border-secondary);
 }
 
-/* Capped so the tile stops growing with the list — a 7th task shouldn't push
-   the rest of the page down — and scrolls internally past that point.
+/* Capped so the tile stops growing with the list, a 7th task shouldn't push
+   the rest of the page down, and scrolls internally past that point.
    340px shows 4 full rows (measured: 74px row + 8px gap) plus a sliver of
    the 5th as a scroll affordance. Emma's call, 2026-09-10. */
 .ws-tasklist {
@@ -762,7 +762,7 @@
      2026-09-10. The checkbox inside keeps its own pointer from rmx.css. */
   cursor: pointer;
 }
-/* Hover is dropshadow-sm — "Used for subtle separation", which is what a row
+/* Hover is dropshadow-sm, "Used for subtle separation", which is what a row
    lifting under the cursor should be. Emma's call, 2026-09-10: the previous
    hover was an invented shadow heavier than the tile's own, so a row appeared
    to float above the card containing it. */
@@ -822,7 +822,7 @@
    of red outline, display light red background fill on overdue tasks."
 
    The fill is --component-lozenge-error, the error Lozenge's own tint, which
-   is the light red the palette actually has — a flat one, not the diagonal
+   is the light red the palette actually has, a flat one, not the diagonal
    gradient the original export used. The border goes back to the same
    --border-disabled every other row carries, so the fill is doing the work on
    its own, and the due date keeps its --text-error. */
@@ -849,7 +849,7 @@
 }
 /* Where a task's context is a real linked record (not a free-text note),
    it carries the same label + blue-value treatment as the Tasks screen's
-   own Links section (node 4385:103128, "2.2.6 Task Linking Details") —
+   own Links section (node 4385:103128, "2.2.6 Task Linking Details"),
    gray label, blue value. Only the rows that genuinely reference a record
    (Tenant, Unit, Vendor) use it; a note like "Duplicate charge on statement"
    stays plain text, since it isn't a link to anything. Emma's call,
@@ -899,7 +899,7 @@
 .ws-rmu__hours { font: var(--type-label-s-regular); color: var(--text-primary); }
 
 /* Percentage ring. RMX has Progress Bar (three states) and Progress Circle
-   (a step counter) — neither is a percentage ring, so this is drawn here and
+   (a step counter), neither is a percentage ring, so this is drawn here and
    listed in PROTOTYPE.md as a gap. */
 .ws-donut { position: relative; width: 96px; height: 96px; flex: none; }
 .ws-donut__track { stroke: var(--border-primary); }
@@ -971,7 +971,7 @@
    .rmx-text--link for action text, so nothing here depends on it. */
 
 /* Context Bar action text. The trailing slot takes Context Bar Items, one of
-   which is a text action (Content=Tour Action) — that is what "My Dashboard"
+   which is a text action (Content=Tour Action), that is what "My Dashboard"
    is here, not an icon. It must not inherit the bar's white-on-white field
    rule, and it keeps the bar's 20px icon size. */
 .rmx-contextbar__trailing > [data-rmx-component="Context Bar Item"] {
@@ -993,13 +993,13 @@
 
    Two separate causes, so two fixes. The area links were underlined in their
    DEFAULT state simply because they are <a> elements and neither rmx.css nor
-   proto.css resets the browser default — .rmx-text--link only ADDS an
+   proto.css resets the browser default, .rmx-text--link only ADDS an
    underline on hover. And rmx.css deliberately underlines .rmx-btn--text and
    .rmx-btn--underline labels on hover.
 
    Note this contradicts RMX Foundations, which names a text style
    Web/Paragraph/S/Special/Underline and describes it as "Use for links on
-   hover". Flagged in PROTOTYPE.md — the style and the rule cannot both stand. */
+   hover". Flagged in PROTOTYPE.md, the style and the rule cannot both stand. */
 .rmx-text--link,
 .rmx-text--link:hover,
 .rmx-btn--text .rmx-btn__label,
@@ -1032,7 +1032,7 @@
      900-1279  two columns, 24px gutter; the app bar's three equal columns
                give way so Command Launch keeps its width
      < 900     one column, 16px gutter, and the cards reorder so the work
-               comes before the menus — which is the order the export's own
+               comes before the menus, which is the order the export's own
                one-column layout specified
 
    Nothing here is a breakpoint invented for its own sake: 1280 and 900 are
@@ -1063,7 +1063,7 @@
   /* One area column, so the blocks stop being squeezed. */
   .ws-areaflow { column-width: auto; columns: 1; }
 
-  /* The app bar stays three columns — that is what centres Command Launch —
+  /* The app bar stays three columns, that is what centres Command Launch,
      but the middle one takes double weight so the search field keeps a usable
      width, and Company Code gives up its space, being the least load-bearing
      thing in the bar. The library has no responsive Header variant; see
@@ -1086,18 +1086,18 @@
   }
   .ws-ann__copy { min-width: 0; }
 
-  /* Phone-width app bar. RMX has no responsive Header variant — the component
-     is authored at a fixed desktop width — so this is a stopgap that stops it
+  /* Phone-width app bar. RMX has no responsive Header variant, the component
+     is authored at a fixed desktop width, so this is a stopgap that stops it
      visibly breaking, not a design. Two rules: keep the wordmark on one line
      (it was wrapping to "Re / Manager" and colliding with the icons), and drop
      the Command Launch icon buttons that lead nowhere in this prototype.
      See PROTOTYPE.md, "Worth raising". */
   /* The logo is a vector at a fixed 175x32, and the bar clips rather than
      scrolls, so at phone width it was cut mid-wordmark. Let it scale in its
-     column instead — the viewBox keeps it proportional. */
+     column instead, the viewBox keeps it proportional. */
   .rmx-appbar__logo { width: 100%; max-width: 175px; height: auto; }
   /* Keep the Mega Menu button. This rule used to drop all three icon buttons,
-     which was fine while all three were placeholders — but the first one is
+     which was fine while all three were placeholders, but the first one is
      now the only way into the Mega Menu, so hiding it removed the feature
      entirely below 600px rather than merely tidying the bar. Reports and
      Favorites still lead nowhere, so they're the two that go. */
@@ -1108,7 +1108,7 @@
 /* ---------- toast position ----------
    Top centre, below the sticky app bar + Context Bar (88px), not proto.css's
    shared bottom-centre default. Emma's call, 2026-09-10, and reserved for a
-   completed action now — checking off a task, not a data-rmx-todo
+   completed action now, checking off a task, not a data-rmx-todo
    placeholder (that listener is suppressed in the screen's own script). */
 .rmx-toaststack {
   top: 96px;
@@ -1117,7 +1117,7 @@
 
 /* ---------- task details, opened in place ----------
    Full-viewport iframe framing screens/tasks.html?embed=1&open=<id>. No
-   scrim of its own here — the framed page's own overlay-scrim (dimmed
+   scrim of its own here, the framed page's own overlay-scrim (dimmed
    navy, click-outside-to-close) fills the iframe edge to edge and does
    that job already; a second scrim behind it would just double-dim.
    z-index sits above the sticky app bar/Context Bar (40/39) and every

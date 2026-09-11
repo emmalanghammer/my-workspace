@@ -5,7 +5,7 @@
    named text style. audit.mjs fails any text that is not one of them.
    ============================================================ */
 
-/* A weight the browser has not actually loaded is silently synthesised —
+/* A weight the browser has not actually loaded is silently synthesised,
    600 renders as fake Bold while getComputedStyle still reports 600.
    Turning synthesis off makes a missing face visibly wrong, not quietly wrong. */
 html { font-synthesis-weight: none; font-synthesis-style: none; }

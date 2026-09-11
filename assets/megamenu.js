@@ -1,10 +1,10 @@
 /* ============================================================
-   RMX Mega Menu — shared across screens.
+   RMX Mega Menu, shared across screens.
 
    Built from the real Figma frame (RMX-Pages 5XEzI94nmZsWE7rQQ7OIHP, node
    4077:83115) and trued up against that frame's own SVG export. It lives
    here, injected by script, rather than in one screen's markup because the
-   app bar is on every screen — so its hamburger has to work on every screen.
+   app bar is on every screen, so its hamburger has to work on every screen.
    Emma's call, 2026-09-10: "it should always be clickable".
 
    Include it after the app bar markup, alongside megamenu.css:
@@ -17,7 +17,7 @@
    Everything the menu draws ships in here: the overlay markup, the seven
    categories' real content, and its own mm-* icon sprite. The sprite is
    prefixed so the menu never depends on, or collides with, whichever glyphs
-   a host screen happens to carry — the four tab icons and the brand mark are
+   a host screen happens to carry, the four tab icons and the brand mark are
    harvested from the library, the rest are the canonical core glyphs.
    ============================================================ */
 (function () {
@@ -25,7 +25,7 @@
 
   /* This file is shared by screens at different depths (/index.html and
      /screens/tasks.html), and the site is served from / locally but from
-     /my-workspace/ on Pages — so neither a page-relative nor a root-relative
+     /my-workspace/ on Pages, so neither a page-relative nor a root-relative
      href works for both. Resolve against this script's own URL instead:
      assets/megamenu.js is always one level below the site root. */
   var ROOT = (function () {
@@ -80,7 +80,7 @@
      Real content transcribed from the Figma frame (see the comment on
      #megaMenuOverlay above). Every item is a plain string and renders as a
      data-rmx-todo placeholder, except 'Tasks' under Services > Calendar,
-     which carries an href — see PROTOTYPE.md for why that one item is real
+     which carries an href, see PROTOTYPE.md for why that one item is real
      and everything else here isn't. */
   var MEGA_MENU_ORDER = ['rental-info', 'accounting', 'receivables', 'payables', 'owners', 'services', 'communication'];
   var MEGA_MENU = {
@@ -203,7 +203,7 @@
   }
 
   /* Any screen's hamburger opens it. The button is a real affordance now, so
-     a screen that still marks it data-rmx-todo gets that stripped — otherwise
+     a screen that still marks it data-rmx-todo gets that stripped, otherwise
      the capture-phase suppressor on My Workspace would eat the click. */
   function wireOpeners(onOpen) {
     var btns = document.querySelectorAll('[data-rmx-megamenu], #megaMenuBtn, [aria-label="Mega Menu"]');
