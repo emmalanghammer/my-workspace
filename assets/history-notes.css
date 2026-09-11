@@ -259,7 +259,9 @@
 .nd-checks .hn-check { height:auto; }
 
 /* ---- toast ---- */
-.hn-toast { position:fixed; top:96px; left:50%; z-index:580; display:flex; align-items:center; gap:8px; padding:16px; border-radius:var(--r-sm); background:var(--rmx-navy); color:#fff; font-size:16px; font-weight:600; line-height:24px; box-shadow:var(--hn-shadow-toast); max-width:360px; transform:translate(-50%,-8px); opacity:0; pointer-events:none; transition:all .18s ease; }
+/* Green, like every other toast on these screens -- it only ever says a note
+   was added or deleted. Emma's call, 2026-09-11. */
+.hn-toast { position:fixed; top:96px; left:50%; z-index:580; display:flex; align-items:center; gap:8px; padding:16px; border-radius:var(--r-sm); background:var(--rmx-green); color:#fff; font-size:16px; font-weight:600; line-height:24px; box-shadow:var(--hn-shadow-toast); max-width:360px; transform:translate(-50%,-8px); opacity:0; pointer-events:none; transition:all .18s ease; }
 .hn-toast.show { opacity:1; transform:translate(-50%,0); }
 
 @media (max-width: 899px) {

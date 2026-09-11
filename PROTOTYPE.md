@@ -2232,6 +2232,38 @@ and shows a blue border instead; this one does too now. *Not visually verified �
 the automated browser never holds OS focus, so `:focus` does not match there.
 The rule is the same one the rest of the screen's inputs use.*
 
+## Every toast is green
+
+Emma's call, 2026-09-11. There were three toasts across these screens and all
+three defaulted to the navy Toast State=Action ground, with green reserved for
+the two calls that asked for it by name.
+
+Green is the right default here. Every toast these screens raise reports
+something that finished — task added, saved, created, deleted, closed, claimed,
+checklist populated, note added, filters applied — and that is Toast
+State=Success (`#6eb744`). All three now start there:
+
+- **The register's own toast** (`.toast`) — green ground; `.toast.success`
+  stays so existing callers keep working, it just no longer changes anything.
+- **The History / Notes overlay's toast** (`.hn-toast`) — same.
+- **`RMX.toast` in the skill's `app.js`** — the `kind` default moves from
+  `neutral` to `success`, so a caller that genuinely needs the navy
+  State=Action ground can still ask for `'neutral'` and get it.
+
+Both toasts already carried the filled check-circle glyph, so the green needed
+nothing else to read right.
+
+**One message is now green that arguably should not be.** "Task name is
+required" is the only toast on either screen that reports a failure rather than
+a completion, and it is green like the rest. Toast has a `State=Failure`
+(`--text-error`) that it could use instead — say the word and that one call
+gets it, without disturbing the rule for everything else.
+
+**And one thing for you to decide upstream.** This is the second local change
+to the skill's `app.js` — the first was making a toast replace rather than
+stack. Both look like they belong in the skill rather than in this prototype;
+`check.mjs` reports the file as drifted either way.
+
 ---
 
 # Worth raising with the design system

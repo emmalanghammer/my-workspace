@@ -233,7 +233,12 @@
      timer is per-toast and re-armed on each call, so a replaced toast takes
      its own timer with it.                                                  */
   let toastTimer = null;
-  function toast(message, kind = 'neutral', ms = 3200) {
+  /* Green by default. Every toast these prototypes raise reports something
+     that finished, and Toast State=Success is what that looks like; a caller
+     that genuinely needs the navy State=Action ground can still ask for
+     'neutral'. Emma's call, 2026-09-11 -- see PROTOTYPE.md on whether this
+     belongs upstream in the skill. */
+  function toast(message, kind = 'success', ms = 3200) {
     let stack = $('.rmx-toaststack');
     if (!stack) {
       stack = document.createElement('div');

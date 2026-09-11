@@ -222,7 +222,12 @@ a:hover { text-decoration:none; }
    design.md §7.4 "Corner, auto-dismissing") — and used ONLY for a completed
    action now (task added/saved/deleted/closed, checklist populated), not for
    data-rmx-todo placeholders; see the removed listener below this script. */
-.toast{position:fixed;top:96px;left:50%;z-index:500;display:flex;align-items:center;gap:8px;padding:16px;border-radius:var(--r-sm);background:var(--rmx-navy);color:#fff;font-size:16px;font-weight:600;line-height:24px;box-shadow:var(--shadow-toast);max-width:360px;transform:translate(-50%,-8px);opacity:0;pointer-events:none;transition:all .18s ease;}
+/* Every toast is green. A toast on these screens only ever reports something
+   that finished -- task added, saved, closed, claimed, note added, filters
+   applied -- and Toast State=Success (#6eb744) is what that looks like. The
+   navy State=Action ground is for a toast that is asking something, and there
+   are none here. Emma's call, 2026-09-11. */
+.toast{position:fixed;top:96px;left:50%;z-index:500;display:flex;align-items:center;gap:8px;padding:16px;border-radius:var(--r-sm);background:var(--rmx-green);color:#fff;font-size:16px;font-weight:600;line-height:24px;box-shadow:var(--shadow-toast);max-width:360px;transform:translate(-50%,-8px);opacity:0;pointer-events:none;transition:all .18s ease;}
 .toast.show{transform:translate(-50%,0);opacity:1;}
 .toast.success{background:var(--rmx-green);}
 .toast .material-symbols-outlined{font-size:32px;}
