@@ -112,18 +112,18 @@ var ENTITIES = {
        note:'Annual contract renewed — quarterly treatment across three properties.', files:[]}
     ]
   },
-  'prospect-sally-klydon': {
+  'prospect-nicole-brandt': {
     kind: 'Prospect',
-    name: 'Sally Klydon',
+    name: 'Nicole Brandt',
     items: [
       {icon:'properties',   text:'Riverview Apartments'},
       {icon:'units',        text:'Riverview #212'},
-      {icon:'mail-outline', text:'sklydon@example.com'},
+      {icon:'mail-outline', text:'nbrandt@example.com'},
       {icon:'call',         text:'513-555-7741'}
     ],
     notes: [
       {type:'Quote', date:'09/10/25 11:05 AM', category:'Leasing', user:'Danielle Gardin',
-       note:'She wants to see the unit priced with the covered space in the rent, not as a separate line. @Tony Sally wants the quote repriced with the covered parking space included. Can you add it?', files:[]},
+       note:'She wants to see the unit priced with the covered space in the rent, not as a separate line. @Tony Nicole wants the quote repriced with the covered parking space included. Can you add it?', files:[]},
       {type:'Showing', date:'09/09/25 04:30 PM', category:'Leasing', user:'Danielle Gardin',
        note:'Toured #212. Liked the unit, asked twice about covered parking — she leaves for a job site before six and does not want to scrape in the winter. One garage space is open at $45.', files:[]},
       {type:'Quote', date:'09/09/25 02:10 PM', category:'Leasing', user:'Danielle Gardin',
@@ -176,20 +176,20 @@ var ENTITIES = {
        note:'Move-in inspection completed with the tenant. No exceptions noted.', files:['moveIn_107B.pdf']}
     ]
   },
-  'owner-gerald-hupp': {
+  'owner-sally-klydon': {
     kind: 'Owner',
-    name: 'Gerald Hupp',
+    name: 'Sally Klydon',
     items: [
       {icon:'properties',   text:'Brookside Apartments', more:1},
-      {icon:'mail-outline', text:'ghupp@example.com'},
+      {icon:'mail-outline', text:'sklydon@example.com'},
       {icon:'call',         text:'513-555-3318'}
     ],
     balance: '0.00',
     notes: [
       {type:'Management Agreement', date:'09/10/25 01:30 PM', category:'<Unassigned>', user:'Dave Hegemann',
-       note:'He wants it ready to sign the week he closes, so rents can be collected in October. @Tony he closes on the Westbrook fourplex on the 30th and wants the management agreement started.', files:[]},
+       note:'She wants it ready to sign the week she closes, so rents can be collected in October. @Tony she closes on the Westbrook fourplex on the 30th and wants the management agreement started.', files:[]},
       {type:'Owner Contact', date:'09/10/25 11:45 AM', category:'<Unassigned>', user:'Dave Hegemann',
-       note:'Called to say the Westbrook Ave fourplex is under contract, closing 09/30. Four units, three occupied, currently self-managed. He wants us on it from day one — same terms as his other two.', files:[]},
+       note:'Called to say the Westbrook Ave fourplex is under contract, closing 09/30. Four units, three occupied, currently self-managed. She wants us on it from day one — same terms as her other two.', files:[]},
       {type:'Statement', date:'09/01/25 06:00 AM', category:'<Unassigned>', user:'Karen Hsu',
        note:'August owner statement sent. Distribution $4,206.18.', files:['owner_stmt_aug.pdf']},
       {type:'Management Agreement', date:'02/14/24 09:00 AM', category:'<Unassigned>', user:'Emma Langhammer',
@@ -222,7 +222,7 @@ function chipHTML(name){
 /* Who can be tagged: the user list, plus anyone who has written a note on
    this record. Emma's call, 2026-09-10 -- "include any users who have added
    notes as users available to @ tag in a note." Karen Hsu, Diego Alvarez,
-   Anthony Park and Sally Klydon all show up as note authors without being in
+   Anthony Park and Diego Alvarez all show up as note authors without being in
    the user list, and it reads oddly to get a note from someone you cannot
    reply to. Derived entries carry no username: the record gives us a name,
    not a login. */

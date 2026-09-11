@@ -1810,10 +1810,10 @@ prospects, an owner.
 | Who tagged him | Record | What it is |
 |---|---|---|
 | Becky Carle | Tenant · Daniel Smith | Wants a dog; records attached, question is addendum or deposit first |
-| Danielle Gardin | Prospect · Sally Klydon | Wants the quote repriced with the covered parking space in the rent |
+| Danielle Gardin | Prospect · Nicole Brandt | Wants the quote repriced with the covered parking space in the rent |
 | Ali Ferryman | Prospect · Renee Vogel | Needs a dog park; asking for the lead to move to Brookside |
 | Karen Hsu | Tenant · Marcia Clark | Adding a roommate within six months, wants the process in writing |
-| Dave Hegemann | Owner · Gerald Hupp | Closing on a fourplex, wants the management agreement started |
+| Dave Hegemann | Owner · Sally Klydon | Closing on a fourplex, wants the management agreement started |
 
 Each opens its own History / Notes, and each history is a thread rather than a
 single line — the tagged note sits on top of the two or three that led to it,
@@ -1829,10 +1829,13 @@ Marcia Clark's call" is about.
 
 Two judgement calls worth knowing:
 
-- **Sally moved from Owner Prospect to Prospect.** She was an owner prospect
-  sending a proforma; the note you wrote puts her in a unit asking about
-  parking. The owner scenario became Gerald Hupp, a separate record, so both
-  exist rather than one being bent into the other.
+- **Klydon is the owner; the parking prospect is Nicole Brandt.** Sally Klydon
+  arrived as an Owner Prospect sending a proforma, and the parking-quote note
+  would have made her a rental prospect instead — while Scene 3 needs an
+  "Owner Klydon" to re-verify a W-9 against. Emma's call, 2026-09-11: Klydon
+  is the owner, with the management-agreement thread and the Owner link Scene 3
+  attaches; the prospect asking about covered parking is a different person.
+  One name, one role, in the demo and in the data.
 - **The Issue and Vendor records are still in the file, now unlinked.** Issue
   #4821 and Anderson Pest Control are real, coherent histories, and the
   register still carries a Riverview #204 task and vendor links that could
