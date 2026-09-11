@@ -2647,6 +2647,48 @@ rows with nothing in the Link column, and "Sign off on Brookside HVAC scope" as
 the Vendor. They are left as written: they record what was decided at the time,
 and the HVAC task is still here.
 
+## The Scoreboard names the record and draws what it is
+
+Emma's call, 2026-09-11. A task linked to a tenant used to read "Tenant:
+Charlie Apegian" beside a house. Two things wrong with that: the glyph was the
+Properties icon whatever the record was, and the type was spelled out in words
+next to it. It now reads "Charlie Apegian" beside the Tenants icon.
+
+**Five icons harvested from RMX Iconography**, from the library's Icons page on
+2026-09-11, named as the library names them:
+
+| Link type | Icon | Node |
+|---|---|---|
+| Tenant | `tenants` | 68:2910 |
+| Unit | `units` | 68:2934 |
+| Property | `properties` | 68:2933 |
+| Owner | `owners` | 68:2899 |
+| Vendor | `vendors` | 68:2926 |
+
+Dropping the label only works if the icon carries the type, which is why all
+five were harvested rather than the one Emma asked about. The exported
+`properties` path matched the one already in the sheet, which is a useful check
+that the existing glyph was genuine.
+
+**A latent bug went with it.** `renderScoreboard` built its `<use href>` as
+`'#' + it.icon`, and the sheet's symbols are `hn-` prefixed, so `#properties`
+should have resolved to nothing. It rendered anyway: Figma's export wraps each
+path in a `<g id="properties">`, and the browser found that inner group. Every
+Scoreboard icon on both screens was resolving through an accident of the export
+rather than through the symbol it was meant to use. The reference is `'#hn-' +
+it.icon` now.
+
+**Eight tasks had a Link column value and no typed link record**, so their
+Scoreboard and their Links tile both came up empty: `t3`, `t-receipts`, `o1`,
+`o4`, `o6`, `o7`, `o8` and `o9`. It was invisible while the Scoreboard printed
+its own label; it is not invisible now. Each one gained the link the register
+was already displaying, typed to match (PARK is a Property, `HH - 1102` a Unit,
+Patrick O'Malley a Tenant). This is the third time the same gap has been found
+one row at a time, and the shape of the data is why: `link` is a string the
+register prints and `links` is the real record list, and nothing makes them
+agree. Worth collapsing to one field, which is a change to the data model
+rather than to a screen.
+
 ---
 
 # Worth raising with the design system

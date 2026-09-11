@@ -1298,7 +1298,7 @@ let myTasks = [
   { id:'t3', title:"Record Park's records", flag:true, colorBar:null, completed:false,
     action:'Add Journal', actionDetails:null, dueDate:'09/15/26', dueTime:'07:30 AM', overdue:false,
     assigned:['role-pm'], link:'PARK', linkOverflow:0, workflow:'Property Renovation',
-    checklist:[], externalCal:false },
+    checklist:[], externalCal:false, links:[{label:'Property', value:'PARK', removable:false}] },
   /* The third task in the Property Manager queue, a claim row and a register
      task like any other, so clicking one opens its real details rather than
      nothing. Emma's call, 2026-09-11. */
@@ -1333,14 +1333,14 @@ let myTasks = [
   { id:'t-receipts', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:true,
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/17/26', dueTime:'10:00 AM', overdue:false,
     assigned:['tlittle'], link:"Patrick O'Malley", linkOverflow:1, workflow:'',
-    checklist: PET_CHECKLIST(), externalCal:true },
+    checklist: PET_CHECKLIST(), externalCal:true, links:[{label:'Tenant', value:"Patrick O'Malley", removable:false}] },
 ];
 
 // Other Users' Tasks dataset (screenshot 10), fixed, per simplification #5 above.
 let otherTasks = [
   { id:'o1', title:'Send an email to Daniel', flag:true, colorBar:'red', completed:false,
     action:'Send Email', actionDetails:null, dueDate:'09/23/26', dueTime:'09:30 AM', overdue:false,
-    assigned:['gwhitaker'], link:'Daniel Smith', linkOverflow:0, workflow:'', checklist:[] },
+    assigned:['gwhitaker'], link:'Daniel Smith', linkOverflow:0, workflow:'', checklist:[], links:[{label:'Tenant', value:'Daniel Smith', removable:false}] },
   { id:'o2', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/18/26', dueTime:'10:00 AM', overdue:false,
     assigned:['jreeves'], link:'', linkOverflow:0, workflow:'', checklist:[] },
@@ -1350,7 +1350,7 @@ let otherTasks = [
     checklist:[ {text:'Attach the signed records to the property', assigned:['ncole'], done:false} ] },
   { id:'o4', title:'Close completed service ticket', flag:false, colorBar:'green', completed:false,
     action:null, actionDetails:null, dueDate:'09/24/26', dueTime:'02:00 PM', overdue:false,
-    assigned:['mdoyle'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
+    assigned:['mdoyle'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', checklist:[], links:[{label:'Unit', value:'HH - 1102', removable:false}] },
   { id:'o5', title:'Distribute payments to owners', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/29/26', dueTime:'08:30 AM', overdue:false,
     assigned:['bhollis','dshaw','psullivan','tnolan'], link:'', linkOverflow:0, workflow:'', checklist:[] },
@@ -1358,13 +1358,13 @@ let otherTasks = [
     action:'View Issues', actionDetails:null, dueDate:'08/01/26', dueTime:'09:30 AM', overdue:true,
     assigned:['lbennett'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
     checklist:[ {text:'Open service issue list', assigned:['ncole'], done:true},
-                {text:'Close all tickets', assigned:['mdoyle','hbrooks'], done:false} ] },
+                {text:'Close all tickets', assigned:['mdoyle','hbrooks'], done:false} ], links:[{label:'Unit', value:'FMHP - 105', removable:false}] },
   { id:'o7', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/30/26', dueTime:'07:30 AM', overdue:false,
-    assigned:['kwarner'], link:"Patrick O'Malley", linkOverflow:1, workflow:'', checklist:[] },
+    assigned:['kwarner'], link:"Patrick O'Malley", linkOverflow:1, workflow:'', checklist:[], links:[{label:'Tenant', value:"Patrick O'Malley", removable:false}] },
   { id:'o8', title:'Review owner details for FMHP', flag:false, colorBar:'blue', completed:false,
     action:'Post Owner Checks', actionDetails:null, dueDate:'07/25/26', dueTime:'07:30 AM', overdue:true,
-    assigned:['tnolan','hbrooks'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
+    assigned:['tnolan','hbrooks'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', checklist:[], links:[{label:'Unit', value:'FMHP - 106', removable:false}] },
   /* The same New Vendor Onboarding process as it looks to someone watching
      it rather than working it: Tony found the vendor on the 5th, Dave created
      the account on the 8th, and Chris's step has sat untouched since. The
@@ -1394,7 +1394,7 @@ let otherTasks = [
     ] },
   { id:'o9', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'07/05/26', dueTime:'07:30 AM', overdue:true,
-    assigned:['cfoster'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', checklist:[] },
+    assigned:['cfoster'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation', checklist:[], links:[{label:'Unit', value:'FMHP - 105', removable:false}] },
 ];
 
 
@@ -2367,6 +2367,16 @@ function onQaddActionClick(e){
    (myTasks/otherTasks link and vendor fields, My Workspace's task rows),
    nothing invented for this feature specifically. Emma's call, 2026-09-10. */
 const LINK_TYPES = ['Tenant', 'Unit', 'Property', 'Owner', 'Vendor'];
+
+/* One RMX Iconography glyph per link type, so the History / Notes Scoreboard
+   can show what a record *is* without printing the word. Harvested from the
+   library's Icons page on 2026-09-11: tenants 68:2910, units 68:2934,
+   properties 68:2933, owners 68:2899, vendors 68:2926. The names are the
+   library's own, which is why they are plural. */
+const LINK_ICONS = {
+  Tenant: 'tenants', Unit: 'units', Property: 'properties',
+  Owner: 'owners', Vendor: 'vendors',
+};
 const LINK_RECORDS = {
   Tenant: ['Daniel Smith', "Patrick O'Malley", 'Marcia Clark', 'Tomas Webber'],
   Unit: ['107B', 'Riverview #204', 'Lot 3'],
@@ -2507,7 +2517,13 @@ function renderModalHistory(){
    in it come back through onChange and land on the task, which is what keeps
    the modal's own History tile in step. */
 function taskHistoryRecord(t){
-  const linked = (t.links || []).map(l => ({ icon:'properties', text:`${l.label}: ${l.value}` }));
+  /* Each linked record is shown as its own icon plus the record's name, no
+     "Tenant:" label in front of it: the icon is what says which kind of record
+     it is, and repeating that in words makes the Scoreboard read as a form
+     field rather than a record. Emma's call, 2026-09-11. Every one of the five
+     link types has its own glyph harvested from RMX Iconography, so nothing
+     here is carried by a label that is no longer printed. */
+  const linked = (t.links || []).map(l => ({ icon: LINK_ICONS[l.label] || 'properties', text: l.value }));
   return {
     key: 'task-' + t.id,
     kind: 'Task',
