@@ -581,7 +581,10 @@ function toast(msg){
      by the host screen -- a task, say, which the Tasks page opens history for.
      `opts.onChange(notes)` reports every add/edit/delete back, so a host that
      owns the record can persist it; `opts.addNote` opens the Note dialog
-     straight away, for an "Add Note" affordance that should land there. */
+     straight away, for an "Add Note" affordance that should land there, and
+     `opts.noteOnly` opens *just* that dialog -- no register behind it -- for
+     an Add Note that means "write one", not "go and look at them all".
+     Emma's call, 2026-09-11. */
   function open(key, opts) {
     inject();
     opts = opts || {};
@@ -600,8 +603,8 @@ function toast(msg){
     document.getElementById('chkAttach').classList.remove('checked');
     renderScoreboard();
     renderNotes();
-    document.getElementById('hnOverlay').hidden = false;
-    if (opts.addNote) openNote(null);
+    if (!opts.noteOnly) document.getElementById('hnOverlay').hidden = false;
+    if (opts.addNote || opts.noteOnly) openNote(null);
   }
   function closeOverlay() {
     var el = document.getElementById('hnOverlay');

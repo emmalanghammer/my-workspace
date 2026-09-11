@@ -1723,6 +1723,82 @@ the other. Clicking it drops the roles Tony is in, leaves anyone else on the
 task, adds Tony, and fires the same green toast. It does not save the task;
 Save still does that, so Cancel still backs it out.
 
+## The Workspace tile shows everything that is Tony's, or his roles'
+
+Emma's call, 2026-09-11, on the My Tasks tile: *all of the tasks assigned to
+the current user or their user roles should display here.* It was showing six
+while the register's My Tasks held ten, because the tile's rows were written
+before the register's data grew.
+
+The tile now mirrors the register. Three rows joined his own list — New Vendor
+Onboarding, Approve Daniel for Pet, and the completed Upload receipts, which
+stays listed and struck through rather than disappearing, because that is what
+the register does with a closed task. Record Park's records joined the role
+queue, since it is held by Property Manager.
+
+**The role queue is no longer hidden until his list is empty.** It was built
+for the demo's last scene, where clearing his own work is what surfaces it.
+"Everything assigned to your roles displays here" and "your roles' work
+appears only once you are idle" cannot both be true, so the queue now sits
+permanently below his own tasks, labelled, with Claim on each row. The scene
+still reads: as he ticks his own off, the queue is what is left. *If you
+wanted the reveal kept, that is the one line to put back.*
+
+Three smaller things fell out of it:
+
+- **The greeting counts what the tile counts.** "You have 6 tasks open, 2
+  overdue" was a fixed sentence that went stale the moment anything was ticked
+  or claimed. It reads the same rows the tile does now.
+- **A claimed task keeps its id**, so its details still open after it moves out
+  of the queue. A task typed into the mini bar has no id and still doesn't —
+  it exists only on that page.
+- **The open count excludes the role queue.** Those tasks are listed but not
+  yet his, so counting them as his open work would overstate it. Say if you'd
+  rather the number covered everything on the tile.
+
+## The register's quick-add bar catches up with the tile's
+
+Three calls, same afternoon, all of them closing gaps between the full bar on
+the Tasks register and the mini one on the Workspace tile.
+
+**The date and time are real fields now.** They were two fixed strings —
+`09/17/2025`, `11:00 AM` — that nothing read; a task added from the bar got
+that date whatever the bar showed. Each field and its icon opens the same
+picker `assets/datetime.js` gives the tile, the bar stays open while you pick,
+and what is showing is what the task gets. Same for the assignee: the bar's
+own selection, not a hard-coded Tony.
+
+**Opening the bar starts from now.** Today, an hour ahead, assigned to
+whoever is signed in — every time it opens, not just the first. A quick-add
+bar is for the next thing, so inheriting the last thing's date is wrong twice
+over.
+
+**The avatar cluster follows the library.** Avatar's `Style=Inline Avatar
+Group` records `itemSpacing: -4` — the bubbles overlap by 4px, which is what
+the register's rows already did and the bar did not. And a role is orange
+wherever it appears, including in the bar, which was the one place still
+drawing every assignee blue.
+
+**The `+N` bubble is filled, not outlined.** It now matches the avatars it
+stands for — blue among users, orange among roles. The library records an
+`Style=Outline` Avatar (white fill, blue stroke, blue initials) but nothing
+that says the overflow bubble is one, so this is Emma's call rather than a
+harvest; item 33. Applied to the register's rows as well as the bar, since a
+rule that holds in one cluster and not the other is just a bug with a reason.
+
+## Add Note writes a note; the arrow opens the history
+
+The History / Notes tile header had one link doing two jobs: `Add Note ⧉`
+opened the whole History / Notes overlay *and* the Note dialog on top of it,
+so asking to write one sentence put a full register behind it.
+
+Split, on Emma's call: **Add Note** opens only the Note Details dialog, over
+Task Details, with nothing between them. The **jump arrow** opens the History /
+Notes overlay on top of Task Details, which is what a jump arrow means
+everywhere else on this screen. `RMXHistory.open` takes a `noteOnly` option
+for the first case — the shared overlay still loads the record, it just
+doesn't show its register.
+
 ---
 
 # Worth raising with the design system
@@ -1936,3 +2012,11 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     no `component-*` background at that value, so the panel declares the hex
     locally. Same family of gap as items 12 and 21 — a real Foundations colour
     the export does not reach.
+33. **The `+N` overflow bubble is not a recorded variant.** Avatar ships seven
+    styles — Inline, Default, Outline, Large, two Scoreboard sizes and Inline
+    Avatar Group — and the group's anatomy is three identical 24px Avatar
+    Items overlapped by 4px. Nothing records what the bubble standing for the
+    ones you cannot see should look like, though the product clearly has one.
+    This prototype fills it with the colour of the cluster it belongs to —
+    blue among users, orange among roles — on Emma's call. Either Inline
+    Avatar Group wants an overflow item, or the pattern wants writing down.

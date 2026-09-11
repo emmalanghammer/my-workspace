@@ -788,6 +788,10 @@
   cursor: default;
 }
 .ws-task--claim:hover { box-shadow: none; }
+/* A queue row that is also a real register task opens its details like any
+   other row, so it gets the pointer and the hover back. */
+.ws-task--claim[data-ws-task-id] { cursor: pointer; }
+.ws-task--claim[data-ws-task-id]:hover { box-shadow: var(--ws-shadow-sm); }
 /* Same Claim button as the register's, so the action reads identically in
    both places. */
 .ws-claim-btn {

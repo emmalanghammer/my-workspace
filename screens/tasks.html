@@ -256,9 +256,15 @@ a:hover { text-decoration:none; }
 .qadd-row2-right a{color:var(--rmx-blue);}
 .qadd-row2-right a.muted{color:var(--text-disabled);cursor:default;pointer-events:none;}
 /* Users Bubbles avatar cluster: up to 2 avatars shown, then a "+N" overflow bubble */
-.ub-avatars{display:inline-flex;align-items:center;gap:4px;}
-.ub-avatar{position:relative;width:24px;height:24px;border-radius:50%;background:var(--rmx-blue);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex:none;cursor:pointer;}
-.ub-avatar.plus{background:#fff;border:1px solid var(--rmx-blue);color:var(--rmx-blue);font-size:12px;}
+/* Avatar "Style=Inline Avatar Group" overlaps its items by 4px (the library
+   records itemSpacing -4), which is what the register's rows already do. */
+.ub-avatars{display:inline-flex;align-items:center;}
+.ub-avatar{position:relative;width:24px;height:24px;border-radius:50%;background:var(--rmx-blue);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex:none;cursor:pointer;margin-left:-4px;}
+.ub-avatar:first-child{margin-left:0;}
+/* The overflow bubble is the same blue as the avatars it stands for -- and
+   the same orange when what it stands for is roles. Emma's call, 2026-09-11. */
+.ub-avatar.plus{background:var(--rmx-blue);border:1px solid var(--rmx-blue);color:#fff;font-size:12px;}
+.ub-avatar.plus.role{background:var(--lozenge-notice);border-color:var(--rmx-orange);color:var(--rmx-navy);}
 /* A role is orange in the Assignee field and in the dropdown list, the same
    as its bubble in the register. */
 .ub-avatar.role{background:var(--lozenge-notice);border:1px solid var(--rmx-orange);color:var(--rmx-navy);}
@@ -350,7 +356,8 @@ a:hover { text-decoration:none; }
 .avatar-bubble{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;background:var(--rmx-blue);color:#fff;margin-left:-4px;flex:none;}
 .avatar-bubble:first-child{margin-left:0;}
 .avatar-bubble.notice{background:var(--lozenge-notice);border:1px solid var(--rmx-orange);color:var(--rmx-navy);}
-.avatar-bubble.plus{background:#fff;border:1px solid var(--rmx-blue);color:var(--rmx-blue);}
+.avatar-bubble.plus{background:var(--rmx-blue);border:1px solid var(--rmx-blue);color:#fff;}
+.avatar-bubble.plus.notice{background:var(--lozenge-notice);border-color:var(--rmx-orange);color:var(--rmx-navy);}
 .claim-btn{height:20px;padding:0 10px;background:var(--rmx-blue);border:1px solid var(--rmx-blue);border-radius:var(--r-sm);color:#fff;font-size:12px;cursor:pointer;display:inline-block;}
 .kebab-btn{color:var(--rmx-blue);cursor:pointer;padding:4px;border-radius:var(--r-sm);}
 .kebab-btn:hover{background:var(--bg-hover);}
@@ -461,6 +468,10 @@ a:hover { text-decoration:none; }
 .tile-header h3{font-size:14px;font-weight:600;color:var(--text-secondary);}
 .tile-header .actions{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:14px;}
 .tile-header .actions a{color:var(--rmx-blue);display:inline-flex;align-items:center;gap:2px;}
+/* Two affordances, not one: the text writes a note, the jump icon opens the
+   whole History / Notes overlay on top. They read as one control, so the gap
+   between them is small. Emma's call, 2026-09-11. */
+.tile-header .actions a + a.tile-header__jump{margin-left:-10px;}
 /* The Tile slot's own 16px padding, and 16px between the field groups inside
    it -- Links / Description / Display / Attachments. Emma's call, 2026-09-10.
    They were relying on each label's 6px margin, which left them crowded and
@@ -660,11 +671,15 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
       </div>
       <div class="qadd-row2">
         <div class="qadd-row2-left">
+          <!-- Two triggers, not one, and the same pickers the My Workspace
+               quick-add bar opens (assets/datetime.js): the date field and its
+               calendar open the Date Picker, the time field and its clock open
+               the time list. Defaults to today, an hour from now. -->
           <div class="qadd-datetime">
-            <div class="dt-field">09/17/2025</div>
-            <div class="dt-icon"><span class="material-symbols-outlined">calendar_today</span></div>
-            <div class="dt-field">11:00 AM</div>
-            <div class="dt-icon"><span class="material-symbols-outlined">schedule</span></div>
+            <div class="dt-field" id="qaddDate" onclick="event.stopPropagation();openQaddDue('date')"></div>
+            <div class="dt-icon" onclick="event.stopPropagation();openQaddDue('date')"><span class="material-symbols-outlined">calendar_today</span></div>
+            <div class="dt-field" id="qaddTime" onclick="event.stopPropagation();openQaddDue('time')"></div>
+            <div class="dt-icon" onclick="event.stopPropagation();openQaddDue('time')"><span class="material-symbols-outlined">schedule</span></div>
           </div>
           <div class="user-bubble-wrap" onclick="event.stopPropagation();openAssigneeDropdown(event)">
             <div class="ub-avatars" id="qaddAvatars"></div>
@@ -968,7 +983,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
           </div>
         </div>
         <div class="tile">
-          <div class="tile-header orange"><h3>History / Notes</h3><div class="actions"><a onclick="openTaskHistory(true)">Add Note <span class="material-symbols-outlined icon-16">open_in_new</span></a></div></div>
+          <div class="tile-header orange"><h3>History / Notes</h3><div class="actions"><a onclick="openTaskHistory('note')">Add Note</a><a class="tile-header__jump" title="Open History / Notes" onclick="openTaskHistory('all')"><span class="material-symbols-outlined icon-16">open_in_new</span></a></div></div>
           <div class="tile-body" id="historyNotesBody">
             <table class="hn-table"><thead><tr><th style="width:70px;">Date</th><th style="width:60px;">Type</th><th>Note</th></tr></thead><tbody id="historyBody"></tbody></table>
             <div class="checklist-empty hidden" id="historyEmpty">No History Notes found.</div>
@@ -1299,8 +1314,13 @@ let state = {
    ============================================================ */
 /* An avatar is a key now: a person renders blue, a role orange, and a bare
    "+N" is the overflow marker rather than anybody. */
-function avatarHTML(key){
-  if(/^\+/.test(key)) return `<div class="avatar-bubble plus">${key}</div>`;
+function avatarHTML(key, i, all){
+  // Users and roles are never mixed on one task, so "is this cluster a role
+  // cluster?" is a question the overflow bubble can answer from its siblings.
+  if(/^\+/.test(key)){
+    const role = (all||[]).some(k => isRoleKey(k));
+    return `<div class="avatar-bubble plus${role ? ' notice' : ''}">${key}</div>`;
+  }
   const cls = isRoleKey(key) ? 'avatar-bubble notice' : 'avatar-bubble';
   return `<div class="${cls}" title="${assigneeName(key)}">${assigneeInitials(key)}</div>`;
 }
@@ -1497,7 +1517,38 @@ function switchTab(tab){
 /* ============================================================
    QUICK ADD BAR
    ============================================================ */
+/* ---- the quick-add bar's due date and time ----
+   Default: today, an hour from now, exactly as the My Workspace tile's mini
+   bar does it -- one implementation in assets/datetime.js, used in both
+   places, so the calendar is the real RMX Date Picker wherever it opens.
+   Picking a value leaves the bar open: choosing a time is not finishing the
+   task. Emma's call, 2026-09-11. */
+let qaddDue = { date:'', time:'' };
+function paintQaddDue(){
+  document.getElementById('qaddDate').textContent = qaddDue.date || 'mm/dd/yyyy';
+  document.getElementById('qaddTime').textContent = qaddDue.time || '--:-- --';
+}
+function resetQaddDue(){
+  const d = RMXDateTime.defaults();
+  qaddDue.date = d.date; qaddDue.time = d.time;
+  paintQaddDue();
+}
+function openQaddDue(which){
+  const anchor = document.querySelector('.qadd-datetime');
+  if(which === 'date'){
+    RMXDateTime.openDate(anchor, { value:qaddDue.date, onPick:v => { qaddDue.date = v; paintQaddDue(); } });
+  } else {
+    RMXDateTime.openTime(anchor, { value:qaddDue.time, onPick:v => { qaddDue.time = v; paintQaddDue(); } });
+  }
+}
+
 function expandQuickAdd(){
+  /* Every opening starts clean: due today an hour from now, assigned to
+     whoever is signed in. Emma's call, 2026-09-11 -- the bar is for adding
+     the next thing, not for inheriting the last thing. */
+  resetQaddDue();
+  assigneeSelected = new Set([ME_KEY]);
+  renderQuickAddAssignees();
   state.quickAddExpanded = true;
   document.getElementById('qaddBar').classList.add('expanded');
   document.getElementById('qaddCollapsed').classList.add('hidden');
@@ -1512,6 +1563,7 @@ function collapseQuickAdd(){
   document.getElementById('qaddExpanded').classList.add('hidden');
   document.getElementById('qaddCollapsed').classList.remove('hidden');
   setQuickAddLinksEnabled(false);
+  resetQaddDue();
 }
 function onQuickAddInput(){
   const v = document.getElementById('qaddInput').value;
@@ -1537,14 +1589,20 @@ function quickAddMoreDetails(){
   openTaskModal(null, null, v);
 }
 function makeBlankTask(title){
+  /* The bar's own values, not a fixed date and a fixed person: whatever the
+     date, time and assignee fields are showing is what the task gets. */
+  const who = [...assigneeSelected];
   return { id:'t-'+Date.now(), title, flag:false, colorBar:null, completed:false,
-    action:null, actionDetails:null, dueDate:'09/17/25', dueTime:'11:00 AM', overdue:false,
-    assigned:['tlittle'], link:'', linkOverflow:0, workflow:'', checklist:[], externalCal:false };
+    action:null, actionDetails:null, dueDate:qaddDue.date, dueTime:qaddDue.time, overdue:false,
+    assigned:who.length ? who : [ME_KEY], link:'', linkOverflow:0, workflow:'', checklist:[], externalCal:false };
 }
 // click-outside collapses the empty quick-add bar
 document.addEventListener('click', (e)=>{
   if(!state.quickAddExpanded) return;
   const bar = document.getElementById('qaddBar');
+  // The pickers render on <body>, so they are outside the bar in the DOM and
+  // would otherwise close it the moment you chose a date.
+  if(e.target.closest && e.target.closest('.dt-panel')) return;
   if(!bar.contains(e.target) && document.getElementById('qaddInput').value.trim()===''){
     collapseQuickAdd();
   }
@@ -1651,7 +1709,7 @@ function renderModalAssignee(){
   const shown = keys.slice(0, 2), overflow = keys.slice(2);
   let html = shown.map(k =>
     `<div class="ub-avatar${isRoleKey(k) ? ' role' : ''}">${assigneeInitials(k)}</div>`).join('');
-  if (overflow.length) html += `<div class="ub-avatar plus">+${overflow.length}</div>`;
+  if (overflow.length) html += `<div class="ub-avatar plus${keys.some(isRoleKey) ? ' role' : ''}">+${overflow.length}</div>`;
   document.getElementById('modalAssignAvatars').innerHTML = html;
   const names = document.getElementById('modalAssignNames');
   names.textContent = keys.length ? keys.map(assigneeName).join(', ') : 'Unassigned';
@@ -1717,10 +1775,11 @@ function renderQuickAddAssignees(){
   const selected = [...assigneeSelected].map(k => ({ key:k, initials:assigneeInitials(k), name:assigneeName(k) }));
   const shown = selected.slice(0,2);
   const overflow = selected.slice(2);
-  let html = shown.map(u=>`<div class="ub-avatar">${u.initials}<div class="user-bubble-tooltip">${u.name}</div></div>`).join('');
+  const anyRole = selected.some(u => isRoleKey(u.key));
+  let html = shown.map(u=>`<div class="ub-avatar${isRoleKey(u.key) ? ' role' : ''}">${u.initials}<div class="user-bubble-tooltip">${u.name}</div></div>`).join('');
   if(overflow.length){
     const names = overflow.map(u=>u.name).join(', ');
-    html += `<div class="ub-avatar plus">+${overflow.length}<div class="user-bubble-tooltip">${names}</div></div>`;
+    html += `<div class="ub-avatar plus${anyRole ? ' role' : ''}">+${overflow.length}<div class="user-bubble-tooltip">${names}</div></div>`;
   }
   document.getElementById('qaddAvatars').innerHTML = html;
 }
@@ -2224,11 +2283,14 @@ function taskHistoryRecord(t){
     }))
   };
 }
-function openTaskHistory(addNote){
+/* mode 'note' opens only the Note Details dialog -- Add Note means write one.
+   mode 'all' opens the History / Notes overlay on top of Task Details, which
+   is what the jump icon beside it is for. Emma's call, 2026-09-11. */
+function openTaskHistory(mode){
   const t = state.modalTask;
   if (!t) { toast('Save this task before adding a note'); return; }
   RMXHistory.open(taskHistoryRecord(t), {
-    addNote: !!addNote,
+    noteOnly: mode === 'note',
     onChange: function (notes) {
       /* Back into the task's own shape, so the modal's History tile and the
          overlay never disagree about what has been written. */
@@ -2495,6 +2557,8 @@ renderRegister();
 renderQuickAddAssignees();
 renderQfAssignedLabel();
 initColumnResize();
+// assets/datetime.js loads after this block, so the default has to wait for it.
+document.addEventListener('DOMContentLoaded', resetQaddDue);
 
 // Arrived from My Workspace's My Tasks preview — open that task's details
 // directly, so "open a task's details" lands on the actual task, not the

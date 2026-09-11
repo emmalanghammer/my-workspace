@@ -195,7 +195,7 @@
         <div class="ws-eyebrow"><span class="ws-eyebrow__dot"></span>Wednesday, May 6</div>
         <h1 class="ws-band__title">Good morning, Tony.</h1>
         <p class="ws-band__summary">
-          You have <b>6 tasks</b> open, <b>2 overdue</b>, and <b>4 mentions</b> waiting.
+          You have <b data-ws-hero-open>8 tasks</b> open, <b data-ws-hero-overdue>2 overdue</b>, and <b>4 mentions</b> waiting.
         </p>
       </div>
       <div class="ws-band__actions">
@@ -532,7 +532,7 @@
         <div class="rmx-tile__header">
           <span class="ws-hicon ws-hicon--brand"><svg class="rmx-icon rmx-icon--16"><use href="#checklist"></use></svg></span>
           <span class="rmx-tile__title">My Tasks</span>
-          <span class="ws-tile-count" data-ws-open-count>6</span>
+          <span class="ws-tile-count" data-ws-open-count>8</span>
           <span class="rmx-tile__actions">
             <button class="ws-iconbtn" aria-label="New task" id="wsQaddBtn">
               <svg class="rmx-icon"><use href="#add"></use></svg>
@@ -592,12 +592,24 @@
             </div>
           </div>
 
-          <!-- Role queue. Hidden while Tony still has open tasks of his own;
-               it surfaces once his list is clear, so the tile stops being a
-               to-do list and starts offering him the next thing. Each row is
-               claimable straight from here. Emma's scene, 2026-09-11. -->
+          <!-- Role queue. Everything held by a role Tony belongs to, listed
+               under his own tasks rather than hidden behind them: the tile
+               shows every task assigned to him or to one of his roles. Emma's
+               call, 2026-09-11. Each row is claimable straight from here. -->
           <div class="ws-claimlist" id="wsClaimList" hidden>
-            <div class="ws-claimlist__label">Unassigned &middot; Property Manager queue</div>
+            <div class="ws-claimlist__label">Property Manager queue</div>
+
+            <!-- The one role-held task that also exists on the register, so it
+                 opens real details; the two below it are workspace-only. -->
+            <div class="ws-task ws-task--claim" data-ws-claim data-ws-task-id="t3"
+                 data-title="Record Park&rsquo;s records" data-flag="true"
+                 data-context="" data-due="07/31/25 07:30 AM">
+              <div>
+                <div class="ws-task__title">Record Park&rsquo;s records<svg class="ws-task__flag" viewBox="0 0 14 16" role="img" aria-label="High priority"><use href="#flag-priority"></use></svg></div>
+              </div>
+              <span class="ws-task__due">07/31/25 07:30 AM</span>
+              <button type="button" class="ws-claim-btn">Claim</button>
+            </div>
 
             <div class="ws-task ws-task--claim" data-ws-claim
                  data-title="Send renewal reminders &mdash; properties ending in 30 days"
@@ -683,6 +695,16 @@
               <span class="ws-task__due">09/12/25 05:00 PM</span>
             </div>
 
+            <div class="ws-task" data-overdue="false" data-done="false" data-ws-task-id="t-approve-pet">
+              <span class="rmx-check" data-rmx-component="Checkbox" data-checked="false" role="checkbox" aria-checked="false" tabindex="0">
+                <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
+              </span>
+              <div>
+                <div class="ws-task__title">Approve Daniel for Pet<svg class="ws-task__flag" viewBox="0 0 14 16" role="img" aria-label="High priority"><use href="#flag-priority"></use></svg></div>
+              </div>
+              <span class="ws-task__due">09/17/25 11:00 AM</span>
+            </div>
+
             <div class="ws-task" data-overdue="false" data-done="false" data-ws-task-id="ws-tomas-renewal">
               <span class="rmx-check" data-rmx-component="Checkbox" data-checked="false" role="checkbox" aria-checked="false" tabindex="0">
                 <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
@@ -694,6 +716,32 @@
                 </div>
               </div>
               <span class="ws-task__due">09/17/25 05:00 PM</span>
+            </div>
+
+            <div class="ws-task" data-overdue="false" data-done="false" data-ws-task-id="t-vendor-onboarding">
+              <span class="rmx-check" data-rmx-component="Checkbox" data-checked="false" role="checkbox" aria-checked="false" tabindex="0">
+                <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
+              </span>
+              <div>
+                <div class="ws-task__title">New Vendor Onboarding</div>
+              </div>
+              <span class="ws-task__due">09/19/26 05:00 PM</span>
+            </div>
+
+            <!-- Completed, and still listed: the register keeps a closed task on
+                 My Tasks rather than dropping it, so the tile does the same. It
+                 is struck through and does not count toward the open number. -->
+            <div class="ws-task" data-overdue="false" data-done="true" data-ws-task-id="t-receipts">
+              <span class="rmx-check" data-rmx-component="Checkbox" data-checked="true" role="checkbox" aria-checked="true" tabindex="0">
+                <span class="rmx-check__box"><svg class="rmx-icon rmx-icon--16" aria-hidden="true"><use href="#check"></use></svg></span>
+              </span>
+              <div>
+                <div class="ws-task__title">Upload receipts for property expenses</div>
+                <div class="ws-task__meta">
+                  <span class="ws-task__context ws-task__link"><span class="ws-task__link-label">Tenant</span> <span class="ws-task__link-value">Patrick O&rsquo;Malley</span></span>
+                </div>
+              </div>
+              <span class="ws-task__due">09/15/25 10:00 AM</span>
             </div>
 
           </div>
@@ -928,11 +976,19 @@
     openCount.textContent = String(open.length);
     overdueChip.hidden = overdue.length === 0;
     overdueChip.textContent = overdue.length + ' overdue';
-    /* The role queue is the tile's answer to "what now?" -- so it surfaces
-       only once nothing of Tony's own is left open, and never under the
-       Overdue filter, where an unassigned task has no business appearing. */
+    /* The greeting counts the same tasks the tile does -- it used to be a
+       fixed sentence, which went stale the moment anything was ticked off
+       or claimed. */
+    var heroOpen = document.querySelector('[data-ws-hero-open]');
+    var heroOverdue = document.querySelector('[data-ws-hero-overdue]');
+    if (heroOpen) heroOpen.textContent = open.length + (open.length === 1 ? ' task' : ' tasks');
+    if (heroOverdue) heroOverdue.textContent = overdue.length + ' overdue';
+    /* The role queue sits below Tony's own tasks and stays there: the tile
+       lists everything assigned to him or to a role he is in. It drops out
+       under the Overdue filter, where a task that is not yet his -- and so
+       not yet late for him -- has no business appearing. */
     var claimable = claimList.querySelectorAll('[data-ws-claim]').length;
-    claimList.hidden = !(open.length === 0 && filter === 'all' && claimable > 0);
+    claimList.hidden = !(filter === 'all' && claimable > 0);
   }
 
   /* Claiming from the tile: the task becomes one of Tony's in place, without
@@ -941,9 +997,11 @@
     var btn = e.target.closest ? e.target.closest('.ws-claim-btn') : null;
     if (!btn) return;
     var card = btn.closest('[data-ws-claim]');
-    addTaskRow(card.getAttribute('data-title'), {
+    addTaskRow(card.querySelector('.ws-task__title').firstChild.nodeValue, {
       context: card.getAttribute('data-context'),
-      due: card.getAttribute('data-due')
+      due: card.getAttribute('data-due'),
+      flag: card.getAttribute('data-flag') === 'true',
+      id: card.getAttribute('data-ws-task-id')
     });
     card.remove();
     paint();
@@ -1035,6 +1093,9 @@
     row.className = 'ws-task';
     row.setAttribute('data-overdue', 'false');
     row.setAttribute('data-done', 'false');
+    /* A claimed task keeps the id it has on the register, so its details
+       still open; one typed into the mini bar has none and does not. */
+    if (opts.id) row.setAttribute('data-ws-task-id', opts.id);
     row.innerHTML =
       '<span class="rmx-check" data-rmx-component="Checkbox" data-checked="false"' +
       ' role="checkbox" aria-checked="false" tabindex="0">' +
@@ -1046,6 +1107,11 @@
       '<span class="ws-task__due"></span>';
     row.querySelector('.ws-task__due').textContent = opts.due || (qaddDue.date + ' ' + qaddDue.time).trim();
     row.querySelector('.ws-task__title').textContent = title;
+    if (opts.flag) {
+      row.querySelector('.ws-task__title').insertAdjacentHTML('beforeend',
+        '<svg class="ws-task__flag" viewBox="0 0 14 16" role="img" aria-label="High priority">' +
+        '<use href="#flag-priority"></use></svg>');
+    }
     if (opts.context) row.querySelector('.ws-task__context').textContent = opts.context;
     list.insertBefore(row, list.firstElementChild);
     orderTasks();   // a new task is not overdue, so it lands below the overdue ones
@@ -1116,6 +1182,7 @@
     // call, 2026-09-10 (twice: first the deep link, then "open on the
     // workspace" instead of leaving it).
     if (e.target.closest('.rmx-check')) return;
+    if (e.target.closest('.ws-claim-btn')) return;
     var row = e.target.closest ? e.target.closest('.ws-task') : null;
     var id = row && row.getAttribute('data-ws-task-id');
     if (id) openTaskFrame(id);
