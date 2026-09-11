@@ -350,6 +350,31 @@ a:hover { text-decoration:none; }
 .kebab-btn{color:var(--rmx-blue);cursor:pointer;padding:4px;border-radius:var(--r-sm);}
 .kebab-btn:hover{background:var(--bg-hover);}
 .register-totals{text-align:right;font-size:12px;color:var(--text-disabled);padding:8px 0;display:flex;justify-content:flex-end;gap:32px;}
+/* ---- Quick Filters panel (3703:121005) ----
+   The panel ground is `Component/tenant-header` (#e8f6fa) -- a Foundations
+   colour tokens.css does not carry, see design-system item 32. Everything
+   else is standard: 248px fields, 36px inputs on component/input-default,
+   16px gaps, Apply/Reset bottom right. */
+.qf-panel{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px;margin-bottom:12px;background:#e8f6fa;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);}
+.qf-panel[hidden]{display:none;}
+.qf-actions{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;}
+.qf-selector{width:280px;flex:none;background:var(--bg-subtle);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);overflow:hidden;}
+.qf-selector__tabs{display:flex;gap:2px;}
+.qf-tab{flex:1;padding:16px 8px;border:0;background:none;font:600 14px 'Roboto',sans-serif;color:var(--text-primary);cursor:pointer;}
+.qf-tab.active{color:var(--rmx-navy);box-shadow:inset 0 -2px 0 var(--rmx-blue);}
+.qf-selector__body{display:flex;flex-direction:column;gap:16px;padding:16px;}
+.qf-filters{display:flex;flex-direction:column;gap:16px;}
+.qf-row1{display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+.qf-row{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+/* High Priority is a toggle: white with grey text until it is on, then the
+   error Lozenge tint with navy text -- the component's two states. */
+.qf-hp{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px;border:0;border-radius:var(--r-sm);background:var(--bg-surface);color:var(--text-primary);font:400 14px 'Roboto',sans-serif;cursor:pointer;}
+.qf-hp .hp-flag{opacity:.45;}
+.qf-hp.active{background:var(--lozenge-error);color:var(--rmx-navy);}
+.qf-hp.active .hp-flag{opacity:1;}
+.qf-linktype{color:var(--rmx-blue);cursor:pointer;}
+.qf-buttons{display:flex;align-items:center;gap:16px;margin-left:auto;}
+.qf-panel .field>label{display:flex;align-items:center;gap:4px;}
 .register-wrap{border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);overflow-x:auto;overflow-y:hidden;}
 
 /* Chips (Select Users overlay) */
@@ -668,6 +693,79 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
   </div>
 
   <!-- Register -->
+  <!-- ============================================================
+       Quick Filters — 2.3.4 Other Users Tasks View, Filters Open
+       (Tasks Enhancements 3703:121005). Shown by default on Other
+       Users' Tasks, where choosing whose tasks you are looking at is
+       the first thing you do; the Assigned To field is what drives
+       that. Emma's call, 2026-09-11.
+       ============================================================ -->
+  <div class="qf-panel" id="qfPanel" hidden>
+    <div class="qf-actions">
+
+      <!-- Property / Owner selector -->
+      <div class="qf-selector" data-rmx-todo="Filtering by property or group is not built in this prototype">
+        <div class="qf-selector__tabs">
+          <button type="button" class="qf-tab active">Property</button>
+          <button type="button" class="qf-tab">Owner</button>
+        </div>
+        <div class="qf-selector__body">
+          <div class="field"><div class="input"><span style="flex:1;"></span><span class="material-symbols-outlined">keyboard_arrow_down</span></div></div>
+          <div class="field"><label>Group</label><div class="input"><span style="flex:1;"></span><span class="material-symbols-outlined">keyboard_arrow_down</span></div></div>
+        </div>
+      </div>
+
+      <div class="qf-filters">
+        <div class="qf-row1">
+          <span class="check" data-rmx-todo="A ticked task stays visible in this prototype, so there is nothing for this to reveal"><span class="chkbox" id="qfClosed"></span>Closed Tasks</span>
+          <span class="check" onclick="toggleQfCheck(this,'checklist')"><span class="chkbox" id="qfChecklist"></span>Show Checklist Items</span>
+          <span class="check" data-rmx-todo="Follow-up notes are not modelled in this prototype"><span class="chkbox"></span>Include History/Note Follow Up</span>
+          <button type="button" class="qf-hp" id="qfHighPriority" onclick="toggleQfHighPriority()">
+            <svg class="hp-flag" width="14" height="16" viewBox="0 0 14 16" fill="none" aria-hidden="true"><path d="M0 15.8333V0H13.3333L11.6667 4.16667L13.3333 8.33333H1.66667V15.8333H0Z" fill="#EB343C"/></svg>High Priority
+          </button>
+        </div>
+
+        <div class="qf-row">
+          <div class="field" style="width:248px;">
+            <label>Assigned To</label>
+            <div class="input" style="cursor:pointer;" onclick="event.stopPropagation();openUsersModal()">
+              <span style="flex:1;" id="qfAssignedLabel">All Selected</span>
+              <span class="material-symbols-outlined">keyboard_arrow_down</span>
+            </div>
+          </div>
+          <div class="field" style="width:248px;" data-rmx-todo="Created By is not recorded in this prototype">
+            <label>Created By</label>
+            <div class="input"><span class="material-symbols-outlined">search</span><span style="flex:1;font-style:italic;color:var(--text-disabled);">Any</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div>
+          </div>
+          <div class="field" style="width:248px;">
+            <label>Workflow Project</label>
+            <div class="input" style="cursor:pointer;" onclick="event.stopPropagation();openQfWorkflowMenu(event)">
+              <span class="material-symbols-outlined">search</span>
+              <span style="flex:1;" id="qfWorkflowLabel">Any</span>
+              <span class="material-symbols-outlined">keyboard_arrow_down</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="qf-row">
+          <div class="field" style="width:248px;" data-rmx-todo="Filtering by linked record is not built in this prototype">
+            <label>Linked To <a class="qf-linktype">Tenant <span class="material-symbols-outlined icon-16">arrow_drop_down</span></a></label>
+            <div class="input"><span class="material-symbols-outlined">search</span><span style="flex:1;"></span></div>
+          </div>
+          <div class="field" style="width:248px;" data-rmx-todo="Relative date filtering is not built in this prototype">
+            <label>Due Date</label>
+            <div class="input"><span style="flex:1;">30 Days</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qf-buttons">
+      <button class="btn btn-primary" onclick="applyQuickFilters()">Apply</button>
+      <button class="btn btn-secondary" onclick="resetQuickFilters()">Reset</button>
+    </div>
+  </div>
+
   <div class="register-wrap">
     <table class="task-register">
       <thead>
@@ -1305,12 +1403,20 @@ function renderRegister(){
   if (state.activeTab === 'other' && state.selectedUserKeys.size) {
     list = list.filter(t => (t.assigned || []).some(k => state.selectedUserKeys.has(k)));
   }
+  if (qfApplied.highPriority) list = list.filter(t => t.flag);
+  if (qfApplied.workflow)     list = list.filter(t => t.workflow === qfApplied.workflow);
+  /* No closed-task filter. In the product a closed task drops out of the
+     register until you ask for it; here a task you tick stays put, struck
+     through, which is what makes ticking one legible in a demo. Hiding closed
+     tasks would fight that -- and it quietly took My Tasks from ten rows to
+     nine. Left as the one checkbox that is honestly not built. */
   const q = (document.getElementById('searchInput').value||'').toLowerCase().trim();
   const filtered = q ? list.filter(t=>t.title.toLowerCase().includes(q)) : list;
   let html = '';
   filtered.forEach(t=>{
     html += taskRowHTML(t, state.activeTab);
-    if(t.expandChecklist && t.checklist && !q){ t.checklist.forEach((c,idx)=> html += childRowHTML(c, state.activeTab, t.id, idx)); }
+    const showItems = (t.expandChecklist || qfApplied.checklist) && t.checklist && t.checklist.length;
+    if(showItems && !q){ t.checklist.forEach((c,idx)=> html += childRowHTML(c, state.activeTab, t.id, idx)); }
   });
   document.getElementById('registerBody').innerHTML = html || `<tr><td colspan="10" style="text-align:center;color:var(--text-disabled);font-style:italic;padding:24px;">No tasks match your search.</td></tr>`;
   document.getElementById('totalsLine').textContent = q
@@ -1355,15 +1461,12 @@ function renderTabCounts(){
    TABS
    ============================================================ */
 function switchTab(tab){
-  // The Select Other Users overlay shows only the first time this tab is
-  // clicked, before any users are selected. Once a selection exists, every
-  // later click — including clicking the tab again while it's already
-  // active — just switches/stays, no reopen. Emma's call, 2026-09-10.
-  if(tab==='other' && state.selectedUserKeys.size===0){
-    openUsersModal();
-    return;
-  }
+  /* Other Users' Tasks opens with the Quick Filters panel showing rather than
+     forcing the Select Other Users overlay in front of you -- the Assigned To
+     field in the panel is that same picker, reachable when you want it
+     instead of before you have seen anything. Emma's call, 2026-09-11. */
   state.activeTab = tab;
+  setQuickFilters(tab === 'other');
   document.getElementById('tabMyBtn').classList.toggle('active', tab==='my');
   document.getElementById('tabOtherBtn').classList.toggle('active', tab==='other');
   document.getElementById('searchInput').value='';
@@ -1565,9 +1668,67 @@ function renderQuickAddAssignees(){
   }
   document.getElementById('qaddAvatars').innerHTML = html;
 }
+/* ---- Quick Filters ----
+   Staged, not live: the panel has Apply and Reset, so choices sit until you
+   commit them, which is what those buttons mean. Emma's call, 2026-09-11 --
+   Other Users' Tasks opens with the panel showing, because choosing whose
+   tasks you are looking at is the first thing you do there. */
+const QF_DEFAULTS = { closed:false, checklist:false, highPriority:false, workflow:null };
+let qfStaged  = {...QF_DEFAULTS};
+let qfApplied = {...QF_DEFAULTS};
+
+function setQuickFilters(open){
+  document.getElementById('qfPanel').hidden = !open;
+  document.getElementById('qfLabel').textContent = open ? 'Hide Quick Filters' : 'Show Quick Filters';
+}
 function toggleQuickFilters(){
-  const lbl = document.getElementById('qfLabel');
-  lbl.textContent = lbl.textContent==='Show Quick Filters' ? 'Hide Quick Filters' : 'Show Quick Filters';
+  setQuickFilters(document.getElementById('qfPanel').hidden);
+}
+function toggleQfCheck(el, key){
+  qfStaged[key] = !qfStaged[key];
+  el.querySelector('.chkbox').classList.toggle('checked', qfStaged[key]);
+  el.querySelector('.chkbox').innerHTML = qfStaged[key] ? '<span class="material-symbols-outlined">check</span>' : '';
+}
+function toggleQfHighPriority(){
+  qfStaged.highPriority = !qfStaged.highPriority;
+  document.getElementById('qfHighPriority').classList.toggle('active', qfStaged.highPriority);
+}
+function openQfWorkflowMenu(e){
+  const all = [...new Set(myTasks.concat(otherTasks).map(t => t.workflow).filter(Boolean))].sort();
+  const panel = document.getElementById('linkTypePanel');
+  panel.innerHTML = ['Any'].concat(all)
+    .map(w => `<div class="fp-plain-item" onclick="pickQfWorkflow('${w.replace(/'/g, "\\'")}')">${w}</div>`).join('');
+  panel.hidden = false;
+  positionPanel(panel, e.currentTarget);
+}
+function pickQfWorkflow(w){
+  qfStaged.workflow = (w === 'Any') ? null : w;
+  document.getElementById('qfWorkflowLabel').textContent = w;
+  document.getElementById('linkTypePanel').hidden = true;
+}
+function applyQuickFilters(){
+  qfApplied = {...qfStaged};
+  renderRegister();
+  toast('Filters applied', 'success');
+}
+function resetQuickFilters(){
+  qfStaged = {...QF_DEFAULTS};
+  qfApplied = {...QF_DEFAULTS};
+  state.selectedUserKeys.clear();
+  ['qfChecklist'].forEach(id => {
+    const b = document.getElementById(id);
+    b.classList.remove('checked'); b.innerHTML = '';
+  });
+  document.getElementById('qfHighPriority').classList.remove('active');
+  document.getElementById('qfWorkflowLabel').textContent = 'Any';
+  renderQfAssignedLabel();
+  renderRegister();
+}
+/* The Assigned To field is the Select Other Users picker, worn as an input --
+   one implementation, and the field reports what it holds. */
+function renderQfAssignedLabel(){
+  const n = state.selectedUserKeys.size;
+  document.getElementById('qfAssignedLabel').textContent = n ? n + ' Selected' : 'All Selected';
 }
 
 /* ============================================================
@@ -1622,6 +1783,7 @@ function clearAllUsers(){
 }
 function saveSelectedUsers(){
   if(state.selectedUserKeys.size===0) return;
+  renderQfAssignedLabel();
   state.otherUsersConfirmedOnce = true;
   document.getElementById('usersOverlay').hidden = true;
   state.activeTab = 'other';
@@ -2275,6 +2437,7 @@ function toast(msg, variant){
    ============================================================ */
 renderRegister();
 renderQuickAddAssignees();
+renderQfAssignedLabel();
 initColumnResize();
 
 // Arrived from My Workspace's My Tasks preview — open that task's details

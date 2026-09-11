@@ -1038,6 +1038,41 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
 
+## Other Users' Tasks opens with Quick Filters
+
+Built from Tasks Enhancements `3502:93452` / `3703:121005`, Emma's call,
+2026-09-11. The "Show Quick Filters" link used to only swap its own label —
+there was no panel behind it. There is now, and Other Users' Tasks opens with
+it showing, because choosing whose tasks you are looking at is the first thing
+you do there.
+
+**Assigned To is what drives who shows.** It is the Select Other Users picker
+worn as an input — one implementation — and the field reports what it holds
+("1 Selected", "All Selected"). Picking Chris cuts the register to his one
+task. That replaces the old behaviour where the tab shoved the picker overlay
+in your face before you had seen anything; the picker is still there, reached
+when you want it.
+
+**Filters are staged, not live.** The panel has Apply and Reset, so choices
+sit until you commit them — which is what those buttons mean. Verified:
+staging High Priority leaves the list alone until Apply, then empties it
+correctly, and Reset restores all ten. The one exception is Assigned To, which
+applies when you Save inside its own picker, because that Save is itself a
+commit.
+
+What is real: **Assigned To**, **Show Checklist Items** (expands every
+checklist inline, 4 child rows to 7), **Workflow Project** (options built from
+the tasks' own values), **High Priority**, and **Reset**. Marked not-built,
+with reasons: Property/Owner and Group, Created By (nothing records it),
+Linked To, and the relative Due Date.
+
+**Closed Tasks is the interesting one.** In the product a closed task drops
+out of the register until you ask for it. Here a task you tick stays put,
+struck through, which is what makes ticking one legible in a demo — and
+implementing the filter quietly took My Tasks from ten rows to nine by hiding
+the completed one. It is left as the one checkbox honestly not built, rather
+than breaking the ten Emma just asked for.
+
 ## Scene 5 — clear the list, then claim what's left
 
 Emma's scene, 2026-09-11. Tony works his My Tasks tile down to nothing, and
@@ -1838,3 +1873,8 @@ and **for Emma to decide on** — none of it was worked around quietly. Items
     the product is therefore inert under the cursor. Either the token is
     missing or the state is deliberate, but one blue button that never
     responds next to a Secondary that does reads as an oversight.
+32. **`Component/tenant-header` (#e8f6fa) is not in `tokens.css`.** It is the
+    Quick Filters panel's ground in `3703:121005`, and the stylesheet carries
+    no `component-*` background at that value, so the panel declares the hex
+    locally. Same family of gap as items 12 and 21 — a real Foundations colour
+    the export does not reach.
