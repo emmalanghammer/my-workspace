@@ -91,6 +91,13 @@
 <!-- RMX_ICONS:END -->
 
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+<!-- The Mentions tile's header glyph. Real geometry from RMX Iconography,
+     carried over with the tile itself -- this page's own sprite was built
+     for the four tiles the frame has, and does not include it. -->
+<symbol id="sms" viewBox="0 0 20 20" fill="currentColor" data-figma="Material Icons/sms / outlined" data-key="60883283aaf83fe1159be987784c6fc5ab3ec096"><path d="M16.6667 3.33331H3.33335C2.41669 3.33331 1.66669 4.08331 1.66669 4.99998V20L5.00002 16.6666H16.6667C17.5834 16.6666 18.3334 15.9166 18.3334 15V4.99998C18.3334 4.08331 17.5834 3.33331 16.6667 3.33331ZM16.6667 15H4.30835L3.33335 15.975V4.99998H16.6667V15ZM5.83335 9.16665H7.50002V10.8333H5.83335V9.16665ZM12.5 9.16665H14.1667V10.8333H12.5V9.16665ZM9.16669 9.16665H10.8334V10.8333H9.16669V9.16665Z"/></symbol>
+</svg>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
 <!-- The ten glyphs this screen needs from assets/icons-local.svg —
      real geometry from RMX Iconography, verified against the live
      library by FNV-1a on the path data. Inlined because bundle.mjs
@@ -116,9 +123,7 @@
 <header class="rmx-appbar" data-rmx-component="Header (app bar)">
   <div class="rmx-appbar__leading">
     <!-- The logo goes to My Workspace from anywhere, this page included. -->
-    <a href="index.html" aria-label="My Workspace">
-      <svg class="rmx-appbar__logo" viewBox="0 0 175 32" role="img" aria-label="Rent Manager"><use href="#rmx-logo"></use></svg>
-    </a>
+    <a class="rmx-appbar__home" href="index.html" aria-label="Rent Manager — go to My Workspace"><svg class="rmx-appbar__logo" viewBox="0 0 175 32" role="img" aria-label="Rent Manager"><use href="#rmx-logo"></use></svg></a>
   </div>
 
   <div class="rmx-appbar__launch">
