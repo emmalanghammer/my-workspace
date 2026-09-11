@@ -1915,6 +1915,44 @@ toggling a class on nothing. Fixed in three places; "Only Notes with
 Attachments" now filters the register (four notes to two on Daniel Smith's
 record), and the Note dialog's three checkboxes tick.
 
+## Closed tasks sink, then they are gone
+
+Emma's call, 2026-09-11, on the My Workspace tile. Two halves of one rule:
+
+**Ticked, it sinks.** The list orders overdue, then everything still open,
+then anything closed. A task you tick does not vanish from under your cursor —
+it drops to the bottom, where you can see what you just did and untick it if
+the tick was a mistake.
+
+**Come back, and it is gone.** A task that was already closed when the page
+loaded never renders. The tile is a list of what is still open; the register
+is where closed tasks live and it keeps every one of them, with its own Closed
+Tasks filter. That is why "Upload receipts for property expenses" is on the
+register and not on the tile.
+
+## Editing a checklist item
+
+Edit was a disabled menu item with a tooltip saying it opened an overlay this
+prototype does not model. It edits in place instead, on Emma's call: the row
+stays a row, the description becomes an input and the assignee a dropdown
+trigger, with Save and Cancel where the kebab was. Enter saves, Escape cancels.
+
+Three things worth knowing:
+
+- **A checklist item goes to people, never to a role.** The dropdown opens on
+  Users with the User Roles tab hidden, rather than offering a choice the data
+  model does not allow.
+- **Reassigning the item you are waiting on reassigns the task**, the same way
+  ticking it off does — that is the whole point of the baton-pass behaviour,
+  and editing is just another way of moving the baton.
+- **A saved item carries assignee keys.** Checklist rows arrived in two shapes:
+  a name string (`assignee`) from the template data, or a list of keys
+  (`assigned`) from the scene tasks. Saving normalises to keys, so an edited
+  item no longer depends on a name matching a person exactly.
+
+Also: **Make private centres on the Assigned To field.** It was aligned to the
+field's bottom edge, which sat it low against a 36px input.
+
 ---
 
 # Worth raising with the design system

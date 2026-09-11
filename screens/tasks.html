@@ -476,6 +476,16 @@ a:hover { text-decoration:none; }
 .tile-header h3{font-size:14px;font-weight:600;color:var(--text-secondary);}
 .tile-header .actions{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:14px;}
 .tile-header .actions a{color:var(--rmx-blue);display:inline-flex;align-items:center;gap:2px;}
+/* ---- a checklist item being edited ----
+   The row stays a row: the description becomes an input and the assignee a
+   dropdown trigger, both sized to the 36px cell rather than opening a second
+   overlay on top of Task Details. Emma's call, 2026-09-11. */
+.cl-edit-input{width:100%;height:28px;padding:0 8px;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);background:#fff;font:400 14px 'Roboto',sans-serif;color:var(--text-secondary);}
+.cl-assign{display:flex;align-items:center;gap:4px;height:28px;padding:0 8px;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);background:#fff;color:var(--text-secondary);cursor:pointer;}
+.cl-assign .material-symbols-outlined{font-size:18px;color:var(--icon-muted);margin-left:auto;}
+.cl-assign .empty{font-style:italic;color:var(--text-disabled);}
+.cl-edit-actions{display:inline-flex;gap:12px;}
+.cl-edit-actions a{color:var(--rmx-blue);cursor:pointer;}
 /* Two affordances, not one: the text writes a note, the jump icon opens the
    whole History / Notes overlay on top. They read as one control, so the gap
    between them is small. Emma's call, 2026-09-11. */
@@ -503,6 +513,10 @@ a:hover { text-decoration:none; }
 /* The row aligns on the controls, not the labels, so "Make private" sits
    level with the Assigned To field rather than with the word above it. */
 .details-row{display:flex;align-items:flex-end;gap:16px;}
+/* The check sits in a box the height of the field beside it, so it centres on
+   the input rather than lining up with its bottom edge. Emma's call,
+   2026-09-11. */
+#privateCheckRow{height:36px;align-items:center;}
 .assign-row{display:flex;align-items:center;gap:8px;}
 .assign-row .btn{flex:none;}
 /* A task sitting in a shared queue cannot be private -- 4077:78705 draws
@@ -1076,7 +1090,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
 </div>
 
 <div class="float-panel" id="checklistItemPanel" hidden style="min-width:140px;">
-  <div class="fp-item disabled" title="Edit opens a separate overlay not modeled in this prototype">Edit</div>
+  <div class="fp-item" onclick="editChecklistItem()">Edit</div>
   <div class="fp-item" onclick="deleteChecklistItem()">Delete</div>
 </div>
 
@@ -1694,9 +1708,14 @@ let assigneeSelected = new Set(['tlittle']);
    dropdown". */
 let modalAssignees = new Set();
 let assigneeTarget = 'quickadd';
-function assigneeSet(){ return assigneeTarget==='modal' ? modalAssignees : assigneeSelected; }
+function assigneeSet(){
+  if (assigneeTarget === 'checklist') return clEditAssignees;
+  return assigneeTarget === 'modal' ? modalAssignees : assigneeSelected;
+}
 function renderAssigneeTarget(){
-  if(assigneeTarget==='modal') renderModalAssignee(); else renderQuickAddAssignees();
+  if(assigneeTarget==='checklist') renderModalChecklist();
+  else if(assigneeTarget==='modal') renderModalAssignee();
+  else renderQuickAddAssignees();
 }
 /* The field shows whoever the task is actually assigned to -- people and
    roles alike, in the order the task lists them -- so it agrees with the
@@ -1741,6 +1760,8 @@ function openAssigneeDropdown(e, target){
   assigneeTarget = target || 'quickadd';
   const panel = document.getElementById('assigneeDropdown');
   panel.hidden = false;
+  // A checklist item cannot go to a role, so the Roles tab is not offered.
+  document.getElementById('adTabRoles').hidden = assigneeTarget === 'checklist';
   setAssigneeTab('users');
   // the quick-add bar anchors on its bubble cluster; the modal field is its own anchor
   positionPanel(panel, e.currentTarget.closest('.user-bubble-wrap') || e.currentTarget);
@@ -1960,6 +1981,7 @@ function openTaskModal(dataset, id, prefillTitle){
   state.modalIsNew = !task;
   state.modalDataset = dataset;
   state.modalChecklist = task ? JSON.parse(JSON.stringify(task.checklist||[])) : [];
+  clEditIdx = null;   // a half-finished edit does not survive opening another task
   state.modalActionLabel = task ? task.action : null;
   state.modalActionDetails = task ? task.actionDetails : null;
   state.actionPicking = false;
@@ -2354,6 +2376,21 @@ function renderModalChecklist(){
     const firstIncompleteIdx = items.findIndex(it=>!it.done);
     body.innerHTML = visible.map(it=>{
       const isCurrent = it._i === firstIncompleteIdx;
+      if (it._i === clEditIdx) {
+        const names = [...clEditAssignees].map(assigneeName).join(', ');
+        return `<tr class="${isCurrent?'current':''}">
+          <td><div class="chkbox"></div></td>
+          <td><input class="cl-edit-input" id="clEditInput" value="${escAttr(clEditDraft.text)}"
+                     oninput="clEditDraft.text=this.value" onkeydown="onChecklistEditKey(event)"></td>
+          <td><div class="cl-assign" onclick="event.stopPropagation();openAssigneeDropdown(event,'checklist')">
+                <span class="${names?'':'empty'}">${names || 'Unassigned'}</span>
+                <span class="material-symbols-outlined">keyboard_arrow_down</span>
+              </div></td>
+          <td style="text-align:right;white-space:nowrap;"><span class="cl-edit-actions">
+                <a onclick="saveChecklistItem()">Save</a><a onclick="cancelChecklistEdit()">Cancel</a>
+              </span></td>
+        </tr>`;
+      }
       return `<tr class="${isCurrent?'current':''} ${it.done?'done':''}">
         <td><div class="chkbox ${it.done?'checked':''}" onclick="toggleChecklistItem(${it._i})">${it.done?'<span class="material-symbols-outlined">check</span>':''}</div></td>
         <td><span class="cl-desc">${it.text}</span></td>
@@ -2380,6 +2417,52 @@ function toggleChecklistItem(i){
     renderModalAssignee();
   }
 }
+/* ---- editing a checklist item in place ----
+   Edit used to be a disabled menu item pointing at an overlay this prototype
+   does not model. It edits the two things the row actually carries instead:
+   the description, and who it is assigned to. Emma's call, 2026-09-11.
+   A checklist item goes to people only -- never to a role -- so the dropdown
+   opens on Users with the User Roles tab out of the way. */
+let clEditIdx = null;
+let clEditDraft = { text:'' };
+let clEditAssignees = new Set();
+function escAttr(v){ return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function editChecklistItem(){
+  document.getElementById('checklistItemPanel').hidden = true;
+  const it = state.modalChecklist[checklistItemMenuIdx];
+  if (!it) return;
+  clEditIdx = checklistItemMenuIdx;
+  clEditDraft = { text: it.text };
+  clEditAssignees = new Set(checklistAvatars(it));
+  setChecklistFilter('all');
+  const input = document.getElementById('clEditInput');
+  if (input) { input.focus(); input.select(); }
+}
+function cancelChecklistEdit(){
+  clEditIdx = null;
+  renderModalChecklist();
+}
+function saveChecklistItem(){
+  const it = state.modalChecklist[clEditIdx];
+  if (it) {
+    it.text = (clEditDraft.text || '').trim() || it.text;
+    it.assigned = [...clEditAssignees];
+    /* One shape from here on: the row carried either a name string or a list
+       of keys, and a saved item carries the keys. */
+    delete it.assignee;
+  }
+  clEditIdx = null;
+  renderModalChecklist();
+  /* Reassigning the item you are waiting on is reassigning the task. */
+  const owner = checklistOwner(state.modalChecklist);
+  if (owner) { modalAssignees = new Set(owner); renderModalAssignee(); }
+  toast('Checklist item saved');
+}
+function onChecklistEditKey(e){
+  if (e.key === 'Enter') { e.preventDefault(); saveChecklistItem(); }
+  if (e.key === 'Escape') { e.preventDefault(); cancelChecklistEdit(); }
+}
+
 let checklistItemMenuIdx = null;
 function openChecklistItemMenu(e, idx){
   checklistItemMenuIdx = idx;

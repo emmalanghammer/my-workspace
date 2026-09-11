@@ -1062,14 +1062,20 @@
      Emma's call, 2026-09-10. A stable partition rather than a sort, so the
      order inside each group is left alone -- the overdue two keep their
      oldest-first order and everything else keeps the order it was added in. */
+  /* Order: overdue first, then everything still open, then anything closed.
+     A task you tick off sinks to the bottom rather than vanishing under your
+     cursor -- you can see what you just did, and undo it if the tick was a
+     mistake. Emma's call, 2026-09-11. */
   function orderTasks() {
     var all = [].slice.call(list.children).filter(function (el) {
       return el.classList && el.classList.contains('ws-task');
     });
-    var overdue = all.filter(function (r) { return r.getAttribute('data-overdue') === 'true'; });
-    var rest = all.filter(function (r) { return r.getAttribute('data-overdue') !== 'true'; });
-    overdue.concat(rest).forEach(function (row) { list.appendChild(row); });
-    rows = overdue.concat(rest);
+    var done = all.filter(function (r) { return r.getAttribute('data-done') === 'true'; });
+    var open = all.filter(function (r) { return r.getAttribute('data-done') !== 'true'; });
+    var overdue = open.filter(function (r) { return r.getAttribute('data-overdue') === 'true'; });
+    var rest = open.filter(function (r) { return r.getAttribute('data-overdue') !== 'true'; });
+    rows = overdue.concat(rest, done);
+    rows.forEach(function (row) { list.appendChild(row); });
   }
 
   /* ---- the quick-add bar's due date and time ----
@@ -1214,6 +1220,13 @@
     paint();
     if (checked && window.RMX) RMX.toast('Task closed successfully', 'success');
   });
+
+  /* ...and it is only there until you come back. The tile is a list of what
+     is still open, so a task that was already closed when the page loaded
+     does not appear at all -- the register is where closed tasks live, and it
+     keeps every one of them. Emma's call, 2026-09-11. */
+  [].slice.call(list.querySelectorAll('.ws-task[data-done="true"]'))
+    .forEach(function (row) { row.remove(); });
 
   orderTasks();
   paint();
