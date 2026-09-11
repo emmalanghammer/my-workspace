@@ -2085,6 +2085,27 @@ It works in every direction, not just the demo's:
 the open count and out of the greeting. The tile is My Tasks; a task that is no
 longer Tony's has no business on it.
 
+## Walking the demo end to end
+
+Emma walked the five scenes, 2026-09-11. Three things came out of it.
+
+**Enter did nothing on the register's quick-add bar.** Scene 1 is "type it and
+hit enter" and the register's bar had no key handler at all — only the
+Workspace tile's mini bar did, from the round where that was built. Enter adds
+and Escape backs out on both now. The whole point of a quick-add bar is not
+reaching for the mouse.
+
+**A closed task only sank on the next re-sort.** Ticking one set its state and
+repainted the counts but did not reorder, so it sat where it was until
+something else — an add, a claim — happened to re-sort the list. It sinks the
+moment it is closed now, and unticking brings it back up among the open ones.
+
+**Scene 1's line does not fit.** "Send new vendor agreement to Precision
+Heating & Cooling" is 56 characters and the quick-add field stops at 50 — the
+frame's own counter reads 0/50, so that is the product's limit and not this
+prototype's. Typed in full it truncates to "…Precision Heating & C". A shorter
+line is the fix; the field is not.
+
 ---
 
 # Worth raising with the design system

@@ -703,7 +703,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
       <div class="qadd-row1">
         <div class="left">
           <span class="material-symbols-outlined" style="color:var(--icon-muted)">add</span>
-          <input id="qaddInput" type="text" maxlength="50" placeholder="Add a task" oninput="onQuickAddInput()">
+          <input id="qaddInput" type="text" maxlength="50" placeholder="Add a task" oninput="onQuickAddInput()" onkeydown="onQuickAddKey(event)">
         </div>
         <span class="charcount" id="qaddCount">0/50</span>
       </div>
@@ -1590,6 +1590,18 @@ function collapseQuickAdd(){
   document.getElementById('qaddCollapsed').classList.remove('hidden');
   setQuickAddLinksEnabled(false);
   resetQaddDue();
+}
+/* Enter adds and keeps you moving, Escape backs out -- the whole point of a
+   quick-add bar is not having to reach for the mouse. The Workspace tile's
+   mini bar has had this since it was built; the register's had not, so
+   "type it and hit enter" did nothing here. Emma's demo walkthrough,
+   2026-09-11. */
+function onQuickAddKey(e){
+  if(e.key === 'Enter' && document.getElementById('qaddInput').value.trim()){
+    e.preventDefault();
+    quickAddTask();
+  }
+  if(e.key === 'Escape') collapseQuickAdd();
 }
 function onQuickAddInput(){
   const v = document.getElementById('qaddInput').value;

@@ -1280,6 +1280,9 @@
     if (!row) return;
     var checked = !!(e.detail && e.detail.checked);
     row.setAttribute('data-done', String(checked));
+    // A closed task sinks to the bottom the moment it is closed, not the next
+    // time something else re-sorts the list.
+    orderTasks();
     paint();
     if (checked && window.RMX) RMX.toast('Task closed successfully', 'success');
   });
