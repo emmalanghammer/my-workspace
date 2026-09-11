@@ -1272,19 +1272,34 @@ let myTasks = [
      history, one role-held task so Claim is reachable here too, and one
      already-completed task. Emma's call, 2026-09-11. */
 
-  /* An internal process that runs through four people in order. Each
-     checklist item carries its own assignee, and the task follows the first
-     item still open -- so ticking yours hands it on rather than leaving you
-     to chase the next person. */
-  { id:'t-vendor-onboarding', title:'New Vendor Onboarding', flag:false, colorBar:'blue', completed:false,
-    action:null, actionDetails:null, dueDate:'09/25/26', dueTime:'05:00 PM', overdue:false,
-    assigned:['tlittle'], link:'', linkOverflow:0, workflow:'Vendor Onboarding',
+  /* An internal process that runs through three roles in order. Each checklist
+     item carries its own assignee -- a *role*, not a person -- and the task
+     follows the first item still open, so ticking yours hands it to the next
+     queue rather than leaving you to chase anyone. Emma's script, 2026-09-11. */
+  { id:'t-month-end-close', title:'Month End Close', flag:false, colorBar:'blue', completed:false,
+    action:'Post Owner Checks', actionDetails:null, dueDate:'09/30/26', dueTime:'05:00 PM', overdue:false,
+    assigned:['role-pm'], link:'Riverview Apartments', linkOverflow:1, workflow:'Month End',
     showProgress:true, externalCal:false,
+    links:[{label:'Property', value:'Riverview Apartments', removable:false},
+           {label:'Owner',    value:'M. Whitfield Properties LLC', removable:true}],
     checklist:[
-      {text:'Find new preferred vendor for services',            assigned:['tlittle'],     done:false},
-      {text:'Create vendor account in system',                   assigned:['bhollis'],   done:false},
-      {text:'Send new vendor agreement & W-9',                   assigned:['amitchell'], done:false},
-      {text:'Confirm COI, W-9, & payment method are on file',    assigned:['dshaw'],   done:false}
+      {text:'Review monthly charges and payments',          assigned:['role-pm'],         done:false},
+      {text:'Process any open/aged payables',               assigned:['role-bookkeeper'], done:false},
+      {text:'Reconcile bank accounts and trust accounts',   assigned:['role-accountant'], done:false},
+      {text:'Run owner statements and pay owners',          assigned:['role-bookkeeper'], done:false},
+      {text:'Close and lock the accounting period',         assigned:['role-accountant'], done:false}
+    ],
+    /* A conversation, not a log: the point of the History / Notes tile on this
+       task is that the people in the queues talk to each other on the record. */
+    history:[
+      {date:'09/11/26 08:20 AM', type:'Note', avatar:'tnolan',
+       text:'@Tony holding the reconciliation until the payables run clears — two invoices posted late on the 9th.'},
+      {date:'09/10/26 04:05 PM', type:'Note', avatar:'psullivan',
+       text:'Aged payables are down to three. Chasing the last one with the vendor today.'},
+      {date:'09/10/26 09:15 AM', type:'Note', avatar:'tlittle',
+       text:'Charges and payments reviewed through the 9th. @Paige Sullivan payables are yours whenever you are ready.'},
+      {date:'09/09/26 05:30 PM', type:'System', avatar:'tnolan',
+       text:'Travis Nolan created task'}
     ] },
   { id:'t-approve-pet', title:'Approve Daniel for Pet', flag:true, colorBar:null, completed:false,
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/18/26', dueTime:'11:00 AM', overdue:false,
@@ -1322,6 +1337,14 @@ let myTasks = [
       {date:'09/10/26 03:15 PM', type:'System', avatar:'ncole',
        text:'Nathan Cole created task'},
     ] },
+  /* The claim scene: a Bookkeeper-queue task Tony picks up because he has the
+     time. It shows on My Tasks because a role he is in holds it, and it
+     carries a Claim button for the same reason. Emma's script, 2026-09-11. */
+  { id:'t-kessler-w9', title:'Review W-9 for new owner Julia Kessler', flag:false, colorBar:'orange', completed:false,
+    action:null, actionDetails:null, dueDate:'09/23/26', dueTime:'12:00 PM', overdue:false,
+    assigned:['role-bookkeeper'], link:'Julia Kessler', linkOverflow:0, workflow:'Onboarding',
+    checklist:[], externalCal:false,
+    links:[{label:'Owner', value:'Julia Kessler', removable:false}] },
   { id:'t-receipts', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:true,
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/17/26', dueTime:'10:00 AM', overdue:false,
     assigned:['tlittle'], link:"Patrick O'Malley", linkOverflow:1, workflow:'',
@@ -1362,24 +1385,27 @@ let otherTasks = [
      the account on the 8th, and Chris's step has sat untouched since. The
      checklist is expanded inline so the stalled item and its owner are
      visible from the register, without opening anything. */
-  /* Named after its own vendor, because it now sits beside the one Tony hands
-     on in the demo's second scene -- two rows reading "New Vendor Onboarding"
-     with different owners is a puzzle, not a register. Its own history already
-     says the vendor is Anderson Mechanical. Emma's walkthrough, 2026-09-11. */
-  { id:'o-vendor-onboarding', title:'New Vendor Onboarding — Anderson Mechanical', flag:false, colorBar:'blue', completed:false,
-    action:null, actionDetails:null, dueDate:'09/10/26', dueTime:'05:00 PM', overdue:true,
-    assigned:['amitchell'], link:'', linkOverflow:0, workflow:'Vendor Onboarding',
+  /* The oversight scene's task: a pet request stalled on one checklist item.
+     Tony can see which item, who owns it, and how long it has sat -- the
+     property manager has not sent the pet letter three days after regional
+     approved it, and the bookkeeper's charge is waiting behind that. Emma's
+     script, 2026-09-11. */
+  { id:'o-pet-approval', title:'Pet Approval Process', flag:false, colorBar:'green', completed:false,
+    action:'Publish Signable Documents',
+    actionDetails:{templateLabel:'Document Template', type:'Tenant', template:'Pet Lease Agreement', tenant:'Marcia Clark'},
+    dueDate:'09/09/26', dueTime:'05:00 PM', overdue:true,
+    assigned:['cdevereaux'], link:'Marcia Clark', linkOverflow:0, workflow:'Leasing',
     showProgress:true, expandChecklist:true, externalCal:false,
-    links:[{label:'Vendor', value:'Anderson Mechanical', removable:true}],
+    links:[{label:'Tenant', value:'Marcia Clark', removable:false}],
     checklist:[
-      {text:'Find new preferred vendor for services',         assigned:['lbennett'],    done:true,  doneDate:'09/05/26 02:10 PM'},
-      {text:'Create vendor account in system',                assigned:['bhollis'],   done:true,  doneDate:'09/08/26 09:40 AM'},
-      {text:'Send new vendor agreement & W-9',                assigned:['amitchell'], done:false, dueDate:'09/09/26 05:00 PM'},
-      {text:'Confirm COI, W-9, & payment method are on file', assigned:['dshaw'],   done:false}
+      {text:'Review pet request and vaccination records',   assigned:['lbennett'],        done:true,  doneDate:'09/06/26 11:20 AM'},
+      {text:'Regional approval for the breed and weight',   assigned:['gwhitaker'],       done:true,  doneDate:'09/08/26 09:40 AM'},
+      {text:'Send the pet letter to the resident',          assigned:['cdevereaux'],      done:false, dueDate:'09/09/26 05:00 PM'},
+      {text:'Add the monthly pet rent to the ledger',       assigned:['role-bookkeeper'], done:false}
     ],
     history:[
-      {date:'09/08/26 09:40 AM', type:'System', avatar:'bhollis', text:'Vendor account created in the system'},
-      {date:'09/05/26 02:10 PM', type:'System', avatar:'lbennett',  text:'Preferred vendor selected — Anderson Mechanical'}
+      {date:'09/08/26 09:40 AM', type:'System', avatar:'gwhitaker', text:'Regional approved the pet request'},
+      {date:'09/06/26 11:20 AM', type:'System', avatar:'lbennett',  text:'Pet request and vaccination records reviewed'}
     ] },
   { id:'o9', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'07/05/26', dueTime:'07:30 AM', overdue:true,
@@ -1766,7 +1792,7 @@ const USERS = [
   {key:'jreeves',   initials:'JR', name:'Jason Reeves',   uname:'jreeves'},
   {key:'lbennett',  initials:'LB', name:'Laura Bennett',  uname:'lbennett'},
   {key:'dshaw',     initials:'DS', name:'Derek Shaw',     uname:'dshaw'},
-  {key:'amitchell', initials:'AM', name:'Aaron Mitchell', uname:'amitchell'},
+  {key:'cdevereaux', initials:'CD', name:'Chris Devereaux', uname:'cdevereaux'},
   {key:'kwarner',   initials:'KW', name:'Kelsey Warner',  uname:'kwarner'},
   {key:'bhollis',   initials:'BH', name:'Brian Hollis',   uname:'bhollis'},
   {key:'psullivan', initials:'PS', name:'Paige Sullivan', uname:'psullivan'},
@@ -1778,14 +1804,22 @@ const USERS = [
    four tasks, matching no role anyone wrote down. Kept visible rather than
    quietly folded into another role; see PROTOTYPE.md item 30. */
 const ROLES = [
+  {key:'role-accountant', initials:'AN', name:'Accountant'},
   {key:'role-accounting', initials:'AC', name:'Accounting'},
-  {key:'role-admin',   initials:'AD', name:'Administrator'},
-  {key:'role-leasing', initials:'LA', name:'Leasing Agent'},
-  {key:'role-pm',      initials:'PM', name:'Property Manager'},
-  {key:'role-sa',      initials:'SA', name:'SA'},
+  {key:'role-admin',      initials:'AD', name:'Administrator'},
+  {key:'role-bookkeeper', initials:'BK', name:'Bookkeeper'},
+  {key:'role-leasing',    initials:'LA', name:'Leasing Agent'},
+  {key:'role-pm',         initials:'PM', name:'Property Manager'},
+  {key:'role-sa',         initials:'SA', name:'SA'},
 ];
-/* The roles Tony holds -- a task assigned to one of these is claimable. */
-const MY_ROLES = ['role-pm', 'role-sa'];
+/* The roles Tony holds -- a task assigned to one of these is claimable.
+   Bookkeeper is here so he can claim the W-9 review out of that queue, which
+   is the demo's claim scene. It has one consequence worth knowing: the Month
+   End Close checklist hands from Property Manager to Bookkeeper, and both are
+   his, so that task stays on his list after he ticks his own item rather than
+   leaving it. The Assigned To field still changes to Bookkeeper, which is the
+   part the scene is showing. Emma's script, 2026-09-11. */
+const MY_ROLES = ['role-pm', 'role-sa', 'role-bookkeeper'];
 const ME_KEY = 'tlittle';
 
 /* A user's bubble colour. Three real avatar colours, the same ones the
@@ -1880,11 +1914,11 @@ function openAssigneeDropdown(e, target){
   assigneeTarget = target || 'quickadd';
   const panel = document.getElementById('assigneeDropdown');
   panel.hidden = false;
-  // A checklist item cannot go to a role, so neither the Roles tab nor the
-  // tab bar it sits in is offered -- one list needs no chooser.
-  const oneList = assigneeTarget === 'checklist';
-  document.getElementById('adTabRoles').hidden = oneList;
-  panel.classList.toggle('one-list', oneList);
+  /* A checklist item can go to a role. It could not until 2026-09-11, on
+     Emma's earlier call; her Month End Close scene assigns every item to one,
+     so both tabs are offered here as everywhere else. */
+  document.getElementById('adTabRoles').hidden = false;
+  panel.classList.remove('one-list');
   setAssigneeTab('users');
   // the quick-add bar anchors on its bubble cluster; the modal field is its own anchor
   positionPanel(panel, e.currentTarget.closest('.user-bubble-wrap') || e.currentTarget);
@@ -2352,7 +2386,7 @@ const LINK_RECORDS = {
   Tenant: ['Daniel Smith', "Patrick O'Malley", 'Marcia Clark', 'Tomas Webber'],
   Unit: ['107B', 'Riverview #204', 'Lot 3'],
   Property: ['Riverview Apartments', 'FMHP', 'HH', 'PARK', 'BUCK'],
-  Owner: ['Sally Klydon', 'Gerald Pruitt', 'Meridian Holdings LLC', 'Ruth Vance'],
+  Owner: ['Sally Klydon', 'Julia Kessler', 'M. Whitfield Properties LLC', 'Gerald Pruitt', 'Meridian Holdings LLC', 'Ruth Vance'],
   Vendor: ["Anderson Mechanical", "Bob's Appliances", 'Anderson Pest Control'],
 };
 

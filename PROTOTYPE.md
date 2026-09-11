@@ -2524,6 +2524,48 @@ system entry that created it. Closing the overlay leaves you on Task Details
 with the tenant link right there, which is the point of going to the register
 rather than opening a panel on the Workspace.
 
+## The revised script
+
+Emma's rewrite, 2026-09-11. Two of its scenes are new and two are rebuilt, and
+one line of it reversed a rule she had set earlier.
+
+**Roles can go on checklist items again.** She had ruled they could not, and
+the picker on a checklist item hid its Roles tab because of it. Every item in
+the new Month End Close goes to a role, so both tabs are offered there as they
+are everywhere else. Asked before building, because the two instructions could
+not both stand.
+
+**Scene 2 is Month End Close**, replacing New Vendor Onboarding. Five items,
+three roles, in order: Property Manager → Bookkeeper → Accountant → Bookkeeper
+→ Accountant. Linked to Riverview Apartments and to Owner M. Whitfield
+Properties LLC, action Post Owner Checks, and its History / Notes is a
+conversation rather than a log — the accountant holding the reconciliation
+until payables clears, the bookkeeper answering, Tony handing his part over.
+Ticking his item moves Assigned To from Property Manager to Bookkeeper.
+
+**Scene 4 is a claim**, new: a Bookkeeper-queue task to review the W-9 for new
+owner Julia Kessler, which Tony picks up from the register. It shows on My
+Tasks and carries a Claim button because a role he is in holds it.
+
+**The oversight scene is the Pet Approval Process**, replacing the vendor one.
+Linked to a tenant, action Publish Signable Documents / Pet Lease Agreement,
+four items with the third stalled: the property manager has not sent the pet
+letter three days after regional approved it, and the bookkeeper's ledger
+charge is queued behind it. Tagging Chris in a note is the nudge.
+
+**Chris Devereaux exists** because the script names him. Emma's call: rename
+one of the team rather than rewrite the script. He was Aaron Mitchell.
+
+### One thing the script's own shape does
+
+Tony is now in the Bookkeeper role, because Scene 4 has him claiming out of
+that queue. That is also the queue Month End Close hands to when he ticks his
+item — so the task stays on his list instead of leaving it, and a Claim button
+appears beside "Bookkeeper" in Task Details. The Assigned To field still
+changes, which is what Scene 2 is showing, but if the hand-off should visibly
+leave him, the fix is to assign the W-9 task to a role he is not in and drop
+Bookkeeper from his roles.
+
 ---
 
 # Worth raising with the design system
