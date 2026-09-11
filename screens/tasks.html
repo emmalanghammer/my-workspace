@@ -1065,6 +1065,11 @@ let myWorkspaceTasks = [
 // My Tasks dataset (screenshots 03/04/05 + the "Approve Daniel for Pet" demo row from screenshot 08)
 let myTasks = [
   ...myWorkspaceTasks,
+  /* Ten tasks, deliberately: the six the My Workspace tile mirrors (two of
+     them the overdue pair that tile counts), plus the demo scenes' own -- New
+     Vendor Onboarding, the pet approval with its template checklist and
+     history, one role-held task so Claim is reachable here too, and one
+     already-completed task. Emma's call, 2026-09-11. */
 
   /* An internal process that runs through four people in order. Each
      checklist item carries its own assignee, and the task follows the first
@@ -1084,44 +1089,14 @@ let myTasks = [
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/17/25', dueTime:'11:00 AM', overdue:false,
     assigned:['tlittle'], link:'', linkOverflow:0, workflow:'',
     checklist: PET_CHECKLIST(), externalCal:true, links: PET_LINKS(), history: PET_HISTORY() },
-  { id:'t1', title:'Assign ticket to maintenance staff', flag:true, colorBar:'red', completed:false,
-    action:'View Issues', actionDetails:null, dueDate:'07/05/25', dueTime:'07:30 AM', overdue:true,
-    assigned:['tlittle'], link:'Daniel Smith', linkOverflow:0, workflow:'',
-    checklist:[], externalCal:false },
-  { id:'t2', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
-    action:null, actionDetails:null, dueDate:'07/25/25', dueTime:'07:30 AM', overdue:true,
-    assigned:['canderson','tlittle','+2'], link:'', linkOverflow:0, workflow:'',
-    checklist:[], externalCal:false },
   { id:'t3', title:"Record Park's records", flag:true, colorBar:null, completed:false,
     action:'Add Journal', actionDetails:null, dueDate:'07/31/25', dueTime:'07:30 AM', overdue:false,
     assigned:['role-pm'], link:'PARK', linkOverflow:0, workflow:'Property Renovation',
     checklist:[], externalCal:false },
-  { id:'t4', title:'View vendors', flag:false, colorBar:null, completed:false,
-    action:'History / Note Follow-Up', actionDetails:null, dueDate:'08/01/25', dueTime:'09:30 AM', overdue:false,
-    assigned:['role-pm'], link:"Bob's Appliances", linkOverflow:2, workflow:'Vendor Contract Renewal',
-    checklist:[], externalCal:false },
-  { id:'t5', title:'Close completed service ticket', flag:false, colorBar:null, completed:true,
-    action:null, actionDetails:null, dueDate:'08/07/25', dueTime:'08:30 AM', overdue:false,
-    assigned:['tlittle'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation',
-    checklist:[], externalCal:false },
-  { id:'t6', title:'Distribute payments to owners', flag:false, colorBar:null, completed:false,
-    action:null, actionDetails:null, dueDate:'08/31/25', dueTime:'02:00 PM', overdue:false,
-    assigned:['tlittle'], link:'', linkOverflow:0, workflow:'',
-    checklist:[], externalCal:false },
-  { id:'t7', title:'Close service tickets', flag:false, colorBar:null, completed:false,
-    action:'View Issues', actionDetails:null, dueDate:'09/10/25', dueTime:'05:05 PM', overdue:false,
-    assigned:['role-sa'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
-    externalCal:false, showProgress:true, expandChecklist:true,
-    checklist:[ {text:'Open service issue list', assigned:['tlittle'], done:false},
-                {text:'Close all tickets', assigned:['role-pm','role-sa'], done:false} ] },
   { id:'t-receipts', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:true,
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/15/25', dueTime:'10:00 AM', overdue:false,
     assigned:['tlittle'], link:"Patrick O'Malley", linkOverflow:1, workflow:'',
     checklist: PET_CHECKLIST(), externalCal:true },
-  { id:'t9', title:'Review owner details for FMHP', flag:false, colorBar:'blue', completed:false,
-    action:'Post Owner Checks', actionDetails:null, dueDate:'09/16/25', dueTime:'10:00 AM', overdue:false,
-    assigned:['role-pm','role-sa'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation',
-    checklist:[], externalCal:false },
 ];
 
 // Other Users' Tasks dataset (screenshot 10) — fixed, per simplification #5 above.
@@ -1146,7 +1121,7 @@ let otherTasks = [
     action:'View Issues', actionDetails:null, dueDate:'08/01/25', dueTime:'09:30 AM', overdue:true,
     assigned:['bcarle'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
     checklist:[ {text:'Open service issue list', assigned:['bcarle'], done:true},
-                {text:'Close all tickets', assigned:['role-pm','role-sa'], done:false} ] },
+                {text:'Close all tickets', assigned:['bfischer','ascharffe'], done:false} ] },
   { id:'o7', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'07/31/25', dueTime:'07:30 AM', overdue:false,
     assigned:['bcarle'], link:"Patrick O'Malley", linkOverflow:1, workflow:'', checklist:[] },

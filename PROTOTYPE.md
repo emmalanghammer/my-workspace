@@ -1038,6 +1038,31 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
 
+## My Tasks is ten tasks
+
+Emma's call, 2026-09-11. It had grown to seventeen, which made every scene a
+scroll. Ten now, and each earns its place:
+
+- the **six the My Workspace tile mirrors**, including the two overdue ones
+  that tile counts — cutting any of them would make the tile and the register
+  disagree;
+- **New Vendor Onboarding**, scene 2;
+- **Approve Daniel for Pet**, the one task carrying a template checklist,
+  links and history;
+- **Record Park's records**, held by a role, so Claim is reachable from My
+  Tasks and not only from the other tab;
+- **Upload receipts for property expenses**, already complete, so the done
+  state is visible somewhere.
+
+Two overdue, as before, and both are the tile's pair.
+
+## A checklist item belongs to a person
+
+Emma's call: user roles cannot be assigned to checklist items. A task can sit
+with Accounting or the Property Manager, but a step inside it is somebody's
+job. "Close all tickets" was the only item breaking that — it named two roles
+— and it now names two people.
+
 ## Scene 4 — oversight, down to the checklist item
 
 Emma's scene, 2026-09-11: Tony checks Other Users' Tasks, sees which specific
