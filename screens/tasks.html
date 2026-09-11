@@ -1650,9 +1650,19 @@ function renderAssigneeList(){
   }).join('') || `<div class="checklist-empty">No ${roles ? 'roles' : 'users'} match your search.</div>`;
   document.getElementById('adSelCount').textContent = assigneeSet().size;
 }
+/* A task goes to people or to roles, never a mix -- Emma's call, 2026-09-11.
+   So picking one kind when the other is already selected switches the
+   assignment rather than adding to it. The list's ticks clear as it happens,
+   which is the feedback; nothing is silently kept behind the scenes. */
 function toggleAssignee(key){
   const set = assigneeSet();
-  if(set.has(key)) set.delete(key); else set.add(key);
+  if (set.has(key)) { set.delete(key); }
+  else {
+    const wantRole = isRoleKey(key);
+    const otherKind = [...set].some(k => isRoleKey(k) !== wantRole);
+    if (otherKind) set.clear();
+    set.add(key);
+  }
   renderAssigneeList();
   renderAssigneeTarget();
 }

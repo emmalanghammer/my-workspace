@@ -1038,6 +1038,19 @@ Emma's calls, all 2026-09-10, all on the My Tasks tile:
   outer radius now, so the ring follows the curve instead of being clipped
   by it.
 
+## People or roles, never both
+
+Emma's call, 2026-09-11: a task can go to several users, or to several roles,
+but not to a mix. Picking one kind when the other is already selected now
+switches the assignment rather than adding to it — four people, then a role,
+leaves just the role; two roles is fine; then a person, and the roles give
+way. The list's ticks clear as it happens, which is the feedback, and nothing
+is kept behind the scenes to reappear later.
+
+Both pickers share the rule, because they share the function — the Task
+Details Assignee field and the quick-add bar's Users Bubbles. Checked the
+existing data too: no task was already carrying a mixed assignment.
+
 ## Two small ones
 
 **A toast replaces the one before it.** Emma's call, 2026-09-11: clearing a
