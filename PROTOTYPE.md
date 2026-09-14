@@ -2878,12 +2878,41 @@ end or the pet rent misses next month's charges. It renders as a mention chip
 in the History / Notes overlay and as plain text in the modal's compact History
 tile, which is how the existing notes on other tasks already behave.
 
-### One thing the script does not settle
+### Tony is a Bookkeeper and nothing else
 
-Tony is in the Bookkeeper role, which Scene 3 needs: it is what puts a Claim
-button on the W-9 task. The same membership means Month End Close stays on his
-list after he hands it to Bookkeeper in Scene 2, rather than visibly leaving.
-Both readings are defensible and the script does not choose. Left as is.
+Emma's call, 2026-09-14, which settles the question left open above. `MY_ROLES`
+was `['role-pm', 'role-sa', 'role-bookkeeper']` and is now `['role-bookkeeper']`.
+That one line decides three things:
+
+- **which role queues are his**, so Month End Close and the W-9 sit in My Tasks
+- **where Claim appears**, since Claim is only offered on a role you hold. It is
+  now on exactly two rows, both Bookkeeper ones, instead of four
+- **what ticking his item does**, since the task follows the first item still
+  open
+
+**Month End Close opens mid-process.** The first item, the Property Manager's,
+ships already ticked at 09/10/26 09:15 AM, so the task is held by Bookkeeper,
+the checklist reads `Current Item: 2/5`, and the register row shows `1/5`. That
+is the state Scene 2 is actually about: Tony opens a task that is already
+moving and ticks the item that is his, rather than starting a checklist nobody
+has touched. Ticking it hands the task to Accountant and writes the
+notification, and saving moves it to Other Users' Tasks, because Accountant is
+not a role he holds.
+
+**The conversation had to agree.** The note thread said Tony reviewed the
+charges and handed payables to Paige Sullivan. With Tony as the Bookkeeper the
+payables are his, so the two middle notes swapped speakers: Paige reviews the
+charges and hands off with "@Tony payables are yours whenever you are ready",
+and Tony reports the aged payables are down to three. Travis Nolan's note,
+holding reconciliation until the payables run clears, already read correctly
+and is untouched.
+
+**Two tasks changed hands.** "Record Park's records" and "Walk vacant units at
+Flagstone" are Property Manager queue work and stopped being Tony's, so they
+moved to Other Users' Tasks. Two rows already there duplicated titles in that
+same list, "Record Park's records" and a second "Assign open maintenance ticket
+to vendor", and came out as these arrived. My Tasks holds 8 now and Other
+Users' Tasks still holds 10.
 
 
 # Worth raising with the design system
