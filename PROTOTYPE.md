@@ -3041,53 +3041,46 @@ by either route, the context-bar title and the mega menu. That already worked:
 Verified rather than assumed, since it is the kind of thing that breaks quietly
 the first time a view starts re-rendering on entry.
 
-### A filter looks like a filter on both screens
+### An Orion filter is a filter tag, with its own stroke
 
-Emma's call, 2026-09-14. Clicking a register row carries the filtered rows into
-Tenant Details, so the left rail showed **4 of 49** with nothing saying why it
-was 4. A count that small with no filter in sight reads as a bug, not a filter.
+Emma's call, 2026-09-14, replacing the "Orion filter active:" row that sat above
+the rail's list.
 
-The hand-off now carries the filter as well as the rows, and the rail draws the
-register's own applied-filter row above the list: the Orion mark, "Orion filter
-active:", the same condition chips. Same component, same words, so a filter
-reads the same wherever you are standing.
+The rail already had a tag for each active quick filter: a lozenge with the tune
+icon, the condition, and a blue X. An Orion filter is the same kind of thing,
+something narrowing this list that you can see and take off, so it is a tag in
+that same row. What tells it apart is **Orion's gradient stroke**, `#008DD5` to
+`#6EB744`, the same border the Filter with Orion panel wears. It leads the row,
+because it is the one that did the most to the list.
 
-- The **X** on a chip clears it **here only**. The register keeps its own,
-  because that is the screen the filter was built on.
-- **Edit** goes back to the register with the builder open, rather than growing
-  a second copy of the panel in a rail a third of the width.
-- Arriving by the mega menu or the `?view=details` deep link, which is how the
-  Workspace gets here, hands over no rows and so **falls back to whatever the
-  register is filtered to**. The register opens on the Riverview dogs filter, so
-  Tenants opens on it too. Emma's call, 2026-09-14: walking from the Workspace
-  straight into Tenants and finding an unfiltered list would mean one session
-  holding two different answers to "which tenants am I looking at".
+The gradient forces one small departure: a gradient border needs two clipped
+backgrounds, so the tag cannot use the flat `--bg-hover` ground the others do.
+White keeps a 1px gradient readable.
 
-A row click still wins, since it passes its own rows and its own filter, so
-filtering the register to something else and clicking through carries that
-instead.
+**The two kinds stack now, and that took a real change underneath.** The Orion
+filter used to arrive as a frozen set of row ids (`lockedAccounts`), which
+`d_matches` treated as a replacement for the quick filters rather than an
+addition, so the quick filter tags were hidden while one was active. The
+conditions themselves now travel and are applied, so both narrow the list
+together and both tags are honest about it.
 
-**The chip truncates in the rail.** A three-condition filter cannot fit across
-340px, and it was running past the panel's own border rather than stopping at
-it. The label takes its own line, the chip shares the next one with the X and
-the pencil, and the text ellipses with the whole condition in its tooltip: a
-filter you cannot read in full is still worth seeing the shape of, and hovering
-gives you the rest. The register's copy is untouched, because it has the width
-to show the thing whole.
+That change also needed the rail's own Status default cleared when an Orion
+filter arrives, exactly as `run()` does on the register. With Current still
+ticked underneath, beat 4's filter about moved-out tenants would have returned
+nobody: the filter would have looked correct and answered wrong.
 
-### The box no longer types for you
+### Editing happens here, not back on the register
 
-Clicking into the empty Filters box used to auto-type the next scripted example,
-so a run-through could walk the beats without anyone touching a key. That came
-out on 2026-09-14, when the dogs-at-Riverview filter stopped being something
-built in front of anyone: the register already opens on it, so the animation was
-typing a sentence whose answer was already on screen.
+The tag opens a popover with the conditions **editable in place**. The register
+is where the filter was built, but it is not where you are, and walking someone
+to another screen to change one condition is the thing this popup exists to
+avoid. Emma's call, 2026-09-14, replacing a pencil that did exactly that.
 
-An input that types by itself only helps while a demo follows a fixed running
-order. The moment someone wants to try their own sentence it is in the way, and
-a prototype that can only be driven along one path is worth less than one anyone
-can poke at. `FILTER_SUGGESTIONS` is kept: it is still the record of which
-prompts the parser is built to answer.
+It renders through `d_renderGroup`, the same function the quick filter panel's
+own builder uses, so the rows are the real editable conditions rather than a
+second drawing of them. Apply rewrites the filter and its tag; Clear removes it.
+Edits are local to this screen, the same as the X already was: the register
+keeps the filter it was given.
 
 ### Beat 1, the old way
 

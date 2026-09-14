@@ -150,16 +150,29 @@ a:hover { text-decoration:underline; }
    width the register gives it. */
 .nav-applied{margin:0 12px 8px;flex-wrap:wrap;}
 .nav-applied.hidden{display:none;}
-/* The label takes its own line and the chip shares the next one with the pencil.
-   A rail this narrow cannot hold a three-condition filter on one line, and the
-   chip was running past the panel's own border rather than stopping at it. */
-.nav-applied__label{display:inline-flex;align-items:center;gap:8px;flex:0 0 100%;}
-.nav-applied #d_appliedChips{flex:1;min-width:0;}
-.nav-applied .lozenge{max-width:100%;}
-/* Truncated, with the whole condition in the tooltip: a filter you cannot read
-   in full is still worth seeing the shape of, and hovering gives you the rest.
-   Emma's call, 2026-09-14. */
-.nav-applied .lozenge-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
+/* An Orion filter is a filter tag like the quick ones beside it, told apart by
+   its stroke rather than by sitting somewhere else: Orion's gradient, #008DD5
+   to #6EB744, the same border the Filter with Orion panel wears. A border needs
+   two clipped backgrounds because CSS has no gradient border-color, which also
+   means the tag cannot use the flat --bg-hover ground the others do; white
+   keeps the gradient readable at 1px. Emma's call, 2026-09-14. */
+.orion-tag{display:inline-flex;align-items:center;gap:8px;height:24px;max-width:100%;padding:4px 8px;
+  border:1px solid transparent;border-radius:var(--r-sm);cursor:pointer;min-width:0;
+  background-image:linear-gradient(#fff,#fff), var(--orion-gradient);
+  background-origin:border-box;background-clip:padding-box,border-box;}
+.orion-tag .lozenge-text{color:var(--rmx-navy);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.orion-tag .orion-mark{flex:none;}
+.orion-tag .lozenge-close-icon{color:var(--rmx-blue);flex:none;}
+/* The editor, anchored under the tag. Borrows .qf-panel's surface so the two
+   popups in this rail are the same object. */
+.d_orion-pop{position:fixed;top:auto;left:auto;z-index:90;width:420px;max-width:calc(100vw - 24px);
+  display:flex;flex-direction:column;max-height:70vh;}
+.d_orion-pop[hidden]{display:none;}
+.d_orion-pop__head{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--bg-hover);
+  font-size:14px;color:var(--text-primary);}
+.d_orion-pop__body{padding:12px 16px;overflow-y:auto;flex:1;min-height:0;}
+.d_orion-pop__foot{display:flex;align-items:center;justify-content:flex-end;gap:8px;height:52px;padding:0 16px;
+  border-top:1px solid var(--bg-hover);background:var(--bg-subtle);border-radius:0 0 var(--r-sm) var(--r-sm);}
 .nav-search{height:36px;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);background:var(--bg-subtle);display:flex;align-items:center;gap:6px;padding:0 4px 0 8px;}
 .nav-search input{flex:1;border:none;outline:none;background:transparent;font-size:14px;color:var(--rmx-navy);min-width:0;}
 .tune-btn{width:28px;height:28px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--rmx-blue);flex:none;}
@@ -1283,12 +1296,20 @@ a:hover { text-decoration:underline; }
       <span id="d_orionAppliedChips" style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;overflow:hidden;"></span>
     </div>
 
-    <!-- The register's own applied-filter row, in the rail. Same component,
-         same words, so a filter reads the same on both screens. -->
-    <div class="applied-row nav-applied hidden" id="d_appliedRow">
-      <span class="nav-applied__label"><span class="orion-mark sm" id="d_appliedMark"></span>Orion filter active:</span>
-      <span id="d_appliedChips"></span>
-      <svg class="material-symbols-outlined" style="color:var(--rmx-blue);cursor:pointer;" title="Edit in the Tenant Register" onclick="d_editOrionFilter()"><use href="#edit"></use></svg>
+    <!-- The Orion tag's own editor. The conditions are the rail's, rendered by
+         the same d_renderGroup the quick filter panel uses, so editing one here
+         is editing the real filter rather than a copy of its description. -->
+    <div class="qf-panel d_orion-pop" id="d_orionPop" hidden onclick="event.stopPropagation()">
+      <div class="d_orion-pop__head">
+        <span class="orion-mark sm" id="d_orionPopMark"></span>
+        <span style="flex:1;" id="d_orionPopPrompt"></span>
+        <svg class="material-symbols-outlined" style="color:var(--icon-muted);cursor:pointer;" onclick="d_closeOrionPop()"><use href="#close"></use></svg>
+      </div>
+      <div class="d_orion-pop__body" id="d_orionPopBody"></div>
+      <div class="d_orion-pop__foot">
+        <button class="btn-text" onclick="d_clearOrionFilter()">Clear</button>
+        <button class="btn btn-primary btn-compact" onclick="d_applyOrionEdit()">Apply</button>
+      </div>
     </div>
     <div class="nav-list" id="navList"></div>
     <div class="nav-totals" id="navTotals"></div>
@@ -1569,7 +1590,8 @@ function goToTenant(account){
      Emma's call, 2026-09-14. */
   window.__showDetails(account, visible, state.applied.length ? {
     chips: state.applied.map(renderChipText),
-    prompt: state.rationale || ""
+    prompt: state.rationale || "",
+    criteria: cloneCriteria(state.applied)
   } : null);
 }
 
@@ -2717,6 +2739,12 @@ function d_matches(crit){
       if (s.appliedColor!=="Any" && t.color!==s.appliedColor) return false;
       if (bal!==null && t.balance < bal) return false;
     }
+    /* The Orion filter is a filter here too, not a set of row ids handed over
+       from somewhere else, so it narrows the rail the same way the quick
+       filters above it do and the two stack rather than one replacing the
+       other. */
+    const orion = s.orionFilter && s.orionFilter.criteria;
+    if (orion && orion.length && !orion.every(g => testGroup(t, g))) return false;
     if (!groups.length) return true;
     return s.outerJoin==="or" ? groups.some(g=>testGroup(t,g)) : groups.every(g=>testGroup(t,g));
   });
@@ -2761,6 +2789,8 @@ function d_renderQuickFilterChips(){
   const row = document.getElementById("d_quickFilterRow");
   if (d_state.lockedAccounts) { row.classList.add("hidden"); return; }
   const chips = [];
+  /* The Orion tag leads, because it is the one that did the most to the list. */
+  if (d_state.orionFilter) chips.push(d_orionTagHTML());
   if (d_state.appliedStatuses.length) chips.push(d_quickFilterChipHTML("Status = "+(d_state.appliedStatuses.length===1?d_state.appliedStatuses[0]:d_state.appliedStatuses.length+" Selected"), "d_removeAppliedStatus()"));
   if (d_state.appliedProperties.length) chips.push(d_quickFilterChipHTML("Properties = "+(d_state.appliedProperties.length===1?d_state.appliedProperties[0]:d_state.appliedProperties.length+" Selected"), "d_removeAppliedProperties()"));
   if (d_state.appliedColor !== "Any") chips.push(d_quickFilterChipHTML("Display Color = "+d_state.appliedColor, "d_removeAppliedColor()"));
@@ -2792,38 +2822,86 @@ function renderNav(list, current){
     }).join("");
   }
   document.getElementById("navTotals").textContent = list.length + " of " + TENANTS.length + " Tenants";
-  renderNavApplied();
 }
 
-/* Why this rail is showing four tenants and not forty-nine. The register draws
-   exactly this row above its own results; drawing it here too means a filter
-   looks like a filter wherever you are standing. Removing it here removes it
-   here only: the register keeps its own, which is the screen the filter was
-   built on. Emma's call, 2026-09-14. */
-function renderNavApplied(){
-  const row = document.getElementById("d_appliedRow");
-  if (!row) return;
+/* Why this rail is showing four tenants and not forty-nine. It sits in the same
+   row as the quick filter tags, because it is the same kind of thing: something
+   narrowing this list that you can see and take off. It is told apart by
+   Orion's gradient stroke rather than by living somewhere else. Emma's call,
+   2026-09-14. */
+function d_orionTagHTML(){
   const f = d_state.orionFilter;
-  row.classList.toggle("hidden", !f);
-  if (!f) return;
-  document.getElementById("d_appliedMark").innerHTML = ORION_ICON_HTML;
-  document.getElementById("d_appliedChips").innerHTML = f.chips.map(function(t){
-    return '<span class="lozenge lozenge-close" style="background:var(--bg-hover);" title="' + escapeHTML(t) + '">' +
-           '<span class="lozenge-text">' + escapeHTML(t) + '</span>' +
-           '<svg class="material-symbols-outlined lozenge-x" onclick="d_clearOrionFilter()"><use href="#close"></use></svg></span>';
-  }).join(" ");
+  const text = (f.chips || []).join(" ");
+  return '<span class="orion-tag" title="' + escapeHTML(text) + '" onclick="d_toggleOrionPop(event)">' +
+         '<span class="orion-mark sm">' + ORION_ICON_HTML + '</span>' +
+         '<span class="lozenge-text">' + escapeHTML(text) + '</span>' +
+         '<svg class="material-symbols-outlined lozenge-close-icon" onclick="event.stopPropagation();d_clearOrionFilter()"><use href="#close"></use></svg>' +
+         '</span>';
 }
 function d_clearOrionFilter(){
   d_state.orionFilter = null;
   d_state.lockedAccounts = null;
+  d_closeOrionPop();
   d_renderAll();
 }
-/* The builder lives on the register, so Edit goes back to it rather than
-   growing a second copy of the panel in the rail. */
-function d_editOrionFilter(){
-  switchView("register");
-  openPanel();
+
+/* ---- editing the Orion filter here, rather than sending you back ----
+   The register is where it was built, but it is not where you are, and walking
+   someone to another screen to change one condition is the thing this popup
+   exists to avoid. Emma's call, 2026-09-14. It renders through d_renderGroup,
+   the same function the quick filter panel's own builder uses, so the rows are
+   the real editable conditions and not a second drawing of them. */
+let d_orionPopOpen = false;
+function d_toggleOrionPop(e){
+  if (e) e.stopPropagation();
+  d_orionPopOpen = !d_orionPopOpen;
+  if (d_orionPopOpen) {
+    const f = d_state.orionFilter;
+    if (!f) { d_orionPopOpen = false; return; }
+    d_state.criteria = d_cloneCriteria(f.criteria || []);
+    document.getElementById("d_orionPopMark").innerHTML = ORION_ICON_HTML;
+    document.getElementById("d_orionPopPrompt").textContent = f.prompt || "Orion filter";
+    d_renderOrionPop();
+  }
+  d_syncOrionPop();
 }
+function d_renderOrionPop(){
+  const g = d_state.criteria[0];
+  document.getElementById("d_orionPopBody").innerHTML = g ? d_renderGroup(g)
+    : '<div class="group-box"><div class="group-items">'
+      + '<div class="cond-add float-anchor">'
+      + '<div class="add-link" onclick="d_openFieldSelector(event,\'newgroup\')"><svg class="material-symbols-outlined"><use href="#add"></use></svg>Condition</div>'
+      + '<div class="dd-panel field-selector" id="d_addCondPanelnewgroup" hidden></div>'
+      + '</div></div></div>';
+}
+function d_syncOrionPop(){
+  const pop = document.getElementById("d_orionPop");
+  pop.hidden = !d_orionPopOpen;
+  if (!d_orionPopOpen) return;
+  const tag = document.querySelector("#d_quickFilterRow .orion-tag");
+  if (!tag) return;
+  const GAP = 6, EDGE = 12;
+  const r = tag.getBoundingClientRect();
+  const h = pop.offsetHeight, w = pop.offsetWidth;
+  const below = window.innerHeight - r.bottom - GAP - EDGE;
+  const above = r.top - GAP - EDGE;
+  const flip = h > below && above > below;
+  pop.style.top = (flip ? Math.max(EDGE, r.top - GAP - Math.min(h, above)) : r.bottom + GAP) + "px";
+  pop.style.left = Math.min(Math.max(EDGE, r.left), window.innerWidth - w - EDGE) + "px";
+}
+function d_closeOrionPop(){ d_orionPopOpen = false; document.getElementById("d_orionPop").hidden = true; }
+function d_applyOrionEdit(){
+  const items = (d_state.criteria[0] && d_state.criteria[0].items) || [];
+  if (!items.length) { d_clearOrionFilter(); return; }
+  d_state.orionFilter.criteria = d_cloneCriteria(d_state.criteria);
+  /* The tag says what the filter is, so an edited filter needs an edited tag. */
+  d_state.orionFilter.chips = d_state.orionFilter.criteria.map(renderChipText);
+  d_closeOrionPop();
+  d_renderAll();
+}
+window.addEventListener("resize", d_syncOrionPop);
+window.addEventListener("scroll", d_syncOrionPop, true);
+
 function showHoverCard(e, account){
   const t = TENANTS.find(x => x.account === account);
   if (!t) return;
@@ -3298,6 +3376,7 @@ document.addEventListener("click", (e)=>{
     return;
   }
   if (!document.getElementById("savedFiltersField").contains(e.target)) { if (d_state.suggestionsOpen) { d_state.suggestionsOpen=false; syncDD(); } }
+  if (d_orionPopOpen && !e.target.closest("#d_orionPop") && !e.target.closest(".orion-tag")) d_closeOrionPop();
 });
 document.addEventListener("keydown", (e)=>{ if (e.key === "Escape") d_closePanel(); });
 
@@ -3313,11 +3392,24 @@ window.__showDetails = function(account, list, orion){
      A row click still wins, since it passes its own list and its own filter. */
   if (!list && state.applied.length) {
     list = matches(state.applied).map(r => r.account);
-    orion = { chips: state.applied.map(renderChipText), prompt: state.rationale || "" };
+    orion = { chips: state.applied.map(renderChipText), prompt: state.rationale || "",
+              criteria: cloneCriteria(state.applied) };
   }
   if (list && list.length) d_state.lockedAccounts = new Set(list);
   else d_state.lockedAccounts = null;
   d_state.orionFilter = d_state.lockedAccounts ? (orion || null) : null;
+  /* The conditions travel, not just the rows they matched, so the filter can be
+     edited here rather than only looked at. With them applied for real,
+     lockedAccounts is no longer what is narrowing the list. Emma's call,
+     2026-09-14. */
+  if (d_state.orionFilter && d_state.orionFilter.criteria) {
+    d_state.lockedAccounts = null;
+    /* Orion's reading is the filter now. The rail's own Status default would
+       otherwise sit underneath it and quietly cut the result: a filter about
+       moved-out tenants returns nobody while Current is still ticked. */
+    d_state.statuses = []; d_state.appliedStatuses = [];
+    renderStatusList();
+  }
   const pool = d_state.lockedAccounts ? TENANTS.filter(t => d_state.lockedAccounts.has(t.account)) : TENANTS;
   d_state.selectedAccount = (account && TENANTS.some(t => t.account === account)) ? account : (pool[0] || TENANTS[0]).account;
   switchView("details");
