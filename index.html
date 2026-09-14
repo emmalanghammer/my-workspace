@@ -597,9 +597,12 @@
      leaves the overlay on a transparent ground, so there is exactly one
      implementation of Task Details, used two ways.
 
-     &notes=1 opens History / Notes on top of it, because the mention *is* a
-     note on that task: landing on the task with the note out of sight would
-     answer a question nobody asked.
+     Task Details and nothing on top of it. An earlier pass also passed
+     &notes=1, on the reasoning that the mention is a note on the task so the
+     note should be in front of you. Emma's call, 2026-09-14: it is not. The
+     mention already says what the note says, and opening History / Notes over
+     the task buries the thing you clicked through to see. The note is still
+     one click away, on the task's own History tile.
 
      The cache-buster matters. Assigning the same src twice does not re-run the
      page, so a second opening would show the state from the first; the overlay
@@ -608,7 +611,7 @@
   var frameEl = document.getElementById('wsTaskFrameFrame');
   function openTaskFrame(id) {
     frameEl.src = 'screens/tasks.html?embed=1&open=' + encodeURIComponent(id) +
-                  '&notes=1&t=' + Date.now();
+                  '&t=' + Date.now();
     frame.hidden = false;
   }
   function closeTaskFrame() {
