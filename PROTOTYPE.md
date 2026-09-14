@@ -3075,6 +3075,20 @@ filter you cannot read in full is still worth seeing the shape of, and hovering
 gives you the rest. The register's copy is untouched, because it has the width
 to show the thing whole.
 
+### The box no longer types for you
+
+Clicking into the empty Filters box used to auto-type the next scripted example,
+so a run-through could walk the beats without anyone touching a key. That came
+out on 2026-09-14, when the dogs-at-Riverview filter stopped being something
+built in front of anyone: the register already opens on it, so the animation was
+typing a sentence whose answer was already on screen.
+
+An input that types by itself only helps while a demo follows a fixed running
+order. The moment someone wants to try their own sentence it is in the way, and
+a prototype that can only be driven along one path is worth less than one anyone
+can poke at. `FILTER_SUGGESTIONS` is kept: it is still the record of which
+prompts the parser is built to answer.
+
 ### Beat 1, the old way
 
 Opening the panel from the tune icon builds a filter by hand, and that path
