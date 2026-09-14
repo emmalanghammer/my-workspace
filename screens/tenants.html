@@ -150,6 +150,16 @@ a:hover { text-decoration:underline; }
    width the register gives it. */
 .nav-applied{margin:0 12px 8px;flex-wrap:wrap;}
 .nav-applied.hidden{display:none;}
+/* The label takes its own line and the chip shares the next one with the pencil.
+   A rail this narrow cannot hold a three-condition filter on one line, and the
+   chip was running past the panel's own border rather than stopping at it. */
+.nav-applied__label{display:inline-flex;align-items:center;gap:8px;flex:0 0 100%;}
+.nav-applied #d_appliedChips{flex:1;min-width:0;}
+.nav-applied .lozenge{max-width:100%;}
+/* Truncated, with the whole condition in the tooltip: a filter you cannot read
+   in full is still worth seeing the shape of, and hovering gives you the rest.
+   Emma's call, 2026-09-14. */
+.nav-applied .lozenge-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
 .nav-search{height:36px;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);background:var(--bg-subtle);display:flex;align-items:center;gap:6px;padding:0 4px 0 8px;}
 .nav-search input{flex:1;border:none;outline:none;background:transparent;font-size:14px;color:var(--rmx-navy);min-width:0;}
 .tune-btn{width:28px;height:28px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--rmx-blue);flex:none;}
@@ -1276,8 +1286,7 @@ a:hover { text-decoration:underline; }
     <!-- The register's own applied-filter row, in the rail. Same component,
          same words, so a filter reads the same on both screens. -->
     <div class="applied-row nav-applied hidden" id="d_appliedRow">
-      <span class="orion-mark sm" id="d_appliedMark"></span>
-      <span>Orion filter active:</span>
+      <span class="nav-applied__label"><span class="orion-mark sm" id="d_appliedMark"></span>Orion filter active:</span>
       <span id="d_appliedChips"></span>
       <svg class="material-symbols-outlined" style="color:var(--rmx-blue);cursor:pointer;" title="Edit in the Tenant Register" onclick="d_editOrionFilter()"><use href="#edit"></use></svg>
     </div>
@@ -2790,7 +2799,7 @@ function renderNavApplied(){
   if (!f) return;
   document.getElementById("d_appliedMark").innerHTML = ORION_ICON_HTML;
   document.getElementById("d_appliedChips").innerHTML = f.chips.map(function(t){
-    return '<span class="lozenge lozenge-close" style="background:var(--bg-hover);">' +
+    return '<span class="lozenge lozenge-close" style="background:var(--bg-hover);" title="' + escapeHTML(t) + '">' +
            '<span class="lozenge-text">' + escapeHTML(t) + '</span>' +
            '<svg class="material-symbols-outlined lozenge-x" onclick="d_clearOrionFilter()"><use href="#close"></use></svg></span>';
   }).join(" ");

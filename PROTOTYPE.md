@@ -3067,6 +3067,14 @@ A row click still wins, since it passes its own rows and its own filter, so
 filtering the register to something else and clicking through carries that
 instead.
 
+**The chip truncates in the rail.** A three-condition filter cannot fit across
+340px, and it was running past the panel's own border rather than stopping at
+it. The label takes its own line, the chip shares the next one with the X and
+the pencil, and the text ellipses with the whole condition in its tooltip: a
+filter you cannot read in full is still worth seeing the shape of, and hovering
+gives you the rest. The register's copy is untouched, because it has the width
+to show the thing whole.
+
 ### Beat 1, the old way
 
 Opening the panel from the tune icon builds a filter by hand, and that path
