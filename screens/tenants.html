@@ -2851,6 +2851,16 @@ window.__showDetails = function(account, list){
 
 d_renderAll();
 
+/* ---- Deep link, so the mega menu and My Workspace can each land on a
+   different view of this one page. ?view=details opens Tenant Details on the
+   first tenant with the full list in its left rail, exactly as calling
+   __showDetails() with no arguments already did for the mega menu. Anything
+   else, a ?view=register or no query string at all, leaves the Register as
+   the landing view, which is what every existing link to this file expects.
+   Purely additive: nothing that worked before behaves differently.
+   Added 2026-09-14 with the Tenants / Tenant Register menu links. ---- */
+if (new URLSearchParams(location.search).get("view") === "details") window.__showDetails();
+
 </script>
 
 <script src="../assets/megamenu.js"></script>
