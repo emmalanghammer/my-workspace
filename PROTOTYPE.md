@@ -2832,6 +2832,60 @@ attempt at this failed.
 Mentions about a tenant, prospect or owner are unchanged: they still open that
 record's History / Notes in place, with no navigation.
 
+## The four task scenes, checked line by line
+
+Emma's revised script, 2026-09-14. Most of it was already built, so this is
+mostly a record of what was checked rather than what was changed.
+
+| Scene | The script asks for | State |
+|---|---|---|
+| 1 | Mention opens the task, Tenant linked: Charlie Apegian | built |
+| 2 | Five checklist items, one role each, in order | built, exact match |
+| 2 | Riverview Apartments, Owner M. Whitfield Properties LLC, Post Owner Checks, a back-and-forth note conversation | built |
+| 2 | "the assigned person is notified it's their turn" | **added** |
+| 3 | Bookkeeper task, W-9 for owner Julia Kessler, claimed from the register | built |
+| 4 | Pet Approval Process, Tenant linked, Publish Signable Documents / Pet Lease Agreement, Chris's item stalled | built |
+| 4 | @mention Chris as a nudge | **added** |
+
+### The hand-off is written on the record
+
+Scene 2's claim is that the task "becomes a shared, self-driving record of a
+multi-person process instead of Tony manually chasing four people". Ticking
+your item already moved the task to the next queue, but it moved *silently*:
+the only way to know the next person had been told was to take it on faith.
+
+Ticking an item that hands the task on now writes a System entry into the
+task's own History: `Bookkeeper notified: "Process any open/aged payables" is
+theirs now`, stamped with that role's avatar. The scene's claim is now visible
+on the thing the scene is about.
+
+Three things it deliberately does not do:
+
+- **Nothing on the last item.** Completing the final item hands the task to
+  nobody, so announcing a notification would be announcing one that was never
+  sent.
+- **Nothing on unticking.** A hand-off that happened, happened; history does
+  not retract.
+- **Nothing on a re-tick.** Untick and re-tick the same item and the entry
+  already at the top of the history is left alone rather than repeated, which
+  is what the first version of this did.
+
+### Scene 4's nudge
+
+Tony's note on the Pet Approval Process tags `@Chris Devereaux` and says why
+the delay costs anything: the bookkeeper needs the signed letter before month
+end or the pet rent misses next month's charges. It renders as a mention chip
+in the History / Notes overlay and as plain text in the modal's compact History
+tile, which is how the existing notes on other tasks already behave.
+
+### One thing the script does not settle
+
+Tony is in the Bookkeeper role, which Scene 3 needs: it is what puts a Claim
+button on the W-9 task. The same membership means Month End Close stays on his
+list after he hands it to Bookkeeper in Scene 2, rather than visibly leaving.
+Both readings are defensible and the script does not choose. Left as is.
+
+
 # Worth raising with the design system
 
 Found while building these two screens, verified against the live libraries,

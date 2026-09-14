@@ -2632,6 +2632,7 @@ function renderModalChecklist(){
   footer.classList.remove('hidden');
 }
 function toggleChecklistItem(i){
+  const before = checklistOwner(state.modalChecklist);
   state.modalChecklist[i].done = !state.modalChecklist[i].done;
   renderModalChecklist();
   /* The Assignee field follows the checklist: tick your item and the task is
@@ -2641,6 +2642,46 @@ function toggleChecklistItem(i){
     modalAssignees = new Set(owner);
     renderModalAssignee();
   }
+  if (state.modalChecklist[i].done) noteHandOff(before, owner, state.modalChecklist);
+}
+
+/* The hand-off, written on the record.
+   ------------------------------------------------------------
+   Emma's script for Scene 2: "as each item in the checklist becomes relevant,
+   the assigned person is notified it's their turn ... a shared, self-driving
+   record of a multi-person process instead of Tony manually chasing four
+   people." The task already moved to the next queue when you ticked your item,
+   but it moved silently: the only way to know the next person had been told
+   was to believe it. This writes the hand-off into the task's own History, so
+   the claim the scene makes is visible on the thing the scene is about.
+
+   Only on ticking, and only when the task actually changes hands, so
+   completing the last item or re-ticking your own does not manufacture a
+   notification nobody received. Emma's call, 2026-09-14. */
+function noteHandOff(before, after, items){
+  if (!after || !after.length) return;
+  const wasKey = (before || [])[0], nowKey = after[0];
+  if (!nowKey || wasKey === nowKey) return;
+  const next = items.find(it => !it.done);
+  if (!next) return;
+  /* Unticking does not remove the entry, because a hand-off that happened
+     happened. But unticking and re-ticking the same item must not announce it
+     twice, so a hand-off already sitting at the top of the history is left
+     alone rather than repeated. */
+  const top = (state.modalHistory || [])[0];
+  if (top && top.type === 'System' && top.avatar === nowKey &&
+      top.text.indexOf('"' + next.text + '"') > -1) return;
+  const stamp = new Date();
+  let h = stamp.getHours(); const ap = h < 12 ? 'AM' : 'PM'; h = h % 12 || 12;
+  const two = n => (n < 10 ? '0' : '') + n;
+  const when = two(stamp.getMonth() + 1) + '/' + two(stamp.getDate()) + '/' +
+               String(stamp.getFullYear()).slice(2) + ' ' + two(h) + ':' +
+               two(stamp.getMinutes()) + ' ' + ap;
+  state.modalHistory = [{
+    date: when, type: 'System', avatar: nowKey,
+    text: assigneeName(nowKey) + ' notified: "' + next.text + '" is theirs now'
+  }].concat(state.modalHistory || []);
+  renderModalHistory();
 }
 /* ---- editing a checklist item in place ----
    Edit used to be a disabled menu item pointing at an overlay this prototype
