@@ -79,15 +79,15 @@
   /* ---- Mega Menu ----
      Real content transcribed from the Figma frame (see the comment on
      #megaMenuOverlay above). Every item is a plain string and renders as a
-     data-rmx-todo placeholder, except 'Tasks' under Services > Calendar,
-     which carries an href, see PROTOTYPE.md for why that one item is real
-     and everything else here isn't. */
+     data-rmx-todo placeholder, except the two that carry an href: 'Tasks'
+     under Services > Calendar, and 'Tenants' under Rental Info > General.
+     See PROTOTYPE.md for why those two are real and everything else isn't. */
   var MEGA_MENU_ORDER = ['rental-info', 'accounting', 'receivables', 'payables', 'owners', 'services', 'communication'];
   var MEGA_MENU = {
     'rental-info': {
       label: 'Rental Info',
       columns: [
-        { title: 'General', items: ['Tenants', 'Prospects', 'Units', 'Properties', 'Unit Types', 'Assets', 'Violations', 'Merge Prospects'] },
+        { title: 'General', items: [{ label: 'Tenants', href: url('screens/tenants.html') }, 'Prospects', 'Units', 'Properties', 'Unit Types', 'Assets', 'Violations', 'Merge Prospects'] },
         { title: 'Leasing', items: ['Screenings', 'Applications', 'Application Templates', 'Renewal Increases', 'Prospect Leasing Board', 'Create Renewal Offers', 'Lease Renewal Register', 'Lease Renewal Board', 'Export Minnesota CRP'] },
         { title: 'Short Term Rentals', items: ['STR Reservations', 'Check-ins', 'Find Reservation'] },
         { title: 'Online Listing', items: ['Listings'] },
