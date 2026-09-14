@@ -145,6 +145,11 @@ a:hover { text-decoration:underline; }
 .nav-head .title{flex:1;font-size:18px;font-weight:600;line-height:24px;color:var(--rmx-navy);}
 .nav-head .icons{display:flex;gap:10px;color:var(--rmx-blue);}
 .nav-search-wrap{padding:0 12px 10px;position:relative;}
+/* The register's .applied-row, narrowed into the rail: same ground, same type,
+   wrapping instead of running off the side because the rail is a third of the
+   width the register gives it. */
+.nav-applied{margin:0 12px 8px;flex-wrap:wrap;}
+.nav-applied.hidden{display:none;}
 .nav-search{height:36px;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);background:var(--bg-subtle);display:flex;align-items:center;gap:6px;padding:0 4px 0 8px;}
 .nav-search input{flex:1;border:none;outline:none;background:transparent;font-size:14px;color:var(--rmx-navy);min-width:0;}
 .tune-btn{width:28px;height:28px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--rmx-blue);flex:none;}
@@ -1258,6 +1263,14 @@ a:hover { text-decoration:underline; }
       <span id="d_orionAppliedChips" style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;overflow:hidden;"></span>
     </div>
 
+    <!-- The register's own applied-filter row, in the rail. Same component,
+         same words, so a filter reads the same on both screens. -->
+    <div class="applied-row nav-applied hidden" id="d_appliedRow">
+      <span class="orion-mark sm" id="d_appliedMark"></span>
+      <span>Orion filter active:</span>
+      <span id="d_appliedChips"></span>
+      <svg class="material-symbols-outlined" style="color:var(--rmx-blue);cursor:pointer;" title="Edit in the Tenant Register" onclick="d_editOrionFilter()"><use href="#edit"></use></svg>
+    </div>
     <div class="nav-list" id="navList"></div>
     <div class="nav-totals" id="navTotals"></div>
     <div class="hover-card" id="hoverCard" hidden></div>
@@ -1531,7 +1544,14 @@ let uid = 100;
 function goToTenant(account){
   if (state.selectMode) return; // bulk-select mode: a row click toggles selection, not navigation
   const visible = matches(state.applied).map(r => r.account);
-  window.__showDetails(account, visible);
+  /* The rows alone were never enough. Tenants showed "4 of 49" with nothing
+     saying why it was 4, which reads as a bug rather than a filter. It now
+     carries the filter itself so Tenants can say what the register says.
+     Emma's call, 2026-09-14. */
+  window.__showDetails(account, visible, state.applied.length ? {
+    chips: state.applied.map(renderChipText),
+    prompt: state.rationale || ""
+  } : null);
 }
 
 let state = {
@@ -2708,6 +2728,37 @@ function renderNav(list, current){
     }).join("");
   }
   document.getElementById("navTotals").textContent = list.length + " of " + TENANTS.length + " Tenants";
+  renderNavApplied();
+}
+
+/* Why this rail is showing four tenants and not forty-nine. The register draws
+   exactly this row above its own results; drawing it here too means a filter
+   looks like a filter wherever you are standing. Removing it here removes it
+   here only: the register keeps its own, which is the screen the filter was
+   built on. Emma's call, 2026-09-14. */
+function renderNavApplied(){
+  const row = document.getElementById("d_appliedRow");
+  if (!row) return;
+  const f = d_state.orionFilter;
+  row.classList.toggle("hidden", !f);
+  if (!f) return;
+  document.getElementById("d_appliedMark").innerHTML = ORION_ICON_HTML;
+  document.getElementById("d_appliedChips").innerHTML = f.chips.map(function(t){
+    return '<span class="lozenge lozenge-close" style="background:var(--bg-hover);">' +
+           '<span class="lozenge-text">' + escapeHTML(t) + '</span>' +
+           '<svg class="material-symbols-outlined lozenge-x" onclick="d_clearOrionFilter()"><use href="#close"></use></svg></span>';
+  }).join(" ");
+}
+function d_clearOrionFilter(){
+  d_state.orionFilter = null;
+  d_state.lockedAccounts = null;
+  d_renderAll();
+}
+/* The builder lives on the register, so Edit goes back to it rather than
+   growing a second copy of the panel in the rail. */
+function d_editOrionFilter(){
+  switchView("register");
+  openPanel();
 }
 function showHoverCard(e, account){
   const t = TENANTS.find(x => x.account === account);
@@ -3187,9 +3238,10 @@ document.addEventListener("click", (e)=>{
 document.addEventListener("keydown", (e)=>{ if (e.key === "Escape") d_closePanel(); });
 
 /* ---- entry point called by the mega menu / the register's row-click to show this view ---- */
-window.__showDetails = function(account, list){
+window.__showDetails = function(account, list, orion){
   if (list && list.length) d_state.lockedAccounts = new Set(list);
   else d_state.lockedAccounts = null;
+  d_state.orionFilter = d_state.lockedAccounts ? (orion || null) : null;
   const pool = d_state.lockedAccounts ? TENANTS.filter(t => d_state.lockedAccounts.has(t.account)) : TENANTS;
   d_state.selectedAccount = (account && TENANTS.some(t => t.account === account)) ? account : (pool[0] || TENANTS[0]).account;
   switchView("details");

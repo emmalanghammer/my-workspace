@@ -3020,6 +3020,24 @@ by either route, the context-bar title and the mega menu. That already worked:
 Verified rather than assumed, since it is the kind of thing that breaks quietly
 the first time a view starts re-rendering on entry.
 
+### A filter looks like a filter on both screens
+
+Emma's call, 2026-09-14. Clicking a register row carries the filtered rows into
+Tenant Details, so the left rail showed **4 of 49** with nothing saying why it
+was 4. A count that small with no filter in sight reads as a bug, not a filter.
+
+The hand-off now carries the filter as well as the rows, and the rail draws the
+register's own applied-filter row above the list: the Orion mark, "Orion filter
+active:", the same condition chips. Same component, same words, so a filter
+reads the same wherever you are standing.
+
+- The **X** on a chip clears it **here only**. The register keeps its own,
+  because that is the screen the filter was built on.
+- **Edit** goes back to the register with the builder open, rather than growing
+  a second copy of the panel in a rail a third of the width.
+- Arriving by the mega menu, which hands over no rows, shows no row, which is
+  correct: nothing is filtering that list.
+
 ### Beat 1, the old way
 
 Opening the panel from the tune icon builds a filter by hand, and that path
