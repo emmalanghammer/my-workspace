@@ -573,6 +573,7 @@ a:hover { text-decoration:underline; }
 .fp-explain-toggle[aria-expanded="true"] svg{transform:rotate(180deg);}
 .fp-explain{padding:4px 0 8px;}
 .fp-explain[hidden]{display:none;}
+.fp-xlead{margin:0 0 16px;font-size:14px;line-height:20px;color:var(--rmx-navy);}
 .fp-xitem{font-size:14px;line-height:20px;color:var(--rmx-navy);}
 .fp-xitem + .fp-xitem{margin-top:16px;}
 .fp-xhead{font-weight:600;}
@@ -1693,20 +1694,54 @@ function rationaleFor(text){ return '"'+text.trim()+'"'; }
    panel cannot end up describing a filter that is no longer there.
    ============================================================ */
 function explainRows(items){
-  return (items || []).map(function(c, i){
-    const b = function(v){ return '<b>' + escapeHTML(v) + '</b>'; };
-    const join = i ? (c.join === 'or' ? ' (OR)' : ' (AND)') : '';
+  /* The Script Assistant's own shape (2490:3317): a paragraph that answers the
+     question in plain words first, a line handing off to the detail, then
+     numbered bold headings with a paragraph under each. Opening straight into
+     a numbered list, which is what this did first, answers a question nobody
+     asked yet. Emma's call, 2026-09-14. */
+  const b = function(v){ return '<b>' + escapeHTML(v) + '</b>'; };
+  const fields = items.map(function(c){ return c.matchedField || c.label || c.field; });
+  const unique = fields.filter(function(f, n){ return fields.indexOf(f) === n; });
+  const joins = items.slice(1).map(function(c){ return c.join === 'or' ? 'OR' : 'AND'; });
+  const joinWord = joins.length && joins.every(function(j){ return j === joins[0]; }) ? joins[0] : null;
+
+  let lead = 'Orion read your request as ' + b(items.length === 1 ? 'one condition' : items.length + ' conditions');
+  if (items.length > 1) {
+    lead += joinWord ? ', joined with ' + b(joinWord) : ', joined with a mix of ' + b('AND') + ' and ' + b('OR');
+  }
+  const named = unique.map(b);
+  lead += ', filtering on ' + (named.length === 1 ? named[0] :
+           named.slice(0, -1).join(', ') + ' and ' + named[named.length - 1]) + '. ';
+  lead += 'Every one of these is a field already on the tenant record, so this is the same filter you could have built by hand in Advanced Filters.';
+
+  const dyn = items.filter(function(c){ return c.dynamic; });
+  const exc = items.filter(function(c){ return c.excluded; });
+  if (dyn.length) {
+    lead += ' One of them is ' + b('dynamic') + ': it works out its value each time the filter runs rather than ' +
+            'freezing the value it had the day you saved it.';
+  }
+  if (exc.length) {
+    lead += ' ' + (exc.length === 1 ? 'One condition is' : exc.length + ' conditions are') + ' an ' + b('exclusion') +
+            ', kept as a positive field set to No rather than a "not equals" wrapped around the whole filter.';
+  }
+
+  const blocks = items.map(function(c, n){
     let body = 'Written as ' + b(describe(c)) + '.';
-    if (c.why) body = 'Matched on \u201c' + escapeHTML(c.why) + '\u201d and written as ' + b(describe(c)) + '.';
-    if (c.excluded) body += ' Read as an exclusion, so the filter keeps the rows where this is <b>not</b> true.';
+    if (c.why) body = 'Orion keyed on \u201c' + escapeHTML(c.why) + '\u201d in your sentence and wrote it as ' + b(describe(c)) + '.';
+    if (c.excluded) body += ' This one is an exclusion, so the filter keeps the rows where it is <b>not</b> true.';
     if (c.dynamic) { const d = dynamicNote(c); if (d) body += ' ' + escapeHTML(d); }
+    if (n) body += ' Joined to the condition above it with ' + b(c.join === 'or' ? 'OR' : 'AND') + '.';
     return '<div class="fp-xitem">' +
-             '<div class="fp-xhead">' + (i + 1) + '. ' +
-                escapeHTML(c.matchedField || c.label || c.field) + escapeHTML(join) + '</div>' +
+             '<div class="fp-xhead">' + (n + 1) + '. ' + escapeHTML(c.matchedField || c.label || c.field) + '</div>' +
              '<div class="fp-xbody">' + body + '</div>' +
            '</div>';
   }).join('');
+
+  return '<p class="fp-xlead">' + lead + '</p>' +
+         '<p class="fp-xlead">Here is how Orion built each condition:</p>' +
+         blocks;
 }
+
 
 
 /* What a dynamic condition resolved to, and the promise that it will resolve

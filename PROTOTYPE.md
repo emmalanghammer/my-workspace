@@ -2960,9 +2960,15 @@ harvested off those two frames rather than invented:
 
 The first pass had it as a blue link with a leading chevron over a grey
 label/value table, which is a different component making a different promise.
-The Assistant explains itself in sentences, and this is the same kind of work,
-so it explains itself in sentences too: numbered, one per condition, the way
-that frame numbers its own sections. That last one is why the parser now
+**The content follows the same shape, not just the styling.** The open frame
+answers in plain words first ("You can display a tenant's full name using the
+**[Tenant().FullName]** function..."), then hands off ("Here is how the tenant
+full name function behaves..."), then numbers bold sections with a paragraph
+under each. So this does too: a lead paragraph saying how many conditions it
+read, how they are joined, which fields they land on, and whether any are
+dynamic or exclusions; then "Here is how Orion built each condition:"; then one
+numbered section per condition. A first pass opened straight into the numbered
+list, which answers a question the reader has not asked yet. That last one is why the parser now
 records `why` on every rule it fires: quoting "dogs" when the sentence said
 "dog" is a small lie that costs the whole gut check, so it quotes verbatim out
 of what was typed.
