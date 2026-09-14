@@ -876,6 +876,7 @@ a:hover { text-decoration:underline; }
             <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="buildRowText"></span>
             <span style="font-size:12px;color:var(--text-primary);">Enter</span>
           </div>
+          <div id="savedFilterList"></div>
         </div>
       </div>
     </div>
@@ -1818,6 +1819,61 @@ function openFilterList(){
   const buildRow = document.getElementById("buildRow");
   buildRow.classList.toggle("hidden", !state.prompt.trim());
   document.getElementById("buildRowText").textContent = 'Build a filter for “'+state.prompt+'”';
+  renderSavedFilterList();
+}
+/* The Filters dropdown lists what has been saved from this box, so a filter
+   Orion built once can be picked again without describing it a second time.
+   Until 2026-09-14 saving only pushed a name onto state.savedFilters and
+   nothing ever read it back: the panel held the "Build a filter for ..." row
+   and nothing else, so opening it with saved filters in hand showed an empty
+   box. Emma's call. */
+function renderSavedFilterList(){
+  const list = document.getElementById("savedFilterList");
+  if (!state.savedFilters.length) {
+    /* Empty only reads as empty when the panel says so. With no saved filters
+       and nothing typed, the panel would otherwise be a blank white rectangle. */
+    list.innerHTML = state.prompt.trim() ? "" :
+      '<div class="dd-section">Saved Filters</div>' +
+      '<div class="dd-item" style="cursor:default;font-style:italic;color:var(--text-disabled);">Nothing saved yet</div>';
+    return;
+  }
+  list.innerHTML = '<div class="dd-section">Saved Filters</div>' +
+    state.savedFilters.map(function(f, i){
+      const active = f.name === state.selectedFilter;
+      return '<div class="dd-item' + (active ? ' selected' : '') + '" style="gap:8px;" onclick="pickSavedFilter(' + i + ')">' +
+             (f.orion ? '<span class="orion-mark sm">' + ORION_ICON_HTML + '</span>' : '') +
+             '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHTML(f.name) + '</span>' +
+             '</div>';
+    }).join("");
+}
+function escapeHTML(v){
+  return String(v).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+/* Picking a saved filter applies it outright rather than opening the builder:
+   it was already reviewed and named once. The chip row and the register are
+   the confirmation, so there is no toast. Edit re-opens the builder, the same
+   pencil the applied row already carries. */
+function pickSavedFilter(i){
+  const f = state.savedFilters[i];
+  if (!f) return;
+  state.criteria = cloneCriteria(f.criteria);
+  state.outerJoin = f.outerJoin || "and";
+  state.rationale = f.rationale || "";
+  state.applied = state.criteria;
+  state.selectedFilter = f.name;
+  state.showPanel = false;
+  state.prompt = "";
+  document.getElementById("promptInput").value = "";
+  document.getElementById("filterListPanel").hidden = true;
+  renderAll();
+}
+/* Saved criteria are a copy, not the live array. Without this, applying a
+   saved filter and then editing a condition would rewrite the saved filter
+   too, since both would point at the same objects. */
+function cloneCriteria(c){
+  return JSON.parse(JSON.stringify(c || []));
 }
 function toggleFilterList(e){ e.preventDefault(); e.stopPropagation(); const p = document.getElementById("filterListPanel"); if (p.hidden) openFilterList(); else p.hidden = true; }
 const FILTER_SUGGESTIONS = [
@@ -1877,7 +1933,7 @@ function run(text){
 }
 function openPanel(){ state.showPanel = true; if (!state.criteria.length) state.criteria = state.applied; renderFilterUI(); }
 function closePanel(){ state.showPanel = false; renderFilterUI(); }
-function clearAll(){ state.applied = []; state.criteria = []; state.showPanel = false; state.prompt = ""; state.rationale = ""; document.getElementById("promptInput").value=""; renderAll(); }
+function clearAll(){ state.applied = []; state.criteria = []; state.showPanel = false; state.prompt = ""; state.rationale = ""; state.selectedFilter = ""; document.getElementById("promptInput").value=""; renderAll(); }
 function clearFilterDraft(){ state.criteria = []; state.prompt = ""; state.rationale = ""; state.showPanel = false; document.getElementById("promptInput").value=""; renderFilterUI(); }
 function applyFilter(){ state.applied = state.criteria; state.showPanel = false; renderAll(); }
 
@@ -2077,7 +2133,15 @@ function confirmSave(){
     return;
   }
   const name = (state.saveName||"").trim() || "Untitled Filter";
-  state.savedFilters = [{name:name, orion:true}].concat(state.savedFilters);
+  /* The conditions travel with the name. The modal's own copy says saved
+     filters keep the original request so Orion can refine them later, which
+     only holds if the request is what gets stored. */
+  state.savedFilters = [{
+    name: name, orion: true,
+    criteria: cloneCriteria(state.criteria),
+    outerJoin: state.outerJoin,
+    rationale: state.rationale || ""
+  }].concat(state.savedFilters);
   state.selectedFilter = name; state.applied = state.criteria; state.showPanel = false;
   closeSaveModal(); renderAll();
   showToast('Filter "'+name+'" saved'+(state.visibility==="company"?" for your company.":" to your filters."));

@@ -2717,6 +2717,49 @@ fetched once more, so the very first load after this needs a hard reload
 
 ---
 
+## A saved Orion filter is a filter you can pick again
+
+Emma's call, 2026-09-14, on the Tenant Register's Orion filter builder.
+
+Saving already did the visible half of the job: Save as Filter opens the Save
+Filter overlay, and confirming it applies the filter, closes the builder and
+leaves the "Orion filter active" chip row above a filtered register. That part
+was working and is unchanged.
+
+The half that was missing was everything after. `confirmSave` pushed
+`{name, orion:true}` onto `state.savedFilters` and **nothing ever read it
+back**: the Filters dropdown held the "Build a filter for ..." row and nothing
+else, so opening it with a saved filter in hand showed an empty white box. The
+filter had a name and no conditions behind it, so even a list could not have
+applied one.
+
+Three changes, all inside `screens/tenants.html`:
+
+- **The conditions travel with the name.** A saved filter now carries a copy of
+  its criteria, its outer join and its rationale. The Save Filter overlay's own
+  copy promises that saved filters keep the original request so Orion can
+  refine them later, which only holds if the request is what gets stored.
+- **The dropdown lists them**, under a `Saved Filters` section, each row with
+  the Orion mark, the currently applied one marked with the existing
+  `.dd-item.selected` style. With nothing saved it says "Nothing saved yet"
+  rather than opening as a blank rectangle.
+- **Picking one applies it outright** rather than reopening the builder: it was
+  reviewed and named once already. The chip row and the register are the
+  confirmation, so there is no toast, which matches how `applyFilter` on this
+  screen already behaves.
+
+The stored criteria are a deep copy. Sharing the array would mean that applying
+a saved filter and then editing a condition silently rewrote the saved filter
+too.
+
+`clearAll` now also clears `selectedFilter`, so the dropdown stops marking a
+filter as current once it has been cleared off the register.
+
+**Not published.** Emma asked on 2026-09-14 that nothing touch the live Pages
+link while this work is in progress, so this is committed locally and not
+pushed. The deploy only fires on a push to `main`.
+
+
 # Worth raising with the design system
 
 Found while building these two screens, verified against the live libraries,
