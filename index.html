@@ -538,13 +538,6 @@
 </div>
 </main>
 
-<!-- Task Details, framed. The register's own overlay in ?embed=1 mode, so the
-     Workspace shows the real thing rather than a second copy of it that can
-     drift from it. -->
-<div id="wsTaskFrame" class="ws-taskframe" hidden>
-  <iframe id="wsTaskFrameFrame" title="Task details" src="about:blank"></iframe>
-</div>
-
 <script src="assets/app.js"></script>
 <script src="assets/history-notes.js"></script>
 <script src="assets/megamenu.js"></script>
@@ -590,48 +583,22 @@
   var list = document.querySelector('[data-ws-mentions]');
   if (!list) return;
 
-  /* A mention about a task opens that task's details here, over the Workspace,
-     rather than walking you to the Tasks register and leaving you to walk back.
-     Emma's call, 2026-09-14. The modal itself is the register's, framed in
-     ?embed=1 mode: that mode hides the app bar, context bar and register and
-     leaves the overlay on a transparent ground, so there is exactly one
-     implementation of Task Details, used two ways.
+  /* A mention about a task opens that task on the Tasks register, with Task
+     Details already up. Emma's call, 2026-09-14. This went through an in-place
+     version first, the register's own overlay framed over the Workspace in
+     ?embed=1 mode, and the register is where it belongs: the task you were
+     mentioned on is rarely the only one you want once you are looking at it,
+     and landing on the register leaves the rest of the list right there.
 
      Task Details and nothing on top of it. An earlier pass also passed
      &notes=1, on the reasoning that the mention is a note on the task so the
-     note should be in front of you. Emma's call, 2026-09-14: it is not. The
+     note should be in front of you. Emma's call, same day: it is not. The
      mention already says what the note says, and opening History / Notes over
-     the task buries the thing you clicked through to see. The note is still
-     one click away, on the task's own History tile.
-
-     The cache-buster matters. Assigning the same src twice does not re-run the
-     page, so a second opening would show the state from the first; the overlay
-     reads the shared task state on load, so it has to actually load. */
-  var frame = document.getElementById('wsTaskFrame');
-  var frameEl = document.getElementById('wsTaskFrameFrame');
-  function openTaskFrame(id) {
-    frameEl.src = 'screens/tasks.html?embed=1&open=' + encodeURIComponent(id) +
-                  '&t=' + Date.now();
-    frame.hidden = false;
-  }
-  function closeTaskFrame() {
-    frame.hidden = true;
-    frameEl.src = 'about:blank'; // drop the frame's state so the next open starts clean
-  }
-  /* The framed page tells us when its overlay closed. Without this the frame
-     would stay over the Workspace as an invisible full-screen layer and
-     swallow every click on the page underneath. */
-  window.addEventListener('message', function (e) {
-    if (!e.data || e.data.source !== 'rmx-tasks') return;
-    if (e.data.type === 'close') closeTaskFrame();
-  });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && !frame.hidden) closeTaskFrame();
-  });
-
+     the task buries the thing you clicked through to see. The note stays one
+     click away, on the task's own History tile. */
   function open(row) {
     var task = row.getAttribute('data-ws-task');
-    if (task) { openTaskFrame(task); return; }
+    if (task) { location.href = 'screens/tasks.html?open=' + encodeURIComponent(task); return; }
     var key = row.getAttribute('data-ws-entity');
     if (key && window.RMXHistory) RMXHistory.open(key);
   }

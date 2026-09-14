@@ -2789,38 +2789,35 @@ left where they are rather than moved unasked, but they are the reason this is
 written down.
 
 
-## A task mention opens the task where you are standing
+## A task mention opens the task on the register
 
-Emma's call, 2026-09-14. Clicking the "Apply the new move-in credit" mention
-used to set `location.href` and walk you to the Tasks register. It opens Task
-Details over the Workspace now, and you never leave the page.
+Emma's call, 2026-09-14, arrived at in three steps, which is worth recording
+because the middle one is built and then removed.
 
-The modal is not a second copy. It is the register's own overlay, framed in the
-`?embed=1` mode that already existed in `screens/tasks.html`: that mode hides
-the app bar, context bar and register and leaves the overlay on a transparent
-ground, so there is one implementation of Task Details used two ways and
-nothing to keep in sync. The frame, its CSS (`.ws-taskframe`) and the
-`postMessage` handshake were all still in the prototype from when the My Tasks
-tile used them; this restores the host side that went when the tile did.
+It started by setting `location.href` to the register **with History / Notes
+open on top** of the task. Two changes off that:
 
-`&notes=1` opens History / Notes on top of the task, because the mention **is**
-a note on that task. Landing on the task with the note out of sight would
-answer a question nobody asked.
+1. **In place, over the Workspace.** The register's own Task Details overlay,
+   framed in the `?embed=1` mode already in `screens/tasks.html`, so you never
+   left the page. Built and working.
+2. **Task Details, nothing on top of it.** `&notes=1` dropped. The mention
+   already says what the note says, and opening History / Notes over the task
+   buries the thing you clicked through to see. The note stays one click away
+   on the task's own History tile. **This one stuck.**
+3. **Back to the register**, and step 1 came out again. The task you were
+   mentioned on is rarely the only one you want once you are looking at it, and
+   landing on the register leaves the rest of the list right there behind the
+   overlay.
 
-Two details that are easy to get wrong:
-
-- **The src carries a cache-buster.** Assigning the same `src` twice does not
-  re-run the page, so a second opening would show the state left by the first.
-  The overlay reads the shared task state on load, so it has to actually load.
-- **The frame listens for the close message.** `screens/tasks.html` posts
-  `{source:'rmx-tasks', type:'close'}` when its overlay closes. Without the host
-  acting on it the frame stays as an invisible full-screen layer over the
-  Workspace and swallows every click on the page underneath. Escape closes it
-  too.
+So the mention now goes to `screens/tasks.html?open=<id>`, Task Details opens
+on arrival, and closing it leaves you on the register rather than nowhere. The
+frame, its markup and the `postMessage` handshake were removed with step 3
+rather than left behind as dead code; `.ws-taskframe` stays in
+`assets/workspace.css` because it was there before any of this and costs
+nothing.
 
 Mentions about a tenant, prospect or owner are unchanged: they still open that
-record's History / Notes in place, with no frame involved.
-
+record's History / Notes in place, with no navigation.
 
 # Worth raising with the design system
 
