@@ -2915,6 +2915,24 @@ to vendor", and came out as these arrived. My Tasks holds 8 now and Other
 Users' Tasks still holds 10.
 
 
+## Checklist items get the green check
+
+Emma's call, 2026-09-14. A completed task row already used `.chkbox.green`
+(#6EB744) and its checklist items used the orange `.chkbox.checked` (#F58220),
+so the same act of finishing something was two colours depending on which row
+it happened on. Checklist items are green now, in the register's child rows and
+in Task Details, so an item and the task it belongs to agree.
+
+**This is a deliberate deviation from the skill**, which names the rule
+explicitly: "a checked checkbox is orange, `--icon-attention`, NOT the
+marketing orange". Every other checkbox on the screen still follows it, Quick
+Filters included. The argument for the exception is that these two are not
+really the same control: an item you tick off is reporting completion, which is
+`Icon/icon-success`, while `icon-attention` is for a box whose checked state is
+asking you to notice it. Worth settling in the system rather than per
+prototype, since the same question will come up on every checklist RMX ships.
+
+
 # Worth raising with the design system
 
 Found while building these two screens, verified against the live libraries,

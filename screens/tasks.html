@@ -199,7 +199,13 @@ a:hover { text-decoration:none; }
    skill names this one by name -- "a checked checkbox is orange,
    --icon-attention, NOT the marketing orange" -- and this had the marketing
    value, so every checked checkbox on the screen was a shade off. Found while
-   making the register's checklist checkbox match Task Details', 2026-09-11. */
+   making the register's checklist checkbox match Task Details', 2026-09-11.
+
+   Checklist items do not use it. They are `.chkbox.green`, the same green a
+   completed task row uses, because completing a checklist item is the same
+   kind of event as completing the task: something finished. Emma's call,
+   2026-09-14, and a deliberate deviation from the skill's rule; see
+   PROTOTYPE.md. Orange still means attention on every other checkbox here. */
 .chkbox.checked{background:var(--rmx-orange);border-color:var(--rmx-orange);}
 .chkbox.checked .material-symbols-outlined{font-size:16px;color:#fff;}
 .chkbox.blue.checked{background:var(--rmx-blue);border-color:var(--rmx-blue);}
@@ -1507,7 +1513,7 @@ function childRowHTML(c, dataset, parentId, idx){
        orange when checked, because that is what a checked Checkbox is. Green
        belongs to the task-done control on the row above it, and the two
        meaning different things is the point. Emma's call, 2026-09-11. */
-    ? `<div class="chkbox checked" style="display:inline-flex;vertical-align:middle;margin-right:8px;" onclick="event.stopPropagation();toggleChecklistRow('${dataset}','${parentId}',${idx})"><span class="material-symbols-outlined">check</span></div>`
+    ? `<div class="chkbox green checked" style="display:inline-flex;vertical-align:middle;margin-right:8px;" onclick="event.stopPropagation();toggleChecklistRow('${dataset}','${parentId}',${idx})"><span class="material-symbols-outlined">check</span></div>`
     : `<div class="chkbox" style="display:inline-flex;vertical-align:middle;margin-right:8px;" onclick="event.stopPropagation();toggleChecklistRow('${dataset}','${parentId}',${idx})"></div>`;
   return `<tr class="child-row">
     <td class="col-check"></td>
@@ -2625,7 +2631,7 @@ function renderModalChecklist(){
         </tr>`;
       }
       return `<tr class="${isCurrent?'current':''} ${it.done?'done':''}">
-        <td><div class="chkbox ${it.done?'checked':''}" onclick="toggleChecklistItem(${it._i})">${it.done?'<span class="material-symbols-outlined">check</span>':''}</div></td>
+        <td><div class="chkbox green ${it.done?'checked':''}" onclick="toggleChecklistItem(${it._i})">${it.done?'<span class="material-symbols-outlined">check</span>':''}</div></td>
         <td><span class="cl-desc">${it.text}</span></td>
         <td>${checklistAssigneeText(it)}</td>
         <td style="text-align:right;white-space:nowrap;"><span class="material-symbols-outlined cl-kebab" onclick="event.stopPropagation();openChecklistItemMenu(event, ${it._i})">more_vert</span></td>

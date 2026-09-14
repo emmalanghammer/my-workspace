@@ -548,6 +548,20 @@ a:hover { text-decoration:underline; }
 .fp-head-row{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
 .fp-head-title{font-size:20px;font-weight:400;line-height:28px;color:var(--rmx-navy);}
 .fp-head-sub{font-size:14px;color:var(--text-primary);padding:12px 16px 0;}
+.fp-explain-wrap{padding:8px 16px 0;}
+.fp-explain-toggle{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0;border:0;background:none;
+  font-size:14px;color:var(--rmx-blue);cursor:pointer;}
+.fp-explain-toggle svg{transition:transform .15s ease;}
+.fp-explain-toggle[aria-expanded="true"] svg{transform:rotate(90deg);}
+.fp-explain{margin-top:8px;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);background:var(--bg-subtle);padding:4px 0;}
+.fp-explain[hidden]{display:none;}
+.fp-xrow{display:grid;grid-template-columns:150px 1fr;gap:4px 12px;padding:8px 12px;font-size:14px;line-height:20px;}
+.fp-xrow + .fp-xrow{border-top:1px solid var(--rmx-hairline);}
+.fp-xlabel{color:var(--text-primary);}
+.fp-xval{color:var(--rmx-navy);}
+.fp-xquote{font-style:italic;color:var(--text-primary);}
+.fp-xnote{grid-column:1 / -1;color:var(--text-primary);}
+.fp-xjoin{padding:4px 12px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--text-disabled);}
 .fp-head-meta{display:flex;align-items:center;gap:12px;flex:none;}
 .fp-close{color:var(--text-disabled);cursor:pointer;}
 .fp-close:hover{color:var(--text-primary);}
@@ -929,6 +943,16 @@ a:hover { text-decoration:underline; }
       </div>
     </div>
     <div class="fp-head-sub" id="rationaleText"></div>
+    <!-- "Pull up how Orion built the filter, and it shows you its logic ...
+         That's your gut check." Emma's script, 2026-09-14. Closed by default:
+         the filter itself is the answer, this is the working shown on request. -->
+    <div class="fp-explain-wrap">
+      <button class="fp-explain-toggle" id="explainToggle" onclick="toggleExplain()" aria-expanded="false" aria-controls="explainBody">
+        <svg class="material-symbols-outlined icon-18" id="explainChevron"><use href="#chevron-right"></use></svg>
+        How Orion built this
+      </button>
+      <div class="fp-explain" id="explainBody" hidden></div>
+    </div>
     <div class="fp-body" id="groupsBody"></div>
     <div class="fp-footer" style="justify-content:flex-end;">
       <div class="actions">
@@ -1483,6 +1507,15 @@ let state = {
 };
 
 /* ---- natural-language parse (ported verbatim) ---- */
+/* The phrase a rule keyed on, returned verbatim out of what was typed, so the
+   explanation can quote the user rather than paraphrase them. Orion claiming
+   it matched "dogs" when the sentence said "dog" is a small lie that costs the
+   whole gut check. */
+function matched(text, re){
+  const m = text.match(re);
+  return m ? m[0] : "";
+}
+
 function parse(text){
   const t = text.toLowerCase(); const out = [];
   const add = (c) => out.push(Object.assign({id:++uid}, c));
@@ -1491,27 +1524,36 @@ function parse(text){
   if (/balance|owe|owes|owing|delinquen|past due|arrears|open charges/.test(t)) {
     const under = /under|less than|below|beneath/.test(t);
     const bare = !amount && /balance due|owes|owing|delinquen|past due|arrears|any balance/.test(t);
-    add({field:"balance", label:"Balance", op: under?"lt":"gt", value: bare?"0":String(amt), kind:"number"});
+    add({field:"balance", label:"Balance", op: under?"lt":"gt", value: bare?"0":String(amt), kind:"number",
+        why: matched(t, /balance|owe[sd]?|owing|delinquen\w*|past due|arrears|open charges/), matchedField:"Balance"});
     const dayOfMonth = t.match(/as of the (\d+)(?:st|nd|rd|th)?/);
     if (dayOfMonth) {
       const day = Number(dayOfMonth[1]);
-      add({field:"asOf", label:"Balance as of", op:"is", value: resolveDayValue(day), day, kind:"date"});
+      add({field:"asOf", label:"Balance as of", op:"is", value: resolveDayValue(day), day, kind:"date",
+          why: dayOfMonth[0], matchedField:"Balance as of", dynamic:true});
     } else if (/as of today|today/.test(t)) {
-      add({field:"asOf", label:"Balance as of", op:"is", value: resolveDayValue("today"), day:"today", kind:"date"});
+      add({field:"asOf", label:"Balance as of", op:"is", value: resolveDayValue("today"), day:"today", kind:"date",
+          why: matched(t, /as of today|today/), matchedField:"Balance as of", dynamic:true});
     }
   }
   if (/moved out|move.?out/.test(t) && /security deposit|deposit/.test(t)) {
     const dMatch = t.match(/(\d+)\s*days?/);
-    add({field:"moveOutDays", label:"Moved Out More Than X Days Ago", op:"is", value: String(dMatch ? Number(dMatch[1]) : 30), kind:"number"});
-    add({field:"securityDeposit", label:"Security Deposit Held is over", op:"gt", value:"0", kind:"number"});
+    add({field:"moveOutDays", label:"Moved Out More Than X Days Ago", op:"is", value: String(dMatch ? Number(dMatch[1]) : 30), kind:"number",
+      why: matched(t, /moved out|move.?out/), matchedField:"Move Out Date", dynamic:true});
+    add({field:"securityDeposit", label:"Security Deposit Held is over", op:"gt", value:"0", kind:"number",
+      why: matched(t, /security deposit|deposit/), matchedField:"Security Deposit Held"});
   }
-  if (/\bdog/.test(t)) add({field:"pet", label:"Pet Type is", op:"is", value:"Dog", kind:"select"});
-  if (/riverview/.test(t)) add({field:"property", label:"Property is", op:"is", value:"Riverview Apartments", kind:"select"});
+  if (/\bdog/.test(t)) add({field:"pet", label:"Pet Type is", op:"is", value:"Dog", kind:"select",
+    why: matched(t, /\bdogs?\b/), matchedField:"Pet Type"});
+  if (/riverview/.test(t)) add({field:"property", label:"Property is", op:"is", value:"Riverview Apartments", kind:"select",
+    why: matched(t, /riverview/), matchedField:"Property"});
   if (/\bevic/.test(t)) {
     const excl = /(not|no|without|exclude|excluding|except|omit|skip|ignore)\b[^.]*evic|evic[a-z]*[^.]*\b(exclud|omit)/.test(t);
-    add({field:"eviction", label:"In Eviction Process is", op:"is", value: excl?"No":"Yes", kind:"text"});
+    add({field:"eviction", label:"In Eviction Process is", op:"is", value: excl?"No":"Yes", kind:"text",
+      why: matched(t, /evic\w*/), matchedField:"In Eviction Process", excluded: excl});
   }
-  if (/notice/.test(t)) add({field:"evictionStage", label:"Eviction Stage is", op:"is", value:"Notice", kind:"text"});
+  if (/notice/.test(t)) add({field:"evictionStage", label:"Eviction Stage is", op:"is", value:"Notice", kind:"text",
+    why: matched(t, /notice/), matchedField:"Eviction Stage"});
   if (/vacant/.test(t)) add({field:"siteClass", label:"Site Classification contains", op:"has", value:"Vacant", kind:"text"});
   if (/occupied/.test(t)) add({field:"siteClass", label:"Site Classification contains", op:"has", value:"Occupied", kind:"text"});
   if (/unassigned|homeowner/.test(t)) add({field:"siteClass", label:"Site Classification contains", op:"has", value:"Unassigned", kind:"text"});
@@ -1522,10 +1564,13 @@ function parse(text){
     add({field:"leaseWithin", label:"Lease End within (days)", op:"is", value:String(days), kind:"number"});
   }
   [["flagstone","Flagstone Manufactured Homes"],["lockland","Lockland Manufactured Homes"],["beacon","Beacon Ridge Apartments"],["harbor","Harbor Point Estates"]].forEach(p=>{
-    if (t.indexOf(p[0])>=0) add({field:"property", label:"Property is", op:"is", value:p[1], kind:"select"});
+    if (t.indexOf(p[0])>=0) add({field:"property", label:"Property is", op:"is", value:p[1], kind:"select",
+      why: p[0], matchedField:"Property"});
   });
-  if (/past tenant|moved out|former/.test(t)) add({field:"status", label:"Status is", op:"is", value:"Past", kind:"text"});
-  else if (/current tenant|current status|\bcurrent\b/.test(t)) add({field:"status", label:"Status is", op:"is", value:"Current", kind:"text"});
+  if (/past tenant|moved out|former/.test(t)) add({field:"status", label:"Status is", op:"is", value:"Past", kind:"text",
+    why: matched(t, /past tenants?|moved out|former/), matchedField:"Status"});
+  else if (/current tenant|current status|\bcurrent\b/.test(t)) add({field:"status", label:"Status is", op:"is", value:"Current", kind:"text",
+    why: matched(t, /current tenants?|current status|current/), matchedField:"Status"});
   if (/display color|\bcolor\b/.test(t)) {
     const color = COLORS.find(c => new RegExp("\\b"+c.toLowerCase()+"\\b").test(t));
     if (color) add({field:"color", label:"Display Color is", op:"is", value:color, kind:"select"});
