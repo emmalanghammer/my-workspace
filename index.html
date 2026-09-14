@@ -594,11 +594,12 @@
      &notes=1, on the reasoning that the mention is a note on the task so the
      note should be in front of you. Emma's call, same day: it is not. The
      mention already says what the note says, and opening History / Notes over
-     the task buries the thing you clicked through to see. The note stays one
-     click away, on the task's own History tile. */
+     the task buries the thing you clicked through to see. Instead `&notes=1`
+     now scrolls the modal down to the History / Notes tile, so the note you
+     were tagged in is what you are looking at and the task stays in view. */
   function open(row) {
     var task = row.getAttribute('data-ws-task');
-    if (task) { location.href = 'screens/tasks.html?open=' + encodeURIComponent(task); return; }
+    if (task) { location.href = 'screens/tasks.html?open=' + encodeURIComponent(task) + '&notes=1'; return; }
     var key = row.getAttribute('data-ws-entity');
     if (key && window.RMXHistory) RMXHistory.open(key);
   }

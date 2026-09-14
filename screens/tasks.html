@@ -1076,7 +1076,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
             </div>
           </div>
         </div>
-        <div class="tile">
+        <div class="tile" id="historyNotesTile">
           <div class="tile-header orange"><h3>History / Notes</h3><div class="actions"><a onclick="openTaskHistory('note')">Add Note</a><a class="tile-header__jump" title="Open History / Notes" onclick="openTaskHistory('all')"><span class="material-symbols-outlined icon-16">open_in_new</span></a></div></div>
           <div class="tile-body" id="historyNotesBody">
             <table class="hn-table"><thead><tr><th>Date</th><th>Type</th><th>Note</th></tr></thead><tbody id="historyBody"></tbody></table>
@@ -2199,6 +2199,14 @@ function openTaskModal(dataset, id, prefill){
   document.getElementById('saveNewBtn').classList.toggle('hidden', !!task);
 
   document.getElementById('taskOverlay').hidden = false;
+  /* Every task opens at the top of its own details. The modal body is one
+     reused element, so without this it keeps the scroll position the last task
+     left behind: arrive from a mention, which scrolls down to History / Notes,
+     then open anything else from the register and it opens halfway down a form
+     for no reason the reader can see. This has to come *after* the overlay is
+     shown, since setting scrollTop on a display:none element does nothing. */
+  const modalBody = document.querySelector('#taskOverlay .modal-body');
+  if (modalBody) modalBody.scrollTop = 0;
 }
 function closeTaskModal(){
   document.getElementById('taskOverlay').hidden = true;
@@ -3009,9 +3017,28 @@ function openFromQueryParam(){
   const dataset = myTasks.includes(task) ? 'my' : 'other';
   openTaskModal(dataset, task.id);
   /* ?notes=1 -- arrived from a mention that lives in this task's History /
-     Notes, so the overlay opens on top of Task Details rather than leaving you
-     to find it. Emma's call, 2026-09-11. */
-  if (params.get('notes') === '1') openTaskHistory('all');
+     Notes. The modal scrolls down to that tile so the note you were tagged in
+     is what you are looking at, rather than the top of a form you have to
+     scroll yourself. Emma's call, 2026-09-14.
+
+     This used to open the whole History / Notes overlay on top of Task
+     Details, which buried the task you clicked through to see. Scrolling says
+     the same thing more quietly and leaves the task in view. */
+  if (params.get('notes') === '1') scrollToHistoryNotes();
+}
+
+/* Scrolled, not jumped: the movement is what tells you the page took you
+   somewhere, and on a demo screen a modal that is silently already-scrolled
+   reads as a modal that rendered wrong. The frame waits for the modal's own
+   render to settle, otherwise the tile is measured before it has a height. */
+function scrollToHistoryNotes(){
+  requestAnimationFrame(function(){
+    const tile = document.getElementById('historyNotesTile');
+    const body = tile && tile.closest('.modal-body');
+    if (!body) return;
+    const delta = tile.getBoundingClientRect().top - body.getBoundingClientRect().top;
+    body.scrollTo({ top: body.scrollTop + delta, behavior: 'smooth' });
+  });
 }
 
 // Embedded mode (?embed=1), My Workspace frames this page in an iframe

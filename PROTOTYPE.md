@@ -2800,14 +2800,19 @@ open on top** of the task. Two changes off that:
 1. **In place, over the Workspace.** The register's own Task Details overlay,
    framed in the `?embed=1` mode already in `screens/tasks.html`, so you never
    left the page. Built and working.
-2. **Task Details, nothing on top of it.** `&notes=1` dropped. The mention
-   already says what the note says, and opening History / Notes over the task
-   buries the thing you clicked through to see. The note stays one click away
-   on the task's own History tile. **This one stuck.**
+2. **Task Details, nothing on top of it.** The overlay-on-overlay dropped. The
+   mention already says what the note says, and opening History / Notes over
+   the task buries the thing you clicked through to see.
 3. **Back to the register**, and step 1 came out again. The task you were
    mentioned on is rarely the only one you want once you are looking at it, and
    landing on the register leaves the rest of the list right there behind the
    overlay.
+4. **Scrolled to the History / Notes tile.** `&notes=1` survives, with a new
+   job: instead of opening the overlay it scrolls the modal down to that tile,
+   so the note you were tagged in is what you are looking at and the task stays
+   in view. The scroll is smooth rather than a jump, because the movement is
+   what tells you the page took you somewhere; a modal that is silently
+   already-scrolled reads as one that rendered wrong.
 
 So the mention now goes to `screens/tasks.html?open=<id>`, Task Details opens
 on arrival, and closing it leaves you on the register rather than nowhere. The
@@ -2815,6 +2820,14 @@ frame, its markup and the `postMessage` handshake were removed with step 3
 rather than left behind as dead code; `.ws-taskframe` stays in
 `assets/workspace.css` because it was there before any of this and costs
 nothing.
+
+**A bug the scroll exposed.** The modal body is one reused element, so it kept
+whatever scroll position the previous task left behind. Arriving from a mention
+scrolled it down; opening anything else from the register then opened halfway
+down a form, for no reason a reader could see. Every open resets it now. The
+reset has to run *after* the overlay is shown, since setting `scrollTop` on a
+`display:none` element silently does nothing, which is exactly how the first
+attempt at this failed.
 
 Mentions about a tenant, prospect or owner are unchanged: they still open that
 record's History / Notes in place, with no navigation.
