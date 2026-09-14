@@ -2940,26 +2940,36 @@ builder. Its argument, made in three of the four beats, is that the point is
 not saved clicks: it is that you can check the work. So most of this round is
 one new thing, and the rest is what that thing needed.
 
-### "How Orion built this"
+### "How did Orion build this?"
 
-A disclosure under the prompt, closed by default, that reads back per
-condition: **the field it matched**, **the condition it constructed**, and **the
-words in your sentence it keyed on**.
+A help icon and that question, right-aligned on the same line as the filter's
+own question, opening a popover that reads back per condition: **the field it
+matched**, **the condition it constructed**, and **the words in your sentence it
+keyed on**.
 
-**Drawn as the Orion Script Assistant draws its own version of this.** Emma
-pointed at `Ugt7vEPg0qrIvFaEVPHGgc` `2488:2899` (closed) and `2490:3317` (open),
-where the same promise is made about a generated script, and everything here is
-harvested off those two frames rather than invented:
+**It took three shapes to get there**, all on 2026-09-14, and the middle one is
+worth recording because it was harvested correctly and still wrong.
 
-| | Harvested |
-|---|---|
-| Label | Roboto Regular 14/20 in `#666666`, not link blue |
-| Chevron | trailing on the right, down closed and up open |
-| Divider | a hairline above the row |
-| Body | prose in `#13314C` 14/20 with the named things in bold |
+1. A collapsible section under the prompt, styled off the Orion Script
+   Assistant's own "How does this script work?" (`Ugt7vEPg0qrIvFaEVPHGgc`
+   `2488:2899` closed, `2490:3317` open): label in `#666666` 14/20 rather than
+   link blue, chevron trailing right, hairline above, prose body in `#13314C`.
+2. The same, with the content rewritten as prose in the Assistant's voice, a
+   lead paragraph then numbered sections.
+3. **A question on the line, answered in a popover**, with the content back to
+   label/value rows.
 
-The first pass had it as a blue link with a leading chevron over a grey
-label/value table, which is a different component making a different promise.
+The section had to go because opening it pushed the conditions down the page:
+the thing you opened it to check moved while you were checking it. A popover
+floats, so the filter stays put. It is `position: fixed`, right edges aligned
+with the trigger, flipped above when it will not fit below, dismissed by an
+outside click or Escape, which is the clamp every other floating panel here
+uses.
+
+On the manual path the trigger is not drawn at all, for the same reason the
+title reads Advanced Filters there: Orion did not build that filter and must not
+offer to explain it.
+
 **The styling is the Assistant's. The content is not**, and that took a round
 trip to settle. The explanation was rewritten as prose in the Assistant's shape,
 a lead paragraph then numbered sections, and then put back to the label/value
