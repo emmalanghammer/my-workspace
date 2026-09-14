@@ -279,6 +279,37 @@ body.rmx {
   background: var(--container-secondary); color: var(--text-inverse, #fff);
   font: var(--type-label-m-regular);
 }
+
+/* ---------- App bar, narrow widths ----------
+   RMX has no responsive Header variant, the component is authored at one fixed
+   desktop width, so this is a stopgap that stops it visibly breaking rather
+   than a design. See PROTOTYPE.md, "Worth raising".
+
+   It lives here, in the component stylesheet every screen loads, rather than
+   in one screen's own CSS. It used to sit only in workspace.css, so the app
+   bar degraded correctly on My Workspace and nowhere else: on the other
+   screens Company Code kept its space and overlapped Command Launch. A shared
+   component's behaviour belongs with the component. */
+@media (max-width: 899px) {
+  /* The bar stays three columns, that is what centres Command Launch, but the
+     middle one takes double weight so the search field keeps a usable width,
+     and Company Code gives up its space, being the least load-bearing thing
+     in the bar. */
+  .rmx-appbar__launch { flex: 2 0 0; }
+  .rmx-appbar__code { display: none; }
+}
+
+@media (max-width: 599px) {
+  /* The logo is a vector at a fixed 175x32 and the bar clips rather than
+     scrolls, so at phone width it was cut mid-wordmark. Let it scale in its
+     column instead, the viewBox keeps it proportional. */
+  .rmx-appbar__logo { width: 100%; max-width: 175px; height: auto; }
+  /* Keep the Mega Menu button: it is the only way into the menu, so hiding it
+     removes the feature rather than tidying the bar. Reports and Favorites
+     lead nowhere, so they are the two that go. */
+  .rmx-appbar__icons > button:nth-child(2),
+  .rmx-appbar__icons > button:last-child { display: none; }
+}
 /* ---------- Context Bar ----------
    Harvested from node 10861:12222. Two slots, justify-between: leading items
    left, trailing items right. Both slots gap 12px (--spacing-sm), NOT 16.

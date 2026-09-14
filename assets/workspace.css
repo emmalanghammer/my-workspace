@@ -1063,13 +1063,9 @@
   /* One area column, so the blocks stop being squeezed. */
   .ws-areaflow { column-width: auto; columns: 1; }
 
-  /* The app bar stays three columns, that is what centres Command Launch,
-     but the middle one takes double weight so the search field keeps a usable
-     width, and Company Code gives up its space, being the least load-bearing
-     thing in the bar. The library has no responsive Header variant; see
-     PROTOTYPE.md, "Worth raising". */
-  .rmx-appbar__launch { flex: 2 0 0; }
-  .rmx-appbar__code { display: none; }
+  /* The app bar's own narrow-width behaviour moved to rmx.css, next to the
+     component it belongs to, so every screen degrades the same way and not
+     just this one. */
 }
 
 @media (max-width: 599px) {
@@ -1086,23 +1082,7 @@
   }
   .ws-ann__copy { min-width: 0; }
 
-  /* Phone-width app bar. RMX has no responsive Header variant, the component
-     is authored at a fixed desktop width, so this is a stopgap that stops it
-     visibly breaking, not a design. Two rules: keep the wordmark on one line
-     (it was wrapping to "Re / Manager" and colliding with the icons), and drop
-     the Command Launch icon buttons that lead nowhere in this prototype.
-     See PROTOTYPE.md, "Worth raising". */
-  /* The logo is a vector at a fixed 175x32, and the bar clips rather than
-     scrolls, so at phone width it was cut mid-wordmark. Let it scale in its
-     column instead, the viewBox keeps it proportional. */
-  .rmx-appbar__logo { width: 100%; max-width: 175px; height: auto; }
-  /* Keep the Mega Menu button. This rule used to drop all three icon buttons,
-     which was fine while all three were placeholders, but the first one is
-     now the only way into the Mega Menu, so hiding it removed the feature
-     entirely below 600px rather than merely tidying the bar. Reports and
-     Favorites still lead nowhere, so they're the two that go. */
-  .rmx-appbar__icons > button:nth-child(2),
-  .rmx-appbar__icons > button:last-child { display: none; }
+  /* Phone-width app bar rules moved to rmx.css, see the note above. */
 }
 
 /* ---------- toast position ----------
