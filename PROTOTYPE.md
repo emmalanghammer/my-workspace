@@ -3031,9 +3031,17 @@ the screen is already showing the answer than if someone has to type the
 sentence before the point can be made.
 
 It is built through the same `parse()` every typed prompt goes through, so what
-is on screen at load is a real Orion filter rather than a mock of one, and "How
-Orion built this" explains it exactly as it would explain one you typed. No
-thinking animation, because nothing was asked in front of anyone.
+is on screen at load is a real Orion filter rather than a mock of one, and the
+explanation describes it exactly as it would one you typed. No thinking
+animation, because nothing was asked in front of anyone.
+
+**Status stays on its shipped default of Current.** An earlier version of this
+cleared it, on the same reasoning `run()` uses, and left the toolbar's Status
+field blank on load. It is safe to leave here because every tenant this opening
+filter matches is current anyway, so it changes nothing about the result.
+Typing a new prompt still clears it inside `run()`, which is what keeps a filter
+about moved-out tenants from being silently cut by a Current nobody remembered
+was on.
 
 **It survives moving between Tenants and Tenant Register**, both directions and
 by either route, the context-bar title and the mega menu. That already worked:

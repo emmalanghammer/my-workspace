@@ -2573,9 +2573,13 @@ const OPENING_PROMPT = "Tenants with dogs at Riverview";
   state.applied = state.criteria;
   state.rationale = rationaleFor(OPENING_PROMPT);
   state.promptText = OPENING_PROMPT;
-  /* Same reason run() clears them: Orion's own reading is the filter now, and a
-     leftover Status quick-filter would silently cut the result behind it. */
-  state.statuses = [];
+  /* Status stays on its shipped default of Current, which is what the register
+     opens as and what the toolbar should show. It is safe to leave here because
+     every tenant this opening filter matches is current anyway, so it changes
+     nothing about the result; and typing a new prompt still clears it inside
+     run(), which is what keeps a filter about moved-out tenants from being
+     silently cut by a Current that nobody remembered was on. Emma's call,
+     2026-09-14. */
   state.showPanel = false;
 })();
 
