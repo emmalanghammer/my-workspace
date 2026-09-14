@@ -3285,6 +3285,18 @@ document.addEventListener("keydown", (e)=>{ if (e.key === "Escape") d_closePanel
 
 /* ---- entry point called by the mega menu / the register's row-click to show this view ---- */
 window.__showDetails = function(account, list, orion){
+  /* Arriving with no list, which is the mega menu's Tenants link and the
+     ?view=details deep link the Workspace uses, still arrives into whatever the
+     register is filtered to. The register opens on the Riverview dogs filter,
+     so Tenants does too: walking from the Workspace straight into Tenants and
+     finding an unfiltered list would mean the same session had two different
+     answers to "which tenants am I looking at". Emma's call, 2026-09-14.
+
+     A row click still wins, since it passes its own list and its own filter. */
+  if (!list && state.applied.length) {
+    list = matches(state.applied).map(r => r.account);
+    orion = { chips: state.applied.map(renderChipText), prompt: state.rationale || "" };
+  }
   if (list && list.length) d_state.lockedAccounts = new Set(list);
   else d_state.lockedAccounts = null;
   d_state.orionFilter = d_state.lockedAccounts ? (orion || null) : null;

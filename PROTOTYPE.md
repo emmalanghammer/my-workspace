@@ -3056,8 +3056,16 @@ reads the same wherever you are standing.
   because that is the screen the filter was built on.
 - **Edit** goes back to the register with the builder open, rather than growing
   a second copy of the panel in a rail a third of the width.
-- Arriving by the mega menu, which hands over no rows, shows no row, which is
-  correct: nothing is filtering that list.
+- Arriving by the mega menu or the `?view=details` deep link, which is how the
+  Workspace gets here, hands over no rows and so **falls back to whatever the
+  register is filtered to**. The register opens on the Riverview dogs filter, so
+  Tenants opens on it too. Emma's call, 2026-09-14: walking from the Workspace
+  straight into Tenants and finding an unfiltered list would mean one session
+  holding two different answers to "which tenants am I looking at".
+
+A row click still wins, since it passes its own rows and its own filter, so
+filtering the register to something else and clicking through carries that
+instead.
 
 ### Beat 1, the old way
 
