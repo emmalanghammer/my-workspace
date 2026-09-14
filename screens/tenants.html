@@ -568,17 +568,20 @@ a:hover { text-decoration:underline; }
    and the chevron trailing on the right. Open, it is prose in navy 14/20 with
    the named things in bold, not a table: the Assistant explains itself in
    sentences and this is the same promise about the same kind of work. */
-.fp-explain-wrap{margin:12px 16px 0;border-top:1px solid var(--rmx-hairline);padding-top:8px;}
-.fp-explain-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
-  padding:4px 0;border:0;background:none;font-size:14px;line-height:20px;color:var(--text-primary);
-  text-align:left;cursor:pointer;}
-.fp-explain-toggle svg{flex:none;color:var(--text-primary);transition:transform .15s ease;}
-/* Closed points down, open points up, as the Script Assistant draws it
-   (2488:2899 closed, 2490:3317 open). */
-.fp-explain-toggle[aria-expanded="true"] svg{transform:rotate(180deg);}
-.fp-explain{margin-top:8px;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);background:var(--bg-subtle);padding:4px 0;}
+/* The filter's question and the question about the filter share a line. */
+.fp-head-sub{display:flex;align-items:baseline;gap:16px;}
+.fp-head-sub #rationaleText{flex:1;min-width:0;}
+.fp-explain-trigger{display:inline-flex;align-items:center;gap:4px;flex:none;padding:0;border:0;
+  background:none;font-size:14px;line-height:20px;color:var(--rmx-blue);cursor:pointer;white-space:nowrap;}
+.fp-explain-trigger svg{flex:none;}
+.fp-explain-trigger:hover span{text-decoration:underline;}
+.fp-explain-trigger[aria-expanded="true"]{color:var(--rmx-blue-hover,var(--rmx-blue));}
+/* Floating, so opening it does not shove the conditions down the page. Same
+   surface as every other floating panel here: white, hairline, shadow-md. */
+.fp-explain{position:fixed;z-index:80;width:420px;max-width:calc(100vw - 24px);max-height:60vh;overflow-y:auto;
+  border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);background:#fff;box-shadow:var(--shadow-md);padding:4px 0;}
 .fp-explain[hidden]{display:none;}
-.fp-xrow{display:grid;grid-template-columns:150px 1fr;gap:4px 12px;padding:8px 12px;font-size:14px;line-height:20px;}
+.fp-xrow{display:grid;grid-template-columns:130px 1fr;gap:4px 12px;padding:8px 12px;font-size:14px;line-height:20px;}
 .fp-xrow + .fp-xrow{border-top:1px solid var(--rmx-hairline);}
 .fp-xlabel{color:var(--text-primary);}
 .fp-xval{color:var(--rmx-navy);}
@@ -974,17 +977,21 @@ a:hover { text-decoration:underline; }
         </div>
       </div>
     </div>
-    <div class="fp-head-sub" id="rationaleText"></div>
     <!-- "Pull up how Orion built the filter, and it shows you its logic ...
-         That's your gut check." Emma's script, 2026-09-14. Closed by default:
-         the filter itself is the answer, this is the working shown on request. -->
-    <div class="fp-explain-wrap">
-      <button class="fp-explain-toggle" id="explainToggle" onclick="toggleExplain()" aria-expanded="false" aria-controls="explainBody">
-        <span>How Orion built this</span>
-        <svg class="material-symbols-outlined icon-18" id="explainChevron"><use href="#keyboard-arrow-down"></use></svg>
+         That's your gut check." Emma's script, 2026-09-14, drawn as she asked
+         for on the 14th: not a section of the panel that pushes the filter
+         down, but a question sitting at the end of the line the filter question
+         is on, answered in a popover over the top. The working is there when
+         you go looking and costs nothing when you are not. -->
+    <div class="fp-head-sub">
+      <span id="rationaleText"></span>
+      <button class="fp-explain-trigger" id="explainToggle" onclick="toggleExplain(event)"
+              aria-expanded="false" aria-controls="explainBody">
+        <svg class="material-symbols-outlined icon-18"><use href="#help"></use></svg>
+        <span>How did Orion build this?</span>
       </button>
-      <div class="fp-explain" id="explainBody" hidden></div>
     </div>
+    <div class="fp-explain" id="explainBody" hidden onclick="event.stopPropagation()"></div>
     <div class="fp-body" id="groupsBody"></div>
     <div class="fp-footer" style="justify-content:flex-end;">
       <div class="actions">
@@ -1773,9 +1780,27 @@ function ordinal(n){
 }
 
 let explainOpen = false;
-function toggleExplain(){
+function toggleExplain(e){
+  if (e) e.stopPropagation();
   explainOpen = !explainOpen;
   syncExplain();
+}
+/* Under the trigger, right edges aligned, flipped above when it will not fit
+   below: the same clamp every other floating panel in these prototypes uses,
+   for the same reason. */
+function positionExplain(){
+  const body = document.getElementById('explainBody');
+  const trigger = document.getElementById('explainToggle');
+  if (!body || !trigger || body.hidden) return;
+  const GAP = 6, EDGE = 12;
+  const r = trigger.getBoundingClientRect();
+  const h = body.offsetHeight, w = body.offsetWidth;
+  const below = window.innerHeight - r.bottom - GAP - EDGE;
+  const above = r.top - GAP - EDGE;
+  const flip = h > below && above > below;
+  body.style.maxHeight = Math.max(160, flip ? above : below) + 'px';
+  body.style.top = (flip ? Math.max(EDGE, r.top - GAP - Math.min(h, above)) : r.bottom + GAP) + 'px';
+  body.style.left = Math.min(Math.max(EDGE, r.right - w), window.innerWidth - w - EDGE) + 'px';
 }
 function syncExplain(){
   const body = document.getElementById('explainBody');
@@ -1786,6 +1811,7 @@ function syncExplain(){
     '<div class="fp-xempty">Nothing to explain yet.</div>';
   body.hidden = !explainOpen;
   toggle.setAttribute('aria-expanded', explainOpen ? 'true' : 'false');
+  positionExplain();
 }
 function testCond(row, c){
   switch(c.field){
@@ -1916,7 +1942,8 @@ function renderFilterUI(){
     document.getElementById("fpTitle").textContent = built ? "Filter with Orion" : "Advanced Filters";
     document.getElementById("fpOrionMark").style.display = built ? "" : "none";
     document.getElementById("rationaleText").style.display = built ? "" : "none";
-    document.querySelector(".fp-explain-wrap").style.display = built ? "" : "none";
+    document.getElementById("explainToggle").style.display = built ? "" : "none";
+    if (!built && explainOpen) { explainOpen = false; syncExplain(); }
     syncExplain();
     document.getElementById("groupsBody").innerHTML = state.criteria.map((g, gi) => renderGroup(g, gi)).join("")
       + '<div class="cond-add float-anchor">'
@@ -2456,6 +2483,9 @@ function applyTemplate(){
 
 /* ---- global dismiss ---- */
 document.addEventListener("click", (e)=>{
+  if (explainOpen && !e.target.closest("#explainBody") && !e.target.closest("#explainToggle")) {
+    explainOpen = false; syncExplain();
+  }
   if (!e.target.closest(".cond-op")) document.querySelectorAll(".cond-op-panel").forEach(p => p.hidden = true);
   if (!e.target.closest(".cond-add")) document.querySelectorAll(".field-selector").forEach(p => p.hidden = true);
   if (!document.getElementById("bulkWrap").contains(e.target)) closeBulk();
@@ -2466,6 +2496,12 @@ document.addEventListener("click", (e)=>{
 });
 document.addEventListener("keydown", (e)=>{
   if (e.key==="Escape") { document.getElementById("filterListPanel").hidden = true; closeBulk(); }
+});
+
+window.addEventListener("resize", positionExplain);
+window.addEventListener("scroll", positionExplain, true);
+document.addEventListener("keydown", function(e){
+  if (e.key === "Escape" && explainOpen) { explainOpen = false; syncExplain(); }
 });
 
 /* ---- entry point called by the mega menu to show this view ---- */
