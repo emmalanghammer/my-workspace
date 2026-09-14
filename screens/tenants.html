@@ -2045,6 +2045,15 @@ function renderRegister(){
   document.getElementById("selectedLabel").textContent = rowsData.length + " tenants selected";
 }
 function renderFilterUI(){
+  /* Quick Filters and Filter with Orion are two ways of narrowing the same
+     list, and stacked open they push the register most of the way off the
+     screen. One at a time: opening the Orion panel closes the band, and
+     toggleQuickFilters() closes the panel the other way round. Emma's call,
+     2026-09-14. Enforced here because this is the one place the panel's
+     visibility is decided, so every route into it, run(), openPanel(), a saved
+     filter, goes past it. */
+  if (state.showPanel && state.qfBandOpen) state.qfBandOpen = false;
+  syncQuickFilterBand();
   document.getElementById("thinkingCard").classList.toggle("hidden", !state.thinking);
   document.getElementById("filterPanel").classList.toggle("hidden", !state.showPanel);
   document.getElementById("appliedRow").classList.toggle("hidden", !(state.applied.length && !state.showPanel));
@@ -2657,6 +2666,10 @@ function regProperties(){
 }
 function toggleQuickFilters(){
   state.qfBandOpen = !state.qfBandOpen;
+  /* Opening the band puts the Orion panel away. Closing the band leaves it
+     closed, rather than reopening whatever was there before: one of these
+     appearing because you dismissed the other is not what dismissing means. */
+  if (state.qfBandOpen && state.showPanel) { state.showPanel = false; renderFilterUI(); return; }
   syncQuickFilterBand();
 }
 function syncQuickFilterBand(){

@@ -3204,6 +3204,19 @@ Quick filters narrow whatever else is on, Orion's conditions included. Asking
 for Flagstone while an Orion filter says Riverview correctly returns the empty
 state rather than quietly dropping one of the two.
 
+**Only one of the two is open at a time.** Emma's call, 2026-09-14: the band and
+the Filter with Orion panel are two ways of narrowing the same list, and open
+together they pushed the register most of the way off the screen. Opening either
+closes the other.
+
+The rule lives in `renderFilterUI`, which is the one place the Orion panel's
+visibility is decided, so every route into it goes past it: a typed prompt, the
+tune icon, the applied tag, the pencil, picking a saved filter. Doing it in each
+of those instead would have meant five places to forget.
+
+Closing the band does not reopen the panel. One appearing because you dismissed
+the other is not what dismissing means.
+
 
 # Worth raising with the design system
 
