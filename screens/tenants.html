@@ -1337,7 +1337,18 @@ a:hover { text-decoration:underline; }
 
 <div class="toast-lozenge" id="saveToast"><svg class="material-symbols-outlined"><use href="#check-circle-filled"></use></svg><span id="saveToastMsg"></span></div>
 
+
+
+</div>
+
 <!-- ============================== SAVE FILTER MODAL (shared: Tenant Register + Tenant Details) ============================== -->
+<!-- Body level, deliberately. This modal lived inside #viewDetails until
+     2026-09-14, and #viewDetails carries `hidden` (display:none) the whole
+     time you are on the Tenant Register. openSaveModal() cleared the modal's
+     own hidden attribute correctly, but a display:none ancestor meant nothing
+     was ever painted, so Save as Filter on the Register looked like a dead
+     button. Anything shared by both views belongs out here, beside the mega
+     menu overlay, not inside either one. -->
 <div class="overlay-scrim" id="saveOverlay" hidden onclick="if(event.target===this)closeSaveModal()">
   <div class="modal modal-sm" onclick="event.stopPropagation()">
     <div class="modal-header"><h2>Save Filter</h2><svg class="material-symbols-outlined close" onclick="closeSaveModal()"><use href="#close"></use></svg></div>
@@ -1362,9 +1373,6 @@ a:hover { text-decoration:underline; }
       <button class="btn btn-secondary" onclick="closeSaveModal()">Cancel</button>
     </div>
   </div>
-</div>
-
-
 </div>
 
 <script>

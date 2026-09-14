@@ -2759,6 +2759,35 @@ filter as current once it has been cleared off the register.
 link while this work is in progress, so this is committed locally and not
 pushed. The deploy only fires on a push to `main`.
 
+### Save as Filter was a dead button on the Register
+
+Emma, 2026-09-14: "when i click on it the overlay doesn't appear". It did not,
+and it never had on that screen.
+
+`#saveOverlay` sat inside `#viewDetails`, and `#viewDetails` carries `hidden`,
+so `display:none`, the whole time you are on the Tenant Register.
+`openSaveModal()` cleared the modal's own `hidden` attribute exactly as it
+should, but a `display:none` ancestor meant the browser never painted it. The
+modal is labelled in its own comment as shared by both views; it was only ever
+reachable from one of them. It is a direct child of `<body>` now, beside the
+mega menu overlay, which is where anything shared by both views belongs.
+
+**Worth saying how this was missed.** The first pass at diagnosing it checked
+`saveOverlay.hidden === false` after the click and called that verified. That
+assertion passed the whole time: the attribute really was being cleared. It
+just was not the question. What mattered was whether the thing was on screen,
+which is `getComputedStyle(el).display` and a bounding box with height, and
+which was `none` and zero. A flag flipping is not a modal opening, and two
+rounds were spent hunting the click handler because the check said the click
+handler was fine.
+
+The same trap is still set twice more in this file, and both are currently
+harmless only by luck: `#taskOverlay`, `#checklistOverlay`, `#templateOverlay`
+and `#appToast` all live inside `#viewRegister`, and Tenant Details never calls
+them. If it ever does, it will fail in exactly this way, silently. They are
+left where they are rather than moved unasked, but they are the reason this is
+written down.
+
 
 # Worth raising with the design system
 
