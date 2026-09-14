@@ -209,8 +209,14 @@ a:hover { text-decoration:underline; }
 .hover-card .hc-name-left{display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;}
 .hover-card .hc-name{font-size:16px;font-weight:600;color:var(--rmx-navy);overflow:hidden;text-overflow:ellipsis;}
 .hover-card .hc-acct{font-size:14px;color:var(--rmx-navy);flex:none;}
-.hover-card .hc-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.hover-card .hc-meta-left{display:flex;align-items:center;gap:8px;}
+/* The card is a fixed 330px and both halves of this row refuse to shrink (the
+   meta items are nowrap, the icon cluster is flex:none), so a property code
+   plus a long unit pushed the call/text/mail icons clean outside the card.
+   Wrapping keeps them in: they drop to their own line rather than escaping,
+   and nothing is clipped. min-width:0 covers the left group being long on its
+   own. */
+.hover-card .hc-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.hover-card .hc-meta-left{display:flex;align-items:center;gap:8px;min-width:0;}
 .hover-card .hc-meta-item{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--rmx-navy);white-space:nowrap;}
 .hover-card .hc-meta-item .material-symbols-outlined{font-size:20px;color:var(--rmx-blue);}
 .hover-card .hc-icons{display:flex;align-items:center;gap:8px;flex:none;}
@@ -570,6 +576,15 @@ a:hover { text-decoration:underline; }
 .group-items{padding:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
 .cond-chip{display:flex;align-items:center;gap:8px;height:36px;padding:0 8px 0 14px;background:#fff;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);}
 .cond-chip .label{font-size:14px;font-weight:600;color:var(--rmx-navy);white-space:nowrap;}
+/* A condition never grows past its group. The chip is content-width, and the
+   value is the only part that can be long (property names run to ~28
+   characters), so without these it rendered wider than the 342px builder panel
+   and hung outside the group box. The chip shrinks to the group, and the value
+   truncates the way the register's own columns do. */
+.cond-chip{max-width:100%;min-width:0;}
+.cond-chip .cond-op{min-width:0;}
+.cond-op-trigger{max-width:100%;min-width:0;}
+.cond-op-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
 /* Condition operator: an Input-Field-style trigger + floating panel -- never a native <select> --
    and never baked into the label as plain text either: every op/value the picker can set is
    shown back the same way it was picked, per DESIGN.md's 36px standard control height. */
@@ -1693,7 +1708,7 @@ function condChipHTML(c, gid, fnPrefix){
   if (c.kind === "select") {
     const opts = def.options || [];
     html += '<div class="cond-op float-anchor">'
-      + '<span class="cond-op-trigger" onclick="'+fnPrefix+'toggleCondVal(event,'+c.id+')">'+(c.value||"Select")+'<svg class="material-symbols-outlined"><use href="#arrow-drop-down"></use></svg></span>'
+      + '<span class="cond-op-trigger" onclick="'+fnPrefix+'toggleCondVal(event,'+c.id+')"><span class="cond-op-label" title="'+String(c.value||"Select").replace(/"/g,"&quot;")+'">'+(c.value||"Select")+'</span><svg class="material-symbols-outlined"><use href="#arrow-drop-down"></use></svg></span>'
       + '<div class="dd-panel cond-op-panel" id="'+fnPrefix+'valPanel'+c.id+'" hidden>'
       + opts.map(o=>'<div class="dd-item'+(c.value===o?" selected":"")+'" onclick="'+fnPrefix+'setCondValuePicked('+c.id+',\''+o.replace(/'/g,"\\'")+'\')">'+o+'</div>').join("")
       + '</div></div>';
