@@ -3077,7 +3077,19 @@ filter arrives, exactly as `run()` does on the register. With Current still
 ticked underneath, beat 4's filter about moved-out tenants would have returned
 nobody: the filter would have looked correct and answered wrong.
 
-### Editing happens here, not back on the register
+### The register wears the same tag
+
+Emma's call, 2026-09-14. The register's applied-filter row now draws the same
+`.orion-tag` the rail does, gradient stroke and all, so one filter looks like
+one thing on both screens. The Orion mark and the words "Orion filter active:"
+that used to sit in front of it are gone: the tag carries its own mark, and the
+stroke already says which kind of filter this is.
+
+**The pencil stays here**, unlike on Tenants. On this screen the builder is the
+panel directly above, so Edit opens something already in view rather than moving
+you somewhere else. Clicking the tag opens it too.
+
+### Editing happens on Tenants, not back on the register
 
 The tag opens a popover with the conditions **editable in place**. The register
 is where the filter was built, but it is not where you are, and walking someone
