@@ -2960,15 +2960,18 @@ harvested off those two frames rather than invented:
 
 The first pass had it as a blue link with a leading chevron over a grey
 label/value table, which is a different component making a different promise.
-**The content follows the same shape, not just the styling.** The open frame
-answers in plain words first ("You can display a tenant's full name using the
-**[Tenant().FullName]** function..."), then hands off ("Here is how the tenant
-full name function behaves..."), then numbers bold sections with a paragraph
-under each. So this does too: a lead paragraph saying how many conditions it
-read, how they are joined, which fields they land on, and whether any are
-dynamic or exclusions; then "Here is how Orion built each condition:"; then one
-numbered section per condition. A first pass opened straight into the numbered
-list, which answers a question the reader has not asked yet. That last one is why the parser now
+**The styling is the Assistant's. The content is not**, and that took a round
+trip to settle. The explanation was rewritten as prose in the Assistant's shape,
+a lead paragraph then numbered sections, and then put back to the label/value
+rows it started as. Emma's call both times, 2026-09-14.
+
+The prose read better as prose and was worse at the job. This is opened to
+answer three questions fast, which field, which condition, which words, and a
+paragraph makes you read a sentence to find each one where a label column hands
+them over at a glance. The Assistant is explaining a function to someone
+learning it; this is showing work to someone checking it, and checking wants a
+table. Both were built, the second is in, and the first is in the history at
+`3ed2715` if it is ever wanted back. That last one is why the parser now
 records `why` on every rule it fires: quoting "dogs" when the sentence said
 "dog" is a small lie that costs the whole gut check, so it quotes verbatim out
 of what was typed.
