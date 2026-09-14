@@ -2970,6 +2970,17 @@ On the manual path the trigger is not drawn at all, for the same reason the
 title reads Advanced Filters there: Orion did not build that filter and must not
 offer to explain it.
 
+The row is centred, not baseline-aligned. A prompt long enough to wrap, which
+beat 4's is, left the trigger pinned to the first line with the second running
+on underneath it, reading as two separate things instead of one row.
+
+**A bug the wrapped case exposed.** The builder's `FIELD_DEFS` had no entry for
+the two fields beat 4 introduced, so `condFieldDef` fell through to its
+`property` default and an editable row for "not sent to collections" drew itself
+as **Property is No**. The filter was right and the row describing it named a
+different field entirely, which is exactly the kind of quiet wrongness the
+explanation exists to catch. Both fields are defined now.
+
 **The styling is the Assistant's. The content is not**, and that took a round
 trip to settle. The explanation was rewritten as prose in the Assistant's shape,
 a lead paragraph then numbered sections, and then put back to the label/value

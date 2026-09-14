@@ -568,8 +568,11 @@ a:hover { text-decoration:underline; }
    and the chevron trailing on the right. Open, it is prose in navy 14/20 with
    the named things in bold, not a table: the Assistant explains itself in
    sentences and this is the same promise about the same kind of work. */
-/* The filter's question and the question about the filter share a line. */
-.fp-head-sub{display:flex;align-items:baseline;gap:16px;}
+/* The filter's question and the question about the filter share a line.
+   Centred, not baseline-aligned: a prompt long enough to wrap left the trigger
+   pinned to the first line with the second running on underneath it, which read
+   as two separate things rather than one row. Emma's call, 2026-09-14. */
+.fp-head-sub{display:flex;align-items:center;gap:16px;}
 .fp-head-sub #rationaleText{flex:1;min-width:0;}
 .fp-explain-trigger{display:inline-flex;align-items:center;gap:4px;flex:none;padding:0;border:0;
   background:none;font-size:14px;line-height:20px;color:var(--rmx-blue);cursor:pointer;white-space:nowrap;}
@@ -2284,6 +2287,13 @@ const FIELD_DEFS = {
   /* legacy fields Orion's natural-language parser can still create — not shown in the Field Selector picker */
   asOf: {label:"Balance as of", kind:"date", value:"", ops:[{op:"is",label:""}]},
   eviction: {label:"In Eviction Process", kind:"text", value:"Yes", ops:[{op:"is",label:"is"}]},
+  /* The two fields beat 4's exclusions parse into. Without an entry here
+     condFieldDef falls through to FIELD_DEFS.property, so an editable row for
+     "not sent to collections" drew itself as "Property is No": the filter was
+     right, the row describing it was a different field entirely. Added with the
+     fields themselves, 2026-09-14. */
+  collections: {label:"Sent to Collections", kind:"text", value:"Yes", ops:[{op:"is",label:"is"}]},
+  paymentPlan: {label:"Payment Plan", kind:"text", value:"Yes", ops:[{op:"is",label:"is"}]},
   siteClass: {label:"Site Classification", kind:"text", value:"", ops:[{op:"has",label:"contains"}]},
   leaseMissing: {label:"Lease End is empty", kind:"flag", value:"", ops:[{op:"is",label:""}]},
   leaseWithin: {label:"Lease End within (days)", kind:"number", value:"30", ops:[{op:"is",label:""}]},
