@@ -3166,6 +3166,45 @@ said something plausible, and returned the wrong rows. It is `\d[\d,]*` now.
 Any sentence with a comma before the amount was affected.
 
 
+## Quick Filters on the Tenant Register
+
+Harvested from Account Navigation `WErv6Zeb94I5yQZs3wGZ9P` `2475:23001`, Emma's
+call, 2026-09-14. A band under the toolbar, open by default because the frame
+shows it open, with a **Hide Quick Filters** link beside Exclude Subaccounts
+that becomes **Show** and swaps its eye icon when it is closed.
+
+| | Harvested |
+|---|---|
+| Ground | `Component/row-selected` #E8F6FA |
+| Border | `Border/primary` #CEDBE7, radius 4 |
+| Padding | 16 top and bottom, 24 left and right |
+| Fields | three Input Fields, 248px, 16px gaps |
+| Actions | Apply (primary) and Reset (secondary), held right |
+
+The ground is worth noting: #E8F6FA is `Component/row-selected`, and this is the
+one place on the screen it is used as a surface rather than as the state of a
+row. That is what the frame does, so it is what this does.
+
+The three fields are Properties, Display Color and Balance, which are the same
+three Tenant Details already filters by. That is the point of the band: the same
+quick filters, reachable without opening a panel.
+
+**Draft and applied are separate.** The band's controls write to a draft and
+only reach the register on Apply. Without the split, picking one property would
+filter the list out from under you before you had finished choosing. Reset
+empties both, since a reset that left the controls showing a filter it had just
+taken off would be the worse half of a reset.
+
+**The property list comes off the data**, not a hand-kept constant. The details
+view's `PROPS` lists four properties and the tenants sit at five: Riverview
+Apartments, the property the whole filters demo is about, is missing from it. A
+list typed once has already drifted, so this one is derived.
+
+Quick filters narrow whatever else is on, Orion's conditions included. Asking
+for Flagstone while an Orion filter says Riverview correctly returns the empty
+state rather than quietly dropping one of the two.
+
+
 # Worth raising with the design system
 
 Found while building these two screens, verified against the live libraries,
