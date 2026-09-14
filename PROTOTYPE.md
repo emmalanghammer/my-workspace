@@ -2944,7 +2944,25 @@ one new thing, and the rest is what that thing needed.
 
 A disclosure under the prompt, closed by default, that reads back per
 condition: **the field it matched**, **the condition it constructed**, and **the
-words in your sentence it keyed on**. That last one is why the parser now
+words in your sentence it keyed on**.
+
+**Drawn as the Orion Script Assistant draws its own version of this.** Emma
+pointed at `Ugt7vEPg0qrIvFaEVPHGgc` `2488:2899` (closed) and `2490:3317` (open),
+where the same promise is made about a generated script, and everything here is
+harvested off those two frames rather than invented:
+
+| | Harvested |
+|---|---|
+| Label | Roboto Regular 14/20 in `#666666`, not link blue |
+| Chevron | trailing on the right, down closed and up open |
+| Divider | a hairline above the row |
+| Body | prose in `#13314C` 14/20 with the named things in bold |
+
+The first pass had it as a blue link with a leading chevron over a grey
+label/value table, which is a different component making a different promise.
+The Assistant explains itself in sentences, and this is the same kind of work,
+so it explains itself in sentences too: numbered, one per condition, the way
+that frame numbers its own sections. That last one is why the parser now
 records `why` on every rule it fires: quoting "dogs" when the sentence said
 "dog" is a small lie that costs the whole gut check, so it quotes verbatim out
 of what was typed.
@@ -2961,6 +2979,18 @@ so this stays the current month rather than freezing on today's.`
 
 **Exclusions say they are exclusions**: `Read as an exclusion, so the filter
 keeps the rows where this is not true.`
+
+### The panel wears the Orion gradient stroke
+
+Harvested from the same frame: `GRADIENT_LINEAR`, 1px, `#008DD5` at 0 to
+`#6EB744` at 1, corner radius 8. It replaces a flat blue 1px border. It is a
+**border, never a fill**, which is what `tokens.css` already says about
+`--orion-border-gradient` and what the Script Assistant does with it.
+
+CSS has no gradient `border-color`, so it is painted as two backgrounds clipped
+differently: the flat white fills the padding box, the gradient fills the border
+box behind it. The alternative, a wrapper element or a pseudo-element, would
+have meant restructuring a panel that four other things position against.
 
 ### Beat 1, the old way
 

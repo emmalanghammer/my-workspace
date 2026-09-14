@@ -543,24 +543,41 @@ a:hover { text-decoration:underline; }
 @keyframes orion-pulse{0%,100%{opacity:.35;}50%{opacity:1;}}
 
 /* Filter builder panel */
-.filter-panel{margin-top:10px;border:1px solid var(--rmx-blue);border-radius:var(--r-sm);background:#fff;box-shadow:var(--shadow-orion);animation:orion-in .18s ease-out;}
+/* Orion's gradient stroke, harvested from Orion Script Assistant 2490:3317:
+   GRADIENT_LINEAR, 1px, #008DD5 at 0 to #6EB744 at 1, corner radius 8. It is a
+   BORDER, never a fill, which is also what tokens.css says about
+   --orion-border-gradient. Painted as two backgrounds clipped differently
+   because CSS has no gradient border-color: the flat one fills the padding box
+   and the gradient fills the border box behind it. Emma's call, 2026-09-14. */
+.filter-panel{margin-top:10px;border:1px solid transparent;border-radius:var(--orion-r,8px);
+  background-image:linear-gradient(#fff,#fff), var(--orion-gradient);
+  background-origin:border-box;background-clip:padding-box,border-box;
+  box-shadow:var(--shadow-orion);animation:orion-in .18s ease-out;}
 .fp-head{height:48px;padding:0 16px;display:flex;align-items:center;border-bottom:1px solid var(--bg-hover);}
 .fp-head-row{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
 .fp-head-title{font-size:20px;font-weight:400;line-height:28px;color:var(--rmx-navy);}
 .fp-head-sub{font-size:14px;color:var(--text-primary);padding:12px 16px 0;}
-.fp-explain-wrap{padding:8px 16px 0;}
-.fp-explain-toggle{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0;border:0;background:none;
-  font-size:14px;color:var(--rmx-blue);cursor:pointer;}
-.fp-explain-toggle svg{transition:transform .15s ease;}
-.fp-explain-toggle[aria-expanded="true"] svg{transform:rotate(90deg);}
-.fp-explain{margin-top:8px;border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);background:var(--bg-subtle);padding:4px 0;}
+/* "How Orion built this", drawn the way the Orion Script Assistant draws "How
+   does this script work?" (2488:2899 closed, 2490:3317 open): a hairline above
+   it, the label in Icon/text-primary #666666 at 14/20 rather than link blue,
+   and the chevron trailing on the right. Open, it is prose in navy 14/20 with
+   the named things in bold, not a table: the Assistant explains itself in
+   sentences and this is the same promise about the same kind of work. */
+.fp-explain-wrap{margin:12px 16px 0;border-top:1px solid var(--rmx-hairline);padding-top:8px;}
+.fp-explain-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
+  padding:4px 0;border:0;background:none;font-size:14px;line-height:20px;color:var(--text-primary);
+  text-align:left;cursor:pointer;}
+.fp-explain-toggle svg{flex:none;color:var(--text-primary);transition:transform .15s ease;}
+/* Closed points down, open points up, as the Script Assistant draws it
+   (2488:2899 closed, 2490:3317 open). */
+.fp-explain-toggle[aria-expanded="true"] svg{transform:rotate(180deg);}
+.fp-explain{padding:4px 0 8px;}
 .fp-explain[hidden]{display:none;}
-.fp-xrow{display:grid;grid-template-columns:150px 1fr;gap:4px 12px;padding:8px 12px;font-size:14px;line-height:20px;}
-.fp-xrow + .fp-xrow{border-top:1px solid var(--rmx-hairline);}
-.fp-xlabel{color:var(--text-primary);}
-.fp-xval{color:var(--rmx-navy);}
-.fp-xquote{font-style:italic;color:var(--text-primary);}
-.fp-xnote{grid-column:1 / -1;color:var(--text-primary);}
+.fp-xitem{font-size:14px;line-height:20px;color:var(--rmx-navy);}
+.fp-xitem + .fp-xitem{margin-top:16px;}
+.fp-xhead{font-weight:600;}
+.fp-xbody{margin-top:2px;}
+.fp-xempty{font-size:14px;line-height:20px;color:var(--text-disabled);font-style:italic;}
 .fp-xjoin{padding:4px 12px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--text-disabled);}
 /* Lozenge Style=Brand, marking a saved filter that belongs to everyone. */
 .fp-sys{flex:none;height:20px;padding:0 8px;font-size:12px;background:var(--lozenge-brand);
@@ -951,8 +968,8 @@ a:hover { text-decoration:underline; }
          the filter itself is the answer, this is the working shown on request. -->
     <div class="fp-explain-wrap">
       <button class="fp-explain-toggle" id="explainToggle" onclick="toggleExplain()" aria-expanded="false" aria-controls="explainBody">
-        <svg class="material-symbols-outlined icon-18" id="explainChevron"><use href="#chevron-right"></use></svg>
-        How Orion built this
+        <span>How Orion built this</span>
+        <svg class="material-symbols-outlined icon-18" id="explainChevron"><use href="#keyboard-arrow-down"></use></svg>
       </button>
       <div class="fp-explain" id="explainBody" hidden></div>
     </div>
@@ -1677,26 +1694,20 @@ function rationaleFor(text){ return '"'+text.trim()+'"'; }
    ============================================================ */
 function explainRows(items){
   return (items || []).map(function(c, i){
-    const rows = [];
-    if (i) rows.push('<div class="fp-xjoin">' + (c.join === 'or' ? 'OR' : 'AND') + '</div>');
-    const bits = [];
-    bits.push('<div class="fp-xlabel">Field matched</div><div class="fp-xval">' +
-              escapeHTML(c.matchedField || c.label || c.field) + '</div>');
-    bits.push('<div class="fp-xlabel">Condition</div><div class="fp-xval">' + escapeHTML(describe(c)) + '</div>');
-    if (c.why) {
-      bits.push('<div class="fp-xlabel">From your words</div><div class="fp-xval fp-xquote">\u201c' +
-                escapeHTML(c.why) + '\u201d</div>');
-    }
-    if (c.excluded) {
-      bits.push('<div class="fp-xnote">Read as an exclusion, so the filter keeps the rows where this is <b>not</b> true.</div>');
-    }
-    if (c.dynamic) {
-      bits.push('<div class="fp-xnote">' + escapeHTML(dynamicNote(c)) + '</div>');
-    }
-    rows.push('<div class="fp-xrow">' + bits.join('') + '</div>');
-    return rows.join('');
+    const b = function(v){ return '<b>' + escapeHTML(v) + '</b>'; };
+    const join = i ? (c.join === 'or' ? ' (OR)' : ' (AND)') : '';
+    let body = 'Written as ' + b(describe(c)) + '.';
+    if (c.why) body = 'Matched on \u201c' + escapeHTML(c.why) + '\u201d and written as ' + b(describe(c)) + '.';
+    if (c.excluded) body += ' Read as an exclusion, so the filter keeps the rows where this is <b>not</b> true.';
+    if (c.dynamic) { const d = dynamicNote(c); if (d) body += ' ' + escapeHTML(d); }
+    return '<div class="fp-xitem">' +
+             '<div class="fp-xhead">' + (i + 1) + '. ' +
+                escapeHTML(c.matchedField || c.label || c.field) + escapeHTML(join) + '</div>' +
+             '<div class="fp-xbody">' + body + '</div>' +
+           '</div>';
   }).join('');
 }
+
 
 /* What a dynamic condition resolved to, and the promise that it will resolve
    again. The value is the gut check; the promise is the feature. */
@@ -1731,7 +1742,7 @@ function syncExplain(){
   if (!body || !toggle) return;
   const items = (state.criteria[0] && state.criteria[0].items) || [];
   body.innerHTML = items.length ? explainRows(items) :
-    '<div class="fp-xrow"><div class="fp-xnote">Nothing to explain yet.</div></div>';
+    '<div class="fp-xempty">Nothing to explain yet.</div>';
   body.hidden = !explainOpen;
   toggle.setAttribute('aria-expanded', explainOpen ? 'true' : 'false');
 }
