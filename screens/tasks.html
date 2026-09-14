@@ -1388,7 +1388,14 @@ let otherTasks = [
       {text:'Send the pet letter to the resident',          assigned:['cdevereaux'],      done:false, dueDate:'09/09/26 05:00 PM'},
       {text:'Add the monthly pet rent to the ledger',       assigned:['role-bookkeeper'], done:false}
     ],
+    /* Scene 4's nudge. Oversight is only useful if you can act on it from where
+       you found the problem, so the note that unsticks this task is written on
+       the task, not sent somewhere else. It names what is waiting downstream,
+       which is the reason the delay costs anything: the pet rent misses next
+       month's charges if the letter is not signed. Emma's script, 2026-09-14. */
     history:[
+      {date:'09/11/26 10:15 AM', type:'Note', avatar:'tlittle',
+       text:'@Chris Devereaux can you get the pet letter out to the resident today? Regional signed off on the 8th. The bookkeeper needs it back before month end so the pet rent lands on next month\'s charges.'},
       {date:'09/08/26 09:40 AM', type:'System', avatar:'gwhitaker', text:'Regional approved the pet request'},
       {date:'09/06/26 11:20 AM', type:'System', avatar:'lbennett',  text:'Pet request and vaccination records reviewed'}
     ] },
