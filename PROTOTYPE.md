@@ -2998,6 +2998,25 @@ differently: the flat white fills the padding box, the gradient fills the border
 box behind it. The alternative, a wrapper element or a pseudo-element, would
 have meant restructuring a panel that four other things position against.
 
+### The register opens on beat 2's filter
+
+Emma's call, 2026-09-14. The Tenant Register loads with **Tenants with dogs at
+Riverview** already built and already applied: the Orion chip row above four
+Riverview rows, 4 of 330. The second beat is the flip, and it lands harder if
+the screen is already showing the answer than if someone has to type the
+sentence before the point can be made.
+
+It is built through the same `parse()` every typed prompt goes through, so what
+is on screen at load is a real Orion filter rather than a mock of one, and "How
+Orion built this" explains it exactly as it would explain one you typed. No
+thinking animation, because nothing was asked in front of anyone.
+
+**It survives moving between Tenants and Tenant Register**, both directions and
+by either route, the context-bar title and the mega menu. That already worked:
+`switchView` only toggles `hidden`, so the register's state is never torn down.
+Verified rather than assumed, since it is the kind of thing that breaks quietly
+the first time a view starts re-rendering on entry.
+
 ### Beat 1, the old way
 
 Opening the panel from the tune icon builds a filter by hand, and that path

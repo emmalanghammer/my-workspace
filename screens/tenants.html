@@ -664,7 +664,11 @@ a:hover { text-decoration:underline; }
 .status-ms-list .dd-item{gap:10px;}
 .status-ms-footer{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-top:1px solid var(--rmx-hairline);font-size:12px;color:var(--text-primary);flex:none;}
 .status-ms-footer a{color:var(--rmx-blue);cursor:pointer;}
-.fp-footer{display:flex;align-items:center;justify-content:space-between;height:52px;padding:0 16px;border-top:1px solid var(--bg-hover);background:var(--bg-subtle);border-radius:0 0 var(--r-sm) var(--r-sm);}
+/* The footer's own radius has to be the panel's, not --r-sm: the panel went to
+   8px with the Orion gradient stroke and the footer stayed at 4, so its filled
+   ground squared off the two bottom corners inside the rounded border. Emma
+   spotted it, 2026-09-14. */
+.fp-footer{display:flex;align-items:center;justify-content:space-between;height:52px;padding:0 16px;border-top:1px solid var(--bg-hover);background:var(--bg-subtle);border-radius:0 0 var(--orion-r,8px) var(--orion-r,8px);}
 .fp-footer .hint{font-size:12px;color:var(--text-disabled);font-style:italic;}
 .fp-footer .actions{display:flex;align-items:center;gap:8px;}
 
@@ -2467,6 +2471,25 @@ window.__showRegister = function(){
   switchView("register");
   renderAll();
 };
+
+/* The register opens on beat 2's filter, already built and already applied.
+   Emma's call, 2026-09-14: the script's second beat is the flip, and it lands
+   harder if the screen is already showing the answer rather than needing
+   someone to type the sentence before the point can be made. Built through the
+   same parse() every typed prompt goes through, so what is on screen at load is
+   a real Orion filter and "How Orion built this" explains it the same way. No
+   thinking animation, because nothing was asked in front of anyone. */
+const OPENING_PROMPT = "Tenants with dogs at Riverview";
+(function openOnTheOrionFilter(){
+  state.criteria = toGroups(parse(OPENING_PROMPT));
+  state.outerJoin = "and";
+  state.applied = state.criteria;
+  state.rationale = rationaleFor(OPENING_PROMPT);
+  /* Same reason run() clears them: Orion's own reading is the filter now, and a
+     leftover Status quick-filter would silently cut the result behind it. */
+  state.statuses = [];
+  state.showPanel = false;
+})();
 
 renderAll();
 
