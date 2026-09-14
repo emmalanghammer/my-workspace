@@ -562,6 +562,9 @@ a:hover { text-decoration:underline; }
 .fp-xquote{font-style:italic;color:var(--text-primary);}
 .fp-xnote{grid-column:1 / -1;color:var(--text-primary);}
 .fp-xjoin{padding:4px 12px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--text-disabled);}
+/* Lozenge Style=Brand, marking a saved filter that belongs to everyone. */
+.fp-sys{flex:none;height:20px;padding:0 8px;font-size:12px;background:var(--lozenge-brand);
+  border-color:var(--lozenge-brand);color:var(--rmx-navy);}
 .fp-head-meta{display:flex;align-items:center;gap:12px;flex:none;}
 .fp-close{color:var(--text-disabled);cursor:pointer;}
 .fp-close:hover{color:var(--text-primary);}
@@ -879,7 +882,7 @@ a:hover { text-decoration:underline; }
       <label>Filters</label>
       <div class="orion-combo-wrap float-anchor" id="comboWrap">
         <form class="orion-combo" onsubmit="return onComboSubmit(event)">
-          <span class="orion-mark"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE3LjkzMDEiIGhlaWdodD0iMTguMDAwMSIgdmlld0JveD0iMCAwIDE3LjkzMDEgMTguMDAwMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9Ik9yaW9uLUljb24gU2hhcGVzIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTMuNzA4OTYgMTAuNDI0N0MzLjUzNTgyIDEwLjQ5NTIgMy41MzU4MiAxMC43NDMyIDMuNzA4OTYgMTAuODEzN0M1LjMwMTQgMTEuNDUwNyA2LjU2MjU0IDEyLjczMSA3LjE5MDk3IDE0LjM0N0M3LjI1OTM3IDE0LjUyNDQgNy41MDUxOCAxNC41MjQ0IDcuNTczNTggMTQuMzQ3QzguMjAyMDEgMTIuNzMxIDkuNDYzMTQgMTEuNDUyOCAxMS4wNTU2IDEwLjgxMzdDMTEuMjI4NyAxMC43NDMyIDExLjIyODcgMTAuNDk1MiAxMS4wNTU2IDEwLjQyNDdDOS40NjMxNCA5Ljc4NzY5IDguMjAyMDEgOC41MDczMiA3LjU3MzU4IDYuODkxMzZDNy41MDUxOCA2LjcxMzk1IDcuMjU5MzcgNi43MTM5NSA3LjE5MDk3IDYuODkxMzZDNi41NjI1NCA4LjUwNzMyIDUuMzAxNCA5Ljc4NTU1IDMuNzA4OTYgMTAuNDI0N1oiIGZpbGw9IiM2RUI3NDQiLz4KPHBhdGggaWQ9IlZlY3Rvcl8yIiBkPSJNOC4xMjkwNiA0LjgwMjk5QzcuOTAwMzQgNC44OTQ5MSA3LjkwMDM0IDUuMjIxOTUgOC4xMjkwNiA1LjMxMTcyQzEwLjIxNzQgNi4xNDc0OSAxMS44Njk3IDcuODIzMyAxMi42OTI2IDkuOTQxNThDMTIuNzgyNCAxMC4xNzI0IDEzLjEwNTIgMTAuMTcyNCAxMy4xOTUgOS45NDE1OEMxNC4wMTc5IDcuODIzMyAxNS42NzIzIDYuMTQ3NDkgMTcuNzU4NiA1LjMxMTcyQzE3Ljk4NzMgNS4yMTk4MSAxNy45ODczIDQuODkyNzcgMTcuNzU4NiA0LjgwMjk5QzE1LjY3MDIgMy45NjcyMyAxNC4wMTc5IDIuMjkxNDEgMTMuMTk1IDAuMTczMTM5QzEzLjEwNTIgLTAuMDU3NzEyOSAxMi43ODI0IC0wLjA1NzcxMjkgMTIuNjkyNiAwLjE3MzEzOUMxMS44Njk3IDIuMjkxNDEgMTAuMjE1MyAzLjk2NzIzIDguMTI5MDYgNC44MDI5OVoiIGZpbGw9IiMwMDhERDUiLz4KPHBhdGggaWQ9IlZlY3Rvcl8zIiBkPSJNMC40MjUzNjMgMTQuODQ5NEMwLjMwMzUyNSAxNC44OTg1IDAuMzAzNTI1IDE1LjA3MzggMC40MjUzNjMgMTUuMTIzQzEuNTQ5NyAxNS41NzE4IDIuNDM4OSAxNi40NzM5IDIuODgxMzcgMTcuNjE1M0MyLjkzMDUzIDE3LjczOTMgMy4xMDM2NyAxNy43MzkzIDMuMTUwNjkgMTcuNjE1M0MzLjU5MzE2IDE2LjQ3NiA0LjQ4MjM2IDE1LjU3NCA1LjYwNjcgMTUuMTIzQzUuNzI4NTMgMTUuMDczOCA1LjcyODUzIDE0Ljg5ODUgNS42MDY3IDE0Ljg0OTRDNC40ODIzNiAxNC40MDA1IDMuNTkzMTYgMTMuNDk4NSAzLjE1MDY5IDEyLjM1N0MzLjEwMTUzIDEyLjIzMyAyLjkyODM5IDEyLjIzMyAyLjg4MTM3IDEyLjM1N0MyLjQzODkgMTMuNDk2MyAxLjU0OTcgMTQuMzk4MyAwLjQyNTM2MyAxNC44NDk0WiIgZmlsbD0iIzEzMzE0QyIvPgo8cGF0aCBpZD0iVmVjdG9yXzQiIGQ9Ik0xNS4yMjc5IDguNTg4NTlDMTUuMjQyOSA4LjY3ODM3IDE1LjI1NTcgOC43NzAyOCAxNS4yNjg1IDguODYyMkMxNS4yNjg1IDguODc3MTYgMTUuMjcyOCA4Ljg4OTk4IDE1LjI3MjggOC45MDQ5NUMxNS4yODM1IDguOTg2MTcgMTUuMjkyIDkuMDY3NCAxNS4yOTg1IDkuMTQ4NjJDMTUuMzAyNyA5LjE4NzEgMTUuMzA0OSA5LjIyNTU3IDE1LjMwNyA5LjI2NjE5QzE1LjMxMTMgOS4zMjgxNyAxNS4zMTU2IDkuMzg4MDIgMTUuMzE5OCA5LjQ1MDAxQzE1LjMyNDEgOS41NTY4OSAxNS4zMjg0IDkuNjYxNjMgMTUuMzI4NCA5Ljc2ODVDMTUuMzI4NCAxMy42ODAyIDEyLjE0NTYgMTYuODYyOSA4LjIzMzk4IDE2Ljg2MjlDOC4xMTQyOCAxNi44NjI5IDcuOTkyNDQgMTYuODYwOCA3Ljg3NDg3IDE2Ljg1NDRDNy44NDkyMiAxNi44NTQ0IDcuODIzNTcgMTYuODUwMSA3Ljc5NzkyIDE2Ljg0NzlDNy43MDM4NyAxNi44NDE1IDcuNjA5ODIgMTYuODM1MSA3LjUxNTc3IDE2LjgyNjZDNy40OTQ0IDE2LjgyNDQgNy40NzMwMiAxNi44MjAyIDcuNDQ5NTEgMTYuODE4QzcuMzUxMTggMTYuODA3MyA3LjI1Mjg2IDE2Ljc5NDUgNy4xNTY2NyAxNi43Nzk1QzcuMTQxNzEgMTYuNzc3NCA3LjEyNjc1IDE2Ljc3MzEgNy4xMTE3OCAxNi43NzFDNy4wMDcwNCAxNi43NTM5IDYuOTA0NDQgMTYuNzM2OCA2LjgwMTg0IDE2LjcxNTRDNi43OTMyOSAxNi43MTU0IDYuNzg2ODggMTYuNzExMSA2Ljc3ODMzIDE2LjcwOUM2LjY2OTMyIDE2LjY4NTUgNi41NTgxNyAxNi42NTk4IDYuNDUxMjkgMTYuNjMyMUM2LjQ1MTI5IDE2LjYzMjEgNi40NDcwMiAxNi42MzIxIDYuNDQ0ODggMTYuNjMyMUM2LjEwMDc0IDE2LjU0MjMgNS43NjUxNSAxNi40MjY5IDUuNDM4MTEgMTYuMjg1OEM1LjA4NzU2IDE2LjUwNTkgNC43Nzc2MiAxNi43ODYgNC41MjUzOSAxNy4xMTczQzUuMDkxODMgMTcuNDAzNyA1LjY4ODIgMTcuNjIzOSA2LjMwODA4IDE3Ljc3MzVDNi4zMTg3NiAxNy43NzU2IDYuMzI5NDUgMTcuNzc3OCA2LjM0MDE0IDE3Ljc3OTlDNi40NzI2NyAxNy44MTIgNi42MDUxOSAxNy44Mzk4IDYuNzM5ODUgMTcuODYzM0M2Ljc3NjE5IDE3Ljg2OTcgNi44MTI1MyAxNy44NzYxIDYuODUxMDEgMTcuODgyNUM2Ljk2MjE2IDE3LjkwMTcgNy4wNzMzMSAxNy45MTY3IDcuMTg0NDYgMTcuOTMxN0M3LjIyOTM1IDE3LjkzODEgNy4yNzQyMyAxNy45NDI0IDcuMzIxMjYgMTcuOTQ4OEM3LjQzMDI3IDE3Ljk2MTYgNy41MzkyOCAxNy45NzAxIDcuNjUwNDQgMTcuOTc4N0M3LjY5MzE5IDE3Ljk4MDggNy43MzgwNyAxNy45ODUxIDcuNzgwODIgMTcuOTg3MkM3LjkzMjU5IDE3Ljk5NTggOC4wODQzNSAxOC4wMDAxIDguMjM2MTIgMTguMDAwMUMxMi43NzYyIDE4LjAwMDEgMTYuNDY5OCAxNC4zMDY0IDE2LjQ2OTggOS43NjYzNkMxNi40Njk4IDkuNTkxMDkgMTYuNDYzNCA5LjQxNzk1IDE2LjQ1MDYgOS4yNDQ4MUMxNi40NDg0IDkuMjA0MiAxNi40NDQyIDkuMTY1NzIgMTYuNDQyIDkuMTI1MTFDMTYuNDI5MiA4Ljk2MjY2IDE2LjQxNDIgOC44MDIzNSAxNi4zOTA3IDguNjQyMDNDMTYuMzkwNyA4LjYzMzQ4IDE2LjM5MDcgOC42MjQ5MyAxNi4zODg2IDguNjE2MzhDMTYuMzYyOSA4LjQzNjgzIDE2LjMzMDkgOC4yNTk0MiAxNi4yOTQ1IDguMDg0MTRDMTYuMjkyNCA4LjA3MTMyIDE2LjI5MDMgOC4wNTg0OSAxNi4yODYgOC4wNDc4QzE2LjI0OTcgNy44NzQ2NiAxNi4yMDY5IDcuNzAzNjYgMTYuMTU5OSA3LjUzNDhDMTYuMTU5OSA3LjUyODM5IDE2LjE1NTYgNy41MjE5OCAxNi4xNTU2IDcuNTE3N0MxNS44MTM2IDcuODQyNiAxNS41MDM3IDguMjAxNyAxNS4yMzAxIDguNTkwNzNMMTUuMjI3OSA4LjU4ODU5WiIgZmlsbD0iIzEzMzE0QyIvPgo8cGF0aCBpZD0iVmVjdG9yXzUiIGQ9Ik0xMC40ODI0IDEuODQ5QzEwLjQ4MjQgMS44NDkgMTAuNDY5NSAxLjg0NDczIDEwLjQ2NTMgMS44NDQ3M0MxMC4yOTY0IDEuNzk3NyAxMC4xMjU0IDEuNzU0OTUgOS45NTQ0IDEuNzE4NjJDOS45NDE1NyAxLjcxNjQ4IDkuOTI2NjEgMS43MTIyIDkuOTEzNzkgMS43MTAwN0M5LjczODUxIDEuNjczNzMgOS41NjMyNCAxLjY0MTY3IDkuMzg1ODIgMS42MTgxNUM5LjM3NTEzIDEuNjE4MTUgOS4zNjY1OCAxLjYxNjAyIDkuMzU1OSAxLjYxMzg4QzkuMTk3NzIgMS41OTI1IDkuMDM3NDEgMS41NzU0IDguODc3MDkgMS41NjI1OEM4LjgzNjQ4IDEuNTYwNDQgOC43OTgwMSAxLjU1NjE3IDguNzU3MzkgMS41NTQwM0M4LjU4NDI1IDEuNTQzMzQgOC40MTExMiAxLjUzNDc5IDguMjM1ODQgMS41MzQ3OUMzLjY5NTc2IDEuNTM0NzkgMCA1LjIyODQxIDAgOS43Njg0OUMwIDkuOTIyMzkgMC4wMDQyNzQ5MSAxMC4wNzQyIDAuMDEyODI1IDEwLjIyNTlDMC4wMTQ5NjI1IDEwLjI3MDggMC4wMTkyMzczIDEwLjMxMzYgMC4wMjM1MTI0IDEwLjM1NjNDMC4wMzIwNjI0IDEwLjQ2NTMgMC4wNDA2MTI4IDEwLjU3NjUgMC4wNTM0Mzc4IDEwLjY4NTVDMC4wNTc3MTI5IDEwLjczMDQgMC4wNjQxMjU0IDEwLjc3NTMgMC4wNzA1Mzc5IDEwLjgyMjNDMC4wODU1MDA1IDEwLjkzMzQgMC4xMDA0NjMgMTEuMDQ2NyAwLjExOTcwMSAxMS4xNTU3QzAuMTI2MTEzIDExLjE5MjEgMC4xMzI1MjYgMTEuMjI4NCAwLjEzODkzOCAxMS4yNjQ4QzAuMTYyNDUxIDExLjM5NzMgMC4xOTAyMzggMTEuNTI5OCAwLjIyMjMwMSAxMS42NjIzQzAuMjI0NDM5IDExLjY3NTIgMC4yMjg3MTQgMTEuNjg1OCAwLjIzMDg1MSAxMS42OTg3QzAuMzgwNDc3IDEyLjMxNjQgMC42MDA2NDEgMTIuOTE0OSAwLjg4OTIwNiAxMy40ODE0QzEuMjE2MjUgMTMuMjI3IDEuNDk2MjYgMTIuOTE0OSAxLjcxNDI5IDEyLjU1NzlDMS43MTQyOSAxMi41NTc5IDEuNzE0MjkgMTIuNTU3OSAxLjcxNDI5IDEyLjU1NThDMS42Njk0IDEyLjQ0ODkgMS42MjQ1MSAxMi4zMzk5IDEuNTgzOSAxMi4yMzA5QzEuNTgzOSAxMi4yMzA5IDEuNTgzOSAxMi4yMzA5IDEuNTgzOSAxMi4yMjg4QzEuNTQzMjggMTIuMTE3NiAxLjUwNDgxIDEyLjAwNjUgMS40NzA2MSAxMS44OTUzQzEuNDM2NDEgMTEuNzg2MyAxLjQwNDM1IDExLjY3NTIgMS4zNzQ0MiAxMS41NjE5QzEuMzc0NDIgMTEuNTU3NiAxLjM3NDQyIDExLjU1NTUgMS4zNzIyOCAxMS41NTEyQzEuMzQ0NSAxMS40NDQzIDEuMzE4ODUgMTEuMzM1MyAxLjI5NzQ3IDExLjIyODRDMS4yOTc0NyAxMS4yMTk5IDEuMjkzMiAxMS4yMTEzIDEuMjkxMDYgMTEuMjAyOEMxLjI2OTY4IDExLjEwMDIgMS4yNTI1OCAxMC45OTc2IDEuMjM1NDggMTAuODkyOEMxLjIzMzM1IDEwLjg3NzkgMS4yMjkwNyAxMC44NjI5IDEuMjI2OTMgMTAuODQ3OUMxLjIxMTk3IDEwLjc1MTcgMS4yMDEyOCAxMC42NTM0IDEuMTkwNiAxMC41NTUxQzEuMTg4NDYgMTAuNTMzNyAxLjE4NDE4IDEwLjUxMjMgMS4xODIwNCAxMC40OTFDMS4xNzM0OSAxMC4zOTY5IDEuMTY3MDggMTAuMzAyOSAxLjE2MDY3IDEwLjIwODhDMS4xNjA2NyAxMC4xODMyIDEuMTU2MzkgMTAuMTU3NSAxLjE1NDI2IDEwLjEzMTlDMS4xNDc4NCAxMC4wMTIyIDEuMTQ1NzEgOS44OTI0NyAxLjE0NTcxIDkuNzcyNzdDMS4xNDU3MSA1Ljg2MTEyIDQuMzI4NDcgMi42NzgzNiA4LjI0MDExIDIuNjc4MzZDOC4zNDY5OSAyLjY3ODM2IDguNDUzODcgMi42ODA1IDguNTYwNzQgMi42ODY5MUM4LjYyNDg3IDIuNjg5MDUgOC42ODg5OSAyLjY5NTQ2IDguNzUzMTIgMi42OTk3M0M4Ljc4OTQ2IDIuNzAxODcgOC44Mjc5MyAyLjcwNDAxIDguODY0MjcgMi43MDgyOEM4Ljk0OTc3IDIuNzE2ODQgOS4wMzMxMyAyLjcyNTM5IDkuMTE2NSAyLjczNjA3QzkuMTI5MzIgMi43MzYwNyA5LjE0MjE0IDIuNzM4MjEgOS4xNTI4MyAyLjc0MDM1QzkuMjQ2ODggMi43NTMxNyA5LjM0MDkzIDIuNzY2IDkuNDMyODUgMi43ODMxQzkuODEzMzMgMi41MDk1IDEwLjE2NiAyLjE5NzQyIDEwLjQ4NjYgMS44NTMyOEwxMC40ODI0IDEuODQ5WiIgZmlsbD0iIzAwOERENSIvPgo8L2c+Cjwvc3ZnPgo=" alt="Orion"></span>
+          <span class="orion-mark" id="fpOrionMark"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE3LjkzMDEiIGhlaWdodD0iMTguMDAwMSIgdmlld0JveD0iMCAwIDE3LjkzMDEgMTguMDAwMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9Ik9yaW9uLUljb24gU2hhcGVzIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTMuNzA4OTYgMTAuNDI0N0MzLjUzNTgyIDEwLjQ5NTIgMy41MzU4MiAxMC43NDMyIDMuNzA4OTYgMTAuODEzN0M1LjMwMTQgMTEuNDUwNyA2LjU2MjU0IDEyLjczMSA3LjE5MDk3IDE0LjM0N0M3LjI1OTM3IDE0LjUyNDQgNy41MDUxOCAxNC41MjQ0IDcuNTczNTggMTQuMzQ3QzguMjAyMDEgMTIuNzMxIDkuNDYzMTQgMTEuNDUyOCAxMS4wNTU2IDEwLjgxMzdDMTEuMjI4NyAxMC43NDMyIDExLjIyODcgMTAuNDk1MiAxMS4wNTU2IDEwLjQyNDdDOS40NjMxNCA5Ljc4NzY5IDguMjAyMDEgOC41MDczMiA3LjU3MzU4IDYuODkxMzZDNy41MDUxOCA2LjcxMzk1IDcuMjU5MzcgNi43MTM5NSA3LjE5MDk3IDYuODkxMzZDNi41NjI1NCA4LjUwNzMyIDUuMzAxNCA5Ljc4NTU1IDMuNzA4OTYgMTAuNDI0N1oiIGZpbGw9IiM2RUI3NDQiLz4KPHBhdGggaWQ9IlZlY3Rvcl8yIiBkPSJNOC4xMjkwNiA0LjgwMjk5QzcuOTAwMzQgNC44OTQ5MSA3LjkwMDM0IDUuMjIxOTUgOC4xMjkwNiA1LjMxMTcyQzEwLjIxNzQgNi4xNDc0OSAxMS44Njk3IDcuODIzMyAxMi42OTI2IDkuOTQxNThDMTIuNzgyNCAxMC4xNzI0IDEzLjEwNTIgMTAuMTcyNCAxMy4xOTUgOS45NDE1OEMxNC4wMTc5IDcuODIzMyAxNS42NzIzIDYuMTQ3NDkgMTcuNzU4NiA1LjMxMTcyQzE3Ljk4NzMgNS4yMTk4MSAxNy45ODczIDQuODkyNzcgMTcuNzU4NiA0LjgwMjk5QzE1LjY3MDIgMy45NjcyMyAxNC4wMTc5IDIuMjkxNDEgMTMuMTk1IDAuMTczMTM5QzEzLjEwNTIgLTAuMDU3NzEyOSAxMi43ODI0IC0wLjA1NzcxMjkgMTIuNjkyNiAwLjE3MzEzOUMxMS44Njk3IDIuMjkxNDEgMTAuMjE1MyAzLjk2NzIzIDguMTI5MDYgNC44MDI5OVoiIGZpbGw9IiMwMDhERDUiLz4KPHBhdGggaWQ9IlZlY3Rvcl8zIiBkPSJNMC40MjUzNjMgMTQuODQ5NEMwLjMwMzUyNSAxNC44OTg1IDAuMzAzNTI1IDE1LjA3MzggMC40MjUzNjMgMTUuMTIzQzEuNTQ5NyAxNS41NzE4IDIuNDM4OSAxNi40NzM5IDIuODgxMzcgMTcuNjE1M0MyLjkzMDUzIDE3LjczOTMgMy4xMDM2NyAxNy43MzkzIDMuMTUwNjkgMTcuNjE1M0MzLjU5MzE2IDE2LjQ3NiA0LjQ4MjM2IDE1LjU3NCA1LjYwNjcgMTUuMTIzQzUuNzI4NTMgMTUuMDczOCA1LjcyODUzIDE0Ljg5ODUgNS42MDY3IDE0Ljg0OTRDNC40ODIzNiAxNC40MDA1IDMuNTkzMTYgMTMuNDk4NSAzLjE1MDY5IDEyLjM1N0MzLjEwMTUzIDEyLjIzMyAyLjkyODM5IDEyLjIzMyAyLjg4MTM3IDEyLjM1N0MyLjQzODkgMTMuNDk2MyAxLjU0OTcgMTQuMzk4MyAwLjQyNTM2MyAxNC44NDk0WiIgZmlsbD0iIzEzMzE0QyIvPgo8cGF0aCBpZD0iVmVjdG9yXzQiIGQ9Ik0xNS4yMjc5IDguNTg4NTlDMTUuMjQyOSA4LjY3ODM3IDE1LjI1NTcgOC43NzAyOCAxNS4yNjg1IDguODYyMkMxNS4yNjg1IDguODc3MTYgMTUuMjcyOCA4Ljg4OTk4IDE1LjI3MjggOC45MDQ5NUMxNS4yODM1IDguOTg2MTcgMTUuMjkyIDkuMDY3NCAxNS4yOTg1IDkuMTQ4NjJDMTUuMzAyNyA5LjE4NzEgMTUuMzA0OSA5LjIyNTU3IDE1LjMwNyA5LjI2NjE5QzE1LjMxMTMgOS4zMjgxNyAxNS4zMTU2IDkuMzg4MDIgMTUuMzE5OCA5LjQ1MDAxQzE1LjMyNDEgOS41NTY4OSAxNS4zMjg0IDkuNjYxNjMgMTUuMzI4NCA5Ljc2ODVDMTUuMzI4NCAxMy42ODAyIDEyLjE0NTYgMTYuODYyOSA4LjIzMzk4IDE2Ljg2MjlDOC4xMTQyOCAxNi44NjI5IDcuOTkyNDQgMTYuODYwOCA3Ljg3NDg3IDE2Ljg1NDRDNy44NDkyMiAxNi44NTQ0IDcuODIzNTcgMTYuODUwMSA3Ljc5NzkyIDE2Ljg0NzlDNy43MDM4NyAxNi44NDE1IDcuNjA5ODIgMTYuODM1MSA3LjUxNTc3IDE2LjgyNjZDNy40OTQ0IDE2LjgyNDQgNy40NzMwMiAxNi44MjAyIDcuNDQ5NTEgMTYuODE4QzcuMzUxMTggMTYuODA3MyA3LjI1Mjg2IDE2Ljc5NDUgNy4xNTY2NyAxNi43Nzk1QzcuMTQxNzEgMTYuNzc3NCA3LjEyNjc1IDE2Ljc3MzEgNy4xMTE3OCAxNi43NzFDNy4wMDcwNCAxNi43NTM5IDYuOTA0NDQgMTYuNzM2OCA2LjgwMTg0IDE2LjcxNTRDNi43OTMyOSAxNi43MTU0IDYuNzg2ODggMTYuNzExMSA2Ljc3ODMzIDE2LjcwOUM2LjY2OTMyIDE2LjY4NTUgNi41NTgxNyAxNi42NTk4IDYuNDUxMjkgMTYuNjMyMUM2LjQ1MTI5IDE2LjYzMjEgNi40NDcwMiAxNi42MzIxIDYuNDQ0ODggMTYuNjMyMUM2LjEwMDc0IDE2LjU0MjMgNS43NjUxNSAxNi40MjY5IDUuNDM4MTEgMTYuMjg1OEM1LjA4NzU2IDE2LjUwNTkgNC43Nzc2MiAxNi43ODYgNC41MjUzOSAxNy4xMTczQzUuMDkxODMgMTcuNDAzNyA1LjY4ODIgMTcuNjIzOSA2LjMwODA4IDE3Ljc3MzVDNi4zMTg3NiAxNy43NzU2IDYuMzI5NDUgMTcuNzc3OCA2LjM0MDE0IDE3Ljc3OTlDNi40NzI2NyAxNy44MTIgNi42MDUxOSAxNy44Mzk4IDYuNzM5ODUgMTcuODYzM0M2Ljc3NjE5IDE3Ljg2OTcgNi44MTI1MyAxNy44NzYxIDYuODUxMDEgMTcuODgyNUM2Ljk2MjE2IDE3LjkwMTcgNy4wNzMzMSAxNy45MTY3IDcuMTg0NDYgMTcuOTMxN0M3LjIyOTM1IDE3LjkzODEgNy4yNzQyMyAxNy45NDI0IDcuMzIxMjYgMTcuOTQ4OEM3LjQzMDI3IDE3Ljk2MTYgNy41MzkyOCAxNy45NzAxIDcuNjUwNDQgMTcuOTc4N0M3LjY5MzE5IDE3Ljk4MDggNy43MzgwNyAxNy45ODUxIDcuNzgwODIgMTcuOTg3MkM3LjkzMjU5IDE3Ljk5NTggOC4wODQzNSAxOC4wMDAxIDguMjM2MTIgMTguMDAwMUMxMi43NzYyIDE4LjAwMDEgMTYuNDY5OCAxNC4zMDY0IDE2LjQ2OTggOS43NjYzNkMxNi40Njk4IDkuNTkxMDkgMTYuNDYzNCA5LjQxNzk1IDE2LjQ1MDYgOS4yNDQ4MUMxNi40NDg0IDkuMjA0MiAxNi40NDQyIDkuMTY1NzIgMTYuNDQyIDkuMTI1MTFDMTYuNDI5MiA4Ljk2MjY2IDE2LjQxNDIgOC44MDIzNSAxNi4zOTA3IDguNjQyMDNDMTYuMzkwNyA4LjYzMzQ4IDE2LjM5MDcgOC42MjQ5MyAxNi4zODg2IDguNjE2MzhDMTYuMzYyOSA4LjQzNjgzIDE2LjMzMDkgOC4yNTk0MiAxNi4yOTQ1IDguMDg0MTRDMTYuMjkyNCA4LjA3MTMyIDE2LjI5MDMgOC4wNTg0OSAxNi4yODYgOC4wNDc4QzE2LjI0OTcgNy44NzQ2NiAxNi4yMDY5IDcuNzAzNjYgMTYuMTU5OSA3LjUzNDhDMTYuMTU5OSA3LjUyODM5IDE2LjE1NTYgNy41MjE5OCAxNi4xNTU2IDcuNTE3N0MxNS44MTM2IDcuODQyNiAxNS41MDM3IDguMjAxNyAxNS4yMzAxIDguNTkwNzNMMTUuMjI3OSA4LjU4ODU5WiIgZmlsbD0iIzEzMzE0QyIvPgo8cGF0aCBpZD0iVmVjdG9yXzUiIGQ9Ik0xMC40ODI0IDEuODQ5QzEwLjQ4MjQgMS44NDkgMTAuNDY5NSAxLjg0NDczIDEwLjQ2NTMgMS44NDQ3M0MxMC4yOTY0IDEuNzk3NyAxMC4xMjU0IDEuNzU0OTUgOS45NTQ0IDEuNzE4NjJDOS45NDE1NyAxLjcxNjQ4IDkuOTI2NjEgMS43MTIyIDkuOTEzNzkgMS43MTAwN0M5LjczODUxIDEuNjczNzMgOS41NjMyNCAxLjY0MTY3IDkuMzg1ODIgMS42MTgxNUM5LjM3NTEzIDEuNjE4MTUgOS4zNjY1OCAxLjYxNjAyIDkuMzU1OSAxLjYxMzg4QzkuMTk3NzIgMS41OTI1IDkuMDM3NDEgMS41NzU0IDguODc3MDkgMS41NjI1OEM4LjgzNjQ4IDEuNTYwNDQgOC43OTgwMSAxLjU1NjE3IDguNzU3MzkgMS41NTQwM0M4LjU4NDI1IDEuNTQzMzQgOC40MTExMiAxLjUzNDc5IDguMjM1ODQgMS41MzQ3OUMzLjY5NTc2IDEuNTM0NzkgMCA1LjIyODQxIDAgOS43Njg0OUMwIDkuOTIyMzkgMC4wMDQyNzQ5MSAxMC4wNzQyIDAuMDEyODI1IDEwLjIyNTlDMC4wMTQ5NjI1IDEwLjI3MDggMC4wMTkyMzczIDEwLjMxMzYgMC4wMjM1MTI0IDEwLjM1NjNDMC4wMzIwNjI0IDEwLjQ2NTMgMC4wNDA2MTI4IDEwLjU3NjUgMC4wNTM0Mzc4IDEwLjY4NTVDMC4wNTc3MTI5IDEwLjczMDQgMC4wNjQxMjU0IDEwLjc3NTMgMC4wNzA1Mzc5IDEwLjgyMjNDMC4wODU1MDA1IDEwLjkzMzQgMC4xMDA0NjMgMTEuMDQ2NyAwLjExOTcwMSAxMS4xNTU3QzAuMTI2MTEzIDExLjE5MjEgMC4xMzI1MjYgMTEuMjI4NCAwLjEzODkzOCAxMS4yNjQ4QzAuMTYyNDUxIDExLjM5NzMgMC4xOTAyMzggMTEuNTI5OCAwLjIyMjMwMSAxMS42NjIzQzAuMjI0NDM5IDExLjY3NTIgMC4yMjg3MTQgMTEuNjg1OCAwLjIzMDg1MSAxMS42OTg3QzAuMzgwNDc3IDEyLjMxNjQgMC42MDA2NDEgMTIuOTE0OSAwLjg4OTIwNiAxMy40ODE0QzEuMjE2MjUgMTMuMjI3IDEuNDk2MjYgMTIuOTE0OSAxLjcxNDI5IDEyLjU1NzlDMS43MTQyOSAxMi41NTc5IDEuNzE0MjkgMTIuNTU3OSAxLjcxNDI5IDEyLjU1NThDMS42Njk0IDEyLjQ0ODkgMS42MjQ1MSAxMi4zMzk5IDEuNTgzOSAxMi4yMzA5QzEuNTgzOSAxMi4yMzA5IDEuNTgzOSAxMi4yMzA5IDEuNTgzOSAxMi4yMjg4QzEuNTQzMjggMTIuMTE3NiAxLjUwNDgxIDEyLjAwNjUgMS40NzA2MSAxMS44OTUzQzEuNDM2NDEgMTEuNzg2MyAxLjQwNDM1IDExLjY3NTIgMS4zNzQ0MiAxMS41NjE5QzEuMzc0NDIgMTEuNTU3NiAxLjM3NDQyIDExLjU1NTUgMS4zNzIyOCAxMS41NTEyQzEuMzQ0NSAxMS40NDQzIDEuMzE4ODUgMTEuMzM1MyAxLjI5NzQ3IDExLjIyODRDMS4yOTc0NyAxMS4yMTk5IDEuMjkzMiAxMS4yMTEzIDEuMjkxMDYgMTEuMjAyOEMxLjI2OTY4IDExLjEwMDIgMS4yNTI1OCAxMC45OTc2IDEuMjM1NDggMTAuODkyOEMxLjIzMzM1IDEwLjg3NzkgMS4yMjkwNyAxMC44NjI5IDEuMjI2OTMgMTAuODQ3OUMxLjIxMTk3IDEwLjc1MTcgMS4yMDEyOCAxMC42NTM0IDEuMTkwNiAxMC41NTUxQzEuMTg4NDYgMTAuNTMzNyAxLjE4NDE4IDEwLjUxMjMgMS4xODIwNCAxMC40OTFDMS4xNzM0OSAxMC4zOTY5IDEuMTY3MDggMTAuMzAyOSAxLjE2MDY3IDEwLjIwODhDMS4xNjA2NyAxMC4xODMyIDEuMTU2MzkgMTAuMTU3NSAxLjE1NDI2IDEwLjEzMTlDMS4xNDc4NCAxMC4wMTIyIDEuMTQ1NzEgOS44OTI0NyAxLjE0NTcxIDkuNzcyNzdDMS4xNDU3MSA1Ljg2MTEyIDQuMzI4NDcgMi42NzgzNiA4LjI0MDExIDIuNjc4MzZDOC4zNDY5OSAyLjY3ODM2IDguNDUzODcgMi42ODA1IDguNTYwNzQgMi42ODY5MUM4LjYyNDg3IDIuNjg5MDUgOC42ODg5OSAyLjY5NTQ2IDguNzUzMTIgMi42OTk3M0M4Ljc4OTQ2IDIuNzAxODcgOC44Mjc5MyAyLjcwNDAxIDguODY0MjcgMi43MDgyOEM4Ljk0OTc3IDIuNzE2ODQgOS4wMzMxMyAyLjcyNTM5IDkuMTE2NSAyLjczNjA3QzkuMTI5MzIgMi43MzYwNyA5LjE0MjE0IDIuNzM4MjEgOS4xNTI4MyAyLjc0MDM1QzkuMjQ2ODggMi43NTMxNyA5LjM0MDkzIDIuNzY2IDkuNDMyODUgMi43ODMxQzkuODEzMzMgMi41MDk1IDEwLjE2NiAyLjE5NzQyIDEwLjQ4NjYgMS44NTMyOEwxMC40ODI0IDEuODQ5WiIgZmlsbD0iIzAwOERENSIvPgo8L2c+Cjwvc3ZnPgo=" alt="Orion"></span>
           <input id="promptInput" type="text" placeholder="Describe what you want to filter by" oninput="onPromptChange()" onfocus="openFilterList();autoTypeSavedFilterExample();" onkeydown="if(event.key==='Enter'){event.preventDefault();runQuery();}">
           <svg class="material-symbols-outlined" style="color:var(--icon-muted);cursor:pointer;" onclick="toggleFilterList(event)"><use href="#arrow-drop-down"></use></svg>
         </form>
@@ -936,7 +939,7 @@ a:hover { text-decoration:underline; }
     <div class="fp-head">
       <div class="fp-head-row">
         <span class="orion-mark"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE3LjkzMDEiIGhlaWdodD0iMTguMDAwMSIgdmlld0JveD0iMCAwIDE3LjkzMDEgMTguMDAwMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9Ik9yaW9uLUljb24gU2hhcGVzIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTMuNzA4OTYgMTAuNDI0N0MzLjUzNTgyIDEwLjQ5NTIgMy41MzU4MiAxMC43NDMyIDMuNzA4OTYgMTAuODEzN0M1LjMwMTQgMTEuNDUwNyA2LjU2MjU0IDEyLjczMSA3LjE5MDk3IDE0LjM0N0M3LjI1OTM3IDE0LjUyNDQgNy41MDUxOCAxNC41MjQ0IDcuNTczNTggMTQuMzQ3QzguMjAyMDEgMTIuNzMxIDkuNDYzMTQgMTEuNDUyOCAxMS4wNTU2IDEwLjgxMzdDMTEuMjI4NyAxMC43NDMyIDExLjIyODcgMTAuNDk1MiAxMS4wNTU2IDEwLjQyNDdDOS40NjMxNCA5Ljc4NzY5IDguMjAyMDEgOC41MDczMiA3LjU3MzU4IDYuODkxMzZDNy41MDUxOCA2LjcxMzk1IDcuMjU5MzcgNi43MTM5NSA3LjE5MDk3IDYuODkxMzZDNi41NjI1NCA4LjUwNzMyIDUuMzAxNCA5Ljc4NTU1IDMuNzA4OTYgMTAuNDI0N1oiIGZpbGw9IiM2RUI3NDQiLz4KPHBhdGggaWQ9IlZlY3Rvcl8yIiBkPSJNOC4xMjkwNiA0LjgwMjk5QzcuOTAwMzQgNC44OTQ5MSA3LjkwMDM0IDUuMjIxOTUgOC4xMjkwNiA1LjMxMTcyQzEwLjIxNzQgNi4xNDc0OSAxMS44Njk3IDcuODIzMyAxMi42OTI2IDkuOTQxNThDMTIuNzgyNCAxMC4xNzI0IDEzLjEwNTIgMTAuMTcyNCAxMy4xOTUgOS45NDE1OEMxNC4wMTc5IDcuODIzMyAxNS42NzIzIDYuMTQ3NDkgMTcuNzU4NiA1LjMxMTcyQzE3Ljk4NzMgNS4yMTk4MSAxNy45ODczIDQuODkyNzcgMTcuNzU4NiA0LjgwMjk5QzE1LjY3MDIgMy45NjcyMyAxNC4wMTc5IDIuMjkxNDEgMTMuMTk1IDAuMTczMTM5QzEzLjEwNTIgLTAuMDU3NzEyOSAxMi43ODI0IC0wLjA1NzcxMjkgMTIuNjkyNiAwLjE3MzEzOUMxMS44Njk3IDIuMjkxNDEgMTAuMjE1MyAzLjk2NzIzIDguMTI5MDYgNC44MDI5OVoiIGZpbGw9IiMwMDhERDUiLz4KPHBhdGggaWQ9IlZlY3Rvcl8zIiBkPSJNMC40MjUzNjMgMTQuODQ5NEMwLjMwMzUyNSAxNC44OTg1IDAuMzAzNTI1IDE1LjA3MzggMC40MjUzNjMgMTUuMTIzQzEuNTQ5NyAxNS41NzE4IDIuNDM4OSAxNi40NzM5IDIuODgxMzcgMTcuNjE1M0MyLjkzMDUzIDE3LjczOTMgMy4xMDM2NyAxNy43MzkzIDMuMTUwNjkgMTcuNjE1M0MzLjU5MzE2IDE2LjQ3NiA0LjQ4MjM2IDE1LjU3NCA1LjYwNjcgMTUuMTIzQzUuNzI4NTMgMTUuMDczOCA1LjcyODUzIDE0Ljg5ODUgNS42MDY3IDE0Ljg0OTRDNC40ODIzNiAxNC40MDA1IDMuNTkzMTYgMTMuNDk4NSAzLjE1MDY5IDEyLjM1N0MzLjEwMTUzIDEyLjIzMyAyLjkyODM5IDEyLjIzMyAyLjg4MTM3IDEyLjM1N0MyLjQzODkgMTMuNDk2MyAxLjU0OTcgMTQuMzk4MyAwLjQyNTM2MyAxNC44NDk0WiIgZmlsbD0iIzEzMzE0QyIvPgo8cGF0aCBpZD0iVmVjdG9yXzQiIGQ9Ik0xNS4yMjc5IDguNTg4NTlDMTUuMjQyOSA4LjY3ODM3IDE1LjI1NTcgOC43NzAyOCAxNS4yNjg1IDguODYyMkMxNS4yNjg1IDguODc3MTYgMTUuMjcyOCA4Ljg4OTk4IDE1LjI3MjggOC45MDQ5NUMxNS4yODM1IDguOTg2MTcgMTUuMjkyIDkuMDY3NCAxNS4yOTg1IDkuMTQ4NjJDMTUuMzAyNyA5LjE4NzEgMTUuMzA0OSA5LjIyNTU3IDE1LjMwNyA5LjI2NjE5QzE1LjMxMTMgOS4zMjgxNyAxNS4zMTU2IDkuMzg4MDIgMTUuMzE5OCA5LjQ1MDAxQzE1LjMyNDEgOS41NTY4OSAxNS4zMjg0IDkuNjYxNjMgMTUuMzI4NCA5Ljc2ODVDMTUuMzI4NCAxMy42ODAyIDEyLjE0NTYgMTYuODYyOSA4LjIzMzk4IDE2Ljg2MjlDOC4xMTQyOCAxNi44NjI5IDcuOTkyNDQgMTYuODYwOCA3Ljg3NDg3IDE2Ljg1NDRDNy44NDkyMiAxNi44NTQ0IDcuODIzNTcgMTYuODUwMSA3Ljc5NzkyIDE2Ljg0NzlDNy43MDM4NyAxNi44NDE1IDcuNjA5ODIgMTYuODM1MSA3LjUxNTc3IDE2LjgyNjZDNy40OTQ0IDE2LjgyNDQgNy40NzMwMiAxNi44MjAyIDcuNDQ5NTEgMTYuODE4QzcuMzUxMTggMTYuODA3MyA3LjI1Mjg2IDE2Ljc5NDUgNy4xNTY2NyAxNi43Nzk1QzcuMTQxNzEgMTYuNzc3NCA3LjEyNjc1IDE2Ljc3MzEgNy4xMTE3OCAxNi43NzFDNy4wMDcwNCAxNi43NTM5IDYuOTA0NDQgMTYuNzM2OCA2LjgwMTg0IDE2LjcxNTRDNi43OTMyOSAxNi43MTU0IDYuNzg2ODggMTYuNzExMSA2Ljc3ODMzIDE2LjcwOUM2LjY2OTMyIDE2LjY4NTUgNi41NTgxNyAxNi42NTk4IDYuNDUxMjkgMTYuNjMyMUM2LjQ1MTI5IDE2LjYzMjEgNi40NDcwMiAxNi42MzIxIDYuNDQ0ODggMTYuNjMyMUM2LjEwMDc0IDE2LjU0MjMgNS43NjUxNSAxNi40MjY5IDUuNDM4MTEgMTYuMjg1OEM1LjA4NzU2IDE2LjUwNTkgNC43Nzc2MiAxNi43ODYgNC41MjUzOSAxNy4xMTczQzUuMDkxODMgMTcuNDAzNyA1LjY4ODIgMTcuNjIzOSA2LjMwODA4IDE3Ljc3MzVDNi4zMTg3NiAxNy43NzU2IDYuMzI5NDUgMTcuNzc3OCA2LjM0MDE0IDE3Ljc3OTlDNi40NzI2NyAxNy44MTIgNi42MDUxOSAxNy44Mzk4IDYuNzM5ODUgMTcuODYzM0M2Ljc3NjE5IDE3Ljg2OTcgNi44MTI1MyAxNy44NzYxIDYuODUxMDEgMTcuODgyNUM2Ljk2MjE2IDE3LjkwMTcgNy4wNzMzMSAxNy45MTY3IDcuMTg0NDYgMTcuOTMxN0M3LjIyOTM1IDE3LjkzODEgNy4yNzQyMyAxNy45NDI0IDcuMzIxMjYgMTcuOTQ4OEM3LjQzMDI3IDE3Ljk2MTYgNy41MzkyOCAxNy45NzAxIDcuNjUwNDQgMTcuOTc4N0M3LjY5MzE5IDE3Ljk4MDggNy43MzgwNyAxNy45ODUxIDcuNzgwODIgMTcuOTg3MkM3LjkzMjU5IDE3Ljk5NTggOC4wODQzNSAxOC4wMDAxIDguMjM2MTIgMTguMDAwMUMxMi43NzYyIDE4LjAwMDEgMTYuNDY5OCAxNC4zMDY0IDE2LjQ2OTggOS43NjYzNkMxNi40Njk4IDkuNTkxMDkgMTYuNDYzNCA5LjQxNzk1IDE2LjQ1MDYgOS4yNDQ4MUMxNi40NDg0IDkuMjA0MiAxNi40NDQyIDkuMTY1NzIgMTYuNDQyIDkuMTI1MTFDMTYuNDI5MiA4Ljk2MjY2IDE2LjQxNDIgOC44MDIzNSAxNi4zOTA3IDguNjQyMDNDMTYuMzkwNyA4LjYzMzQ4IDE2LjM5MDcgOC42MjQ5MyAxNi4zODg2IDguNjE2MzhDMTYuMzYyOSA4LjQzNjgzIDE2LjMzMDkgOC4yNTk0MiAxNi4yOTQ1IDguMDg0MTRDMTYuMjkyNCA4LjA3MTMyIDE2LjI5MDMgOC4wNTg0OSAxNi4yODYgOC4wNDc4QzE2LjI0OTcgNy44NzQ2NiAxNi4yMDY5IDcuNzAzNjYgMTYuMTU5OSA3LjUzNDhDMTYuMTU5OSA3LjUyODM5IDE2LjE1NTYgNy41MjE5OCAxNi4xNTU2IDcuNTE3N0MxNS44MTM2IDcuODQyNiAxNS41MDM3IDguMjAxNyAxNS4yMzAxIDguNTkwNzNMMTUuMjI3OSA4LjU4ODU5WiIgZmlsbD0iIzEzMzE0QyIvPgo8cGF0aCBpZD0iVmVjdG9yXzUiIGQ9Ik0xMC40ODI0IDEuODQ5QzEwLjQ4MjQgMS44NDkgMTAuNDY5NSAxLjg0NDczIDEwLjQ2NTMgMS44NDQ3M0MxMC4yOTY0IDEuNzk3NyAxMC4xMjU0IDEuNzU0OTUgOS45NTQ0IDEuNzE4NjJDOS45NDE1NyAxLjcxNjQ4IDkuOTI2NjEgMS43MTIyIDkuOTEzNzkgMS43MTAwN0M5LjczODUxIDEuNjczNzMgOS41NjMyNCAxLjY0MTY3IDkuMzg1ODIgMS42MTgxNUM5LjM3NTEzIDEuNjE4MTUgOS4zNjY1OCAxLjYxNjAyIDkuMzU1OSAxLjYxMzg4QzkuMTk3NzIgMS41OTI1IDkuMDM3NDEgMS41NzU0IDguODc3MDkgMS41NjI1OEM4LjgzNjQ4IDEuNTYwNDQgOC43OTgwMSAxLjU1NjE3IDguNzU3MzkgMS41NTQwM0M4LjU4NDI1IDEuNTQzMzQgOC40MTExMiAxLjUzNDc5IDguMjM1ODQgMS41MzQ3OUMzLjY5NTc2IDEuNTM0NzkgMCA1LjIyODQxIDAgOS43Njg0OUMwIDkuOTIyMzkgMC4wMDQyNzQ5MSAxMC4wNzQyIDAuMDEyODI1IDEwLjIyNTlDMC4wMTQ5NjI1IDEwLjI3MDggMC4wMTkyMzczIDEwLjMxMzYgMC4wMjM1MTI0IDEwLjM1NjNDMC4wMzIwNjI0IDEwLjQ2NTMgMC4wNDA2MTI4IDEwLjU3NjUgMC4wNTM0Mzc4IDEwLjY4NTVDMC4wNTc3MTI5IDEwLjczMDQgMC4wNjQxMjU0IDEwLjc3NTMgMC4wNzA1Mzc5IDEwLjgyMjNDMC4wODU1MDA1IDEwLjkzMzQgMC4xMDA0NjMgMTEuMDQ2NyAwLjExOTcwMSAxMS4xNTU3QzAuMTI2MTEzIDExLjE5MjEgMC4xMzI1MjYgMTEuMjI4NCAwLjEzODkzOCAxMS4yNjQ4QzAuMTYyNDUxIDExLjM5NzMgMC4xOTAyMzggMTEuNTI5OCAwLjIyMjMwMSAxMS42NjIzQzAuMjI0NDM5IDExLjY3NTIgMC4yMjg3MTQgMTEuNjg1OCAwLjIzMDg1MSAxMS42OTg3QzAuMzgwNDc3IDEyLjMxNjQgMC42MDA2NDEgMTIuOTE0OSAwLjg4OTIwNiAxMy40ODE0QzEuMjE2MjUgMTMuMjI3IDEuNDk2MjYgMTIuOTE0OSAxLjcxNDI5IDEyLjU1NzlDMS43MTQyOSAxMi41NTc5IDEuNzE0MjkgMTIuNTU3OSAxLjcxNDI5IDEyLjU1NThDMS42Njk0IDEyLjQ0ODkgMS42MjQ1MSAxMi4zMzk5IDEuNTgzOSAxMi4yMzA5QzEuNTgzOSAxMi4yMzA5IDEuNTgzOSAxMi4yMzA5IDEuNTgzOSAxMi4yMjg4QzEuNTQzMjggMTIuMTE3NiAxLjUwNDgxIDEyLjAwNjUgMS40NzA2MSAxMS44OTUzQzEuNDM2NDEgMTEuNzg2MyAxLjQwNDM1IDExLjY3NTIgMS4zNzQ0MiAxMS41NjE5QzEuMzc0NDIgMTEuNTU3NiAxLjM3NDQyIDExLjU1NTUgMS4zNzIyOCAxMS41NTEyQzEuMzQ0NSAxMS40NDQzIDEuMzE4ODUgMTEuMzM1MyAxLjI5NzQ3IDExLjIyODRDMS4yOTc0NyAxMS4yMTk5IDEuMjkzMiAxMS4yMTEzIDEuMjkxMDYgMTEuMjAyOEMxLjI2OTY4IDExLjEwMDIgMS4yNTI1OCAxMC45OTc2IDEuMjM1NDggMTAuODkyOEMxLjIzMzM1IDEwLjg3NzkgMS4yMjkwNyAxMC44NjI5IDEuMjI2OTMgMTAuODQ3OUMxLjIxMTk3IDEwLjc1MTcgMS4yMDEyOCAxMC42NTM0IDEuMTkwNiAxMC41NTUxQzEuMTg4NDYgMTAuNTMzNyAxLjE4NDE4IDEwLjUxMjMgMS4xODIwNCAxMC40OTFDMS4xNzM0OSAxMC4zOTY5IDEuMTY3MDggMTAuMzAyOSAxLjE2MDY3IDEwLjIwODhDMS4xNjA2NyAxMC4xODMyIDEuMTU2MzkgMTAuMTU3NSAxLjE1NDI2IDEwLjEzMTlDMS4xNDc4NCAxMC4wMTIyIDEuMTQ1NzEgOS44OTI0NyAxLjE0NTcxIDkuNzcyNzdDMS4xNDU3MSA1Ljg2MTEyIDQuMzI4NDcgMi42NzgzNiA4LjI0MDExIDIuNjc4MzZDOC4zNDY5OSAyLjY3ODM2IDguNDUzODcgMi42ODA1IDguNTYwNzQgMi42ODY5MUM4LjYyNDg3IDIuNjg5MDUgOC42ODg5OSAyLjY5NTQ2IDguNzUzMTIgMi42OTk3M0M4Ljc4OTQ2IDIuNzAxODcgOC44Mjc5MyAyLjcwNDAxIDguODY0MjcgMi43MDgyOEM4Ljk0OTc3IDIuNzE2ODQgOS4wMzMxMyAyLjcyNTM5IDkuMTE2NSAyLjczNjA3QzkuMTI5MzIgMi43MzYwNyA5LjE0MjE0IDIuNzM4MjEgOS4xNTI4MyAyLjc0MDM1QzkuMjQ2ODggMi43NTMxNyA5LjM0MDkzIDIuNzY2IDkuNDMyODUgMi43ODMxQzkuODEzMzMgMi41MDk1IDEwLjE2NiAyLjE5NzQyIDEwLjQ4NjYgMS44NTMyOEwxMC40ODI0IDEuODQ5WiIgZmlsbD0iIzAwOERENSIvPgo8L2c+Cjwvc3ZnPgo=" alt="Orion"></span>
-        <div class="fp-head-title" style="flex:1;">Filter with Orion</div>
+        <div class="fp-head-title" id="fpTitle" style="flex:1;">Filter with Orion</div>
         <div class="fp-head-meta">
           <svg class="material-symbols-outlined fp-close" onclick="closePanel()"><use href="#close"></use></svg>
         </div>
@@ -1388,6 +1391,7 @@ a:hover { text-decoration:underline; }
         <div style="display:flex;gap:16px;">
           <label class="check"><span class="radio-dot" id="visMeDot" style="width:20px;height:20px;border-radius:50%;border:2px solid var(--rmx-blue);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;" onclick="setVisibility('me')"><span id="visMeInner" style="width:12px;height:12px;border-radius:50%;background:var(--rmx-blue);"></span></span>Just Me</label>
           <label class="check"><span class="radio-dot" id="visCoDot" style="width:20px;height:20px;border-radius:50%;border:2px solid var(--text-disabled);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;" onclick="setVisibility('company')"><span id="visCoInner" style="width:12px;height:12px;border-radius:50%;"></span></span>My Company</label>
+          <label class="check"><span class="radio-dot" id="visAllDot" style="width:20px;height:20px;border-radius:50%;border:2px solid var(--text-disabled);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;" onclick="setVisibility('all')"><span id="visAllInner" style="width:12px;height:12px;border-radius:50%;"></span></span>All Users</label>
         </div>
       </div>
       <label class="check" onclick="toggleSetDefault()"><span class="chkbox" id="setDefaultCheck"></span>Set as my default filter</label>
@@ -1437,7 +1441,7 @@ const TENANTS = [
   { name: "Rhonda Pike", eviction: true, siteClass: "<Unassigned Homeowner Status>", balance: 11275.90, account: 540, property: "Harbor Point Estates", unit: "Lot #61", leaseStart: "07/01/22", leaseEnd: "", status: "Current", email: "rpike540@gmail.com", phone: "513-555-1740", color: "Blue" },
   { name: "Terrence Dill", notice: true, eviction: true, siteClass: "Occupied", balance: 5825.00, account: 566, property: "Harbor Point Estates", unit: "Lot #74", leaseStart: "05/01/24", leaseEnd: "09/30/26", status: "Current", email: "tdill566@gmail.com", phone: "513-555-1766", color: "Green" },
   { name: "Ivy Castellano", extra: "+3", siteClass: "Occupied", balance: 430.00, account: 588, property: "Harbor Point Estates", unit: "Lot #80", leaseStart: "01/01/26", leaseEnd: "12/31/26", status: "Current", email: "icastellano588@gmail.com", phone: "513-555-1788", color: "Orange" },
-  { name: "Wesley Boone", eviction: true, siteClass: "Occupied", balance: 20105.62, account: 601, property: "Harbor Point Estates", unit: "Lot #93", leaseStart: "06/01/20", leaseEnd: "05/31/26", moveOut: "07/15/26", deposit: 500.00, status: "Past", email: "wboone601@gmail.com", phone: "513-555-1801", color: "Yellow" },
+  { name: "Wesley Boone", eviction: true, collections: true, siteClass: "Occupied", balance: 20105.62, account: 601, property: "Harbor Point Estates", unit: "Lot #93", leaseStart: "06/01/20", leaseEnd: "05/31/26", moveOut: "07/15/26", deposit: 500.00, status: "Past", email: "wboone601@gmail.com", phone: "513-555-1801", color: "Yellow" },
   { name: "Nadia Fields", siteClass: "Occupied", balance: 3120.75, account: 617, property: "Lockland Manufactured Homes", unit: "Lot #31", leaseStart: "10/01/24", leaseEnd: "09/30/26", status: "Current", email: "nfields617@gmail.com", phone: "513-555-1817" },
   { name: "Curtis Vaughn", extra: "+1", siteClass: "Occupied", balance: 1840.00, account: 632, property: "Beacon Ridge Apartments", unit: "Apt 106", leaseStart: "08/01/25", leaseEnd: "07/31/26", status: "Current", email: "cvaughn632@gmail.com", phone: "513-555-1832", color: "Green" },
   { name: "Priya Raman", siteClass: "Occupied", balance: 0.00, account: 644, property: "Beacon Ridge Apartments", unit: "Apt 214", leaseStart: "02/15/26", leaseEnd: "02/14/27", status: "Current", email: "praman644@gmail.com", phone: "513-555-1844", color: "Orange" },
@@ -1451,7 +1455,16 @@ const TENANTS = [
   { name: "Alicia Moreau", siteClass: "Occupied", balance: 1120.00, account: 738, property: "Beacon Ridge Apartments", unit: "Apt 409", leaseStart: "11/15/25", leaseEnd: "11/14/26", status: "Current", email: "amoreau738@gmail.com", phone: "513-555-1938" },
   { name: "Devon Pryor", extra: "+1", siteClass: "Occupied", balance: 6045.80, account: 749, property: "Harbor Point Estates", unit: "Lot #88", leaseStart: "02/01/23", leaseEnd: "01/31/27", status: "Current", email: "dpryor749@gmail.com", phone: "513-555-1949", color: "Yellow" },
   { name: "Tara Mensah", siteClass: "Occupied", balance: 340.00, account: 761, property: "Flagstone Manufactured Homes", unit: "Lot #118", leaseStart: "04/01/26", leaseEnd: "03/31/27", status: "Current", email: "tmensah761@gmail.com", phone: "513-555-1961", color: "Blue" },
-  { name: "Gil Overton", eviction: true, siteClass: "Occupied", balance: 22410.05, account: 773, property: "Harbor Point Estates", unit: "Lot #96", leaseStart: "05/01/19", leaseEnd: "04/30/26", moveOut: "06/01/26", deposit: 0.00, status: "Past", email: "goverton773@gmail.com", phone: "513-555-1973", color: "Green" },
+  { name: "Gil Overton", eviction: true, collections: true, siteClass: "Occupied", balance: 22410.05, account: 773, property: "Harbor Point Estates", unit: "Lot #96", leaseStart: "05/01/19", leaseEnd: "04/30/26", moveOut: "06/01/26", deposit: 0.00, status: "Past", email: "goverton773@gmail.com", phone: "513-555-1973", color: "Green" },
+  /* Beat 4 needs something to exclude. Six tenants have moved out owing more
+     than $100: two went to collections, one is on a payment plan, and three
+     have had neither happen yet. Those three are the answer the scene is
+     after, and they are only interesting because the other three exist to be
+     left out. Emma's script, 2026-09-14. */
+  { name: "Rosalyn Pike", eviction: false, siteClass: "Vacant", balance: 1840.25, account: 918, property: "Lockland Manufactured Homes", unit: "Lot 21", leaseStart: "03/01/23", leaseEnd: "02/28/26", moveOut: "07/02/26", deposit: 0.00, status: "Past", paymentPlan: true, email: "rpike918@gmail.com", phone: "513-555-2214", color: "Blue" },
+  { name: "Dorian Selby", eviction: false, siteClass: "Vacant", balance: 612.40, account: 926, property: "Beacon Ridge Apartments", unit: "Apt 118", leaseStart: "08/01/22", leaseEnd: "07/31/26", moveOut: "08/04/26", deposit: 0.00, status: "Past", email: "dselby926@gmail.com", phone: "513-555-2260", color: "Orange" },
+  { name: "Camille Rourke", eviction: false, siteClass: "Vacant", balance: 245.80, account: 934, property: "Riverview Apartments", unit: "Apt 309", leaseStart: "01/15/24", leaseEnd: "01/14/26", moveOut: "06/20/26", deposit: 0.00, status: "Past", email: "crourke934@gmail.com", phone: "513-555-2287", color: "Green" },
+  { name: "Ezra Whitfield", eviction: false, siteClass: "Vacant", balance: 1103.15, account: 941, property: "Flagstone Manufactured Homes", unit: "Lot #88", leaseStart: "05/01/21", leaseEnd: "04/30/26", moveOut: "05/28/26", deposit: 0.00, status: "Past", email: "ewhitfield941@gmail.com", phone: "513-555-2301", color: "Yellow" },
   { name: "Renee Kowalski", extra: "+2", siteClass: "Occupied", balance: 780.00, account: 784, property: "Lockland Manufactured Homes", unit: "Lot #26", leaseStart: "12/01/24", leaseEnd: "11/30/26", status: "Current", email: "rkowalski784@gmail.com", phone: "513-555-1984", color: "Orange" },
   { name: "Samir Bhatt", siteClass: "Occupied", balance: 3960.00, account: 796, property: "Beacon Ridge Apartments", unit: "Apt 507", leaseStart: "03/01/25", leaseEnd: "09/30/26", status: "Current", email: "sbhatt796@gmail.com", phone: "513-555-1996" },
   { name: "Owen Castillo", siteClass: "Occupied", balance: 950.00, account: 812, property: "Riverview Apartments", unit: "Apt 204", leaseStart: "03/01/25", leaseEnd: "02/28/27", pet: "Dog", status: "Current", email: "ocastillo812@gmail.com", phone: "513-555-2012", color: "Blue" },
@@ -1519,7 +1532,11 @@ function matched(text, re){
 function parse(text){
   const t = text.toLowerCase(); const out = [];
   const add = (c) => out.push(Object.assign({id:++uid}, c));
-  const amount = t.match(/\$?\s?([\d,]+(?:\.\d+)?)(?!\s*(?:st|nd|rd|th)\b)\s?(k)?/);
+  /* `\d[\d,]*`, not `[\d,]+`: the old pattern let a bare comma count as a
+     number, so any sentence with a comma before the amount ("moved out, owe
+     over $100") matched ", " first, read it as 0, and quietly turned "owe over
+     $100" into "balance greater than 0". Found on beat 4, 2026-09-14. */
+  const amount = t.match(/\$?\s?(\d[\d,]*(?:\.\d+)?)(?!\s*(?:st|nd|rd|th)\b)\s?(k)?/);
   const amt = amount ? num(amount[1]) * (amount[2] ? 1000 : 1) : 5000;
   if (/balance|owe|owes|owing|delinquen|past due|arrears|open charges/.test(t)) {
     const under = /under|less than|below|beneath/.test(t);
@@ -1547,6 +1564,29 @@ function parse(text){
     why: matched(t, /\bdogs?\b/), matchedField:"Pet Type"});
   if (/riverview/.test(t)) add({field:"property", label:"Property is", op:"is", value:"Riverview Apartments", kind:"select",
     why: matched(t, /riverview/), matchedField:"Property"});
+  /* Beat 4: "tell it what to exclude ... and it'll build the filter in a way
+     that's both accurate and easy to understand." The exclusion words are
+     shared by every rule below rather than re-spelled per field, because a
+     sentence excludes with whatever word came to mind. Emma's script,
+     2026-09-14. */
+  const NEG = /(not|no|never|without|hasn.?t|haven.?t|exclude|excluding|except|omit|skip|ignore)/;
+  const negatedNear = (re) => {
+    const m = t.match(new RegExp(NEG.source + '[^.;]{0,60}?' + re.source, 'i')) ||
+              t.match(new RegExp(re.source + '[^.;]{0,30}?' + NEG.source, 'i'));
+    return !!m;
+  };
+  if (/collections?/.test(t)) {
+    add({field:"collections", label:"Sent to Collections is", op:"is",
+         value: negatedNear(/collections?/) ? "No" : "Yes", kind:"text",
+         why: matched(t, /(?:sent to )?collections?/), matchedField:"Sent to Collections",
+         excluded: negatedNear(/collections?/)});
+  }
+  if (/payment plan/.test(t)) {
+    add({field:"paymentPlan", label:"Payment Plan is", op:"is",
+         value: negatedNear(/payment plan/) ? "No" : "Yes", kind:"text",
+         why: matched(t, /payment plan(?: set up)?/), matchedField:"Payment Plan",
+         excluded: negatedNear(/payment plan/)});
+  }
   if (/\bevic/.test(t)) {
     const excl = /(not|no|without|exclude|excluding|except|omit|skip|ignore)\b[^.]*evic|evic[a-z]*[^.]*\b(exclud|omit)/.test(t);
     add({field:"eviction", label:"In Eviction Process is", op:"is", value: excl?"No":"Yes", kind:"text",
@@ -1603,6 +1643,8 @@ function describe(c){
   if (c.field==="balance") return num(c.value)===0 && c.op==="gt" ? "Balance greater than 0" : c.op==="eq" ? "Balance equals $"+money(num(c.value)) : "Balance "+(c.op==="lt"?"under":"over")+" $"+money(num(c.value));
   if (c.field==="asOf") return "as of "+c.value;
   if (c.field==="eviction") return c.value==="No" ? "not in an eviction process" : "in an eviction process";
+  if (c.field==="collections") return c.value==="No" ? "not sent to collections" : "sent to collections";
+  if (c.field==="paymentPlan") return c.value==="No" ? "no payment plan set up" : "has a payment plan";
   if (c.field==="evictionStage") return "Eviction Stage is "+c.value;
   if (c.field==="notice") return "Notice given";
   if (c.field==="leaseMissing") return "No lease end date";
@@ -1614,11 +1656,96 @@ function describe(c){
   return c.label.replace(" contains"," is ")+" "+c.value;
 }
 function rationaleFor(text){ return '"'+text.trim()+'"'; }
+
+/* ============================================================
+   How Orion built this
+   ============================================================
+   Emma's script, 2026-09-14, makes the same point in three of its four beats:
+   "Rent Manager is still building an actual filter underneath, and it shows
+   you how: the condition it constructed, the field it matched, and the logic
+   it applied ... That's your gut check."
+
+   So this reads back, per condition: the field it landed on, the condition it
+   wrote, and the words in your sentence it keyed on. A dynamic condition also
+   says what it resolved to today and that it re-resolves on every run, which
+   is the whole argument for beat 3: a filter that goes stale is worse than no
+   filter, because it stays plausible.
+
+   It explains `state.criteria`, the live conditions, not a stored copy of what
+   Orion said. Edit a condition by hand and the explanation follows it, so the
+   panel cannot end up describing a filter that is no longer there.
+   ============================================================ */
+function explainRows(items){
+  return (items || []).map(function(c, i){
+    const rows = [];
+    if (i) rows.push('<div class="fp-xjoin">' + (c.join === 'or' ? 'OR' : 'AND') + '</div>');
+    const bits = [];
+    bits.push('<div class="fp-xlabel">Field matched</div><div class="fp-xval">' +
+              escapeHTML(c.matchedField || c.label || c.field) + '</div>');
+    bits.push('<div class="fp-xlabel">Condition</div><div class="fp-xval">' + escapeHTML(describe(c)) + '</div>');
+    if (c.why) {
+      bits.push('<div class="fp-xlabel">From your words</div><div class="fp-xval fp-xquote">\u201c' +
+                escapeHTML(c.why) + '\u201d</div>');
+    }
+    if (c.excluded) {
+      bits.push('<div class="fp-xnote">Read as an exclusion, so the filter keeps the rows where this is <b>not</b> true.</div>');
+    }
+    if (c.dynamic) {
+      bits.push('<div class="fp-xnote">' + escapeHTML(dynamicNote(c)) + '</div>');
+    }
+    rows.push('<div class="fp-xrow">' + bits.join('') + '</div>');
+    return rows.join('');
+  }).join('');
+}
+
+/* What a dynamic condition resolved to, and the promise that it will resolve
+   again. The value is the gut check; the promise is the feature. */
+function dynamicNote(c){
+  if (c.field === 'asOf') {
+    const from = c.day === 'today' ? 'today' :
+                 'the ' + c.day + ordinal(c.day) + ' of this month';
+    return 'Resolved from \u201c' + from + '\u201d to ' + c.value +
+           '. It resolves again every time the filter runs, so this stays the ' +
+           (c.day === 'today' ? 'current date' : 'current month') + ' rather than freezing on today\u2019s.';
+  }
+  if (c.field === 'moveOutDays') {
+    return 'Counted back from the day the filter runs, not from a date typed once, so ' +
+           c.value + ' days ago moves with the calendar.';
+  }
+  return '';
+}
+function ordinal(n){
+  const v = Number(n) % 100;
+  if (v >= 11 && v <= 13) return 'th';
+  return ['th','st','nd','rd'][Math.min(Number(n) % 10, 4)] || 'th';
+}
+
+let explainOpen = false;
+function toggleExplain(){
+  explainOpen = !explainOpen;
+  syncExplain();
+}
+function syncExplain(){
+  const body = document.getElementById('explainBody');
+  const toggle = document.getElementById('explainToggle');
+  if (!body || !toggle) return;
+  const items = (state.criteria[0] && state.criteria[0].items) || [];
+  body.innerHTML = items.length ? explainRows(items) :
+    '<div class="fp-xrow"><div class="fp-xnote">Nothing to explain yet.</div></div>';
+  body.hidden = !explainOpen;
+  toggle.setAttribute('aria-expanded', explainOpen ? 'true' : 'false');
+}
 function testCond(row, c){
   switch(c.field){
     case "balance": return c.op==="lt" ? row.balance < num(c.value) : c.op==="eq" ? row.balance === num(c.value) : row.balance > num(c.value);
     case "asOf": return true;
     case "eviction": return c.value==="No" ? !row.eviction : !!row.eviction;
+    /* Absent means no, deliberately: a tenant with nothing recorded has not
+       been sent to collections, so an exclusion keeps them. Reading a missing
+       field as "unknown, leave them out" would quietly shrink the list, which
+       is the failure beat 4 is arguing against. */
+    case "collections": return c.value==="No" ? !row.collections : !!row.collections;
+    case "paymentPlan": return c.value==="No" ? !row.paymentPlan : !!row.paymentPlan;
     case "evictionStage": return String(c.value).toLowerCase()==="notice" ? !!row.notice : false;
     case "notice": return !!row.notice;
     case "leaseMissing": return !row.leaseEnd;
@@ -1728,6 +1855,17 @@ function renderFilterUI(){
 
   if (state.showPanel) {
     document.getElementById("rationaleText").textContent = state.rationale || "";
+    /* Beat 1 opens this panel by hand, off the tune icon, to show the old way:
+       find the field, pick the operator, apply. Orion has not said anything on
+       that path, so the panel must not claim it did. No prompt means the plain
+       Advanced Filters title and no "How Orion built this", which would have
+       nothing to explain. Emma's script, 2026-09-14. */
+    const built = !!state.rationale;
+    document.getElementById("fpTitle").textContent = built ? "Filter with Orion" : "Advanced Filters";
+    document.getElementById("fpOrionMark").style.display = built ? "" : "none";
+    document.getElementById("rationaleText").style.display = built ? "" : "none";
+    document.querySelector(".fp-explain-wrap").style.display = built ? "" : "none";
+    syncExplain();
     document.getElementById("groupsBody").innerHTML = state.criteria.map((g, gi) => renderGroup(g, gi)).join("")
       + '<div class="cond-add float-anchor">'
       + '<div class="add-link" onclick="openFieldSelector(event,\'newgroup\')"><svg class="material-symbols-outlined"><use href="#add"></use></svg>Add Group</div>'
@@ -1896,6 +2034,7 @@ function renderSavedFilterList(){
       return '<div class="dd-item' + (active ? ' selected' : '') + '" style="gap:8px;" onclick="pickSavedFilter(' + i + ')">' +
              (f.orion ? '<span class="orion-mark sm">' + ORION_ICON_HTML + '</span>' : '') +
              '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHTML(f.name) + '</span>' +
+             (f.system ? '<span class="lozenge lozenge-brand fp-sys">System</span>' : '') +
              '</div>';
     }).join("");
 }
@@ -1929,11 +2068,14 @@ function cloneCriteria(c){
   return JSON.parse(JSON.stringify(c || []));
 }
 function toggleFilterList(e){ e.preventDefault(); e.stopPropagation(); const p = document.getElementById("filterListPanel"); if (p.hidden) openFilterList(); else p.hidden = true; }
+/* The script's own examples, in the order the four beats use them. Emma's
+   script, 2026-09-14. The box auto-types the next one each time you click into
+   it empty, so a run-through can walk the beats without anyone typing. */
 const FILTER_SUGGESTIONS = [
   "Tenants with dogs at Riverview",
   "Show me tenants delinquent on their rent charges as of the 3rd of this month",
-  "Tenants that moved out over 30 days ago but we're still holding a security deposit",
-  "Tenants that moved out with open charges totaling more than $100"
+  "Show tenants that have moved out, owe over $100, and haven't been sent to collections or had a payment plan set up yet",
+  "Tenants that moved out over 30 days ago but we're still holding a security deposit"
 ];
 /* Each empty-box focus auto-types the next example in turn (dogs at
    Riverview first, then delinquent rent, ...), not the same one forever —
@@ -2163,12 +2305,17 @@ function onSaveNameInput(){
   const v = document.getElementById("saveNameInput").value;
   if (saveModalTarget === "details") d_state.saveName = v; else state.saveName = v;
 }
+/* Three, not two. Emma's script, 2026-09-14: a filter this dynamic is worth
+   sharing, so "Save As > Enter a Name > Assign to All Users" has to be a thing
+   you can actually do. All Users is what makes it a System Filter, which is
+   how it is labelled everywhere it appears afterwards. */
 function setVisibility(v){
   state.visibility = v;
-  document.getElementById("visMeInner").style.background = v==="me" ? "var(--rmx-blue)" : "transparent";
-  document.getElementById("visMeDot").style.borderColor = v==="me" ? "var(--rmx-blue)" : "var(--text-disabled)";
-  document.getElementById("visCoInner").style.background = v==="company" ? "var(--rmx-blue)" : "transparent";
-  document.getElementById("visCoDot").style.borderColor = v==="company" ? "var(--rmx-blue)" : "var(--text-disabled)";
+  [['visMe','me'], ['visCo','company'], ['visAll','all']].forEach(function(pair){
+    const on = v === pair[1];
+    document.getElementById(pair[0] + 'Inner').style.background = on ? 'var(--rmx-blue)' : 'transparent';
+    document.getElementById(pair[0] + 'Dot').style.borderColor = on ? 'var(--rmx-blue)' : 'var(--text-disabled)';
+  });
 }
 function toggleSetDefault(){
   state.setDefault = !state.setDefault;
@@ -2193,11 +2340,15 @@ function confirmSave(){
     name: name, orion: true,
     criteria: cloneCriteria(state.criteria),
     outerJoin: state.outerJoin,
-    rationale: state.rationale || ""
+    rationale: state.rationale || "",
+    system: state.visibility === "all"
   }].concat(state.savedFilters);
   state.selectedFilter = name; state.applied = state.criteria; state.showPanel = false;
   closeSaveModal(); renderAll();
-  showToast('Filter "'+name+'" saved'+(state.visibility==="company"?" for your company.":" to your filters."));
+  showToast('Filter "'+name+'" saved'+(
+    state.visibility === "all"     ? " as a System Filter for all users." :
+    state.visibility === "company" ? " for your company." :
+                                     " to your filters."));
 }
 /* Toast, State=Success -- shared by every success confirmation in this prototype */
 function showToast(msg){

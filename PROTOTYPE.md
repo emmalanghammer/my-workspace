@@ -2933,6 +2933,75 @@ asking you to notice it. Worth settling in the system rather than per
 prototype, since the same question will come up on every checklist RMX ships.
 
 
+## The AI filters script, beat by beat
+
+Emma's filters script, 2026-09-14, on the Tenant Register's Orion filter
+builder. Its argument, made in three of the four beats, is that the point is
+not saved clicks: it is that you can check the work. So most of this round is
+one new thing, and the rest is what that thing needed.
+
+### "How Orion built this"
+
+A disclosure under the prompt, closed by default, that reads back per
+condition: **the field it matched**, **the condition it constructed**, and **the
+words in your sentence it keyed on**. That last one is why the parser now
+records `why` on every rule it fires: quoting "dogs" when the sentence said
+"dog" is a small lie that costs the whole gut check, so it quotes verbatim out
+of what was typed.
+
+It explains `state.criteria`, the live conditions, not a stored copy of what
+Orion said. Edit a condition by hand and the explanation follows, so the panel
+can never describe a filter that is no longer there.
+
+**Dynamic conditions say what they resolved to and that they will resolve
+again**, which is beat 3's whole argument: "here's the actual as of date it's
+using. That's your gut check." The 3rd of this month reads `Resolved from "the
+3rd of this month" to 09/03/2026. It resolves again every time the filter runs,
+so this stays the current month rather than freezing on today's.`
+
+**Exclusions say they are exclusions**: `Read as an exclusion, so the filter
+keeps the rows where this is not true.`
+
+### Beat 1, the old way
+
+Opening the panel from the tune icon builds a filter by hand, and that path
+already worked: Add Group, a searchable field list by category, operator per
+condition. What was wrong is that it called itself **Filter with Orion** and
+offered to explain a filter Orion had no part in. With no prompt behind it the
+panel is titled **Advanced Filters**, drops the Orion mark, and hides the
+explanation. Same builder, honest label.
+
+### Beat 3, the System Filter
+
+Save Filter's Visibility gained a third option, **All Users**, because "Save As
+> Enter a Name > Assign to All Users" has to be a thing you can do. Saving that
+way marks the filter as a System Filter, the toast says so, and it carries a
+brand Lozenge reading **System** in the Filters dropdown.
+
+### Beat 4, exclusions
+
+The parser learned two fields, Sent to Collections and Payment Plan, and a
+shared set of negation words (`not / no / never / without / hasn't / haven't /
+exclude / except / omit / skip / ignore`) matched near the field rather than
+spelled out per rule, since a sentence excludes with whatever word came to
+mind. A missing value reads as **no**: a tenant with nothing recorded has not
+been sent to collections, so an exclusion keeps them. Reading a blank as
+"unknown, leave them out" would quietly shrink the list, which is the failure
+the beat is arguing against.
+
+Six tenants have moved out owing more than $100: two went to collections, one
+is on a payment plan, three have had neither. The three are the answer, and
+they are only interesting because the other three exist to be left out.
+
+### A parser bug the script found
+
+The amount pattern was `[\d,]+`, which matches a bare comma. "Show tenants that
+have moved out, owe over $100" matched `", "` first, read it as 0, and turned
+"owe over $100" into "Balance greater than 0": a filter that looked right,
+said something plausible, and returned the wrong rows. It is `\d[\d,]*` now.
+Any sentence with a comma before the amount was affected.
+
+
 # Worth raising with the design system
 
 Found while building these two screens, verified against the live libraries,
