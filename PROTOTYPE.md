@@ -3098,6 +3098,30 @@ offered to explain a filter Orion had no part in. With no prompt behind it the
 panel is titled **Advanced Filters**, drops the Orion mark, and hides the
 explanation. Same builder, honest label.
 
+### Save Filter opens with the request as the name
+
+Filter Name is required and was opening empty, because `run()` clears the box
+once Orion has read the sentence: by the time anyone reached Save as Filter the
+request was gone. The modal's own first line promises that "saved filters keep
+the original request, so Orion can refine them later", and it was not keeping
+the part a person would recognise it by.
+
+The sentence is now kept as `state.promptText`, separate from `state.prompt`,
+which is what is currently typed. The two stop being the same thing the moment
+Orion reads it. The name offered is that request tidied: the leading imperative
+goes, since "Show me tenants delinquent..." is how you ask for something and not
+what you call it afterwards, and the first letter is capitalised.
+
+- "Show me tenants delinquent on their rent charges as of the 3rd of this month"
+  offers **Tenants delinquent on their rent charges as of the 3rd of th**
+- A filter built by hand in Advanced Filters opens with an **empty** name, since
+  there is no request behind it
+- A saved filter carries its request, so picking one back out of the dropdown
+  and re-saving it prefills the same way
+
+Trailing filler is left alone. Guessing where a sentence stops being a name does
+more harm than the tidy is worth, and the field is editable.
+
 ### Beat 3, the System Filter
 
 Save Filter's Visibility gained a third option, **All Users**, because "Save As

@@ -2144,6 +2144,7 @@ function pickSavedFilter(i){
   state.criteria = cloneCriteria(f.criteria);
   state.outerJoin = f.outerJoin || "and";
   state.rationale = f.rationale || "";
+  state.promptText = f.promptText || "";
   state.applied = state.criteria;
   state.selectedFilter = f.name;
   state.showPanel = false;
@@ -2191,6 +2192,12 @@ function run(text){
        moved-out tenants, no matter how correctly the prompt was parsed. */
     state.statuses = [];
     state.rationale = rationaleFor(text, crit);
+    /* The box is cleared a few lines down, so without this the sentence that
+       started the filter is gone by the time anyone reaches Save as Filter and
+       the required Filter Name opens empty. Kept separately from state.prompt,
+       which is what is currently typed, because these stop being the same thing
+       the moment Orion has read it. Emma's call, 2026-09-14. */
+    state.promptText = text;
     /* Once the ask is translated into a filter, the box's job is done —
        clear it back to the "Describe what you want to filter by" helper
        text instead of leaving the raw prompt sitting there. */
@@ -2201,8 +2208,8 @@ function run(text){
 }
 function openPanel(){ state.showPanel = true; if (!state.criteria.length) state.criteria = state.applied; renderFilterUI(); }
 function closePanel(){ state.showPanel = false; renderFilterUI(); }
-function clearAll(){ state.applied = []; state.criteria = []; state.showPanel = false; state.prompt = ""; state.rationale = ""; state.selectedFilter = ""; document.getElementById("promptInput").value=""; renderAll(); }
-function clearFilterDraft(){ state.criteria = []; state.prompt = ""; state.rationale = ""; state.showPanel = false; document.getElementById("promptInput").value=""; renderFilterUI(); }
+function clearAll(){ state.applied = []; state.criteria = []; state.showPanel = false; state.prompt = ""; state.rationale = ""; state.promptText = ""; state.selectedFilter = ""; document.getElementById("promptInput").value=""; renderAll(); }
+function clearFilterDraft(){ state.criteria = []; state.prompt = ""; state.rationale = ""; state.promptText = ""; state.showPanel = false; document.getElementById("promptInput").value=""; renderFilterUI(); }
 function applyFilter(){ state.applied = state.criteria; state.showPanel = false; renderAll(); }
 
 function setOuterJoin(v){ state.outerJoin = v; renderFilterUI(); }
@@ -2360,11 +2367,29 @@ let saveModalTarget = "register";
 function openSaveModal(){
   saveModalTarget = "register";
   document.getElementById("saveOverlay").hidden = false;
-  state.saveName = state.prompt.replace(/^\s*(show me|find|list)\s+/i,"").replace(/(^\w)/, m=>m.toUpperCase()).slice(0,60);
+  /* "Saved filters keep the original request, so Orion can refine them later",
+     says this modal's own first line, so the name it offers is that request:
+     the sentence asked for, tidied into a name rather than left as an order.
+     A filter built by hand in Advanced Filters has no request behind it and
+     opens with an empty name, which is correct. Emma's call, 2026-09-14. */
+  state.saveName = nameFromRequest(state.promptText || state.prompt);
   document.getElementById("saveNameInput").value = state.saveName;
   document.getElementById("saveConditionsPreview").innerHTML = state.criteria.map(g=>'<span class="lozenge"><span class="lozenge-text">'+renderChipText(g)+'</span></span>').join("");
   setVisibility("me"); state.setDefault=false; document.getElementById("setDefaultCheck").classList.remove("checked");
 }
+/* A request turned into a name: the leading imperative goes, since "Show me
+   tenants delinquent..." is how you ask for something and not what you call it
+   afterwards, and the first letter is capitalised. Trailing filler like "yet"
+   is left alone; guessing at where a sentence stops being a name does more harm
+   than the tidy is worth. */
+function nameFromRequest(text){
+  return String(text || "")
+    .trim()
+    .replace(/^(show me|show|find me|find|list|give me|get me)\s+/i, "")
+    .replace(/^(\w)/, function(m){ return m.toUpperCase(); })
+    .slice(0, 60);
+}
+
 function d_openSaveModal(){
   saveModalTarget = "details";
   document.getElementById("saveOverlay").hidden = false;
@@ -2421,6 +2446,7 @@ function confirmSave(){
     criteria: cloneCriteria(state.criteria),
     outerJoin: state.outerJoin,
     rationale: state.rationale || "",
+    promptText: state.promptText || "",
     system: state.visibility === "all"
   }].concat(state.savedFilters);
   state.selectedFilter = name; state.applied = state.criteria; state.showPanel = false;
@@ -2524,6 +2550,7 @@ const OPENING_PROMPT = "Tenants with dogs at Riverview";
   state.outerJoin = "and";
   state.applied = state.criteria;
   state.rationale = rationaleFor(OPENING_PROMPT);
+  state.promptText = OPENING_PROMPT;
   /* Same reason run() clears them: Orion's own reading is the filter now, and a
      leftover Status quick-filter would silently cut the result behind it. */
   state.statuses = [];
