@@ -2889,6 +2889,24 @@ Three things it deliberately does not do:
   already at the top of the history is left alone rather than repeated, which
   is what the first version of this did.
 
+### Claiming takes the open checklist item with it
+
+Emma's call, 2026-09-15. The task follows the first item still open, so a task
+held by Bookkeeper is held by Bookkeeper *because* that item is. Claiming it and
+leaving the item reading "Bookkeeper" made the two disagree about who is doing
+the work, which is the disagreement the checklist exists to settle.
+
+Claiming now reassigns the open item as well, from both routes: the register's
+Claim button and the one beside Assigned To in the modal.
+
+Only the open one, and only when it is held by a role being claimed from:
+
+- **Done items keep their owner.** They record who did the work.
+- **Later items keep their role.** Month End Close has a second Bookkeeper item
+  further down; that belongs to whoever holds the queue when it comes up, which
+  may not be the person claiming today.
+- **A task with no checklist claims as before.** Scene 3's W-9 has none.
+
 ### Scene 4's dates count back from today
 
 Emma's call, 2026-09-15. The scene makes a claim about elapsed time: Chris

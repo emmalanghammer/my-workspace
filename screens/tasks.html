@@ -1609,6 +1609,27 @@ function childRowHTML(c, dataset, parentId, idx){
 function claimableRoles(t){
   return (t.assigned || []).filter(k => isRoleKey(k) && MY_ROLES.indexOf(k) > -1);
 }
+/* Claiming takes the open checklist item too.
+   ------------------------------------------------------------
+   The task follows the first item still open, so a task held by Bookkeeper is
+   held by Bookkeeper *because* that item is. Claiming the task and leaving the
+   item saying "Bookkeeper" makes the two disagree about who is doing the work,
+   and the disagreement is the one the checklist exists to settle. Emma's call,
+   2026-09-15.
+
+   Only the open item, and only when it is held by a role being claimed from:
+   items already done record who did them, and items further down belong to
+   whoever comes next. */
+function claimOpenChecklistItem(items, roles){
+  const next = (items || []).find(it => !it.done);
+  if (!next) return false;
+  const held = (next.assigned || []).filter(k => roles.indexOf(k) > -1);
+  if (!held.length) return false;
+  next.assigned = (next.assigned || []).filter(k => held.indexOf(k) === -1);
+  if (next.assigned.indexOf(ME_KEY) === -1) next.assigned.unshift(ME_KEY);
+  return true;
+}
+
 function claimTask(dataset, id){
   const list = dataset === 'my' ? myTasks : otherTasks;
   const t = list.find(x => x.id === id);
@@ -1617,7 +1638,9 @@ function claimTask(dataset, id){
   if (!mine.length) return;
   t.assigned = (t.assigned || []).filter(k => mine.indexOf(k) === -1);
   if (t.assigned.indexOf(ME_KEY) === -1) t.assigned.unshift(ME_KEY);
-  RMXTaskState.patch(t.id, {assigned: t.assigned.slice()});
+  const tookItem = claimOpenChecklistItem(t.checklist, mine);
+  RMXTaskState.patch(t.id, Object.assign({assigned: t.assigned.slice()},
+    tookItem ? {checklist: t.checklist} : {}));
   renderRegister();
   toast('Task claimed', 'success');
 }
@@ -1976,6 +1999,7 @@ function claimFromModal(){
   if (!mine.length) return;
   modalAssignees = new Set([...modalAssignees].filter(k => mine.indexOf(k) === -1));
   modalAssignees.add(ME_KEY);
+  if (claimOpenChecklistItem(state.modalChecklist, mine)) renderModalChecklist();
   renderModalAssignee();
   toast('Task claimed', 'success');
 }
