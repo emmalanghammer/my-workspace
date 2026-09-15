@@ -35,7 +35,7 @@
    the tenant on "Return Marcia Clark's call", and so on, so a
    record reads the same wherever you meet it.
    ============================================================ */
-var ME = 'Tony Little';
+var ME = 'Charlie Apegian';
 /* The same seven people the Tasks screen's Assigned To dropdown lists, so
    the two screens agree about who exists. See PROTOTYPE.md on the two
    conflicting user lists in the Tasks data. */
@@ -46,7 +46,7 @@ var USERS = [
   {initials:'CA', name:'Laura Bennett', uname:'lbennett'},
   {initials:'DG', name:'Kelsey Warner', uname:'kwarner'},
   {initials:'EL', name:'Paige Sullivan', uname:'psullivan'},
-  {initials:'TL', name:'Tony Little',     uname:'tlittle'}
+  {initials:'CA', name:'Charlie Apegian', uname:'capegian'}
 ];
 
 var ENTITIES = {
@@ -59,7 +59,7 @@ var ENTITIES = {
     ],
     notes: [
       {type:'Vendor Coordination', date:'09/10/25 08:42 AM', category:'Maintenance', user:'Wesley Barnes',
-       note:'Carpet vendor quote received, $1,840 for unit and hallway. @Tony can you confirm the carpet vendor before I close this issue?', files:['quote_riverview_204.pdf']},
+       note:'Carpet vendor quote received, $1,840 for unit and hallway. @Charlie can you confirm the carpet vendor before I close this issue?', files:['quote_riverview_204.pdf']},
       {type:'Tenant Contact', date:'09/08/25 04:15 PM', category:'Maintenance', user:'Nathan Cole',
        note:'Left voicemail for the tenant about access on Thursday morning.', files:[]},
       {type:'Inspection', date:'09/05/25 11:20 AM', category:'<Unassigned>', user:'Grace Whitaker',
@@ -82,7 +82,7 @@ var ENTITIES = {
     balance: '0.00',
     notes: [
       {type:'Tenant Contact', date:'09/10/25 03:40 PM', category:'Leasing', user:'Erin Caldwell',
-       note:'She is planning to add a roommate in the next six months and wants the process in writing before she commits. @Tony she’s adding a roommate within six months and wants the steps in writing.', files:[]},
+       note:'She is planning to add a roommate in the next six months and wants the process in writing before she commits. @Charlie she’s adding a roommate within six months and wants the steps in writing.', files:[]},
       {type:'Tenant Contact', date:'09/10/25 02:15 PM', category:'Leasing', user:'Erin Caldwell',
        note:'Called about adding her sister to the lease sometime after the new year. Walked her through it at a high level: application and screening for the new occupant, then a lease amendment, and the deposit recalculated at two occupants. She asked for it in writing.', files:[]},
       {type:'Billing', date:'09/10/25 09:12 AM', category:'Receivables', user:'Erin Caldwell',
@@ -105,7 +105,7 @@ var ENTITIES = {
     balance: '640.00',
     notes: [
       {type:'Payment Setup', date:'09/10/25 06:30 AM', category:'Payables', user:'Corinne Vaughn',
-       note:'flagging @Tony, they want autopay set up before next visit.', files:[]},
+       note:'flagging @Charlie, they want autopay set up before next visit.', files:[]},
       {type:'Service Visit', date:'08/28/25 01:15 PM', category:'Maintenance', user:'Grace Whitaker',
        note:'Quarterly treatment completed at Flagstone. Invoice 8841 received.', files:['inv_8841.pdf']},
       {type:'Contract', date:'01/15/25 08:00 AM', category:'<Unassigned>', user:'Laura Bennett',
@@ -123,7 +123,7 @@ var ENTITIES = {
     ],
     notes: [
       {type:'Quote', date:'09/10/25 11:05 AM', category:'Leasing', user:'Kelsey Warner',
-       note:'She wants to see the unit priced with the covered space in the rent, not as a separate line. @Tony Nicole wants the quote repriced with the covered parking space included. Can you add it?', files:[]},
+       note:'She wants to see the unit priced with the covered space in the rent, not as a separate line. @Charlie Nicole wants the quote repriced with the covered parking space included. Can you add it?', files:[]},
       {type:'Showing', date:'09/09/25 04:30 PM', category:'Leasing', user:'Kelsey Warner',
        note:'Toured #212. Liked the unit, asked twice about covered parking. She leaves for a job site before six and does not want to scrape in the winter. One garage space is open at $45.', files:[]},
       {type:'Quote', date:'09/09/25 02:10 PM', category:'Leasing', user:'Kelsey Warner',
@@ -144,7 +144,7 @@ var ENTITIES = {
     ],
     notes: [
       {type:'Lead Transfer', date:'09/10/25 09:20 AM', category:'Leasing', user:'Derek Shaw',
-       note:'Flagstone has no dog run and the nearest park is a fifteen minute drive. Brookside has the fenced run off the south lot. @Tony she really wants a dog park, and nothing at Flagstone fits. Can you move the lead to Brookside?', files:[]},
+       note:'Flagstone has no dog run and the nearest park is a fifteen minute drive. Brookside has the fenced run off the south lot. @Charlie she really wants a dog park, and nothing at Flagstone fits. Can you move the lead to Brookside?', files:[]},
       {type:'Prospect Contact', date:'09/09/25 05:40 PM', category:'Leasing', user:'Derek Shaw',
        note:'Followed up after the tour. She was straight about it: the dog run is the deciding factor, two large dogs, and she will keep looking without one.', files:[]},
       {type:'Showing', date:'09/09/25 10:00 AM', category:'Leasing', user:'Derek Shaw',
@@ -167,7 +167,7 @@ var ENTITIES = {
     balance: '0.00',
     notes: [
       {type:'Pet Request', date:'09/11/25 08:50 AM', category:'Leasing', user:'Nathan Cole',
-       note:'Vet records and the renter’s policy are attached. @Tony he wants to get a dog, a 40lb lab mix. Pet addendum or do we need the deposit first?', files:['vaccination_record.pdf','renters_policy.pdf']},
+       note:'Vet records and the renter’s policy are attached. @Charlie he wants to get a dog, a 40lb lab mix. Pet addendum or do we need the deposit first?', files:['vaccination_record.pdf','renters_policy.pdf']},
       {type:'Tenant Contact', date:'09/10/25 04:20 PM', category:'Leasing', user:'Nathan Cole',
        note:'Came into the office about adding a dog, a two year old lab mix, about 40lb, from the shelter on Vine. Told him the breed is fine and the weight is under the limit, and that we would need vet records and proof of renter’s insurance listing the dog.', files:[]},
       {type:'Lease', date:'07/01/25 10:00 AM', category:'Leasing', user:'Paige Sullivan',
@@ -187,7 +187,7 @@ var ENTITIES = {
     balance: '0.00',
     notes: [
       {type:'Management Agreement', date:'09/10/25 01:30 PM', category:'<Unassigned>', user:'Brian Hollis',
-       note:'She wants it ready to sign the week she closes, so rents can be collected in October. @Tony she closes on the Westbrook fourplex on the 30th and wants the management agreement started.', files:[]},
+       note:'She wants it ready to sign the week she closes, so rents can be collected in October. @Charlie she closes on the Westbrook fourplex on the 30th and wants the management agreement started.', files:[]},
       {type:'Owner Contact', date:'09/10/25 11:45 AM', category:'<Unassigned>', user:'Brian Hollis',
        note:'Called to say the Westbrook Ave fourplex is under contract, closing 09/30. Four units, three occupied, currently self-managed. She wants us on it from day one, same terms as her other two.', files:[]},
       {type:'Statement', date:'09/01/25 06:00 AM', category:'<Unassigned>', user:'Erin Caldwell',
@@ -214,7 +214,7 @@ function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&
 /* An @tag renders as an outlined pill carrying the person's name, with no
    "@" left showing -- orange when it is you, blue when it is anyone else.
    Emma's call, 2026-09-10, off a screenshot of the real product. */
-function isMe(name){ return name === ME || name === 'Tony'; }
+function isMe(name){ return name === ME || name === 'Charlie'; }
 function chipHTML(name){
   return '<span class="hn-at ' + (isMe(name) ? 'hn-at--me' : 'hn-at--other') +
          '" contenteditable="false" data-name="' + esc(name) + '">' + esc(name) + '</span>';
@@ -246,12 +246,12 @@ function taggableUsers(){
 }
 /* A note is stored as plain text with "@Name" in it, so it reads the same in
    the register, in the field and in the data. Only names we know become
-   chips; a stray "@" stays text rather than posing as a person. "Tony" stays
+   chips; a stray "@" stays text rather than posing as a person. "Charlie" stays
    as a short alias for the signed-in user, since the seeded mentions use it.
-   Longest first, so "@Tony Little" is not eaten by "@Tony". */
+   Longest first, so "@Charlie Little" is not eaten by "@Charlie". */
 function knownNames(){
   return taggableUsers().map(function(u){ return u.name; })
-    .concat(['Tony'])
+    .concat(['Charlie'])
     .sort(function(a,b){ return b.length - a.length; });
 }
 function withMentions(text){

@@ -3394,6 +3394,29 @@ with no name clipped, and at 1000, where everything shrinks together and Tasks
 is still the widest at 214px. Zero overflow at both.
 
 
+## The signed-in user is Charlie Apegian
+
+Emma's call, 2026-09-15, replacing Tony Little. It reaches the app bar avatar on
+all three screens (**CA**), the Workspace greeting, every `@Charlie` mention,
+the Assigned To field, the register's own avatars, the claim rule, and the
+mention chip's own-vs-other colour in both the History tile and the History /
+Notes overlay.
+
+Done by **renaming the existing user rather than adding one**: the key, name and
+initials changed on the record that was already there, so every assignment,
+mention and history entry kept pointing at the same person and nothing had to be
+re-pointed. `MY_ROLES` is untouched, so Charlie is still a Bookkeeper and Scene
+3's claim still works.
+
+**The name was already taken.** Charlie Apegian was the *tenant* on "Apply the
+new move-in credit", which is the record Scene 1's mention is about. Left alone,
+that scene would have read as Charlie asking Charlie to confirm whether Charlie
+applies for the credit. The tenant is **Dana Whitcomb** now, and the scene reads
+the way it did before: someone asking the signed-in user about a resident. It is
+the one thing changed here that was not asked for, and it is a single name if it
+should be something else.
+
+
 # Worth raising with the design system
 
 Found while building these two screens, verified against the live libraries,
