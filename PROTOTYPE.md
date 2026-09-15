@@ -3186,6 +3186,29 @@ what you call it afterwards, and the first letter is capitalised.
 Trailing filler is left alone. Guessing where a sentence stops being a name does
 more harm than the tidy is worth, and the field is editable.
 
+**And no length cap.** The first version sliced the name at 60 characters, a
+number nothing asked for, which cut "as of the third of this month" off at
+"this". A name that reads broken is worse than one that reads long. Fixed
+2026-09-15.
+
+### Two bugs the day-token dropdown turned up
+
+Both mine, both from the same round on 2026-09-14, and both worth recording
+because neither announced itself.
+
+**`ordinal()` was declared twice.** The file had one returning number and suffix
+together, "3rd", used by the day presets. The explanation's dynamic note needed
+the suffix alone, and the helper written for it was called `ordinal()` too.
+Declared second, it replaced the first, and every day preset lost its number:
+the dropdown read "st of this month", "rd of this month", and the applied token
+read "rd of this month". No error, just a list of suffixes. The suffix-only one
+is `ordinalSuffix()` now.
+
+**Quick Filters start closed.** The frame draws the band open and that is what
+it shipped as, but the register is the thing being looked at and the band pushes
+it down the page. Opening it is one click and the link says so. Emma's call,
+2026-09-15.
+
 ### Beat 3, the System Filter
 
 Save Filter's Visibility gained a third option, **All Users**, because "Save As

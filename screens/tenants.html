@@ -1683,7 +1683,10 @@ let state = {
      filtered by, and they only meet when Apply is pressed. Without the split,
      picking a property would filter the list from under you before you had
      finished choosing. Emma's call, 2026-09-14. */
-  qfBandOpen: true,
+  /* Closed by default. The frame draws the band open, but the register is what
+     people look at and the band pushes it down; opening it is one click and
+     the link says so. Emma's call, 2026-09-15. */
+  qfBandOpen: false,
   qfDraft:   { properties: [], color: "Any", balance: "" },
   qfApplied: { properties: [], color: "Any", balance: "" },
   savedFilters: [],
@@ -1911,7 +1914,7 @@ function explainRows(items){
 function dynamicNote(c){
   if (c.field === 'asOf') {
     const from = c.day === 'today' ? 'today' :
-                 'the ' + c.day + ordinal(c.day) + ' of this month';
+                 'the ' + c.day + ordinalSuffix(c.day) + ' of this month';
     return 'Resolved from \u201c' + from + '\u201d to ' + c.value +
            '. It resolves again every time the filter runs, so this stays the ' +
            (c.day === 'today' ? 'current date' : 'current month') + ' rather than freezing on today\u2019s.';
@@ -1922,7 +1925,12 @@ function dynamicNote(c){
   }
   return '';
 }
-function ordinal(n){
+/* The suffix on its own, for sentences that already have the number in them.
+   Named apart from ordinal() above, which returns number and suffix together:
+   this was called ordinal() too, and being declared second it replaced that
+   one, so every day preset lost its number and the list read "st of this
+   month", "rd of this month". Found 2026-09-15. */
+function ordinalSuffix(n){
   const v = Number(n) % 100;
   if (v >= 11 && v <= 13) return 'th';
   return ['th','st','nd','rd'][Math.min(Number(n) % 10, 4)] || 'th';
@@ -2539,13 +2547,17 @@ function openSaveModal(){
    tenants delinquent..." is how you ask for something and not what you call it
    afterwards, and the first letter is capitalised. Trailing filler like "yet"
    is left alone; guessing at where a sentence stops being a name does more harm
-   than the tidy is worth. */
+   than the tidy is worth.
+
+   No length cap. There was a .slice(0, 60), a number nothing asked for, and it
+   cut "as of the third of this month" off at "this": a name that reads broken,
+   which is worse than a long one. If a request is long the name is long, and
+   the field is editable. Emma spotted it, 2026-09-15. */
 function nameFromRequest(text){
   return String(text || "")
     .trim()
     .replace(/^(show me|show|find me|find|list|give me|get me)\s+/i, "")
-    .replace(/^(\w)/, function(m){ return m.toUpperCase(); })
-    .slice(0, 60);
+    .replace(/^(\w)/, function(m){ return m.toUpperCase(); });
 }
 
 function d_openSaveModal(){
