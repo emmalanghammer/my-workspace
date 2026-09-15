@@ -2859,6 +2859,25 @@ task's own History: `Bookkeeper notified: "Process any open/aged payables" is
 theirs now`, stamped with that role's avatar. The scene's claim is now visible
 on the thing the scene is about.
 
+**The queue is named as a mention.** `@Accountant notified: "Reconcile bank
+accounts and trust accounts" is theirs now`. Whoever is in that role reads the
+record to find out it is their turn, and a mention is what that looks like
+everywhere else on this screen. Emma's call, 2026-09-15.
+
+Making that render took three changes, all of them closing the same gap:
+
+- **Roles are mentionable.** They travel to the History / Notes overlay
+  alongside the people, so it knows what `@Accountant` is. Without them the
+  overlay printed it as text while the tile beside it drew a chip.
+- **The tile draws chips.** It was printing mentions as plain text, so the
+  identical note read as two different things depending on which view you had
+  open. It shares the overlay's `.hn-at` classes rather than growing a second
+  definition of what a mention looks like.
+- **The overlay reads the modal's draft**, not the saved task. Ticking an item
+  writes the System note into `state.modalHistory`, and the overlay was building
+  from `t.history`: the tile showed the note and the overlay opened without it,
+  until you saved. The two now show the same five entries in the same order.
+
 Three things it deliberately does not do:
 
 - **Nothing on the last item.** Completing the final item hands the task to

@@ -2607,6 +2607,30 @@ function dismissLinkPanels(e){
 document.addEventListener('click', dismissLinkPanels);
 
 /* ---- History / Notes tile ---- */
+/* The same chips the History / Notes overlay draws, on the modal's own History
+   tile. They were plain text here and chips there, so the identical note read
+   as two different things depending on which one you had open. Emma's call,
+   2026-09-15. Shares the overlay's classes, `.hn-at`, since
+   assets/history-notes.css is already loaded on this page: one definition of
+   what a mention looks like rather than a second that can drift.
+
+   Roles are mentionable alongside people. A task handed to Bookkeeper is handed
+   to a queue, and the queue is the thing worth naming. */
+function mentionNames(){
+  return USERS.map(u => u.name)
+    .concat(ROLES.map(r => r.name), ['Tony'])
+    .sort((a, b) => b.length - a.length);
+}
+function withMentionChips(text){
+  let out = String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const meName = assigneeName(ME_KEY);
+  mentionNames().forEach(function(n){
+    const cls = (n === meName || n === 'Tony') ? 'hn-at hn-at--me' : 'hn-at hn-at--other';
+    out = out.split('@' + n).join('<span class="' + cls + '">' + n + '</span>');
+  });
+  return out;
+}
+
 function renderModalHistory(){
   const body = document.getElementById('historyBody');
   const empty = document.getElementById('historyEmpty');
@@ -2625,7 +2649,7 @@ function renderModalHistory(){
     <tr>
       <td>${String(r.date).split(' ')[0]}</td>
       <td>${r.type}</td>
-      <td><div class="hn-note-cell"><span class="hn-avatar">${assigneeInitials(r.avatar)}</span>${r.text}</div></td>
+      <td><div class="hn-note-cell"><span class="hn-avatar">${assigneeInitials(r.avatar)}</span>${withMentionChips(r.text)}</div></td>
     </tr>`).join('');
 }
 
@@ -2649,13 +2673,22 @@ function taskHistoryRecord(t){
     name: t.title,
     /* This screen owns the list of who exists, so it hands it over rather
        than letting the overlay fall back to its own copy. */
-    users: USERS.map(u => ({ initials:u.initials, name:u.name, uname:u.uname })),
+    /* Roles travel with the people. Without them the overlay has no idea what
+       "@Accountant" is and prints it as text, while the tile beside it draws a
+       chip: the same note, two renderings. */
+    users: USERS.map(u => ({ initials:u.initials, name:u.name, uname:u.uname }))
+      .concat(ROLES.map(r => ({ initials:r.initials, name:r.name, uname:r.key }))),
     /* Only what the task is linked to. The Scoreboard names the record you
        are looking at, and a workflow is not a record -- it was sitting there
        wearing a building icon and reading like one. Emma's call,
        2026-09-11. */
     items: linked,
-    notes: (t.history || []).map(h => ({
+    /* The modal's draft, not the saved task, whenever this is the task the
+       modal has open. Ticking a checklist item writes a System note into
+       state.modalHistory, and reading t.history here meant the tile showed that
+       note and the overlay opened without it: the same record, two answers,
+       until you saved. Emma's call, 2026-09-15. */
+    notes: ((state.modalTask && state.modalTask.id === t.id ? state.modalHistory : t.history) || []).map(h => ({
       type: h.type, date: h.date, category: '<Unassigned>',
       user: assigneeName(h.avatar), note: h.text, files: []
     }))
@@ -2783,7 +2816,10 @@ function noteHandOff(before, after, items){
                two(stamp.getMinutes()) + ' ' + ap;
   state.modalHistory = [{
     date: when, type: 'System', avatar: nowKey,
-    text: assigneeName(nowKey) + ' notified: "' + next.text + '" is theirs now'
+    /* The queue is named as a mention, not as prose. Whoever is in that role
+       reads the record to find out it is their turn, and a mention is what that
+       looks like everywhere else on this screen. Emma's call, 2026-09-15. */
+    text: '@' + assigneeName(nowKey) + ' notified: "' + next.text + '" is theirs now'
   }].concat(state.modalHistory || []);
   renderModalHistory();
 }
