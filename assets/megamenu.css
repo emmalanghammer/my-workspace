@@ -39,6 +39,7 @@
   justify-content: center;
   padding: 56px 24px 24px;
 }
+.megamenu-overlay[hidden] { display: none; }
 .megamenu {
   --mm-blue: #0071AA;
   background: var(--background-card, #ffffff);
