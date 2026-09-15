@@ -3250,6 +3250,62 @@ the word "Attachments" with no text set in it. Nothing was invented to fill it,
 so the prototype has no control there.
 
 
+## A link is removable unless an action is addressing it
+
+Emma's call, 2026-09-15. Links carried a hand-set `removable` flag, so which
+ones had an X was decided when the data was typed and had drifted: the Unit on
+"Approve carpet vendor quote" could not be removed for no reason anyone could
+give.
+
+Whether a link can be taken off is not a fact about the link. It is a fact about
+whether a communication action is addressed to that record. Publishing a
+document to Daniel Smith **is** a link to Daniel Smith, and removing it would
+leave an action addressed to nobody. So:
+
+- Every link has an X, **except** the one the current action names.
+- The action's record **shows in the Links tile** even when nobody added it by
+  hand. That half was missing entirely: the action named a tenant and the tile
+  said nothing about them.
+- It counts against "one link of each type", so you cannot add a second Tenant
+  beside the one the action already named.
+- It is derived, not stored, so clearing the action clears the row and the two
+  can never disagree.
+
+The 19 `removable` flags are gone from the data.
+
+**One bug found while wiring it.** `renderActionArea` returns early when there
+is no action, so the call to redraw the Links tile had to go above that return,
+not at the end: clearing an action takes the early branch, and that is exactly
+when the tile most needs to lose the row.
+
+## The register fits without scrolling
+
+Emma's call, 2026-09-15: every column visible, no horizontal scroll, and the
+Tasks column takes the slack.
+
+Nine fixed pixel columns added up to 988 and the register is often narrower, so
+Tasks collapsed to nothing and the rest hung off the edge under a scrollbar. The
+columns are percentages now, each one its width in the frame over the frame's
+own 1388, so the design's proportions are kept and they stretch. Tasks stays
+`auto` and takes whatever the other nine leave.
+
+Four columns keep their pixels: the three icon columns, each holding a 20px
+glyph inside 8px of padding so 36px is the floor, and Claim, which holds a
+button with a fixed label. A percentage of a narrow register falls under both.
+
+Two things that did not work, recorded so they are not tried again:
+
+- **`min(px, %)`** is the obvious answer and is silently dropped in a
+  `table-layout: fixed` column. It showed up as ten equal 79px columns.
+- The **last column's resize grip** sits on the table's right edge and hangs two
+  pixels past it, which was the entire remaining overflow once the columns fit.
+  It has nothing to its right to resize against, so it is not drawn.
+
+Measured at 1440, where every column gets its design width and Tasks is 401px
+with no name clipped, and at 1000, where everything shrinks together and Tasks
+is still the widest at 214px. Zero overflow at both.
+
+
 # Worth raising with the design system
 
 Found while building these two screens, verified against the live libraries,

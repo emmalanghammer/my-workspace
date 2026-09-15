@@ -133,6 +133,9 @@
      was 270px for three 24px bubbles. Each width below is the widest real
      value in this prototype's data plus the cell's 16px of padding, so the
      register fits without cutting anything off. Emma's call, 2026-09-11. */
+  /* Widths measured off the frame. They are what each column gets when there is
+     room; the Tasks column takes the remainder, and below about 1100px the
+     whole table shrinks proportionally rather than scrolling. */
   --col-check-w: 40px; --col-color-w: 26px; --col-task-w: 400px; --col-action-w: 200px;
   --col-due-w: 158px; --col-assigned-w: 116px; --col-link-w: 168px; --col-workflow-w: 156px;
   --col-claim-w: 84px; --col-kebab-w: 40px;
@@ -360,9 +363,19 @@ a:hover { text-decoration:none; }
    holds; Tasks takes whatever is left, so a wide window has no dead strip
    down its right-hand side and a narrow one still scrolls rather than
    crushing anything. Emma's call, 2026-09-11. */
-.task-register{width:100%;min-width:calc(var(--col-check-w) + var(--col-color-w) + var(--col-task-w) + var(--col-action-w) + var(--col-due-w) + var(--col-assigned-w) + var(--col-link-w) + var(--col-workflow-w) + var(--col-claim-w) + var(--col-kebab-w));border-collapse:collapse;background:var(--bg-surface);table-layout:fixed;}
+/* No min-width. Every column shows at whatever width the page has, and the
+   Tasks column takes the slack: the register is read far more often than any
+   one column is read precisely, so losing a few characters off a workflow name
+   costs less than a horizontal scrollbar under every row. Emma's call,
+   2026-09-15. table-layout:fixed is what makes that work, since it sizes from
+   the first row rather than from the longest cell anywhere below. */
+.task-register{width:100%;border-collapse:collapse;background:var(--bg-surface);table-layout:fixed;}
 .task-register th{position:relative;height:28px;background:var(--register-header);font-size:12.6px;font-weight:500;letter-spacing:1.1px;color:#fff;text-align:left;padding:4px 8px;border-right:0.5px solid rgba(255,255,255,.5);}
 .task-register th:last-child{border-right:none;}
+/* The last column's resize grip sits on the table's right edge and hangs two
+   pixels past it, which is the whole of the leftover overflow now that the
+   columns fit. It has nothing to its right to resize against either. */
+.task-register th:last-child .col-resize-handle{display:none;}
 .task-register th .material-symbols-outlined{font-size:16px;color:#fff;vertical-align:-3px;}
 .th-label{display:flex;align-items:center;gap:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .col-resize-handle{position:absolute;top:0;right:-3px;bottom:0;width:7px;cursor:col-resize;z-index:2;}
@@ -376,18 +389,40 @@ a:hover { text-decoration:none; }
 .task-register tr:hover td{background:var(--bg-subtle);}
 .task-register tr.child-row td{background:#fbfcfd;}
 .task-register tr.child-row:hover td{background:var(--bg-subtle);}
+/* Percentages, so every column shrinks together rather than the table
+   overflowing, and Tasks is left `auto` to take whatever the other nine do not.
+   Each share is that column's width in the frame over the frame's own 1388, so
+   the proportions are the design's; they just stretch now.
+
+   Pixels are what was forcing the horizontal scrollbar: nine fixed columns add
+   up to 988 and the register is often narrower than that, which left Tasks at
+   0 and the rest hanging off the edge. `min(px, %)` was the obvious fix and
+   does not work here: a percentage inside min() does not resolve in a
+   table-layout:fixed column, and the whole rule is dropped, which showed up as
+   ten equal 79px columns. Emma's call, 2026-09-15.
+
+   The icon columns and Claim keep their pixels. Each holds a 20px glyph inside 8px
+   of padding either side, so 36px is the floor, and a percentage of a narrow
+   register falls under it: at 615px the kebab came out 23px wide and its
+   more_vert pushed three pixels past the edge, which is a scrollbar for the
+   sake of three pixels. Mixing the two is fine here, since fixed layout gives
+   pixel columns their width, percentage columns their share, and Tasks the
+   remainder. Claim is pixels for the same reason: it holds a button with a
+   fixed label, and a percentage of a narrow register cuts the word in half. */
 .col-check{width:var(--col-check-w);}
 .col-color{width:var(--col-color-w);padding:0 8px!important;}
-.col-task{width:auto;min-width:var(--col-task-w);}
-.col-action{width:var(--col-action-w);}
-.col-due{width:var(--col-due-w);}
+/* auto with no minimum: this is the column that absorbs whatever is left, and
+   a minimum on it is what was forcing the scroll. */
+.col-task{width:auto;}
+.col-action{width:14.41%;}
+.col-due{width:11.38%;}
 /* The bubbles centre in their column, header included. Emma's call,
    2026-09-11. */
-.col-assigned{width:var(--col-assigned-w);text-align:center;}
+.col-assigned{width:8.36%;text-align:center;}
 .task-register th.col-assigned{text-align:center;}
 .col-assigned .avatars{justify-content:center;}
-.col-link{width:var(--col-link-w);}
-.col-workflow{width:var(--col-workflow-w);}
+.col-link{width:12.1%;}
+.col-workflow{width:11.24%;}
 .col-claim{width:var(--col-claim-w);text-align:center;}
 .col-kebab{width:var(--col-kebab-w);text-align:center;}
 .row-color-bar{display:block;width:10px;height:36px;}
@@ -454,7 +489,7 @@ a:hover { text-decoration:none; }
 .qf-linktype{color:var(--rmx-blue);cursor:pointer;}
 .qf-buttons{display:flex;align-items:center;gap:16px;margin-left:auto;}
 .qf-panel .field>label{display:flex;align-items:center;gap:4px;}
-.register-wrap{border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);overflow-x:auto;overflow-y:hidden;}
+.register-wrap{border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);overflow-x:hidden;overflow-y:hidden;}
 
 /* Chips (Select Users overlay) */
 .userlist-box{max-height:200px;overflow-y:auto;background:var(--bg-subtle);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);padding:4px 12px;}
@@ -1219,8 +1254,8 @@ const COMMUNICATION_ACTION_DEMOS = {
 // Links + History/Notes shown on the "Approve Daniel for Pet" Task Details example
 // (node 3502:94964, "2.2.5 Task Details - Desktop" -- the only task this feature's mock populates these for).
 const PET_LINKS = () => ([
-  {label:'Tenant', value:'Daniel Smith', removable:false},
-  {label:'Unit', value:'107B', removable:true},
+  {label:'Tenant', value:'Daniel Smith'},
+  {label:'Unit', value:'107B'},
 ]);
 const PET_HISTORY = () => ([
   {date:'08/08/25', type:'System', avatar:'tlittle', text:'Tony Little claimed task'},
@@ -1262,15 +1297,15 @@ let myOwnTasks = [
   { id:'ws-post-notice', title:"Post 3-day notice for Flagstone Lot 3", flag:true, colorBar:'red', completed:false,
     action:null, actionDetails:null, dueDate:'09/04/26', dueTime:'09:00 AM', overdue:true,
     assigned:['tlittle'], link:"Patrick O'Malley", linkOverflow:0, workflow:'Eviction',
-    checklist:[], externalCal:false, links:[{label:'Tenant', value:"Patrick O'Malley", removable:false}] },
+    checklist:[], externalCal:false, links:[{label:'Tenant', value:"Patrick O'Malley"}] },
   { id:'ws-carpet-vendor', title:'Approve carpet vendor quote', flag:false, colorBar:'green', completed:false,
     action:null, actionDetails:null, dueDate:'09/08/26', dueTime:'05:00 PM', overdue:true,
     assigned:['tlittle'], link:'Riverview #204', linkOverflow:0, workflow:'Unit Renovation',
-    checklist:[], externalCal:false, links:[{label:'Unit', value:'Riverview #204', removable:false}] },
+    checklist:[], externalCal:false, links:[{label:'Unit', value:'Riverview #204'}] },
   { id:'ws-hvac-scope', title:'Sign off on Brookside HVAC scope', flag:false, colorBar:'orange', completed:false,
     action:null, actionDetails:null, dueDate:'09/14/26', dueTime:'05:00 PM', overdue:false,
     assigned:['tlittle'], link:'Anderson Mechanical', linkOverflow:0, workflow:'Vendor',
-    checklist:[], externalCal:false, links:[{label:'Vendor', value:'Anderson Mechanical', removable:false}] },
+    checklist:[], externalCal:false, links:[{label:'Vendor', value:'Anderson Mechanical'}] },
 ];
 
 // My Tasks dataset (screenshots 03/04/05 + the "Approve Daniel for Pet" demo row from screenshot 08)
@@ -1297,8 +1332,8 @@ let myTasks = [
        than at a checklist nobody has touched. Emma's call, 2026-09-14. */
     assigned:['role-bookkeeper'], link:'Riverview Apartments', linkOverflow:1, workflow:'Month End',
     showProgress:true, externalCal:false,
-    links:[{label:'Property', value:'Riverview Apartments', removable:false},
-           {label:'Owner',    value:'M. Whitfield Properties LLC', removable:true}],
+    links:[{label:'Property', value:'Riverview Apartments'},
+           {label:'Owner',    value:'M. Whitfield Properties LLC'}],
     checklist:[
       {text:'Review monthly charges and payments',          assigned:['role-pm'],         done:true, doneDate:'09/10/26 09:15 AM'},
       {text:'Process any open/aged payables',               assigned:['role-bookkeeper'], done:false},
@@ -1326,7 +1361,7 @@ let myTasks = [
     action:null, actionDetails:null, dueDate:'09/19/26', dueTime:'09:00 AM', overdue:false,
     assigned:['tlittle'], link:'Charlie Apegian', linkOverflow:0, workflow:'Leasing',
     checklist:[], externalCal:false,
-    links:[{label:'Tenant', value:'Charlie Apegian', removable:false}],
+    links:[{label:'Tenant', value:'Charlie Apegian'}],
     history:[
       {date:'09/11/26 09:40 AM', type:'Note', avatar:'ncole',
        text:'@Tony Can you confirm the resident applies for the new move in credit?'},
@@ -1340,24 +1375,24 @@ let myTasks = [
     action:null, actionDetails:null, dueDate:'09/23/26', dueTime:'12:00 PM', overdue:false,
     assigned:['role-bookkeeper'], link:'Julia Kessler', linkOverflow:0, workflow:'Onboarding',
     checklist:[], externalCal:false,
-    links:[{label:'Owner', value:'Julia Kessler', removable:false}] },
+    links:[{label:'Owner', value:'Julia Kessler'}] },
   { id:'t-receipts', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:true,
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/17/26', dueTime:'10:00 AM', overdue:false,
     assigned:['tlittle'], link:"Patrick O'Malley", linkOverflow:1, workflow:'',
-    checklist: PET_CHECKLIST(), externalCal:true, links:[{label:'Tenant', value:"Patrick O'Malley", removable:false}] },
+    checklist: PET_CHECKLIST(), externalCal:true, links:[{label:'Tenant', value:"Patrick O'Malley"}] },
 ];
 
 // Other Users' Tasks dataset (screenshot 10), fixed, per simplification #5 above.
 let otherTasks = [
   { id:'o1', title:'Send an email to Daniel', flag:true, colorBar:'red', completed:false,
     action:'Send Email', actionDetails:null, dueDate:'09/23/26', dueTime:'09:30 AM', overdue:false,
-    assigned:['gwhitaker'], link:'Daniel Smith', linkOverflow:0, workflow:'', checklist:[], links:[{label:'Tenant', value:'Daniel Smith', removable:false}] },
+    assigned:['gwhitaker'], link:'Daniel Smith', linkOverflow:0, workflow:'', checklist:[], links:[{label:'Tenant', value:'Daniel Smith'}] },
   { id:'o2', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/18/26', dueTime:'10:00 AM', overdue:false,
     assigned:['jreeves'], link:'', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o4', title:'Close completed service ticket', flag:false, colorBar:'green', completed:false,
     action:null, actionDetails:null, dueDate:'09/24/26', dueTime:'02:00 PM', overdue:false,
-    assigned:['mdoyle'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', checklist:[], links:[{label:'Unit', value:'HH - 1102', removable:false}] },
+    assigned:['mdoyle'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', checklist:[], links:[{label:'Unit', value:'HH - 1102'}] },
   { id:'o5', title:'Distribute payments to owners', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/29/26', dueTime:'08:30 AM', overdue:false,
     assigned:['bhollis','dshaw','psullivan','tnolan'], link:'', linkOverflow:0, workflow:'', checklist:[] },
@@ -1365,13 +1400,13 @@ let otherTasks = [
     action:'View Issues', actionDetails:null, dueDate:'08/01/26', dueTime:'09:30 AM', overdue:true,
     assigned:['lbennett'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
     checklist:[ {text:'Open service issue list', assigned:['ncole'], done:true},
-                {text:'Close all tickets', assigned:['mdoyle','hbrooks'], done:false} ], links:[{label:'Unit', value:'FMHP - 105', removable:false}] },
+                {text:'Close all tickets', assigned:['mdoyle','hbrooks'], done:false} ], links:[{label:'Unit', value:'FMHP - 105'}] },
   { id:'o7', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:false,
     action:null, actionDetails:null, dueDate:'09/30/26', dueTime:'07:30 AM', overdue:false,
-    assigned:['kwarner'], link:"Patrick O'Malley", linkOverflow:1, workflow:'', checklist:[], links:[{label:'Tenant', value:"Patrick O'Malley", removable:false}] },
+    assigned:['kwarner'], link:"Patrick O'Malley", linkOverflow:1, workflow:'', checklist:[], links:[{label:'Tenant', value:"Patrick O'Malley"}] },
   { id:'o8', title:'Review owner details for FMHP', flag:false, colorBar:'blue', completed:false,
     action:'Post Owner Checks', actionDetails:null, dueDate:'07/25/26', dueTime:'07:30 AM', overdue:true,
-    assigned:['tnolan','hbrooks'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', checklist:[], links:[{label:'Unit', value:'FMHP - 106', removable:false}] },
+    assigned:['tnolan','hbrooks'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', checklist:[], links:[{label:'Unit', value:'FMHP - 106'}] },
   /* The same New Vendor Onboarding process as it looks to someone watching
      it rather than working it: Tony found the vendor on the 5th, Dave created
      the account on the 8th, and Chris's step has sat untouched since. The
@@ -1390,14 +1425,14 @@ let otherTasks = [
   { id:'t3', title:"Record Park's records", flag:true, colorBar:null, completed:false,
     action:'Add Journal', actionDetails:null, dueDate:'09/15/26', dueTime:'07:30 AM', overdue:false,
     assigned:['role-pm'], link:'PARK', linkOverflow:0, workflow:'Property Renovation',
-    checklist:[], externalCal:false, links:[{label:'Property', value:'PARK', removable:false}] },
+    checklist:[], externalCal:false, links:[{label:'Property', value:'PARK'}] },
   /* The third task in the Property Manager queue, a claim row and a register
      task like any other, so clicking one opens its real details rather than
      nothing. Emma's call, 2026-09-11. */
   { id:'t-walk-vacant', title:'Walk vacant units at Flagstone before Friday', flag:false, colorBar:'orange', completed:false,
     action:null, actionDetails:null, dueDate:'09/17/26', dueTime:'05:00 PM', overdue:false,
     assigned:['role-pm'], link:'Flagstone Townhomes', linkOverflow:0, workflow:'Leasing',
-    checklist:[], externalCal:false, links:[{label:'Property', value:'Flagstone Townhomes', removable:false}] },
+    checklist:[], externalCal:false, links:[{label:'Property', value:'Flagstone Townhomes'}] },
   /* The task behind the Workspace's first mention. Its History / Notes carries
      the @Tony that mention shows, so clicking the mention lands on this task
      with the overlay already open -- the note is *on the task*, not on the
@@ -1409,7 +1444,7 @@ let otherTasks = [
     dueDate:'09/09/26', dueTime:'05:00 PM', overdue:true,
     assigned:['cdevereaux'], link:'Marcia Clark', linkOverflow:0, workflow:'Leasing',
     showProgress:true, expandChecklist:true, externalCal:false,
-    links:[{label:'Tenant', value:'Marcia Clark', removable:false}],
+    links:[{label:'Tenant', value:'Marcia Clark'}],
     checklist:[
       {text:'Review pet request and vaccination records',   assigned:['lbennett'],        done:true,  doneDate:'09/06/26 11:20 AM'},
       {text:'Regional approval for the breed and weight',   assigned:['gwhitaker'],       done:true,  doneDate:'09/08/26 09:40 AM'},
@@ -2294,6 +2329,11 @@ function renderActionArea(){
   addCard.classList.toggle('hidden', !!state.modalActionLabel || state.actionPicking);
   pickCard.classList.toggle('hidden', !!state.modalActionLabel || !state.actionPicking);
   card.classList.toggle('hidden', !state.modalActionLabel);
+  /* The Links tile shows the record this action is addressed to, so it redraws
+     whenever the action changes. Above the early return below, deliberately:
+     clearing an action takes that branch, and it is exactly when the tile most
+     needs to lose the row. */
+  if (document.getElementById('tileLinksList')) renderModalLinks();
   if(state.modalActionLabel){
     document.getElementById('actionNameLink').textContent = state.modalActionLabel;
   } else {
@@ -2412,6 +2452,10 @@ function onQaddActionClick(e){
    drawn from names already used elsewhere in this prototype's own data
    (myTasks/otherTasks link and vendor fields, My Workspace's task rows),
    nothing invented for this feature specifically. Emma's call, 2026-09-10. */
+/* `removable` is gone from the seeded links. Whether a link can be taken off is
+   not a fact about the link, it is a fact about whether an action is addressing
+   it, so renderModalLinks works it out rather than reading a flag that was set
+   by hand and could be wrong. Emma's call, 2026-09-15. */
 const LINK_TYPES = ['Tenant', 'Unit', 'Property', 'Owner', 'Vendor'];
 
 /* One RMX Iconography glyph per link type, so the History / Notes Scoreboard
@@ -2431,13 +2475,38 @@ const LINK_RECORDS = {
   Vendor: ["Anderson Mechanical", "Bob's Appliances", 'Anderson Pest Control'],
 };
 
+/* The record a communication action is addressed to. Publishing a document to
+   Daniel Smith IS a link to Daniel Smith, so it belongs in this list, and it is
+   the one row you cannot take off: removing it would leave an action addressed
+   to nobody. Everything else is removable. Emma's call, 2026-09-15.
+
+   Derived rather than stored, so clearing the action clears the row with it and
+   the two can never disagree about who the task is about. */
+function actionLink(){
+  const d = state.modalActionDetails;
+  if (!d || !d.tenant) return null;
+  return { label: d.type || 'Tenant', value: d.tenant };
+}
+function isActionLink(l){
+  const a = actionLink();
+  return !!a && a.label === l.label && a.value === l.value;
+}
 function renderModalLinks(){
   const box = document.getElementById('tileLinksList');
-  const rows = state.modalLinks.map((l,i)=>`
+  const a = actionLink();
+  const own = state.modalLinks.map((l,i)=>`
     <div class="tile-link-row">
       <span class="lbl">${l.label}</span><a class="val">${l.value}</a>
-      ${l.removable ? `<span class="material-symbols-outlined close-x" onclick="removeModalLink(${i})">close</span>` : ''}
+      ${isActionLink(l) ? '' : `<span class="material-symbols-outlined close-x" onclick="removeModalLink(${i})">close</span>`}
     </div>`).join('');
+  /* The action's record shows here even when nobody added it by hand, which is
+     the half of this that was missing: the action named a tenant and the Links
+     tile said nothing about them. */
+  const derived = (a && !state.modalLinks.some(isActionLink)) ? `
+    <div class="tile-link-row">
+      <span class="lbl">${a.label}</span><a class="val">${a.value}</a>
+    </div>` : '';
+  const rows = own + derived;
 
   const addRow = state.linkAddOpen ? `
     <div class="link-add-row">
@@ -2490,6 +2559,10 @@ function closeLinkAdd(){
    Vendor. Emma's call, 2026-09-11. */
 function availableLinkTypes(){
   const used = state.modalLinks.map(l => l.label);
+  /* The action's record counts as a link of its type, otherwise you could add a
+     second Tenant next to the one the action already named. */
+  const a = actionLink();
+  if (a && used.indexOf(a.label) === -1) used.push(a.label);
   return LINK_TYPES.filter(t => used.indexOf(t) === -1);
 }
 function openLinkTypeMenu(e){
@@ -2519,7 +2592,7 @@ function onLinkSearchInput(){
   panel.hidden = false;
 }
 function pickLinkRecord(value){
-  state.modalLinks.push({label: state.linkAddType, value, removable: true});
+  state.modalLinks.push({label: state.linkAddType, value});
   document.getElementById('linkResultsPanel').hidden = true;
   closeLinkAdd();
 }
