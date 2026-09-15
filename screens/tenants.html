@@ -162,7 +162,11 @@ a:hover { text-decoration:underline; }
   background-origin:border-box;background-clip:padding-box,border-box;}
 .orion-tag .lozenge-text{color:var(--rmx-navy);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .orion-tag .orion-mark{flex:none;}
-.orion-tag .lozenge-close-icon{color:var(--rmx-blue);flex:none;}
+/* Red, like every other Orion chip's X. The base .lozenge-close-icon rule is
+   already --rmx-red and this was overriding it to blue when the tag was built;
+   the quick filter chips keep their deliberate blue one, which is what tells
+   the two kinds of tag apart at the corner. Emma's call, 2026-09-15. */
+.orion-tag .lozenge-close-icon{color:var(--rmx-red);flex:none;}
 /* On the register the row has the width, so the tag takes what it needs and
    stops at the page rather than at 340px of rail. */
 #appliedRow{gap:12px;}
