@@ -1,3 +1,16 @@
+/* ============================================================
+   Every token below carries its RMX value as a fallback.
+   ------------------------------------------------------------
+   This file is meant to drop into any prototype, and it was reading seven
+   tokens (--background-card, --border-primary, --spacing-lg, --text-inverse,
+   --text-primary, --text-secondary, --type-heading-l-regular) with no fallback
+   at all. On a page that defines them it looked right; on a page that does not,
+   every one of those declarations was invalid and the menu came out with no
+   ground, no hairlines, no heading font and black text where white was meant.
+   Nothing errored, so it read as "the menu is broken" rather than "the host is
+   missing tokens". Values are tokens.css's and type.css's own, so a host that
+   defines them still wins. Found 2026-09-15 on a colleague's copy.
+   ============================================================ */
 /* RMX Mega Menu, shared between screens.
    Real Figma frame (RMX-Pages 5XEzI94nmZsWE7rQQ7OIHP, node 4077:83115),
    trued up against the frame's own SVG export. Lives here rather than in a
@@ -28,7 +41,7 @@
 }
 .megamenu {
   --mm-blue: #0071AA;
-  background: var(--background-card);
+  background: var(--background-card, #ffffff);
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(19, 49, 76, .3);
   width: 100%;
@@ -43,7 +56,7 @@
   align-items: center;
   gap: 32px;
   padding: 14px 20px;
-  border-bottom: 1px solid var(--border-primary);
+  border-bottom: 1px solid var(--border-primary, #cedbe7);
   flex: none;
 }
 /* Brand lockup = the real `Admin Menu Logo` component (RMX-Components
@@ -55,7 +68,7 @@
 .megamenu__brand {
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-lg, 20px);
   flex: none;
 }
 .megamenu__brandmark {
@@ -64,8 +77,8 @@
   flex: none;
 }
 .megamenu__title {
-  font: var(--type-heading-l-regular);
-  color: var(--text-secondary);
+  font: var(--type-heading-l-regular, 400 24px/32px Roboto, sans-serif);
+  color: var(--text-secondary, #13314c);
   white-space: nowrap;
 }
 .megamenu__tabs {
@@ -80,7 +93,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--text-secondary);
+  color: var(--text-secondary, #13314c);
   background: none;
   border: none;
   font: 400 14px/1 'Roboto', sans-serif;
@@ -90,6 +103,14 @@
   text-decoration: none;
 }
 .megamenu__tab:hover { text-decoration: none; }
+/* The menu sizes its own icons. It marks them .rmx-icon and was relying on the
+   host stylesheet's base rule for that class to give them a width and a height;
+   without rmx.css the close button's X rendered at whatever size the SVG felt
+   like, which on the standalone export was enormous. Declared before the tab
+   and footer rules below so those still win on equal specificity.
+   Found while building the standalone export, 2026-09-15. */
+.megamenu-overlay .rmx-icon { width: 20px; height: 20px; flex: none; display: inline-block; fill: currentColor; }
+
 .megamenu__tab .rmx-icon { width: 18px; height: 18px; flex: none; }
 .megamenu__tab--current { cursor: default; }
 .megamenu__close {
@@ -113,7 +134,7 @@
 .megamenu__sidebar {
   width: 200px;
   flex: none;
-  border-right: 1px solid var(--border-primary);
+  border-right: 1px solid var(--border-primary, #cedbe7);
   padding: 8px 0;
   display: flex;
   flex-direction: column;
@@ -138,7 +159,7 @@
 }
 .megamenu__sidebar-item--active {
   background: var(--mm-blue);
-  color: var(--text-inverse);
+  color: var(--text-inverse, #ffffff);
   width: calc(100% + 12px);
 }
 .megamenu__sidebar-item--active::after {
@@ -184,7 +205,7 @@
 .megamenu__item {
   display: block;
   padding: 6px 0;
-  color: var(--text-secondary);
+  color: var(--text-secondary, #13314c);
   font-size: 14px;
   cursor: pointer;
   text-decoration: none;
@@ -197,7 +218,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 10px 20px;
-  border-top: 1px solid var(--border-primary);
+  border-top: 1px solid var(--border-primary, #cedbe7);
   flex-wrap: wrap;
   flex: none;
 }
@@ -210,13 +231,13 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--text-secondary);
+  color: var(--text-secondary, #13314c);
   font-size: 14px;
   cursor: pointer;
 }
 .megamenu__footer-link .rmx-icon { width: 18px; height: 18px; }
 .megamenu__version {
-  color: var(--text-primary);
+  color: var(--text-primary, #666666);
   font-size: 12px;
   flex: none;
 }
@@ -253,7 +274,7 @@
     padding: 0;
     overflow-x: auto;
     border-right: 0;
-    border-bottom: 1px solid var(--border-primary);
+    border-bottom: 1px solid var(--border-primary, #cedbe7);
   }
   .megamenu__sidebar-item { width: auto; flex: none; height: 36px; }
   /* The active row's 12px bleed and corner notch both point into a content
