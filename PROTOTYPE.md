@@ -3218,6 +3218,20 @@ call, 2026-09-14. A band under the toolbar, open by default because the frame
 shows it open, with a **Hide Quick Filters** link beside Exclude Subaccounts
 that becomes **Show** and swaps its eye icon when it is closed.
 
+**The link is its own component**, Show/Hide Filters, RMX Components
+`YhvzfcXOniQJ7xlC8ONzS4` `157:2538`, a two-state set: `State=Show` is
+`visibility` with "Show Quick Filters", `State=Hide` is `visibility_off` with
+"Hide Quick Filters". Harvested 2026-09-15: 24px icon, 8px gap, 14/20 Regular in
+#008DD5. The first pass guessed an 18px icon on a 4px gap.
+
+It also had **no icon at all in the Show state**: `visibility` was never in this
+screen's sprite, only `visibility-off`, so hiding the band left a bare label. It
+is in the sprite now, taken from `assets/icons.svg`.
+
+The 36px height is kept rather than the component's 24, because that is what
+lines the link up with the Exclude Subaccounts checkbox beside it; the component
+is 24 because it is drawn on its own.
+
 | | Harvested |
 |---|---|
 | Ground | `Component/row-selected` #E8F6FA |
