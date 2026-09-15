@@ -419,7 +419,9 @@ a:hover { text-decoration:none; }
 /* The bubbles centre in their column, header included. Emma's call,
    2026-09-11. */
 .col-assigned{width:8.36%;text-align:center;}
-.task-register th.col-assigned{text-align:center;}
+/* text-align does not reach the label, which is a flex row: the avatars in the
+   cells below are centred and the header sat left of them. */
+.task-register th.col-assigned .th-label{justify-content:center;}
 .col-assigned .avatars{justify-content:center;}
 .col-link{width:12.1%;}
 .col-workflow{width:11.24%;}
@@ -778,7 +780,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
   </div>
 
   <div class="rmx-appbar__manage">
-    <div class="rmx-appbar__code"><span>Company Code</span><span>lcs-rmexpress</span></div>
+    <div class="rmx-appbar__code"><span>Company Code</span><span>class60</span></div>
     <div class="rmx-appbar__user">
       <svg class="rmx-icon"><use href="#notifications"></use></svg>
       <span class="rmx-appbar__avatar">TL</span>
