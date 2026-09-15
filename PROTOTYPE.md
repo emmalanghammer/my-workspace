@@ -2889,6 +2889,32 @@ Three things it deliberately does not do:
   already at the top of the history is left alone rather than repeated, which
   is what the first version of this did.
 
+### Scene 4's dates count back from today
+
+Emma's call, 2026-09-15. The scene makes a claim about elapsed time: Chris
+"still hasn't sent the pet letter, three days after regional approved the pet".
+Written as fixed September dates that was true the day it was typed and drifts a
+day further from the truth every day after. Demo it in November and regional
+approved two months ago while the script still says three days.
+
+Pet Approval Process counts back from whenever the prototype is opened:
+
+| | |
+|---|---|
+| Pet request reviewed | 5 days ago |
+| **Regional approved** | **3 days ago**, which is the claim |
+| Pet letter due | 2 days ago, so the task is overdue |
+| Tony's nudge | today |
+
+The note says "Regional signed off three days ago" rather than naming a date,
+for the same reason.
+
+**Only this task.** Everything else keeps its written dates: they are arranging
+a register, not making a claim about how long something has been sitting, so
+relativising them would be churn without a reason. The rest of the demo data
+does drift as the calendar moves, which is worth knowing before a demo far from
+today, and is a bigger question than this scene.
+
 ### Scene 4's nudge
 
 Tony's note on the Pet Approval Process tags `@Chris Devereaux` and says why

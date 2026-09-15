@@ -1308,6 +1308,23 @@ let myOwnTasks = [
     checklist:[], externalCal:false, links:[{label:'Vendor', value:'Anderson Mechanical'}] },
 ];
 
+/* ---- dates that stay true whenever the prototype is opened ----
+   Scene 4 says Chris "still hasn't sent the pet letter, three days after
+   regional approved the pet". Written as fixed September dates that was true
+   on the day it was written and drifts a day further from the truth every day
+   after: demo it in November and regional approved two months ago. So the Pet
+   Approval Process counts back from today instead. Emma's call, 2026-09-15.
+
+   Only that task. Everything else keeps its written dates, because they are
+   not making a claim about elapsed time the way this scene is. */
+function relDate(daysAgo, time){
+  const d = new Date();
+  d.setDate(d.getDate() - daysAgo);
+  const two = n => (n < 10 ? '0' : '') + n;
+  const stamp = two(d.getMonth() + 1) + '/' + two(d.getDate()) + '/' + String(d.getFullYear()).slice(2);
+  return time ? stamp + ' ' + time : stamp;
+}
+
 // My Tasks dataset (screenshots 03/04/05 + the "Approve Daniel for Pet" demo row from screenshot 08)
 let myTasks = [
   ...myOwnTasks,
@@ -1441,14 +1458,16 @@ let otherTasks = [
   { id:'o-pet-approval', title:'Pet Approval Process', flag:false, colorBar:'green', completed:false,
     action:'Publish Signable Documents',
     actionDetails:{templateLabel:'Document Template', type:'Tenant', template:'Pet Lease Agreement', tenant:'Marcia Clark'},
-    dueDate:'09/09/26', dueTime:'05:00 PM', overdue:true,
+    /* Two days overdue, whenever "today" is. */
+    dueDate:relDate(2), dueTime:'05:00 PM', overdue:true,
     assigned:['cdevereaux'], link:'Marcia Clark', linkOverflow:0, workflow:'Leasing',
     showProgress:true, expandChecklist:true, externalCal:false,
     links:[{label:'Tenant', value:'Marcia Clark'}],
     checklist:[
-      {text:'Review pet request and vaccination records',   assigned:['lbennett'],        done:true,  doneDate:'09/06/26 11:20 AM'},
-      {text:'Regional approval for the breed and weight',   assigned:['gwhitaker'],       done:true,  doneDate:'09/08/26 09:40 AM'},
-      {text:'Send the pet letter to the resident',          assigned:['cdevereaux'],      done:false, dueDate:'09/09/26 05:00 PM'},
+      {text:'Review pet request and vaccination records',   assigned:['lbennett'],        done:true,  doneDate:relDate(5, '11:20 AM')},
+      /* The three days the scene is about. */
+      {text:'Regional approval for the breed and weight',   assigned:['gwhitaker'],       done:true,  doneDate:relDate(3, '09:40 AM')},
+      {text:'Send the pet letter to the resident',          assigned:['cdevereaux'],      done:false, dueDate:relDate(2, '05:00 PM')},
       {text:'Add the monthly pet rent to the ledger',       assigned:['role-bookkeeper'], done:false}
     ],
     /* Scene 4's nudge. Oversight is only useful if you can act on it from where
@@ -1457,10 +1476,12 @@ let otherTasks = [
        which is the reason the delay costs anything: the pet rent misses next
        month's charges if the letter is not signed. Emma's script, 2026-09-14. */
     history:[
-      {date:'09/11/26 10:15 AM', type:'Note', avatar:'tlittle',
-       text:'@Chris Devereaux can you get the pet letter out to the resident today? Regional signed off on the 8th. The bookkeeper needs it back before month end so the pet rent lands on next month\'s charges.'},
-      {date:'09/08/26 09:40 AM', type:'System', avatar:'gwhitaker', text:'Regional approved the pet request'},
-      {date:'09/06/26 11:20 AM', type:'System', avatar:'lbennett',  text:'Pet request and vaccination records reviewed'}
+      /* "three days ago" rather than "on the 8th": the sentence has to stay
+         true on the day it is read, not on the day it was typed. */
+      {date:relDate(0, '10:15 AM'), type:'Note', avatar:'tlittle',
+       text:'@Chris Devereaux can you get the pet letter out to the resident today? Regional signed off three days ago. We need it back before month end so we can add the charge for next month.'},
+      {date:relDate(3, '09:40 AM'), type:'System', avatar:'gwhitaker', text:'Regional approved the pet request'},
+      {date:relDate(5, '11:20 AM'), type:'System', avatar:'lbennett',  text:'Pet request and vaccination records reviewed'}
     ] },
 ];
 
