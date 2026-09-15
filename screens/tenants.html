@@ -1701,6 +1701,34 @@ function matched(text, re){
   return m ? m[0] : "";
 }
 
+/* "as of the third of this month", written out. The digit form was the only one
+   parsed, so a sentence a person would actually type dropped the date condition
+   silently and filtered on the balance alone: the same answer for every month,
+   which is the exact failure beat 3 is arguing against. Emma's wording,
+   2026-09-15.
+
+   Returns a match-shaped array so the caller can treat both forms the same. */
+const ORDINAL_WORDS = {
+  first:1, second:2, third:3, fourth:4, fifth:5, sixth:6, seventh:7, eighth:8,
+  ninth:9, tenth:10, eleventh:11, twelfth:12, thirteenth:13, fourteenth:14,
+  fifteenth:15, sixteenth:16, seventeenth:17, eighteenth:18, nineteenth:19,
+  twentieth:20, "twenty-first":21, "twenty first":21, "twenty-second":22,
+  "twenty second":22, "twenty-third":23, "twenty third":23, "twenty-fourth":24,
+  "twenty fourth":24, "twenty-fifth":25, "twenty fifth":25, "twenty-sixth":26,
+  "twenty sixth":26, "twenty-seventh":27, "twenty seventh":27,
+  "twenty-eighth":28, "twenty eighth":28, "twenty-ninth":29, "twenty ninth":29,
+  thirtieth:30, "thirty-first":31, "thirty first":31
+};
+function matchOrdinalWord(t){
+  /* Longest first, so "twenty-third" is not read as "third". */
+  const words = Object.keys(ORDINAL_WORDS).sort((a, b) => b.length - a.length);
+  for (const w of words) {
+    const m = t.match(new RegExp('as of the ' + w.replace(/[-\s]/g, '[-\\s]') + '\\b'));
+    if (m) return [m[0], String(ORDINAL_WORDS[w])];
+  }
+  return null;
+}
+
 function parse(text){
   const t = text.toLowerCase(); const out = [];
   const add = (c) => out.push(Object.assign({id:++uid}, c));
@@ -1715,7 +1743,7 @@ function parse(text){
     const bare = !amount && /balance due|owes|owing|delinquen|past due|arrears|any balance/.test(t);
     add({field:"balance", label:"Balance", op: under?"lt":"gt", value: bare?"0":String(amt), kind:"number",
         why: matched(t, /balance|owe[sd]?|owing|delinquen\w*|past due|arrears|open charges/), matchedField:"Balance"});
-    const dayOfMonth = t.match(/as of the (\d+)(?:st|nd|rd|th)?/);
+    const dayOfMonth = t.match(/as of the (\d+)(?:st|nd|rd|th)?/) || matchOrdinalWord(t);
     if (dayOfMonth) {
       const day = Number(dayOfMonth[1]);
       add({field:"asOf", label:"Balance as of", op:"is", value: resolveDayValue(day), day, kind:"date",
@@ -2801,7 +2829,7 @@ window.__showRegister = function(){
    same parse() every typed prompt goes through, so what is on screen at load is
    a real Orion filter and "How Orion built this" explains it the same way. No
    thinking animation, because nothing was asked in front of anyone. */
-const OPENING_PROMPT = "Tenants with dogs at Riverview";
+const OPENING_PROMPT = "Show tenants that are delinquent on rent as of the third of this month";
 (function openOnTheOrionFilter(){
   state.criteria = toGroups(parse(OPENING_PROMPT));
   state.outerJoin = "and";

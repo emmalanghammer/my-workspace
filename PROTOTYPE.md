@@ -3067,13 +3067,19 @@ differently: the flat white fills the padding box, the gradient fills the border
 box behind it. The alternative, a wrapper element or a pseudo-element, would
 have meant restructuring a panel that four other things position against.
 
-### The register opens on beat 2's filter
+### The register opens on the delinquency filter
 
-Emma's call, 2026-09-14. The Tenant Register loads with **Tenants with dogs at
-Riverview** already built and already applied: the Orion chip row above four
-Riverview rows, 4 of 330. The second beat is the flip, and it lands harder if
-the screen is already showing the answer than if someone has to type the
-sentence before the point can be made.
+Emma's call, 2026-09-15, replacing the Riverview dogs filter it opened on since
+the 14th. The Tenant Register loads with **"Show tenants that are delinquent on
+rent as of the third of this month"** already built and applied.
+
+**Written out, "the third", which the parser could not read.** The only date
+pattern was `as of the (\d+)`, so a sentence anyone would actually type dropped
+the date condition **silently** and filtered on the balance alone. Same answer
+every month, no error, nothing to notice: the exact failure beat 3 exists to
+argue against, sitting in the thing that demonstrates it. The parser reads
+written-out ordinals now, first through thirty-first, longest match first so
+"twenty-third" is not read as "third".
 
 It is built through the same `parse()` every typed prompt goes through, so what
 is on screen at load is a real Orion filter rather than a mock of one, and the
