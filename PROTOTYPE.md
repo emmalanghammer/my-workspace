@@ -3218,6 +3218,38 @@ Closing the band does not reopen the panel. One appearing because you dismissed
 the other is not what dismissing means.
 
 
+## The Attachments box is the real component
+
+Harvested from RMX Components `YhvzfcXOniQJ7xlC8ONzS4` `1718:118742`
+(State=Drag & Drop), Emma's call, 2026-09-15. The Task Details modal had a
+guess at this component rather than this component: a grey cloud icon and three
+separate phrases, "Drag & drop a file, or Upload / Paste".
+
+| | Harvested |
+|---|---|
+| Ground | `Component/input-default` #F5F8FA |
+| Border | 1px #CEDBE7, dashed on an **8/8** pattern |
+| Radius | **2px**, not the 4 the rest of this screen uses |
+| Size | 120 tall, 16px padding, children stacked and centred on a 4px gap |
+| Icon | `cloud upload_outlined`, 32px, Color=Brand #008DD5 |
+| Text | one link, "Drag and drop or browse", 14px #008DD5 |
+
+Two details worth keeping:
+
+- **Radius 2.** Everything else here is `--radius-sm` at 4. The component is
+  specific about this one, so it is 2, and that is a deviation from the visual
+  DNA's "softly squared, 4px on almost everything" worth knowing is deliberate.
+- **The dash is drawn, not bordered.** `border: 1px dashed` produces whatever
+  dash the browser likes, around 2 or 3px in Chrome, and the component says 8/8.
+  It is an inline SVG `stroke-dasharray='8 8'` background instead, with
+  `stroke-width: 2` so the half that falls outside the box is clipped and a 1px
+  line is what shows.
+
+The component's label row also carries a small Link instance to the right of
+the word "Attachments" with no text set in it. Nothing was invented to fill it,
+so the prototype has no control there.
+
+
 # Worth raising with the design system
 
 Found while building these two screens, verified against the live libraries,

@@ -628,9 +628,26 @@ a:hover { text-decoration:none; }
 .link-search-field{flex:1 1 130px;min-width:0;}
 .link-cancel-x{color:var(--rmx-blue);cursor:pointer;font-size:20px;flex:none;}
 .color-swatch{width:14px;height:14px;border-radius:2px;background:#13314c;flex:none;display:inline-block;}
-.uploader{border:1px dashed var(--rmx-hairline);border-radius:var(--r-sm);padding:20px;text-align:center;color:var(--text-primary);font-size:14px;background:var(--bg-subtle);}
-.uploader .material-symbols-outlined{font-size:28px;color:var(--icon-muted);display:block;margin:0 auto 6px;}
-.uploader a{color:var(--rmx-blue);}
+/* Attachments, RMX Components 1718:118742 (State=Drag & Drop). Harvested:
+   content fill #F5F8FA, 1px dashed #CEDBE7 on an 8/8 dash, radius 2 (not the
+   4 everything else here uses, and the component is specific about it), 16px
+   padding, 120 tall, its two children stacked and centred with a 4px gap. The
+   icon is cloud upload_outlined at 32px in Color=Brand, and the line under it
+   is one link, "Drag and drop or browse", 14px in #008DD5.
+   The prototype had a grey icon and three separate phrases, "Drag & drop a
+   file, or Upload / Paste", which was a guess at this component rather than
+   this component. Emma's call, 2026-09-15. */
+.uploader{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  min-height:120px;padding:16px;border:0;border-radius:2px;text-align:center;font-size:14px;line-height:16px;
+  background-color:var(--component-input-default,#f5f8fa);
+  /* The dash is drawn rather than left to `border: dashed`, because the
+     component states 8/8 and a CSS dashed border is whatever the browser
+     feels like, around 2 or 3px here. stroke-width is 2 so that the half of
+     it outside the box is clipped and a 1px line is what shows. */
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' rx='2' ry='2' fill='none' stroke='%23cedbe7' stroke-width='2' stroke-dasharray='8 8'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;}
+.uploader .material-symbols-outlined{font-size:32px;line-height:32px;color:var(--rmx-blue);}
+.uploader a{color:var(--rmx-blue);cursor:pointer;}
 /* The History / Notes register runs flush to the tile, exactly as 3502:94985
    draws it: the tile's content area carries no padding of its own, the header
    row is 32px with 8px of its own and a Border/primary rule under it, and the
@@ -1078,7 +1095,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
             </div>
             <div>
               <label style="font-size:14px;color:var(--text-primary);display:block;margin-bottom:6px;">Attachments</label>
-              <div class="uploader"><span class="material-symbols-outlined">cloud_upload</span>Drag & drop a file, or <a>Upload</a> / <a>Paste</a></div>
+              <div class="uploader"><span class="material-symbols-outlined">cloud_upload</span><a>Drag and drop or browse</a></div>
             </div>
           </div>
         </div>
