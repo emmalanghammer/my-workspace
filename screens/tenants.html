@@ -1684,7 +1684,8 @@ function goToTenant(account){
   window.__showDetails(account, visible, state.applied.length ? {
     chips: state.applied.map(renderChipText),
     prompt: state.rationale || "",
-    criteria: cloneCriteria(state.applied)
+    criteria: cloneCriteria(state.applied),
+    name: appliedFilterName()
   } : null);
 }
 
@@ -2104,6 +2105,26 @@ function renderRegister(){
   headCheck.innerHTML = state.selectMode ? '<span class="sel-check"><svg class="material-symbols-outlined"><use href="#check"></use></svg></span>' : '';
   document.getElementById("selectedLabel").textContent = rowsData.length + " tenants selected";
 }
+/* The name of the saved filter currently applied, or null when what is applied
+   is not one. A saved filter has a name a person chose, and that is a better
+   label than the conditions it expands to: "Delinquent as of the 3rd" is what
+   they called it, "Balance greater than 0 AND as of 09/03/2026" is what it does.
+   The conditions stay in the tooltip, so hovering still answers "what is this
+   actually filtering". Emma's call, 2026-09-15.
+
+   The name only holds while the applied conditions are still the saved ones.
+   Edit a condition and apply it and the tag goes back to describing itself,
+   because a name that no longer matches what is on screen is worse than no
+   name: it is a wrong one. */
+function appliedFilterName(){
+  if (!state.selectedFilter) return null;
+  const f = state.savedFilters.find(x => x.name === state.selectedFilter);
+  if (!f || !f.criteria) return null;
+  const same = JSON.stringify((f.criteria[0] || {}).items || []) ===
+               JSON.stringify((state.applied[0] || {}).items || []);
+  return same ? f.name : null;
+}
+
 function renderFilterUI(){
   /* Quick Filters and Filter with Orion are two ways of narrowing the same
      list, and stacked open they push the register most of the way off the
@@ -2140,10 +2161,11 @@ function renderFilterUI(){
       + '</div>';
   }
   if (state.applied.length && !state.showPanel) {
+    const savedName = appliedFilterName();
     document.getElementById("appliedChips").innerHTML = state.applied.map(g => renderChipText(g)).map(t =>
       '<span class="orion-tag" title="' + escapeHTML(t) + '" onclick="openPanel()">' +
         '<span class="orion-mark sm">' + ORION_ICON_HTML + '</span>' +
-        '<span class="lozenge-text">' + escapeHTML(t) + '</span>' +
+        '<span class="lozenge-text">' + escapeHTML(savedName || t) + '</span>' +
         '<svg class="material-symbols-outlined lozenge-close-icon" onclick="event.stopPropagation();clearAll()"><use href="#close"></use></svg>' +
       '</span>'
     ).join(" ");
@@ -3127,9 +3149,12 @@ function renderNav(list, current){
 function d_orionTagHTML(){
   const f = d_state.orionFilter;
   const text = (f.chips || []).join(" ");
+  /* Same rule as the register's tag: the name people gave it if it still has
+     one, the conditions otherwise, and the conditions in the tooltip either way.
+     Editing the filter here clears the name, in d_applyOrionEdit. */
   return '<span class="orion-tag" title="' + escapeHTML(text) + '" onclick="d_toggleOrionPop(event)">' +
          '<span class="orion-mark sm">' + ORION_ICON_HTML + '</span>' +
-         '<span class="lozenge-text">' + escapeHTML(text) + '</span>' +
+         '<span class="lozenge-text">' + escapeHTML(f.name || text) + '</span>' +
          '<svg class="material-symbols-outlined lozenge-close-icon" onclick="event.stopPropagation();d_clearOrionFilter()"><use href="#close"></use></svg>' +
          '</span>';
 }
@@ -3191,6 +3216,7 @@ function d_applyOrionEdit(){
   d_state.orionFilter.criteria = d_cloneCriteria(d_state.criteria);
   /* The tag says what the filter is, so an edited filter needs an edited tag. */
   d_state.orionFilter.chips = d_state.orionFilter.criteria.map(renderChipText);
+  d_state.orionFilter.name = null;
   d_closeOrionPop();
   d_renderAll();
 }
@@ -3688,7 +3714,7 @@ window.__showDetails = function(account, list, orion){
   if (!list && state.applied.length) {
     list = matches(state.applied).map(r => r.account);
     orion = { chips: state.applied.map(renderChipText), prompt: state.rationale || "",
-              criteria: cloneCriteria(state.applied) };
+              criteria: cloneCriteria(state.applied), name: appliedFilterName() };
   }
   if (list && list.length) d_state.lockedAccounts = new Set(list);
   else d_state.lockedAccounts = null;

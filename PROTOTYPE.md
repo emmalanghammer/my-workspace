@@ -3128,6 +3128,19 @@ filter arrives, exactly as `run()` does on the register. With Current still
 ticked underneath, beat 4's filter about moved-out tenants would have returned
 nobody: the filter would have looked correct and answered wrong.
 
+### A saved filter's tag says its name
+
+Emma's call, 2026-09-15. Once a filter has been saved, the tag reads the name
+the person gave it rather than the conditions it expands to: **Delinquent as of
+the 3rd** instead of **Balance greater than 0 AND as of 09/03/2026**. The
+conditions stay in the tooltip, so hovering still answers "what is this actually
+filtering". Both tags do it, the register's and the Tenants rail's.
+
+**The name only holds while the conditions are still the saved ones.** Edit one
+and apply it and the tag goes back to describing itself. A name that no longer
+matches what is on screen is worse than no name, because it is a wrong one, and
+this is a screen whose whole argument is that you can check the work.
+
 ### The register wears the same tag
 
 Emma's call, 2026-09-14. The register's applied-filter row now draws the same
