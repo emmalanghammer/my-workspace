@@ -58,7 +58,11 @@
 .ows-welcome__greeting,
 .ows-welcome__line {
   margin: 0;
-  color: var(--text-primary);
+  /* Both lines are #575353 in the Figma frame (4969:70317). That hex is
+     bound to no variable and no colour style, so there is no token for
+     it; --text-primary is the near miss at #666666. Literal by request,
+     see PROTOTYPE.md. */
+  color: #575353;
 }
 
 /* ---- the tile row -----------------------------------------
