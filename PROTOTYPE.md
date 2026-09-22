@@ -2485,17 +2485,27 @@ RMX-Pages `4077:83115`, three things were off, not one:
 
 The blue was right all along: `Background/background-megamenu`, #0071AA.
 
-## The tile titles are 16px SemiBold navy
+## The tile titles follow the library, after a year of following the app
 
-Emma's call, 2026-09-11. `Header Style=Workspace` says Heading/M/Regular,
-20px, grey: and every shipped My Workspace tile draws a navy SemiBold title
-nearer 16px. They are `Web/Paragraph/L/SemiBold` in `--text-secondary` now,
-which is a real named style and the same call Emma made on the proposal screen
-long before this one became the site.
+Emma's call, 2026-09-22, reversing her own calls of 2026-09-10 and 2026-09-11.
 
-**Item 4 is still open, and this does not close it.** One of the library and
-the app is wrong about that style; the prototype has now followed the app on
-both screens it ever drew, which is a preference, not an answer.
+They were `Web/Paragraph/L/SemiBold` in `--text-secondary` (16 / 600, navy),
+which is what every shipped My Workspace tile draws and what she chose twice,
+on the grounds that a grey regular title does not hold a card. They are now
+`Web/Heading/M/Regular` in `--text-primary` (20 / 400 / 28, #666), which is
+what `Header Style=Workspace` says and what the RMX Pages frame draws: all
+four tiles on Main Content (4969:70323 and its siblings) carry that style,
+bound to `Text/text-primary`, so the design file and the library agree with
+each other and only the app disagrees.
+
+My Mentions moved with them. It is a tile on the same screen and a title that
+did not match the other four would read as a mistake.
+
+**This settles item 4 for the prototype, not for the product.** The prototype
+now follows the design; the shipped app still draws something else, and which
+of the two is wrong is still a question for the team rather than a thing a
+prototype can answer. The proposal screen's rule in `workspace.css` was left
+as it was: that screen is a redirect stub and nothing renders it.
 
 ## A mention that lives on a task
 
@@ -3468,8 +3478,10 @@ and **for Emma to decide on**, none of it was worked around quietly. Items
    avoid it. *(The `.rmx-btn` 14px/500 problem is fixed in 2.0.0.)*
 4. **The Workspace tile's title style is wrong in the library, or wrong in the
    app.** `Header Style=Workspace` says 20px Regular in `--text-primary`; every
-   shipped My Workspace tile draws a navy SemiBold title nearer 16–18px. One of
-   the two needs to change, and a prototype cannot settle it: the proposal
+   shipped My Workspace tile draws a navy SemiBold title nearer 16–18px. The
+   prototype followed the app until 2026-09-22 and follows the library now, on
+   Emma's call — which changes what this screen looks like, not which of the
+   two is right. Still worth raising: the proposal
    follows the app. Same question likely applies to the Dashboard header, which
    the anatomy records as 16px/600 navy.
    **Narrowed 2026-09-10:** the production *design* frame (node 4969:70308)
