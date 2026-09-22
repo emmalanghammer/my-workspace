@@ -3281,6 +3281,32 @@ said something plausible, and returned the wrong rows. It is `\d[\d,]*` now.
 Any sentence with a comma before the amount was affected.
 
 
+## The first click on the Filters box types the ask
+
+Emma's call, 2026-09-22, so the second beat plays itself in front of a room.
+
+The register still opens on the delinquency filter, which is the "here is the
+old way, as a filter somebody already built" beat. The first person to click
+into the Filters box then gets the next one for free: Orion types **"tenants
+with dogs at riverview"** a character at a time, pauses on the finished
+sentence, thinks, and the answer lands on the register as **Pet Type is Dog AND
+Property is Riverview Apartments** — 15 of 330 tenants.
+
+**The filter is built, the builder just does not open.** `run()` takes an
+`applyDirect` flag that sets `state.applied` and leaves `state.showPanel`
+false. Both conditions are there with their matched words, so the tune icon
+opens them, "How did Orion build this?" explains them, and Save as Filter has
+a prompt to name itself from — the panel simply is not thrown in front of the
+result, because the point of the beat is that nobody had to go near it.
+
+Once per load, and any real keystroke or paste cancels the typing and hands the
+box back: a demo that fights the person typing is worse than no demo. Every
+later click on the box opens the saved-filter list the way it always did.
+
+Nothing else routes through `applyDirect`. A prompt someone types themselves
+still opens the panel with the criteria and leaves Apply as a decision they
+make.
+
 ## Quick Filters on the Tenant Register
 
 Harvested from Account Navigation `WErv6Zeb94I5yQZs3wGZ9P` `2475:23001`, Emma's
