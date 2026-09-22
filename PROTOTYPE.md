@@ -3095,11 +3095,18 @@ differently: the flat white fills the padding box, the gradient fills the border
 box behind it. The alternative, a wrapper element or a pseudo-element, would
 have meant restructuring a panel that four other things position against.
 
-### The register opens on the delinquency filter
+### The register opened on the delinquency filter, until it opened on nothing
 
-Emma's call, 2026-09-15, replacing the Riverview dogs filter it opened on since
-the 14th. The Tenant Register loads with **"Show tenants that are delinquent on
-rent as of the third of this month"** already built and applied.
+**Gone on 2026-09-22, Emma's call:** the register now loads unfiltered, all 330
+tenants, no tag, an empty Filters box. The demo starts from nothing and the
+first click on the Filters box is what puts a filter there (see "The first
+click on the Filters box types the ask"). The rest of this section is kept
+because the parser work it describes is still in the code and still load-
+bearing for any prompt anyone types.
+
+It used to load with **"Show tenants that are delinquent on rent as of the
+third of this month"** already built and applied, Emma's call of 2026-09-15,
+replacing the Riverview dogs filter it opened on since the 14th.
 
 **Written out, "the third", which the parser could not read.** The only date
 pattern was `as of the (\d+)`, so a sentence anyone would actually type dropped
@@ -3283,29 +3290,34 @@ Any sentence with a comma before the amount was affected.
 
 ## The first click on the Filters box types the ask
 
-Emma's call, 2026-09-22, so the second beat plays itself in front of a room.
+Emma's call, 2026-09-22, so the beat plays itself in front of a room.
 
-The register still opens on the delinquency filter, which is the "here is the
-old way, as a filter somebody already built" beat. The first person to click
-into the Filters box then gets the next one for free: Orion types **"tenants
-with dogs at riverview"** a character at a time, pauses on the finished
-sentence, thinks, and the answer lands on the register as **Pet Type is Dog AND
-Property is Riverview Apartments** — 15 of 330 tenants.
+The register opens on nothing. The first person to click into the Filters box
+watches Orion type **"tenants with dogs at riverview"** a character at a time,
+and then it stops: the sentence sits there and nothing else happens. **They hit
+Enter**, and the answer is on the register — **Pet Type is Dog AND Property is
+Riverview Apartments**, 15 of 330 tenants.
 
-**The filter is built, the builder just does not open.** `run()` takes an
-`applyDirect` flag that sets `state.applied` and leaves `state.showPanel`
-false. Both conditions are there with their matched words, so the tune icon
-opens them, "How did Orion build this?" explains them, and Save as Filter has
-a prompt to name itself from — the panel simply is not thrown in front of the
-result, because the point of the beat is that nobody had to go near it.
+Three things it deliberately does not do:
 
-Once per load, and any real keystroke or paste cancels the typing and hands the
-box back: a demo that fights the person typing is worse than no demo. Every
-later click on the box opens the saved-filter list the way it always did.
+- **It does not run itself.** The typing is the sentence being written; Enter is
+  the person asking. A filter that applies on its own is a screen doing things
+  at you.
+- **It does not show the thinking card.** `run()` takes an `instant` flag for
+  this path. Nobody waited for this answer, so a loader in front of it reads as
+  a stall, not as work. A prompt somebody types themselves still gets the beat,
+  because there Orion really is reading something it has not seen.
+- **It does not open the builder.** `applyDirect` sets `state.applied` and
+  leaves `state.showPanel` false. The filter is fully built: both conditions
+  carry their matched words, so the tune icon opens them, "How did Orion build
+  this?" explains them, and Save as Filter has a prompt to name itself from.
+  The panel is simply not thrown in front of the result.
 
-Nothing else routes through `applyDirect`. A prompt someone types themselves
-still opens the panel with the criteria and leaves Apply as a decision they
-make.
+Once per load. Typing or pasting anything cancels it, through `oninput` rather
+than `onkeydown` — keying off any keystroke meant that Shift, Tab or a modifier
+pressed before Enter silently disarmed it. Every later click on the box opens
+the saved-filter list the way it always did, and nothing else routes through
+`applyDirect` or `instant`.
 
 ## Quick Filters on the Tenant Register
 
