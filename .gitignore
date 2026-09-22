@@ -7,3 +7,8 @@
 .claude/*
 !.claude/launch.json
 !.claude/dev-server.py
+!.claude/build-single.mjs
+
+# The bundler's output. Regenerate with scripts/bundle.mjs; do not send it,
+# it inlines a literal </script> and breaks the pages (see build-single.mjs).
+dist/
