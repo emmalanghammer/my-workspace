@@ -3417,6 +3417,12 @@ rather than `onkeydown` — keying off any keystroke meant that Shift, Tab or a
 modifier pressed before Enter silently disarmed it. Nothing else routes through
 `applyDirect` or `instant`.
 
+**The box scrolls with the typing.** Either sentence is longer than the field
+once it gets going, and text set from script does not scroll the way typed text
+does: the field sat showing the first half while the rest was written
+off-screen. The caret and the scroll go to the end on every character, so the
+words being typed are the words you can see.
+
 **It listens for click as well as focus.** After Enter the caret is still in
 the box, so clicking into it a second time changes nothing about focus and
 fires no focus event: the second ask never started. Both events call the same

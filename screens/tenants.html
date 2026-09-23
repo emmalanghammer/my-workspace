@@ -3282,6 +3282,13 @@ function onPromptFocus(){
     i++;
     input.value = text.slice(0, i);
     state.prompt = input.value;
+    /* The box is narrower than either sentence, and text set from script does
+       not scroll the way typed text does: the field kept showing the first
+       half while the rest was written off-screen. Push the caret and the
+       scroll to the end on every character, so the words being typed are the
+       words you can see. Emma's call, 2026-09-23. */
+    try { input.setSelectionRange(input.value.length, input.value.length); } catch (e) {}
+    input.scrollLeft = input.scrollWidth;
     if (i < text.length) { demoTypingTimer = setTimeout(type, 45); return; }
     demoTypingTimer = null;
     demoArmed = text;
