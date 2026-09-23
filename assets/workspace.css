@@ -469,12 +469,36 @@
 .ws-mention { cursor: pointer; }
 .ws-mention:hover { background: var(--container-tertiary); }
 .ws-mention:focus-visible { outline: 2px solid var(--border-secondary); outline-offset: -2px; }
+/* The record the mention is about, and when. Rebuilt on 2026-09-23 from
+   Emma's frame (My Mentions, record types, node 8:488): the type and the
+   record sit together in a bordered chip led by the record type's own icon,
+   and the time is pushed to the far end of the row rather than trailing the
+   sentence. Before this the three were one grey 12px line, so the type read
+   as timestamp furniture. */
 .ws-mention__meta {
   display: flex;
-  align-items: baseline;
-  gap: var(--spacing-xs);
+  align-items: center;
+  gap: var(--spacing-xxs);
   flex-wrap: wrap;
 }
+.ws-mention__rec {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xxs);
+  padding: var(--spacing-xxs);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  font: var(--type-label-s-regular);
+  color: var(--text-secondary);
+}
+.ws-mention__rec .rmx-icon { width: 16px; height: 16px; flex: none; }
+/* The record's name is the part that gives: a long one truncates so the time
+   stays on the row's right edge, which is where the frame puts it. Without
+   this the chip pushed the time onto a line of its own on a narrow tile. */
+.ws-mention__rec { min-width: 0; }
+.ws-mention__type { flex: none; }
+.ws-mention__on { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ws-mention__when { margin-left: auto; flex: none; }
 .ws-mention__who { font: var(--type-paragraph-s-semibold); color: var(--text-secondary); }
 .ws-mention__when { font: var(--type-label-s-regular); color: var(--text-disabled); }
 .ws-mention__body {
@@ -504,9 +528,14 @@
 .ws-handle {
   padding: 0 var(--spacing-xxs);
   border-radius: var(--radius-sm);
-  background: var(--component-lozenge-brand);
+  /* Emma's frame tints the handle with text-link at 20% rather than the flat
+     lozenge-brand, and sets it regular, not semibold. color-mix keeps the
+     token as the source; the rgba line is the same colour for a browser that
+     cannot do color-mix. */
+  background: rgba(0, 141, 213, .2);
+  background: color-mix(in srgb, var(--text-link) 20%, transparent);
   color: var(--text-link);
-  font: var(--type-paragraph-s-semibold);
+  font: var(--type-paragraph-s-regular);
 }
 
 /* ---------- My Tasks ---------- */

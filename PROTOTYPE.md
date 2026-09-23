@@ -2727,6 +2727,30 @@ fetched once more, so the very first load after this needs a hard reload
 
 ---
 
+## The mention says what kind of record it is about
+
+Emma's frame, 2026-09-23 (My Mentions, record types, node 8:488 in the Figma
+file this prototype now matches). The type used to be the first word of a 12px
+grey line that also held the record and the time, so it read as timestamp
+furniture. It is now its own thing:
+
+- **A bordered chip** holds the record type's icon, the type, and the record's
+  name: 1px `--border-primary`, `--radius-sm`, 4px padding and gap,
+  `Web/Label/S/Regular` in `--text-secondary`.
+- **The time moves to the right edge** of the row rather than trailing the
+  sentence. A long record name truncates so it stays there; without that the
+  chip pushed the time onto a line of its own on a narrow tile.
+- **The @handle** is `--text-link` at 20% and regular weight, not the flat
+  `--component-lozenge-brand` at semibold, as the frame has it. Written with
+  `color-mix` over an rgba fallback so the token stays the source of the
+  colour.
+
+**The four icons are real geometry, exported on the day.** `checklist` from
+Material Icons, which is what Emma's frame uses; `prospects`, `tenants` and
+`owners` from RMX Iconography (nodes 68:2961, 68:2910, 68:2899, the three she
+sent). None of them drawn, and the Express three carry their clip path so the
+shapes are identical to the library's.
+
 ## Two saved filters are there before you start
 
 Emma's call, 2026-09-23. The register used to open with an empty Saved Filters
