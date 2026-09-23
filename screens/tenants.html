@@ -3322,7 +3322,11 @@ function onPromptFocus(){
        words you can see. Emma's call, 2026-09-23. */
     try { input.setSelectionRange(input.value.length, input.value.length); } catch (e) {}
     input.scrollLeft = input.scrollWidth;
-    if (i < text.length) { demoTypingTimer = setTimeout(type, 45); return; }
+    /* 60ms a character. It was 45, which read as a machine filling a field
+       rather than a person asking a question; slowed on Emma's call,
+       2026-09-23. At 60 the short ask takes about 1.8s and the long one about
+       3.9s, which is long enough to follow and short enough to sit through. */
+    if (i < text.length) { demoTypingTimer = setTimeout(type, 60); return; }
     demoTypingTimer = null;
     demoArmed = text;
   })();
