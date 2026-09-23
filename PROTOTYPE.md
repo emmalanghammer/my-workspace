@@ -3409,7 +3409,7 @@ sits there and nothing else happens until **Enter**.
 | Click | It types | Enter gives |
 |---|---|---|
 | First | tenants with dogs at riverview | Pet Type is Dog AND Property is Riverview Apartments — 7 of 367 |
-| Second | tenants with a balance greater than $20 and more than 30 days old | Balance over $20.00 AND more than 30 days old — 7 of 367 |
+| Second | tenants with a balance greater than $20 and more than 30 days old | Balance over $20, 30+ days old — 7 of 367 |
 
 The second **replaces** the first rather than narrowing it: the register is
 answering a new question, not adding conditions to the old answer. After those
@@ -3445,6 +3445,14 @@ words being typed are the words you can see.
 the box, so clicking into it a second time changes nothing about focus and
 fires no focus event: the second ask never started. Both events call the same
 guarded entry point now.
+
+**The tag reads "Balance over $20, 30+ days old".** Two wording rules, Emma's
+call on 2026-09-23. A threshold someone said out loud loses its cents — "over
+$20", not "over $20.00" — while a figure with real cents in it keeps them
+(`plainMoney`, beside the `money` the register's columns use). And a balance
+and its age are joined by a comma rather than AND, because the age is not a
+second condition, it is the rest of the sentence about the same money. Every
+other pairing keeps its AND, where the two halves really are separate things.
 
 **The seven it returns are the real app's seven.** Emma sent a screenshot of
 the shipped register answering that same question on 2026-09-23: Laura Villa,
