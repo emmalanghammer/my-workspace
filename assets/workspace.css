@@ -478,7 +478,7 @@
 .ws-mention__meta {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xxs);
+  gap: var(--spacing-xs);
   flex-wrap: wrap;
 }
 /* The record sits at the far end of the name's line, unboxed: with the row's
@@ -486,17 +486,10 @@
    inside a frame, and the icon already says this is a record. The record's
    own name is the bold half, since that is the thing you are looking for.
    Emma's call, 2026-09-23. */
-/* The record and the time are one line between the person and the comment,
-   the record first: who, then what it is about and when, then what they said.
-   The comment is the longest part and the thing you read last, so it sits at
-   the bottom of the row with nothing after it. Emma's call, 2026-09-23. */
-.ws-mention__about {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  margin-top: var(--spacing-xxs);
-  min-width: 0;
-}
+/* Name, record, time all on the one line, in that order, and the comment
+   under them: who, what it is about, when, then what they said. Emma's call,
+   2026-09-23. The record's own name is the half that truncates when the line
+   is tight, so the type, the icon and the time all survive a long one. */
 .ws-mention__rec {
   display: inline-flex;
   align-items: center;
