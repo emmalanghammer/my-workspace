@@ -2449,7 +2449,28 @@ function renderFilterUI(){
      visibility is decided, so every route into it, run(), openPanel(), a saved
      filter, goes past it. */
   if (state.showPanel && state.qfBandOpen) state.qfBandOpen = false;
-  syncQuickFilterBand();
+  /* Three saved filters are already there on load, the way they would be for
+   anyone who has used the register for a while: somebody built these and
+   named them before today. They are built through the same parse() a typed
+   prompt goes through, so picking one applies a real Orion filter and the
+   explainer works on it. The delinquency one is the filter this screen used
+   to open on - as a saved filter it still says "here is the old way", but as
+   something a person chose rather than something the screen did. Emma's call,
+   2026-09-23. */
+const SAVED_ON_LOAD = [
+  { name: "Tenants with dogs at riverview",
+    prompt: "tenants with dogs at riverview" },
+  { name: "Delinquent as of the 3rd",
+    prompt: "Show tenants that are delinquent on rent as of the third of this month" },
+  { name: "Moved out, deposit still held",
+    prompt: "past tenants who moved out more than 30 days ago with a security deposit" }
+];
+state.savedFilters = SAVED_ON_LOAD.map(function (f) {
+  return { name: f.name, orion: true, criteria: toGroups(parse(f.prompt)), outerJoin: "and",
+           rationale: rationaleFor(f.prompt), promptText: f.prompt, system: false };
+});
+
+syncQuickFilterBand();
   document.getElementById("thinkingCard").classList.toggle("hidden", !state.thinking);
   document.getElementById("filterPanel").classList.toggle("hidden", !state.showPanel);
   document.getElementById("appliedRow").classList.toggle("hidden", !(state.applied.length && !state.showPanel));
@@ -2641,7 +2662,10 @@ function renderSavedFilterList(){
     state.savedFilters.map(function(f, i){
       const active = f.name === state.selectedFilter;
       return '<div class="dd-item' + (active ? ' selected' : '') + '" style="gap:8px;" onclick="pickSavedFilter(' + i + ')">' +
-             (f.orion ? '<span class="orion-mark sm">' + ORION_ICON_HTML + '</span>' : '') +
+             /* No Orion mark on the rows: every saved filter here was built
+                by Orion, so a mark on all of them distinguishes nothing and
+                just crowds the name. Emma's call, 2026-09-23. The flag stays
+                on the record, it is only not drawn. */
              '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHTML(f.name) + '</span>' +
              (f.system ? '<span class="lozenge lozenge-brand fp-sys">System</span>' : '') +
              '</div>';
@@ -2664,6 +2688,12 @@ function pickSavedFilter(i){
   state.rationale = f.rationale || "";
   state.promptText = f.promptText || "";
   state.applied = state.criteria;
+  /* Same reason run() does it: the Status quick filter defaults to Current, so
+     a saved filter about past tenants would come back empty with nothing on
+     screen to say why. The saved filter's own conditions are the query.
+     Found on 2026-09-23 by seeding "Moved out, deposit still held", which
+     returned nothing at all until this line existed. */
+  state.statuses = [];
   state.selectedFilter = f.name;
   state.showPanel = false;
   state.prompt = "";

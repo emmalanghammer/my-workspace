@@ -2727,6 +2727,35 @@ fetched once more, so the very first load after this needs a hard reload
 
 ---
 
+## Three saved filters are there before you start
+
+Emma's call, 2026-09-23. The register used to open with an empty Saved Filters
+list, which made the list read as a feature nobody had used. It now opens with
+three, the way it would for anyone who has had the register a while:
+
+| Saved filter | Matches |
+|---|---|
+| Tenants with dogs at riverview | 7 |
+| Delinquent as of the 3rd | 109 |
+| Moved out, deposit still held | 33 |
+
+Each is built through the same `parse()` a typed prompt goes through, so
+picking one applies a real Orion filter and "How did Orion build this?" works
+on it. The delinquency one is the filter this screen used to open on: as a
+saved filter it still says "here is the old way", but as something a person
+chose rather than something the screen did to them.
+
+**No Orion mark on the rows.** Every filter in that list was built by Orion, so
+a mark against all three distinguishes nothing and only crowds the name. The
+flag stays on the record; it is just not drawn.
+
+**And it found a real bug.** `pickSavedFilter` never cleared `state.statuses`,
+which defaults to Current. "Moved out, deposit still held" is a filter about
+past tenants, so picking it returned **nothing at all**, with no error and
+nothing on screen to say why — the same silent emptying `run()` had been fixed
+for on 2026-09-14, on the one path that had not been. It clears the status now,
+for the reason `run()` does: the saved filter's own conditions are the query.
+
 ## A saved Orion filter is a filter you can pick again
 
 Emma's call, 2026-09-14, on the Tenant Register's Orion filter builder.
