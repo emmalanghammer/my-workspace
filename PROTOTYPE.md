@@ -3379,15 +3379,23 @@ would have filtered to a name no row carries and returned nothing.
 The register's total was a hard-coded "of 330" in two places and now counts the
 array.
 
-## The first click on the Filters box types the ask
+## The Filters box types the first two asks
 
-Emma's call, 2026-09-22, so the beat plays itself in front of a room.
+Emma's call, 2026-09-22 and 2026-09-23, so the beats play themselves in front
+of a room.
 
-The register opens on nothing. The first person to click into the Filters box
-watches Orion type **"tenants with dogs at riverview"** a character at a time,
-and then it stops: the sentence sits there and nothing else happens. **They hit
-Enter**, and the answer is on the register — **Pet Type is Dog AND Property is
-Riverview Apartments**, 15 of 330 tenants.
+The register opens on nothing. Each of the first two clicks into the Filters
+box types one sentence, a character at a time, and then stops: the sentence
+sits there and nothing else happens until **Enter**.
+
+| Click | It types | Enter gives |
+|---|---|---|
+| First | tenants with dogs at riverview | Pet Type is Dog AND Property is Riverview Apartments — 7 of 367 |
+| Second | tenants with a balance greater than $20 and more than 30 days old | Balance over $20.00 AND more than 30 days old — 86 of 367 |
+
+The second **replaces** the first rather than narrowing it: the register is
+answering a new question, not adding conditions to the old answer. After those
+two the box is an ordinary box again and a click opens the saved filters.
 
 Three things it deliberately does not do:
 
@@ -3404,11 +3412,23 @@ Three things it deliberately does not do:
   this?" explains them, and Save as Filter has a prompt to name itself from.
   The panel is simply not thrown in front of the result.
 
-Once per load. Typing or pasting anything cancels it, through `oninput` rather
-than `onkeydown` — keying off any keystroke meant that Shift, Tab or a modifier
-pressed before Enter silently disarmed it. Every later click on the box opens
-the saved-filter list the way it always did, and nothing else routes through
+Typing or pasting anything cancels the rest of the script, through `oninput`
+rather than `onkeydown` — keying off any keystroke meant that Shift, Tab or a
+modifier pressed before Enter silently disarmed it. Nothing else routes through
 `applyDirect` or `instant`.
+
+**It listens for click as well as focus.** After Enter the caret is still in
+the box, so clicking into it a second time changes nothing about focus and
+fires no focus event: the second ask never started. Both events call the same
+guarded entry point now.
+
+**And the second sentence needed a condition that did not exist.** "more than
+30 days old" parsed to nothing — the filter came out as *Balance over $20* and
+the age half vanished in silence, which is precisely the failure beat 3 exists
+to argue against, sitting in the thing that demonstrates it. There is a
+`balanceAge` condition now ("Balance Aged Over (days)"), with the aging behind
+it generated per tenant in the importer, and the tag reads *Balance over $20.00
+AND more than 30 days old*.
 
 ## Quick Filters on the Tenant Register
 

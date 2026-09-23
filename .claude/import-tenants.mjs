@@ -152,13 +152,19 @@ for (const r of data) {
     rec.moveOut = rec.leaseEnd;
     rec.deposit = Math.round((400 + rand() * 1400) / 5) * 5;
   }
+  /* How old the oldest unpaid charge is. Drawn LAST so that adding it did not
+     shift any earlier draw and churn every other generated field. Only for
+     people who owe something: "a balance more than 30 days old" has nothing to
+     say about a tenant at zero. */
+  if (rec.balance > 0) rec.agedDays = 3 + Math.floor(rand() * 175);
+
   out.push(rec);
 }
 
 /* --- emit --- */
 const order = ['name', 'extra', 'notice', 'eviction', 'collections', 'paymentPlan', 'siteClass',
-               'balance', 'account', 'property', 'unit', 'leaseStart', 'leaseEnd', 'moveOut',
-               'deposit', 'pet', 'status', 'email', 'phone', 'color'];
+               'balance', 'agedDays', 'account', 'property', 'unit', 'leaseStart', 'leaseEnd',
+               'moveOut', 'deposit', 'pet', 'status', 'email', 'phone', 'color'];
 const lit = v => typeof v === 'string' ? JSON.stringify(v)
              : typeof v === 'boolean' ? String(v)
              : Number.isInteger(v) ? String(v) : v.toFixed(2);
@@ -178,3 +184,4 @@ console.log(`    balance > 0   ${n(r=>r.balance>0)}  (of which over $5,000: ${n(
 console.log(`    pets          ${n(r=>r.pet)}  (dogs at Riverview: ${dogsAtRiverview})`);
 console.log(`    flags         ${n(r=>r.notice)} notice, ${n(r=>r.eviction)} eviction  (from the export)`);
 console.log(`    exclusions    ${n(r=>r.collections)} collections, ${n(r=>r.paymentPlan)} payment plan, ${n(r=>r.deposit)} deposit held`);
+console.log(`    aged          ${n(r=>r.agedDays > 30)} owe something more than 30 days old`);
