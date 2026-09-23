@@ -495,7 +495,10 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xxs);
-  margin-top: var(--spacing-xxs);
+  /* 8, not the 4 the comment sits at under the name: the record is a different
+     thing from the sentence above it, and at 4 it read as the last line of it.
+     Emma's call, 2026-09-23. */
+  margin-top: var(--spacing-xs);
   min-width: 0;
   font: var(--type-label-s-regular);
   color: var(--text-secondary);
