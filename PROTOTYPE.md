@@ -3288,6 +3288,51 @@ said something plausible, and returned the wrong rows. It is `\d[\d,]*` now.
 Any sentence with a comma before the amount was affected.
 
 
+## The tenant list comes from Emma's export
+
+368 tenants, imported on 2026-09-23 from `Tenant_Register_2026-09-23.xlsx`
+(the **Tenants** sheet; the workbook's Summary sheet is per-property counts and
+is not used). Rebuilt with `node .claude/import-tenants.mjs <file.xlsx>`, which
+regenerates `TENANTS` — rerun it rather than hand-editing the array, and it
+stops if the export's columns move.
+
+**What is real and what is not.** The export carries who the tenants are, and
+the import never overwrites any of it:
+
+| From the export | Generated here |
+|---|---|
+| Name, Account #, Property, Unit | Balance |
+| Lease Start, Lease End (Excel serials → MM/DD/YY) | Site Classification |
+| Email, Phone, Status | Display colour, occupant count |
+| Flag → Notice / Eviction | Pet Type |
+| | Deposit held, Move Out, Collections, Payment Plan |
+
+The right-hand column is demo content. The register draws a Balance and a Site
+Classification column and the Orion filters read both, so leaving them empty
+would have emptied the screen; they are generated deterministically from the
+account number, which means a rerun produces the identical file and a diff
+stays reviewable. **If a balance is ever quoted as real, it is not.** Send a
+balance column and the generator drops in favour of it.
+
+Roughly: 110 tenants owe something (27 over $5,000), 39 have a pet, 7 of them
+dogs at Riverview, 42 past tenants still have a deposit held.
+
+**One beat lost its example.** The exclusion suggestion used to read *"Notice
+tenants at Flagstone owing over $5,000"*. The export's Flag column marks four
+people in the whole file — two Notice, two eviction — and none of them at
+Flagstone, so that sentence now matches nobody. It is *"Notice tenants owing
+over $5,000"*, which matches one. Flagging rather than inventing: the flags are
+Emma's data, and if the beat wants more of them they belong in the export.
+
+**Property names moved with it.** 18 properties, and the old four are gone —
+there is no Lockland, Beacon Ridge or Harbor Point any more, and Flagstone is
+*Manufactured Housing*, not *Homes*. The parser's property words and the
+details view's `PROPS` were updated to match, or a sentence naming a property
+would have filtered to a name no row carries and returned nothing.
+
+The register's total was a hard-coded "of 330" in two places and now counts the
+array.
+
 ## The first click on the Filters box types the ask
 
 Emma's call, 2026-09-22, so the beat plays itself in front of a room.
