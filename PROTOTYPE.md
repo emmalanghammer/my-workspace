@@ -2756,12 +2756,16 @@ file this prototype now matches). The type used to be the first word of a 12px
 grey line that also held the record and the time, so it read as timestamp
 furniture. It is now its own thing:
 
-- **A bordered chip** holds the record type's icon, the type, and the record's
-  name: 1px `--border-primary`, `--radius-sm`, 4px padding and gap,
-  `Web/Label/S/Regular` in `--text-secondary`.
-- **The time moves to the right edge** of the row rather than trailing the
-  sentence. A long record name truncates so it stays there; without that the
-  chip pushed the time onto a line of its own on a narrow tile.
+- **The record sits at the far end of the name's line**: the record type's
+  icon, the type in `Web/Label/S/Regular`, then the record's own name in
+  `Web/Label/S/SemiBold`, both `--text-secondary`. The name is the bold half
+  because it is the thing you are looking for; it is also the half that
+  truncates when the row is tight, so the type and icon always survive.
+- **No border on it.** It was a bordered chip until 2026-09-23; with the row's
+  hover and the tile's hairlines around it that was a third frame inside a
+  frame, and the icon already says this is a record. Emma's call.
+- **The time sits under the comment**, not beside the name: it is the least of
+  the three things on the row and reads as a footnote there.
 - **The @handle** is `--text-link` at 20% and regular weight, not the flat
   `--component-lozenge-brand` at semibold, as the frame has it. Written with
   `color-mix` over an rgba fallback so the token stays the source of the
