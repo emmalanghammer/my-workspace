@@ -3455,12 +3455,21 @@ second condition, it is the rest of the sentence about the same money. Every
 other pairing keeps its AND, where the two halves really are separate things.
 
 **Only two of the seven carry a display colour.** In the live register just
-Rosita Campanel and Devin Lautner have one, and it is purple; the other five
-have no colour bar at all. The design system has no purple, so Emma picked the
-green (#6eb744) on 2026-09-23 and the other five were cleared. The overrides
-sit in `COLOR_OVERRIDES` in the importer, applied after the colour is drawn so
-that setting them shifts nothing else. Every tenant outside those seven keeps
-a generated colour.
+Rosita Campanel and Devin Lautner have one, and the other five have no colour
+bar at all. Emma's call, 2026-09-23. The overrides sit in `COLOR_OVERRIDES` in
+the importer, applied after the colour is drawn so that setting them shifts
+nothing else; every tenant outside those seven keeps a generated colour.
+
+**Purple is a fifth display colour, and it is not a token.** `#6a5589`,
+sampled from Emma's screenshot of the live register rather than guessed. A
+display colour is product data — a user picks one per tenant — and RMX
+Foundations carries no purple for it: the only purple it has is
+`background-purple`, described in the library as "used exclusively for
+signature fields in Singable Documents", which is a different thing. So
+`--rmx-purple` sits beside the other four display colours in the screen, which
+are local `--rmx-*` values too, and Purple joins `COLORS` so the Display Color
+filter can offer it. **Worth raising:** if display colours are a fixed set in
+Express, all five belong in Foundations rather than in a screen.
 
 **The seven it returns are the real app's seven.** Emma sent a screenshot of
 the shipped register answering that same question on 2026-09-23: Laura Villa,

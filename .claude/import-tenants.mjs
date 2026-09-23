@@ -92,9 +92,10 @@ const AGED_OVER_30 = new Set([14, 67, 249, 320, 331, 333, 451]);
 /* Display colours for the seven the aged-balance filter returns, taken from
    the real register (Emma, 2026-09-23): only Rosita Campanel and Devin Lautner
    carry one there, so the other five show no colour bar here either. The
-   live app draws those two purple; the design system has no purple, and Emma
-   picked the green. Everyone else in the file keeps the generated colour. */
-const COLOR_OVERRIDES = { 320: 'Green', 333: 'Green', 14: null, 67: null, 249: null, 331: null, 451: null };
+   colour is the live app's own purple, #6a5589, sampled from the screenshot;
+   display colours are product data a user picks, and RMX Foundations has no
+   purple for them. Everyone else in the file keeps the generated colour. */
+const COLOR_OVERRIDES = { 320: 'Purple', 333: 'Purple', 14: null, 67: null, 249: null, 331: null, 451: null };
 
 /* Tenants whose row leaves the prototype for the live system, by account
    number. The id in the URL is the real app's, not this export's account
