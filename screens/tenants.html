@@ -1831,7 +1831,7 @@ const TENANTS = [
   { name: "Geoffrey Waters", collections: true, siteClass: "Occupied", balance: 4216.27, agedDays: 16, account: 330, property: "Riverview Apartments", unit: "17", leaseStart: "10/01/26", leaseEnd: "09/28/27", status: "Current", email: "", phone: "(513) 555-0213", color: "Blue" },
   { name: "Kristen Jones", siteClass: "Vacant", balance: 1457.74, agedDays: 83, account: 331, property: "Flagstone Manufactured Housing", unit: "Lot #103 (+1)", leaseStart: "06/01/25", leaseEnd: "05/28/26", status: "Past", email: "", phone: "", color: "Green" },
   { name: "Bridgett Hargitae", extra: "+1", siteClass: "Occupied", balance: 2440.52, agedDays: 3, account: 332, property: "Summerlin HOA", unit: "HOA-5219", leaseStart: "", leaseEnd: "", status: "Current", email: "bgargitae@email.com", phone: "", color: "Orange" },
-  { name: "Devin Lautner", siteClass: "Occupied", balance: 2208.13, agedDays: 98, account: 333, property: "Summerlin HOA", unit: "HOA-5212", leaseStart: "", leaseEnd: "", status: "Current", email: "dlauntner@email.com", phone: "", color: "Green" },
+  { name: "Devin Lautner", siteClass: "Occupied", balance: 2208.13, agedDays: 98, account: 333, property: "Summerlin HOA", unit: "HOA-5212", leaseStart: "", leaseEnd: "", status: "Current", email: "dlauntner@email.com", phone: "", color: "Green", deepLink: "https://class60.rmx.rentmanager.com/#/tenants/390/details?SavedFilterID=45&ExpandList=1" },
   { name: "Preston Harris", extra: "+1", siteClass: "Occupied", balance: 644.62, agedDays: 24, account: 335, property: "Riverview Apartments", unit: "6", leaseStart: "01/01/26", leaseEnd: "12/28/26", status: "Current", email: "", phone: "(513) 555-2049", color: "Green" },
   { name: "Bonnie Clan", extra: "+2", siteClass: "Occupied", balance: 314.02, agedDays: 18, account: 337, property: "1700 Bradford House", unit: "4B", leaseStart: "07/01/26", leaseEnd: "", status: "Current", email: "bclan@email.com", phone: "(412) 555-2330", color: "Blue" },
   { name: "Marion Trust", collections: true, siteClass: "Occupied", balance: 787.52, agedDays: 29, account: 342, property: "1700 Bradford House", unit: "2A", leaseStart: "", leaseEnd: "", status: "Current", email: "mtrust@email.com", phone: "", color: "Green" },
@@ -1989,6 +1989,14 @@ let uid = 100;
 /* ---- switch to the Tenant Details view, carrying the clicked tenant + the register's current rows ---- */
 function goToTenant(account){
   if (state.selectMode) return; // bulk-select mode: a row click toggles selection, not navigation
+  /* A tenant with a deepLink is wired to the live system rather than to this
+     prototype's own Tenants screen: the row opens the real record in a new
+     tab and this screen stays where it was. The id in the URL is the live
+     app's, not the account number, so it is recorded per tenant in
+     .claude/import-tenants.mjs and travels with a re-import. Emma's call,
+     2026-09-23. */
+  const rec = TENANTS.find(r => r.account === account);
+  if (rec && rec.deepLink) { window.open(rec.deepLink, "_blank", "noopener"); return; }
   const visible = matches(state.applied).map(r => r.account);
   /* The rows alone were never enough. Tenants showed "4 of 49" with nothing
      saying why it was 4, which reads as a bug rather than a filter. It now

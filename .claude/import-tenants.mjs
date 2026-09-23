@@ -88,6 +88,14 @@ const COLORS = ['Blue', 'Green', 'Orange', 'Yellow'];
 /* Account numbers, from the real register's own answer to the demo's second
    question. See the note where agedDays is drawn. */
 const AGED_OVER_30 = new Set([14, 67, 249, 320, 331, 333, 451]);
+
+/* Tenants whose row leaves the prototype for the live system, by account
+   number. The id in the URL is the real app's, not this export's account
+   number, so it cannot be derived and has to be recorded. Emma's link,
+   2026-09-23. */
+const DEEP_LINKS = {
+  333: 'https://class60.rmx.rentmanager.com/#/tenants/390/details?SavedFilterID=45&ExpandList=1'
+};
 const out = [];
 let dogsAtRiverview = 0;
 
@@ -174,13 +182,15 @@ for (const r of data) {
   }
   if (pinned && rec.balance <= 20) rec.balance = Math.round((120 + rand() * 2400) * 100) / 100;
 
+  if (DEEP_LINKS[rec.account]) rec.deepLink = DEEP_LINKS[rec.account];
+
   out.push(rec);
 }
 
 /* --- emit --- */
 const order = ['name', 'extra', 'notice', 'eviction', 'collections', 'paymentPlan', 'siteClass',
                'balance', 'agedDays', 'account', 'property', 'unit', 'leaseStart', 'leaseEnd',
-               'moveOut', 'deposit', 'pet', 'status', 'email', 'phone', 'color'];
+               'moveOut', 'deposit', 'pet', 'status', 'email', 'phone', 'color', 'deepLink'];
 const lit = v => typeof v === 'string' ? JSON.stringify(v)
              : typeof v === 'boolean' ? String(v)
              : Number.isInteger(v) ? String(v) : v.toFixed(2);

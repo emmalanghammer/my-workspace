@@ -3379,6 +3379,24 @@ would have filtered to a name no row carries and returned nothing.
 The register's total was a hard-coded "of 330" in two places and now counts the
 array.
 
+## One tenant's row leaves for the live system
+
+Emma's call, 2026-09-23. **Devin Lautner** (account 333) is wired to the real
+Rent Manager record rather than to this prototype's own Tenants screen: his row
+opens `class60.rmx.rentmanager.com/#/tenants/390/details?SavedFilterID=45&ExpandList=1`
+in a new tab, and the register stays where it was. Every other row still opens
+Tenants in the prototype.
+
+The id in that URL is the live app's (390), not the account number (333), so it
+cannot be derived from the export and is recorded per tenant in
+`.claude/import-tenants.mjs` — a re-import carries it. Add more by putting
+another account number and URL in `DEEP_LINKS` there.
+
+Two things to know before demoing it: the tab only opens if the person is
+signed in to that Rent Manager instance, and it is a real popup, so a browser
+that blocks popups will block this one. It is opened from a click, which is the
+case browsers do allow.
+
 ## The Filters box types the first two asks
 
 Emma's call, 2026-09-22 and 2026-09-23, so the beats play themselves in front
