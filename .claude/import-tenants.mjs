@@ -85,6 +85,9 @@ const rng = seed => { let x = (Number(seed) || 1) * 2654435761 % 2147483647;
   return () => (x = x * 16807 % 2147483647) / 2147483647; };
 
 const COLORS = ['Blue', 'Green', 'Orange', 'Yellow'];
+/* Account numbers, from the real register's own answer to the demo's second
+   question. See the note where agedDays is drawn. */
+const AGED_OVER_30 = new Set([14, 67, 249, 320, 331, 333, 451]);
 const out = [];
 let dogsAtRiverview = 0;
 
@@ -155,8 +158,21 @@ for (const r of data) {
   /* How old the oldest unpaid charge is. Drawn LAST so that adding it did not
      shift any earlier draw and churn every other generated field. Only for
      people who owe something: "a balance more than 30 days old" has nothing to
-     say about a tenant at zero. */
-  if (rec.balance > 0) rec.agedDays = 3 + Math.floor(rand() * 175);
+     say about a tenant at zero.
+
+     The seven in AGED_OVER_30 are the answer the real app gives for "balance
+     greater than $20 and more than 30 days old" (Emma's screenshot of it,
+     2026-09-23). The export carries no balances and no aging, so rather than
+     invent a different answer to the same question, the generator is made to
+     agree with the real one: those seven clear the filter and nobody else
+     does. Everyone else who owes is aged under 30 days, which leaves the
+     delinquency filters (balance > 0) exactly as they were. */
+  const pinned = AGED_OVER_30.has(Number(r.B));
+  if (pinned || rec.balance > 0) {
+    const roll = rand();
+    rec.agedDays = pinned ? 31 + Math.floor(roll * 150) : 1 + Math.floor(roll * 29);
+  }
+  if (pinned && rec.balance <= 20) rec.balance = Math.round((120 + rand() * 2400) * 100) / 100;
 
   out.push(rec);
 }
@@ -184,4 +200,5 @@ console.log(`    balance > 0   ${n(r=>r.balance>0)}  (of which over $5,000: ${n(
 console.log(`    pets          ${n(r=>r.pet)}  (dogs at Riverview: ${dogsAtRiverview})`);
 console.log(`    flags         ${n(r=>r.notice)} notice, ${n(r=>r.eviction)} eviction  (from the export)`);
 console.log(`    exclusions    ${n(r=>r.collections)} collections, ${n(r=>r.paymentPlan)} payment plan, ${n(r=>r.deposit)} deposit held`);
-console.log(`    aged          ${n(r=>r.agedDays > 30)} owe something more than 30 days old`);
+const over20aged = out.filter(r => r.balance > 20 && r.agedDays > 30);
+console.log(`    aged          ${over20aged.length} clear "over $20 and more than 30 days old": ${over20aged.map(r=>r.name).join(', ')}`);

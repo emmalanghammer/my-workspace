@@ -3391,7 +3391,7 @@ sits there and nothing else happens until **Enter**.
 | Click | It types | Enter gives |
 |---|---|---|
 | First | tenants with dogs at riverview | Pet Type is Dog AND Property is Riverview Apartments — 7 of 367 |
-| Second | tenants with a balance greater than $20 and more than 30 days old | Balance over $20.00 AND more than 30 days old — 86 of 367 |
+| Second | tenants with a balance greater than $20 and more than 30 days old | Balance over $20.00 AND more than 30 days old — 7 of 367 |
 
 The second **replaces** the first rather than narrowing it: the register is
 answering a new question, not adding conditions to the old answer. After those
@@ -3427,6 +3427,15 @@ words being typed are the words you can see.
 the box, so clicking into it a second time changes nothing about focus and
 fires no focus event: the second ask never started. Both events call the same
 guarded entry point now.
+
+**The seven it returns are the real app's seven.** Emma sent a screenshot of
+the shipped register answering that same question on 2026-09-23: Laura Villa,
+Ralph Donaldson, Lori Singer, Rosita Campanel, Kristen Jones, Devin Lautner,
+Ashley Griffin. The export carries no balances and no aging, so rather than
+have the prototype give a different answer to the question the real app
+already answers, the importer pins those seven accounts to clear the filter
+and caps everyone else's aging under 30 days. The delinquency filters read
+balance alone and are untouched by it.
 
 **And the second sentence needed a condition that did not exist.** "more than
 30 days old" parsed to nothing — the filter came out as *Balance over $20* and
