@@ -2727,17 +2727,21 @@ fetched once more, so the very first load after this needs a hard reload
 
 ---
 
-## Three saved filters are there before you start
+## Two saved filters are there before you start
 
 Emma's call, 2026-09-23. The register used to open with an empty Saved Filters
 list, which made the list read as a feature nobody had used. It now opens with
-three, the way it would for anyone who has had the register a while:
+two, the way it would for anyone who has had the register a while:
 
 | Saved filter | Matches |
 |---|---|
-| Tenants with dogs at riverview | 7 |
 | Delinquent as of the 3rd | 109 |
 | Moved out, deposit still held | 33 |
+
+**Not the dogs-at-Riverview one.** That is the filter the demo builds in front
+of the room, and it belongs in the list only once someone has hit Save as
+Filter — seeding it gave the save nothing to do. Saving it puts it at the top
+of the list, named from the request, which is the beat.
 
 Each is built through the same `parse()` a typed prompt goes through, so
 picking one applies a real Orion filter and "How did Orion build this?" works
@@ -2749,7 +2753,12 @@ chose rather than something the screen did to them.
 a mark against all three distinguishes nothing and only crowds the name. The
 flag stays on the record; it is just not drawn.
 
-**And it found a real bug.** `pickSavedFilter` never cleared `state.statuses`,
+**It found two real bugs.** The first was mine and lasted an hour: the seeding
+ran inside `renderFilterUI()` rather than at load, so every redraw reset the
+list — a filter you saved appeared to save (the toast fired, the name was
+right) and was gone by the next render. Seeding belongs at load, once.
+
+The second: `pickSavedFilter` never cleared `state.statuses`,
 which defaults to Current. "Moved out, deposit still held" is a filter about
 past tenants, so picking it returned **nothing at all**, with no error and
 nothing on screen to say why — the same silent emptying `run()` had been fixed

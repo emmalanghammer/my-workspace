@@ -2449,27 +2449,6 @@ function renderFilterUI(){
      visibility is decided, so every route into it, run(), openPanel(), a saved
      filter, goes past it. */
   if (state.showPanel && state.qfBandOpen) state.qfBandOpen = false;
-  /* Three saved filters are already there on load, the way they would be for
-   anyone who has used the register for a while: somebody built these and
-   named them before today. They are built through the same parse() a typed
-   prompt goes through, so picking one applies a real Orion filter and the
-   explainer works on it. The delinquency one is the filter this screen used
-   to open on - as a saved filter it still says "here is the old way", but as
-   something a person chose rather than something the screen did. Emma's call,
-   2026-09-23. */
-const SAVED_ON_LOAD = [
-  { name: "Tenants with dogs at riverview",
-    prompt: "tenants with dogs at riverview" },
-  { name: "Delinquent as of the 3rd",
-    prompt: "Show tenants that are delinquent on rent as of the third of this month" },
-  { name: "Moved out, deposit still held",
-    prompt: "past tenants who moved out more than 30 days ago with a security deposit" }
-];
-state.savedFilters = SAVED_ON_LOAD.map(function (f) {
-  return { name: f.name, orion: true, criteria: toGroups(parse(f.prompt)), outerJoin: "and",
-           rationale: rationaleFor(f.prompt), promptText: f.prompt, system: false };
-});
-
 syncQuickFilterBand();
   document.getElementById("thinkingCard").classList.toggle("hidden", !state.thinking);
   document.getElementById("filterPanel").classList.toggle("hidden", !state.showPanel);
@@ -3295,6 +3274,29 @@ function onPromptEnter(){
    that the "here is the old way" beat was already on screen; Emma dropped that
    on 2026-09-22, because the demo now starts from nothing and the first click
    on the Filters box is what puts a filter there. */
+
+/* Two saved filters are already there on load, the way they would be for
+ anyone who has used the register for a while: somebody built these and
+ named them before today. They are built through the same parse() a typed
+ prompt goes through, so picking one applies a real Orion filter and the
+ explainer works on it. The delinquency one is the filter this screen used
+ to open on - as a saved filter it still says "here is the old way", but as
+ something a person chose rather than something the screen did. Emma's call,
+ 2026-09-23. */
+const SAVED_ON_LOAD = [
+/* Not the dogs-at-Riverview one: that is the filter the demo builds in front
+   of you, and it belongs in this list only once someone has actually hit
+   Save as Filter. Seeding it gave the save nothing to do. Emma's call,
+   2026-09-23. */
+  { name: "Delinquent as of the 3rd",
+  prompt: "Show tenants that are delinquent on rent as of the third of this month" },
+  { name: "Moved out, deposit still held",
+  prompt: "past tenants who moved out more than 30 days ago with a security deposit" }
+];
+state.savedFilters = SAVED_ON_LOAD.map(function (f) {
+return { name: f.name, orion: true, criteria: toGroups(parse(f.prompt)), outerJoin: "and",
+         rationale: rationaleFor(f.prompt), promptText: f.prompt, system: false };
+});
 
 syncQuickFilterBand();
 renderRegPropLabel();
