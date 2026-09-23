@@ -2756,16 +2756,19 @@ file this prototype now matches). The type used to be the first word of a 12px
 grey line that also held the record and the time, so it read as timestamp
 furniture. It is now its own thing:
 
-- **The record sits at the far end of the name's line**: the record type's
-  icon, the type in `Web/Label/S/Regular`, then the record's own name in
-  `Web/Label/S/SemiBold`, both `--text-secondary`. The name is the bold half
-  because it is the thing you are looking for; it is also the half that
-  truncates when the row is tight, so the type and icon always survive.
-- **No border on it.** It was a bordered chip until 2026-09-23; with the row's
-  hover and the tile's hairlines around it that was a third frame inside a
-  frame, and the icon already says this is a record. Emma's call.
-- **The time sits under the comment**, not beside the name: it is the least of
-  the three things on the row and reads as a footnote there.
+- **The record and the time are one footnote line under the comment**, the
+  record first: the name's line is the person, the comment is what they said,
+  and what it is about and when they said it settle underneath. 12px between
+  the two.
+- **The record** is its type's icon, the type in `Web/Label/S/Regular`, then
+  the record's own name in `Web/Label/S/SemiBold`, both `--text-secondary`.
+  The name is the bold half because it is the thing you are looking for; it is
+  also the half that truncates when the row is tight, so the type and the icon
+  always survive.
+- **No border on it.** It was a bordered chip beside the name for a few hours
+  on 2026-09-23; with the row's hover and the tile's hairlines around it that
+  was a third frame inside a frame, and the icon already says this is a
+  record. Emma's call, same day, as is the move underneath.
 - **The @handle** is `--text-link` at 20% and regular weight, not the flat
   `--component-lozenge-brand` at semibold, as the frame has it. Written with
   `color-mix` over an rgba fallback so the token stays the source of the

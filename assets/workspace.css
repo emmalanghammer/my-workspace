@@ -486,11 +486,21 @@
    inside a frame, and the icon already says this is a record. The record's
    own name is the bold half, since that is the thing you are looking for.
    Emma's call, 2026-09-23. */
+/* The record and the time are one footnote line under the comment, the record
+   first: the name's line is the person, the comment is what they said, and
+   what it is about and when they said it settle underneath. Emma's call,
+   2026-09-23. */
+.ws-mention__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xxs);
+  min-width: 0;
+}
 .ws-mention__rec {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xxs);
-  margin-left: auto;
   min-width: 0;
   font: var(--type-label-s-regular);
   color: var(--text-secondary);
@@ -504,15 +514,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-/* Below the comment now, not beside the name: the time is the least of the
-   three things on the row and it reads as a footnote down there. */
-.ws-mention__when {
-  margin-top: var(--spacing-xxs);
-  font: var(--type-label-s-regular);
-  color: var(--text-disabled);
-}
 .ws-mention__who { font: var(--type-paragraph-s-semibold); color: var(--text-secondary); }
-.ws-mention__when { font: var(--type-label-s-regular); color: var(--text-disabled); }
+.ws-mention__when { flex: none; font: var(--type-label-s-regular); color: var(--text-disabled); }
 .ws-mention__body {
   margin-top: var(--spacing-xxs);
   font: var(--type-paragraph-s-regular);
