@@ -1376,14 +1376,26 @@ let myTasks = [
     action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:'09/18/26', dueTime:'11:00 AM', overdue:false,
     assigned:['capegian'], link:'', linkOverflow:0, workflow:'',
     checklist: PET_CHECKLIST(), externalCal:true, links: PET_LINKS(), history: PET_HISTORY() },
-  { id:'t-movein-credit', title:'Apply the new move-in credit', flag:false, colorBar:'green', completed:false,
-    action:null, actionDetails:null, dueDate:'09/19/26', dueTime:'09:00 AM', overdue:false,
-    assigned:['capegian'], link:'Dana Whitcomb', linkOverflow:0, workflow:'Leasing',
-    checklist:[], externalCal:false,
+  /* The move-in task, rebuilt on 2026-09-23 from Emma's frames. It carries a
+     Write Letter action out of the box (Tenant / New Resident Welcome, to the
+     task's own tenant) and the four things a move-in actually takes. Task and
+     every checklist item belong to the Property Manager queue rather than to
+     Charlie by name: the work is the role's, and he holds that role. */
+  { id:'t-movein-credit', title:'New Resident Move In', flag:false, colorBar:'green', completed:false,
+    action:'Write Letter',
+    actionDetails:{templateLabel:'Letter Template', type:'Tenant', template:'New Resident Welcome', tenant:'Dana Whitcomb'},
+    dueDate:'09/19/26', dueTime:'09:00 AM', overdue:false,
+    assigned:['role-pm'], link:'Dana Whitcomb', linkOverflow:0, workflow:'Leasing',
+    checklist:[
+      {text:'Assign parking space and prepare parking permit',   assigned:['role-pm'], done:false},
+      {text:'Program gate, mailbox, and amenity access codes',   assigned:['role-pm'], done:false},
+      {text:'Cut keys and prepare fobs for handoff',             assigned:['role-pm'], done:false},
+      {text:'Pick up welcome gift and set aside for resident',   assigned:['role-pm'], done:false},
+    ], externalCal:false,
     links:[{label:'Tenant', value:'Dana Whitcomb'}],
     history:[
       {date:'09/11/26 09:40 AM', type:'Note', avatar:'ncole',
-       text:'@Charlie Can you confirm the resident applies for the new move in credit?'},
+       text:'@Charlie Dana moves in on the 19th. Can you get the welcome letter out and the access codes programmed before she picks up keys?'},
       {date:'09/10/26 03:15 PM', type:'System', avatar:'ncole',
        text:'Nathan Cole created task'},
     ] },
@@ -1923,7 +1935,12 @@ const ROLES = [
    offered on a role you actually hold; and what happens to a task when he ticks
    his checklist item. Two tasks held by the Property Manager queue moved to
    Other Users' Tasks with this change, because they stopped being his. */
-const MY_ROLES = ['role-bookkeeper'];
+/* Charlie is a Property Manager as of 2026-09-23, Emma's call, which is what
+   puts New Resident Move In and its checklist on his list: both belong to the
+   Property Manager queue. Bookkeeper stays alongside it, because the claim
+   scene is a Bookkeeper-queue task (the W-9) that he picks up, and dropping
+   the role would take that task off his list and its Claim button with it. */
+const MY_ROLES = ['role-pm', 'role-bookkeeper'];
 const ME_KEY = 'capegian';
 
 /* A user's bubble colour. Three real avatar colours, the same ones the

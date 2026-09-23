@@ -2507,6 +2507,20 @@ of the two is wrong is still a question for the team rather than a thing a
 prototype can answer. The proposal screen's rule in `workspace.css` was left
 as it was: that screen is a redirect stub and nothing renders it.
 
+## Charlie is a Property Manager
+
+Emma's call, 2026-09-23. `MY_ROLES` is `['role-pm', 'role-bookkeeper']`.
+
+Property Manager is what puts New Resident Move In and its checklist on his
+list. **Bookkeeper stays alongside it** because the claim scene is a
+Bookkeeper-queue task, the W-9, that he picks up: dropping the role would take
+that task off My Tasks and its Claim button with it.
+
+**Two consequences worth knowing before a demo.** Every Property-Manager-queue
+task now counts as his, so the ones that sat in Other Users' Tasks have moved
+back into My Tasks (which is capped at ten). And a role-queue task shows a
+Claim button when you hold the role, so New Resident Move In carries one.
+
 ## A mention that lives on a task
 
 Emma's content, 2026-09-11. The other four mentions are notes on records, a
@@ -2514,8 +2528,9 @@ tenant, two prospects, an owner: and they open that record's History / Notes
 as an overlay on the Workspace. This one is a note on a **task**, and it
 behaves differently because it is different:
 
-> **Nathan Cole** · Task · Apply the new move-in credit
-> **@Tony** Can you confirm the resident applies for the new move in credit?
+> **Nathan Cole** · Task · New Resident Move In
+> **@Charlie** Dana moves in on the 19th. Can you get the welcome letter out
+> and the access codes programmed before she picks up keys?
 
 Clicking it leaves the Workspace for the Tasks register, opens that task's
 Task Details, and puts its History / Notes on top: three things in one move,
@@ -2529,9 +2544,16 @@ record. The Scoreboard names the record you are looking at, and a workflow is
 not a record. A task with no link now shows nothing there rather than an empty
 row.
 
-The task is **Apply the new move-in credit**, assigned to Tony, linked to
-**Tenant: Charlie Apegian**, and its history carries the note verbatim plus the
-system entry that created it. Closing the overlay leaves you on Task Details
+The task is **New Resident Move In**, rebuilt on 2026-09-23 from Emma's frames
+and linked to **Tenant: Dana Whitcomb**, with its history carrying the note
+verbatim plus the system entry that created it. It opens with a **Write Letter**
+action already on it (Type Tenant, Letter Template *New Resident Welcome*, to
+the task's own tenant) and the four things a move-in actually takes: assign the
+parking space and permit, program the gate, mailbox and amenity codes, cut keys
+and prepare fobs, pick up the welcome gift.
+
+**The task and every checklist item belong to the Property Manager queue**,
+not to Charlie by name: the work is the role's, and he holds the role. Closing the overlay leaves you on Task Details
 with the tenant link right there, which is the point of going to the register
 rather than opening a panel on the Workspace.
 
