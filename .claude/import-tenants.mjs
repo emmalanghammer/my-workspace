@@ -61,7 +61,15 @@ for (const [col, label] of Object.entries(want)) {
     process.exit(1);
   }
 }
-const data = rows.slice(1).filter(r => (r.A || '').trim());
+/* Charlie Apegian is the signed-in user, and the export lists him as a tenant
+   at Wain Manor. Someone reading the register should not find themselves in
+   it, so he is dropped here rather than by hand, and a later export cannot
+   quietly put him back. Emma's call, 2026-09-23. */
+const NOT_TENANTS = ['Charlie Apegian'];
+const data = rows.slice(1)
+  .filter(r => (r.A || '').trim())
+  .filter(r => !NOT_TENANTS.includes(r.A.trim()));
+const dropped = rows.slice(1).filter(r => NOT_TENANTS.includes((r.A || '').trim())).map(r => r.A.trim());
 
 /* --- helpers --- */
 /* Excel's day 0 is 1899-12-30, and the register prints MM/DD/YY. */
@@ -163,6 +171,7 @@ writeFileSync('.claude/tenants.props.json', JSON.stringify(props, null, 2));
 
 const n = p => out.filter(p).length;
 console.log(`  ${out.length} tenants from ${xlsx.split('/').pop()}`);
+if (dropped.length) console.log(`    dropped       ${dropped.join(', ')} (not a tenant)`);
 console.log(`    ${props.length} properties`);
 console.log(`    status        ${n(r=>r.status==='Current')} current, ${n(r=>r.status==='Past')} past, ${n(r=>r.status==='Future')} future`);
 console.log(`    balance > 0   ${n(r=>r.balance>0)}  (of which over $5,000: ${n(r=>r.balance>5000)})`);

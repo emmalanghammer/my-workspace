@@ -3290,7 +3290,7 @@ Any sentence with a comma before the amount was affected.
 
 ## The tenant list comes from Emma's export
 
-368 tenants, imported on 2026-09-23 from `Tenant_Register_2026-09-23.xlsx`
+367 tenants, imported on 2026-09-23 from `Tenant_Register_2026-09-23.xlsx`
 (the **Tenants** sheet; the workbook's Summary sheet is per-property counts and
 is not used). Rebuilt with `node .claude/import-tenants.mjs <file.xlsx>`, which
 regenerates `TENANTS` — rerun it rather than hand-editing the array, and it
@@ -3314,8 +3314,16 @@ account number, which means a rerun produces the identical file and a diff
 stays reviewable. **If a balance is ever quoted as real, it is not.** Send a
 balance column and the generator drops in favour of it.
 
-Roughly: 110 tenants owe something (27 over $5,000), 39 have a pet, 7 of them
+Roughly: 109 tenants owe something (27 over $5,000), 39 have a pet, 7 of them
 dogs at Riverview, 42 past tenants still have a deposit held.
+
+**Charlie Apegian is not in it.** The export lists him as a tenant at Wain
+Manor, and he is the signed-in user: nobody should open the register and find
+themselves in it. He is dropped by name in the importer's `NOT_TENANTS` list,
+so a later export cannot quietly put him back. He was Wain Manor's only tenant,
+so that property went with him — 17 properties now, and it is gone from the
+parser's property words and from `PROPS` too, since a sentence naming it could
+only ever return nothing.
 
 **One beat lost its example.** The exclusion suggestion used to read *"Notice
 tenants at Flagstone owing over $5,000"*. The export's Flag column marks four
@@ -3324,7 +3332,7 @@ Flagstone, so that sentence now matches nobody. It is *"Notice tenants owing
 over $5,000"*, which matches one. Flagging rather than inventing: the flags are
 Emma's data, and if the beat wants more of them they belong in the export.
 
-**Property names moved with it.** 18 properties, and the old four are gone —
+**Property names moved with it.** 17 properties, and the old four are gone —
 there is no Lockland, Beacon Ridge or Harbor Point any more, and Flagstone is
 *Manufactured Housing*, not *Homes*. The parser's property words and the
 details view's `PROPS` were updated to match, or a sentence naming a property

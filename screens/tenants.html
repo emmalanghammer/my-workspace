@@ -1589,7 +1589,6 @@ a:hover { text-decoration:underline; }
    ============================================================ */
 const TENANTS = [
   { name: "Marcia Clark", siteClass: "Occupied", balance: 0, account: 1, property: "Riverview Apartments", unit: "1", leaseStart: "11/01/25", leaseEnd: "10/28/26", pet: "Dog", status: "Current", email: "m.clark@email.com", phone: "(513) 555-4223", color: "Green" },
-  { name: "Charlie Apegian", siteClass: "Occupied", balance: 2389.40, account: 2, property: "Wain Manor", unit: "Wain", leaseStart: "07/01/26", leaseEnd: "06/28/27", status: "Current", email: "c.apegian@email.com", phone: "(703) 555-9342" },
   { name: "Fred Gregory", siteClass: "Vacant", balance: 0, account: 3, property: "Riverview Apartments", unit: "3", leaseStart: "07/15/25", leaseEnd: "07/14/26", status: "Past", email: "fredg@email.com", phone: "(703) 555-1405", color: "Yellow" },
   { name: "Gregory Klein", extra: "+2", siteClass: "Occupied", balance: 12202.62, account: 4, property: "Riverview Apartments", unit: "4", leaseStart: "01/01/26", leaseEnd: "12/28/26", status: "Current", email: "gklein@email.com", phone: "(513) 555-3378" },
   { name: "Kate Welsh", siteClass: "Vacant", balance: 0, account: 5, property: "Riverview Apartments", unit: "6", leaseStart: "03/01/25", leaseEnd: "02/28/26", moveOut: "02/28/26", deposit: 1355, status: "Past", email: "katewelsh@email.com", phone: "(703) 555-1305", color: "Yellow" },
@@ -2137,7 +2136,7 @@ function parse(text){
   }
   /* Every property in the register except Riverview, which has its own rule
      above. Keyed on the word someone would actually say. */
-  [["blackwell","1127 Blackwell"],["bradford","1700 Bradford House"],["shafor","206 Shafor Street"],["hangar","212 Hangar St."],["southblock","410-415 Southblock"],["black bear","Black Bear Mountains Campsite"],["buckeye","Buckeye Hall"],["clearcreek","Clearcreek Condominiums"],["corporate","Corporate Business Park"],["flagstone","Flagstone Manufactured Housing"],["golden gate","Golden Gate Housing"],["ocean breeze","Ocean Breeze ABNB"],["storage","Safe & Secure Storage"],["summerlin","Summerlin HOA"],["tri-county","Tri-County Mall"],["wain","Wain Manor"],["woodlands","Woodlands HOA"]].forEach(p=>{
+  [["blackwell","1127 Blackwell"],["bradford","1700 Bradford House"],["shafor","206 Shafor Street"],["hangar","212 Hangar St."],["southblock","410-415 Southblock"],["black bear","Black Bear Mountains Campsite"],["buckeye","Buckeye Hall"],["clearcreek","Clearcreek Condominiums"],["corporate","Corporate Business Park"],["flagstone","Flagstone Manufactured Housing"],["golden gate","Golden Gate Housing"],["ocean breeze","Ocean Breeze ABNB"],["storage","Safe & Secure Storage"],["summerlin","Summerlin HOA"],["tri-county","Tri-County Mall"],["woodlands","Woodlands HOA"]].forEach(p=>{
     if (t.indexOf(p[0])>=0) add({field:"property", label:"Property is", op:"is", value:p[1], kind:"select",
       why: p[0], matchedField:"Property"});
   });
@@ -3279,7 +3278,7 @@ function toNum(v){ const n = Number(String(v).replace(/[^0-9.\-]/g,"")); return 
    DATA — ported verbatim from the Claude Design source (content/
    behavior only; visuals rebuilt from design.md).
    ============================================================ */
-const PROPS = ["1127 Blackwell", "1700 Bradford House", "206 Shafor Street", "212 Hangar St.", "410-415 Southblock", "Black Bear Mountains Campsite", "Buckeye Hall", "Clearcreek Condominiums", "Corporate Business Park", "Flagstone Manufactured Housing", "Golden Gate Housing", "Ocean Breeze ABNB", "Riverview Apartments", "Safe & Secure Storage", "Summerlin HOA", "Tri-County Mall", "Wain Manor", "Woodlands HOA"];
+const PROPS = ["1127 Blackwell", "1700 Bradford House", "206 Shafor Street", "212 Hangar St.", "410-415 Southblock", "Black Bear Mountains Campsite", "Buckeye Hall", "Clearcreek Condominiums", "Corporate Business Park", "Flagstone Manufactured Housing", "Golden Gate Housing", "Ocean Breeze ABNB", "Riverview Apartments", "Safe & Secure Storage", "Summerlin HOA", "Tri-County Mall", "Woodlands HOA"];
 const STATUSES = ["Current", "Notice", "Past"];
 
 
