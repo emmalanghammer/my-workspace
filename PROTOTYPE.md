@@ -2756,9 +2756,11 @@ file this prototype now matches). The type used to be the first word of a 12px
 grey line that also held the record and the time, so it read as timestamp
 furniture. It is now its own thing:
 
-- **Name and time head the row, the comment follows, the record sits under
-  both**: you read who and when, then what they said, and the record is there
-  to click once you care.
+- **Name left, time hard right, the comment under them, the record under
+  that**: you read who and when, then what they said, and the record is there
+  to click once you care. 8px between the comment and the record, twice the 4
+  above it, so the record reads as its own thing rather than the last line of
+  the sentence.
 - **The record** is its type's icon, the type in `Web/Label/S/Regular`, then
   the record's own name in `Web/Label/S/SemiBold`, both `--text-secondary`.
   The name is the bold half because it is the thing you are looking for; it is

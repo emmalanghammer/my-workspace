@@ -513,7 +513,10 @@
   white-space: nowrap;
 }
 .ws-mention__who { font: var(--type-paragraph-s-semibold); color: var(--text-secondary); }
-.ws-mention__when { flex: none; font: var(--type-label-s-regular); color: var(--text-disabled); }
+/* Hard right on the name's line: the name and the time are the two ends of
+   the same line rather than two words next to each other. Emma's call,
+   2026-09-23. */
+.ws-mention__when { margin-left: auto; flex: none; font: var(--type-label-s-regular); color: var(--text-disabled); }
 .ws-mention__body {
   margin-top: var(--spacing-xxs);
   font: var(--type-paragraph-s-regular);
