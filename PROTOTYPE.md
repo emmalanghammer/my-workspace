@@ -3454,6 +3454,14 @@ and its age are joined by a comma rather than AND, because the age is not a
 second condition, it is the rest of the sentence about the same money. Every
 other pairing keeps its AND, where the two halves really are separate things.
 
+**Only two of the seven carry a display colour.** In the live register just
+Rosita Campanel and Devin Lautner have one, and it is purple; the other five
+have no colour bar at all. The design system has no purple, so Emma picked the
+green (#6eb744) on 2026-09-23 and the other five were cleared. The overrides
+sit in `COLOR_OVERRIDES` in the importer, applied after the colour is drawn so
+that setting them shifts nothing else. Every tenant outside those seven keeps
+a generated colour.
+
 **The seven it returns are the real app's seven.** Emma sent a screenshot of
 the shipped register answering that same question on 2026-09-23: Laura Villa,
 Ralph Donaldson, Lori Singer, Rosita Campanel, Kristen Jones, Devin Lautner,

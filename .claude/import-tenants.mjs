@@ -89,6 +89,13 @@ const COLORS = ['Blue', 'Green', 'Orange', 'Yellow'];
    question. See the note where agedDays is drawn. */
 const AGED_OVER_30 = new Set([14, 67, 249, 320, 331, 333, 451]);
 
+/* Display colours for the seven the aged-balance filter returns, taken from
+   the real register (Emma, 2026-09-23): only Rosita Campanel and Devin Lautner
+   carry one there, so the other five show no colour bar here either. The
+   live app draws those two purple; the design system has no purple, and Emma
+   picked the green. Everyone else in the file keeps the generated colour. */
+const COLOR_OVERRIDES = { 320: 'Green', 333: 'Green', 14: null, 67: null, 249: null, 331: null, 451: null };
+
 /* Tenants whose row leaves the prototype for the live system, by account
    number. The id in the URL is the real app's, not this export's account
    number, so it cannot be derived and has to be recorded. Emma's link,
@@ -181,6 +188,13 @@ for (const r of data) {
     rec.agedDays = pinned ? 31 + Math.floor(roll * 150) : 1 + Math.floor(roll * 29);
   }
   if (pinned && rec.balance <= 20) rec.balance = Math.round((120 + rand() * 2400) * 100) / 100;
+
+  /* Applied after the draw rather than instead of it, so overriding a colour
+     does not shift any other generated field. */
+  if (Object.prototype.hasOwnProperty.call(COLOR_OVERRIDES, rec.account)) {
+    const c = COLOR_OVERRIDES[rec.account];
+    if (c) rec.color = c; else delete rec.color;
+  }
 
   if (DEEP_LINKS[rec.account]) rec.deepLink = DEEP_LINKS[rec.account];
 
