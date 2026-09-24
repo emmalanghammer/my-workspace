@@ -456,72 +456,65 @@
 
 /* ---------- My Mentions ---------- */
 .ws-mention {
-  display: grid;
-  grid-template-columns: 40px 1fr;
-  gap: var(--spacing-sm);
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
   padding: var(--spacing-sm);
   border-radius: var(--radius-sm);
   cursor: pointer;
 }
-/* A mention is a real target now -- it opens the History / Notes overlay for
-   the record it is about. Emma's call, 2026-09-10. */
-.ws-mention { cursor: pointer; }
 .ws-mention:hover { background: var(--container-tertiary); }
 .ws-mention:focus-visible { outline: 2px solid var(--border-secondary); outline-offset: -2px; }
-/* The record the mention is about, and when. Rebuilt on 2026-09-23 from
-   Emma's frame (My Mentions, record types, node 8:488): the type and the
-   record sit together in a bordered chip led by the record type's own icon,
-   and the time is pushed to the far end of the row rather than trailing the
-   sentence. Before this the three were one grey 12px line, so the type read
-   as timestamp furniture. */
-.ws-mention__meta {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  flex-wrap: wrap;
-}
-/* The record sits at the far end of the name's line, unboxed: with the row's
-   own hover and the tile's hairlines around it the border was a third frame
-   inside a frame, and the icon already says this is a record. The record's
-   own name is the bold half, since that is the thing you are looking for.
-   Emma's call, 2026-09-23. */
-/* The person and the time head the row, the comment follows, and the record it
-   is about sits under both: you read who and when, then what they said, and
-   the record is there to click once you care. Emma's call, 2026-09-23. Its own
-   name is the half that truncates on a narrow tile, so the type and the icon
-   survive a long one. */
+
+/* Rebuilt from Emma's frame (node 24:2638) on 2026-09-24. The record the
+   mention is about leads the row with the time opposite it, the comment
+   follows, and who wrote it signs off underneath beside a 24px inline avatar.
+   The record's icon goes with this pass: at 14px next to a bold record name it
+   was doing less than the words were. What the row is about is the first thing
+   you read now, and the person is the footnote, which is the opposite of where
+   this started. */
 .ws-mention__rec {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xxs);
-  /* 12, three times the 4 the comment sits at under the name: the record is a
-     different thing from the sentence above it, and anything tighter read as
-     the last line of it. 8 first, then 12 on Emma's call, 2026-09-24. */
-  margin-top: var(--spacing-sm);
+  justify-content: space-between;
+  gap: var(--spacing-xs);
   min-width: 0;
-  font: var(--type-label-s-regular);
-  color: var(--text-secondary);
 }
-.ws-mention__rec .rmx-icon { width: 16px; height: 16px; flex: none; }
-.ws-mention__type { flex: none; }
-/* The name gives first when the row is tight, so the type and the icon stay. */
+.ws-mention__recname {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xxs);
+  min-width: 0;
+}
+.ws-mention__type { flex: none; font: var(--type-label-m-regular); color: var(--text-secondary); }
+/* The record's name gives first when the row is tight, so the type and the
+   time both survive a long one. */
 .ws-mention__on {
-  font: var(--type-label-s-semibold);
+  font: var(--type-label-m-semibold);
+  color: var(--text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.ws-mention__who { font: var(--type-paragraph-s-semibold); color: var(--text-secondary); }
-/* Hard right on the name's line: the name and the time are the two ends of
-   the same line rather than two words next to each other. Emma's call,
-   2026-09-23. */
-.ws-mention__when { margin-left: auto; flex: none; font: var(--type-label-s-regular); color: var(--text-disabled); }
+.ws-mention__when { flex: none; font: var(--type-label-s-regular); color: var(--text-disabled); }
 .ws-mention__body {
-  margin-top: var(--spacing-xxs);
   font: var(--type-paragraph-s-regular);
   color: var(--text-primary);
 }
+.ws-mention__by {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xxs);
+}
+.ws-mention__who { font: var(--type-label-s-regular); color: var(--text-secondary); }
+/* Avatar Style=Inline: 24px with its initials at Label/S/Regular, which is the
+   library's own pairing for an avatar sitting in a line of text. */
+[data-rmx-component="Avatar"][data-ws-inline] {
+  width: 24px;
+  height: 24px;
+  font: var(--type-label-s-regular);
+}
+
 /* Avatar, solid circle, white uppercase initials, ~2.5:1 circle-to-text
    (40px circle / 16px text), radius-round. */
 [data-rmx-component="Avatar"] {
