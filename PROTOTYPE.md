@@ -2777,6 +2777,19 @@ fetched once more, so the very first load after this needs a hard reload
 
 ---
 
+## Every tile opens at the top of its own content
+
+Emma's call, 2026-09-24. A tile is a fixed 580 with a scrolling body, and the
+browser restores a scroll position of its own accord: on a reload, and on
+coming back from the Tasks register. Once the mention rows grew it took about
+50px of that to land on a tile whose first mention is cut in half under the
+header, which reads as a broken tile rather than a scrolled one.
+
+Every tile body is reset to the top on load and on `pageshow` (which covers the
+back/forward cache), and `history.scrollRestoration` is `manual`: nothing on
+this page is long enough to be worth restoring, and coming back to it should
+show it the way it opens.
+
 ## The asset links carry a content hash
 
 `node .claude/stamp-assets.mjs`, run after anything in `assets/` changes. It

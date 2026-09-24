@@ -215,7 +215,7 @@
               <span class="ws-mention__recname"><span class="ws-mention__type">Task</span><span class="ws-mention__on">New Resident Move In</span></span>
               <span class="ws-mention__when">20m ago</span>
             </div>
-            <div class="ws-mention__body"><span class="ws-handle">@Charlie</span> Dana Whitcomb moves in on the 19th. Can you set up her community app account? The front office has the permit, the pool pass and the gift covered.</div>
+            <div class="ws-mention__body"><span class="ws-handle">@Charlie</span> Dana Whitcomb moves in on the 19th. Can you set up her community app account?</div>
             <div class="ws-mention__by">
               <span data-rmx-component="Avatar" data-ws-avatar="green" data-ws-inline>NC</span>
               <span class="ws-mention__who">Nathan Cole</span>
@@ -624,6 +624,29 @@
     var row = e.target.closest ? e.target.closest('.ws-mention') : null;
     if (row) { e.preventDefault(); open(row); }
   });
+}());
+
+/* Every tile opens at the top of its own content.
+
+   A tile is a fixed 580 with a scrolling body, and the browser restores a
+   scroll position of its own accord: on a reload, and on coming back from the
+   Tasks register. Since the mention rows grew it takes about 50px of scroll to
+   land on a tile whose first mention is cut in half under the header, which
+   reads as a broken tile rather than a scrolled one. Emma's call, 2026-09-24.
+
+   scrollRestoration is turned off for the same reason: nothing on this page
+   is long enough to be worth restoring, and coming back to it should show it
+   the way it opens. */
+(function pinTilesToTheTop() {
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  function top() {
+    var bodies = document.querySelectorAll('.rmx-tile__body');
+    for (var i = 0; i < bodies.length; i++) bodies[i].scrollTop = 0;
+    window.scrollTo(0, 0);
+  }
+  top();
+  window.addEventListener('load', top);
+  window.addEventListener('pageshow', top);   /* also the back/forward cache */
 }());
 </script>
 </body>
