@@ -2779,35 +2779,39 @@ fetched once more, so the very first load after this needs a hard reload
 
 ## The mention says what kind of record it is about
 
-Emma's frame, 2026-09-23 (My Mentions, record types, node 8:488 in the Figma
-file this prototype now matches). The type used to be the first word of a 12px
-grey line that also held the record and the time, so it read as timestamp
-furniture. It is now its own thing:
+Emma's frame, 2026-09-24 (My Mentions, record types, node 24:2638), the third
+pass on this row in two days. The type began as the first word of a 12px grey
+line that also held the record and the time, where it read as timestamp
+furniture. It is the headline now:
 
-- **Name left, time hard right, the comment under them, the record under
-  that**: you read who and when, then what they said, and the record is there
-  to click once you care. 12px between the comment and the record, three
-  times the 4 above it, so the record reads as its own thing rather than the
-  last line of the sentence.
-- **The record** is its type's icon, the type in `Web/Label/S/Regular`, then
-  the record's own name in `Web/Label/S/SemiBold`, both `--text-secondary`.
-  The name is the bold half because it is the thing you are looking for; it is
-  also the half that truncates when the row is tight, so the type and the icon
-  always survive.
-- **No border on it.** It was a bordered chip beside the name for a few hours
-  on 2026-09-23; with the row's hover and the tile's hairlines around it that
-  was a third frame inside a frame, and the icon already says this is a
-  record. Emma's call, same day, as is the move underneath.
+- **The record leads the row**: the type in `Web/Label/M/Regular`, the
+  record's own name in `Web/Label/M/SemiBold`, both 14px `--text-secondary`,
+  with the time opposite it at the row's right edge in `Web/Label/S/Regular`
+  `--text-disabled`.
+- **The comment follows**, and **who wrote it signs off underneath**: a 24px
+  avatar (the library's Avatar `Style=Inline`, initials at
+  `Web/Label/S/Regular`, which is its own pairing) beside the person's name at
+  12px. The person used to head the row in 14/600 with a 40px avatar in a
+  column of their own; they are the footnote now and the record is the
+  headline, which is the opposite of where this started.
+- **No icon on the record.** At 14px beside a bold record name it was doing
+  less than the words were. It was a bordered chip with an icon for a few
+  hours on 2026-09-23, then an unboxed line with one, and now neither.
 - **The @handle** is `--text-link` at 20% and regular weight, not the flat
-  `--component-lozenge-brand` at semibold, as the frame has it. Written with
-  `color-mix` over an rgba fallback so the token stays the source of the
-  colour.
+  `--component-lozenge-brand` at semibold. Written with `color-mix` over an
+  rgba fallback so the token stays the source of the colour.
 
-**The four icons are real geometry, exported on the day.** `checklist` from
-Material Icons, which is what Emma's frame uses; `prospects`, `tenants` and
-`owners` from RMX Iconography (nodes 68:2961, 68:2910, 68:2899, the three she
-sent). None of them drawn, and the Express three carry their clip path so the
-shapes are identical to the library's.
+**The four icons are real geometry, exported on 2026-09-23.** `checklist` from
+Material Icons; `prospects`, `tenants` and `owners` from RMX Iconography (nodes
+68:2961, 68:2910, 68:2899). None drawn, and the Express three carry their clip
+path so the shapes are identical to the library's. **This layout does not draw
+them** and they are still in the sprite, in case the icon comes back.
+
+**Two things in the frame this does not copy.** Its header has no count, but
+the Workspace header variant does not render one in Figma either, so the
+absence reads as a limitation of the frame rather than a decision: the tile
+keeps its 5. And its fifth mention is labelled Tenant where the record is an
+Owner, which is content drift in the frame, not an instruction.
 
 ## Two saved filters are there before you start
 
