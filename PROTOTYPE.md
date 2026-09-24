@@ -2567,10 +2567,11 @@ holds the first of them.
 because the checklist hands work to maintenance and the list had no such role.
 Demo content, like the rest of that list.
 
-**The note asks the Property Manager, not Charlie.** A mention of a role he
-holds now gets the same chip his own name does, so it reads as his; without
-that, "@Property Manager" looked like somebody else being asked on a task
-sitting in his own list. Closing the overlay leaves you on Task Details
+**The note tags Charlie by name.** It asked "@Property Manager" for part of
+2026-09-24 and went back to his name the same day, Emma's call. The rule that
+came out of that stayed: a mention of a role he holds gets the same chip his
+own name does, rather than reading as somebody else being asked. Nothing uses
+it today, and it is the right rule for a register where work is held by role. Closing the overlay leaves you on Task Details
 with the tenant link right there, which is the point of going to the register
 rather than opening a panel on the Workspace.
 

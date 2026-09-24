@@ -1396,7 +1396,7 @@ let myTasks = [
     links:[{label:'Tenant', value:'Dana Whitcomb'}],
     history:[
       {date:'09/11/26 09:40 AM', type:'Note', avatar:'ncole',
-       text:'@Property Manager Dana moves in on the 19th. Can you get the welcome letter out and her parking permit and amenity fob ready before she picks up keys?'},
+       text:'@Charlie Dana moves in on the 19th. Can you get the welcome letter out and her parking permit and amenity fob ready before she picks up keys?'},
       {date:'09/10/26 03:15 PM', type:'System', avatar:'ncole',
        text:'Nathan Cole created task'},
     ] },
@@ -2692,9 +2692,10 @@ function mentionNames(){
 function withMentionChips(text){
   let out = String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;');
   /* A mention of a role Charlie holds is a mention of Charlie, so it gets the
-     same chip his own name does. Without this "@Property Manager" read as
-     somebody else being asked on a task sitting in his own list. Emma's call,
-     2026-09-24. */
+     same chip his own name does rather than reading as somebody else being
+     asked. No note uses one today, the move-in note went back to tagging him
+     by name, but the rule is the right one for a register where work is held
+     by role. Added 2026-09-24. */
   const mine = [assigneeName(ME_KEY), 'Charlie'].concat(MY_ROLES.map(assigneeName));
   mentionNames().forEach(function(n){
     const cls = mine.indexOf(n) > -1 ? 'hn-at hn-at--me' : 'hn-at hn-at--other';
