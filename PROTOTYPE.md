@@ -2529,14 +2529,14 @@ as an overlay on the Workspace. This one is a note on a **task**, and it
 behaves differently because it is different:
 
 > **Nathan Cole** · Task · New Resident Move In
-> **@Charlie** Dana moves in on the 19th. Can you get the welcome letter out
-> and the access codes programmed before she picks up keys?
+> **@Charlie** Dana Whitcomb moves in on the 19th. Can you set up her
+> community app account?
 
-Clicking it leaves the Workspace for the Tasks register, opens that task's
-Task Details, and puts its History / Notes on top: three things in one move,
-because the note you clicked is in that overlay and nowhere else. A new
-`?notes=1` on the task's own deep link is what does the last part, alongside
-the `?open=` the tile rows have used since the first round.
+Clicking it leaves the Workspace for the Tasks register and opens that task's
+Task Details, at the top: the task's own name, its Write Letter action and its
+checklist. `?notes=1` still rides along on the link and still means "you came
+from the note", but as of 2026-09-24 it no longer moves the modal, so the note
+is a scroll away like everything else on the form.
 
 **The Scoreboard shows only what the task is linked to.** It had been printing
 the workflow alongside it, "Leasing", wearing a building icon, reading like a
@@ -2979,12 +2979,12 @@ open on top** of the task. Two changes off that:
    mentioned on is rarely the only one you want once you are looking at it, and
    landing on the register leaves the rest of the list right there behind the
    overlay.
-4. **Scrolled to the History / Notes tile.** `&notes=1` survives, with a new
-   job: instead of opening the overlay it scrolls the modal down to that tile,
-   so the note you were tagged in is what you are looking at and the task stays
-   in view. The scroll is smooth rather than a jump, because the movement is
-   what tells you the page took you somewhere; a modal that is silently
-   already-scrolled reads as one that rendered wrong.
+4. **Scrolled to the History / Notes tile**, then not. `&notes=1` survived
+   step 3 with a new job, scrolling the modal down to that tile so the note you
+   were tagged in was what you landed on. **Dropped on 2026-09-24, Emma's
+   call**: the modal opens at the top, where the task's name, action and
+   checklist are. The parameter stays on the link and still means "you came
+   from the note"; it simply no longer moves anything.
 
 So the mention now goes to `screens/tasks.html?open=<id>`, Task Details opens
 on arrival, and closing it leaves you on the register rather than nowhere. The

@@ -3273,28 +3273,18 @@ function openFromQueryParam(){
   const dataset = myTasks.includes(task) ? 'my' : 'other';
   openTaskModal(dataset, task.id);
   /* ?notes=1 -- arrived from a mention that lives in this task's History /
-     Notes. The modal scrolls down to that tile so the note you were tagged in
-     is what you are looking at, rather than the top of a form you have to
-     scroll yourself. Emma's call, 2026-09-14.
+     Notes.
 
-     This used to open the whole History / Notes overlay on top of Task
-     Details, which buried the task you clicked through to see. Scrolling says
-     the same thing more quietly and leaves the task in view. */
-  if (params.get('notes') === '1') scrollToHistoryNotes();
-}
+     The modal used to scroll itself down to that tile on arrival, so the note
+     you were tagged in was what you landed on. Emma had it open the whole
+     History / Notes overlay before that, which buried the task you clicked
+     through to see, and the scroll was the quieter version of the same idea.
 
-/* Scrolled, not jumped: the movement is what tells you the page took you
-   somewhere, and on a demo screen a modal that is silently already-scrolled
-   reads as a modal that rendered wrong. The frame waits for the modal's own
-   render to settle, otherwise the tile is measured before it has a height. */
-function scrollToHistoryNotes(){
-  requestAnimationFrame(function(){
-    const tile = document.getElementById('historyNotesTile');
-    const body = tile && tile.closest('.modal-body');
-    if (!body) return;
-    const delta = tile.getBoundingClientRect().top - body.getBoundingClientRect().top;
-    body.scrollTo({ top: body.scrollTop + delta, behavior: 'smooth' });
-  });
+     Both are gone as of 2026-09-24, Emma's call: the modal opens at the top,
+     where the task's own name, action and checklist are, and the note is a
+     scroll away like everything else on the form. The parameter still rides
+     along on the link and still means "you came from the note", it just no
+     longer moves the modal. */
 }
 
 // Embedded mode (?embed=1), My Workspace frames this page in an iframe
