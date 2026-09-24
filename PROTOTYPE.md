@@ -2548,12 +2548,29 @@ The task is **New Resident Move In**, rebuilt on 2026-09-23 from Emma's frames
 and linked to **Tenant: Dana Whitcomb**, with its history carrying the note
 verbatim plus the system entry that created it. It opens with a **Write Letter**
 action already on it (Type Tenant, Letter Template *New Resident Welcome*, to
-the task's own tenant) and the four things a move-in actually takes: assign the
-parking space and permit, program the gate, mailbox and amenity codes, cut keys
-and prepare fobs, pick up the welcome gift.
+the task's own tenant) and the five things a move-in takes, from Emma's frame
+of 2026-09-24:
 
-**The task and every checklist item belong to the Property Manager queue**,
-not to Charlie by name: the work is the role's, and he holds the role. Closing the overlay leaves you on Task Details
+| Checklist item | Assigned to |
+|---|---|
+| Choose welcome gift and approve gift budget | Property Manager |
+| Assign parking space and prepare parking permit | Property Manager |
+| Add resident name to mailbox and building directory | Maintenance Technician |
+| Prepare pool pass and amenity fob | Leasing Agent |
+| Pick up welcome gift and set aside for resident | Leasing Agent |
+
+**The task belongs to the Property Manager queue** rather than to Charlie by
+name, and the checklist hands down three roles: the work is the role's, and he
+holds the first of them.
+
+**Maintenance Technician is a new role**, added to `ROLES` on 2026-09-24
+because the checklist hands work to maintenance and the list had no such role.
+Demo content, like the rest of that list.
+
+**The note asks the Property Manager, not Charlie.** A mention of a role he
+holds now gets the same chip his own name does, so it reads as his; without
+that, "@Property Manager" looked like somebody else being asked on a task
+sitting in his own list. Closing the overlay leaves you on Task Details
 with the tenant link right there, which is the point of going to the register
 rather than opening a panel on the Workspace.
 

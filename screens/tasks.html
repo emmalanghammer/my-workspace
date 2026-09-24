@@ -1387,15 +1387,16 @@ let myTasks = [
     dueDate:'09/19/26', dueTime:'09:00 AM', overdue:false,
     assigned:['role-pm'], link:'Dana Whitcomb', linkOverflow:0, workflow:'Leasing',
     checklist:[
-      {text:'Assign parking space and prepare parking permit',   assigned:['role-pm'], done:false},
-      {text:'Program gate, mailbox, and amenity access codes',   assigned:['role-pm'], done:false},
-      {text:'Cut keys and prepare fobs for handoff',             assigned:['role-pm'], done:false},
-      {text:'Pick up welcome gift and set aside for resident',   assigned:['role-pm'], done:false},
+      {text:'Choose welcome gift and approve gift budget',          assigned:['role-pm'],      done:false},
+      {text:'Assign parking space and prepare parking permit',      assigned:['role-pm'],      done:false},
+      {text:'Add resident name to mailbox and building directory',  assigned:['role-maint'],   done:false},
+      {text:'Prepare pool pass and amenity fob',                    assigned:['role-leasing'], done:false},
+      {text:'Pick up welcome gift and set aside for resident',      assigned:['role-leasing'], done:false},
     ], externalCal:false,
     links:[{label:'Tenant', value:'Dana Whitcomb'}],
     history:[
       {date:'09/11/26 09:40 AM', type:'Note', avatar:'ncole',
-       text:'@Charlie Dana moves in on the 19th. Can you get the welcome letter out and the access codes programmed before she picks up keys?'},
+       text:'@Property Manager Dana moves in on the 19th. Can you get the welcome letter out and her parking permit and amenity fob ready before she picks up keys?'},
       {date:'09/10/26 03:15 PM', type:'System', avatar:'ncole',
        text:'Nathan Cole created task'},
     ] },
@@ -1919,6 +1920,9 @@ const ROLES = [
   {key:'role-admin',      initials:'AD', name:'Administrator'},
   {key:'role-bookkeeper', initials:'BK', name:'Bookkeeper'},
   {key:'role-leasing',    initials:'LA', name:'Leasing Agent'},
+  /* Added 2026-09-24 for the move-in checklist, which hands work to
+     maintenance. Demo content, like the rest of this list. */
+  {key:'role-maint',      initials:'MT', name:'Maintenance Technician'},
   {key:'role-pm',         initials:'PM', name:'Property Manager'},
   {key:'role-sa',         initials:'SA', name:'SA'},
 ];
@@ -2687,9 +2691,13 @@ function mentionNames(){
 }
 function withMentionChips(text){
   let out = String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;');
-  const meName = assigneeName(ME_KEY);
+  /* A mention of a role Charlie holds is a mention of Charlie, so it gets the
+     same chip his own name does. Without this "@Property Manager" read as
+     somebody else being asked on a task sitting in his own list. Emma's call,
+     2026-09-24. */
+  const mine = [assigneeName(ME_KEY), 'Charlie'].concat(MY_ROLES.map(assigneeName));
   mentionNames().forEach(function(n){
-    const cls = (n === meName || n === 'Charlie') ? 'hn-at hn-at--me' : 'hn-at hn-at--other';
+    const cls = mine.indexOf(n) > -1 ? 'hn-at hn-at--me' : 'hn-at hn-at--other';
     out = out.split('@' + n).join('<span class="' + cls + '">' + n + '</span>');
   });
   return out;
