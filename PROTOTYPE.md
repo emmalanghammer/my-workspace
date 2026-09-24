@@ -2568,10 +2568,14 @@ holds the first of them.
 the front office and the list had neither. Demo content, like the rest of that
 list.
 
-**The note names what the task holds**: the tenant by full name, the due date,
-and two items off this checklist (the community app account and the parking
-permit). It is rewritten whenever the checklist is, so it cannot end up asking
-for work the task no longer carries.
+**The note asks Charlie for Charlie's item, and nothing else.** It names the
+tenant in full, the due date, and the one item on the checklist that belongs to
+the Property Manager, the community app account; the permit, the pool pass and
+the gift are the Office Assistant's, so the note says the front office has
+those rather than asking him for them. It had asked him for the permit for
+about an hour on 2026-09-24 until Emma caught it. Worth remembering when the
+checklist changes: the note is separate data and nothing keeps the two in step
+on its own.
 
 **The note tags Charlie by name.** It asked "@Property Manager" for part of
 2026-09-24 and went back to his name the same day, Emma's call. The rule that
