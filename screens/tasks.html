@@ -1387,16 +1387,16 @@ let myTasks = [
     dueDate:'09/19/26', dueTime:'09:00 AM', overdue:false,
     assigned:['role-pm'], link:'Dana Whitcomb', linkOverflow:0, workflow:'Leasing',
     checklist:[
-      {text:'Choose welcome gift and approve gift budget',          assigned:['role-pm'],      done:false},
-      {text:'Assign parking space and prepare parking permit',      assigned:['role-pm'],      done:false},
-      {text:'Add resident name to mailbox and building directory',  assigned:['role-maint'],   done:false},
-      {text:'Prepare pool pass and amenity fob',                    assigned:['role-leasing'], done:false},
-      {text:'Pick up welcome gift and set aside for resident',      assigned:['role-leasing'], done:false},
+      {text:'Set up resident account in the community app',         assigned:['role-pm'],     done:false},
+      {text:'Add resident name to mailbox and building directory',  assigned:['role-maint'],  done:false},
+      {text:'Prepare parking permit for assigned space',            assigned:['role-office'], done:false},
+      {text:'Prepare pool pass and amenity fob',                    assigned:['role-office'], done:false},
+      {text:'Pick up welcome gift and set aside for resident',      assigned:['role-office'], done:false},
     ], externalCal:false,
     links:[{label:'Tenant', value:'Dana Whitcomb'}],
     history:[
       {date:'09/11/26 09:40 AM', type:'Note', avatar:'ncole',
-       text:'@Charlie Dana moves in on the 19th. Can you get the welcome letter out and her parking permit and amenity fob ready before she picks up keys?'},
+       text:'@Charlie Dana Whitcomb moves in on the 19th and her community app account still is not set up. Can you get that and the parking permit sorted before she picks up keys?'},
       {date:'09/10/26 03:15 PM', type:'System', avatar:'ncole',
        text:'Nathan Cole created task'},
     ] },
@@ -1921,8 +1921,10 @@ const ROLES = [
   {key:'role-bookkeeper', initials:'BK', name:'Bookkeeper'},
   {key:'role-leasing',    initials:'LA', name:'Leasing Agent'},
   /* Added 2026-09-24 for the move-in checklist, which hands work to
-     maintenance. Demo content, like the rest of this list. */
+     maintenance and to the front office. Demo content, like the rest of
+     this list. */
   {key:'role-maint',      initials:'MT', name:'Maintenance Technician'},
+  {key:'role-office',     initials:'OA', name:'Office Assistant'},
   {key:'role-pm',         initials:'PM', name:'Property Manager'},
   {key:'role-sa',         initials:'SA', name:'SA'},
 ];

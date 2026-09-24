@@ -2553,19 +2553,25 @@ of 2026-09-24:
 
 | Checklist item | Assigned to |
 |---|---|
-| Choose welcome gift and approve gift budget | Property Manager |
-| Assign parking space and prepare parking permit | Property Manager |
+| Set up resident account in the community app | Property Manager |
 | Add resident name to mailbox and building directory | Maintenance Technician |
-| Prepare pool pass and amenity fob | Leasing Agent |
-| Pick up welcome gift and set aside for resident | Leasing Agent |
+| Prepare parking permit for assigned space | Office Assistant |
+| Prepare pool pass and amenity fob | Office Assistant |
+| Pick up welcome gift and set aside for resident | Office Assistant |
 
 **The task belongs to the Property Manager queue** rather than to Charlie by
 name, and the checklist hands down three roles: the work is the role's, and he
 holds the first of them.
 
-**Maintenance Technician is a new role**, added to `ROLES` on 2026-09-24
-because the checklist hands work to maintenance and the list had no such role.
-Demo content, like the rest of that list.
+**Maintenance Technician and Office Assistant are new roles**, added to
+`ROLES` on 2026-09-24 because the checklist hands work to maintenance and to
+the front office and the list had neither. Demo content, like the rest of that
+list.
+
+**The note names what the task holds**: the tenant by full name, the due date,
+and two items off this checklist (the community app account and the parking
+permit). It is rewritten whenever the checklist is, so it cannot end up asking
+for work the task no longer carries.
 
 **The note tags Charlie by name.** It asked "@Property Manager" for part of
 2026-09-24 and went back to his name the same day, Emma's call. The rule that
