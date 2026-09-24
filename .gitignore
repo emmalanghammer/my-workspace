@@ -9,6 +9,7 @@
 !.claude/dev-server.py
 !.claude/build-single.mjs
 !.claude/import-tenants.mjs
+!.claude/stamp-assets.mjs
 
 # The bundler's output. Regenerate with scripts/bundle.mjs; do not send it,
 # it inlines a literal </script> and breaks the pages (see build-single.mjs).

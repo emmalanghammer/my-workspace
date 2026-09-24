@@ -2777,6 +2777,31 @@ fetched once more, so the very first load after this needs a hard reload
 
 ---
 
+## The asset links carry a content hash
+
+`node .claude/stamp-assets.mjs`, run after anything in `assets/` changes. It
+rewrites every stylesheet and script link in the five pages to
+`assets/workspace.css?v=<first 8 of its sha256>`.
+
+**Why.** GitHub Pages revalidates HTML but serves assets with `max-age=600`, so
+for ten minutes after a push a visitor can get the new markup with the old
+stylesheet. That is not a blank page; it is a page laid out by rules written
+for markup that no longer exists, which looks far more broken than either
+version is. On 2026-09-24 the mention rows came out drawn by a grid meant for
+an avatar column that had just been removed, and it took a trip through the
+response headers to prove the site was fine and the browser was not.
+
+A hash in the URL makes a changed file a different file, so a stale copy can
+never pair with new markup. Unchanged assets keep their hash and stay cached,
+which is the point of the cache.
+
+**Two things it is careful about.** It only rewrites inside a real `<link>` or
+`<script>` tag: the shared assets quote their own `<script src=...>` in header
+comments, and an earlier version of the script stamped those too and then went
+looking for files at paths that were never meant to resolve. And
+`.claude/build-single.mjs` strips the `?v=` when it inlines, so the one-file
+build still finds everything.
+
 ## The mention says what kind of record it is about
 
 Emma's frame, 2026-09-24 (My Mentions, record types, node 24:2638), the third

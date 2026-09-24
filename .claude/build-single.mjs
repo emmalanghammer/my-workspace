@@ -63,14 +63,16 @@ function inline(name, file) {
   let html = readFileSync(resolve(ROOT, file), 'utf8');
   let css = 0, js = 0;
 
-  html = html.replace(/<link rel="stylesheet" href="([^"]+\.css)">/g, (m, href) => {
+  /* The href may carry a ?v= cache-busting stamp (.claude/stamp-assets.mjs);
+     strip it to reach the file. */
+  html = html.replace(/<link rel="stylesheet" href="([^"]+\.css)(?:\?v=[0-9a-f]+)?">/g, (m, href) => {
     const text = readFileSync(resolve(dir, href), 'utf8');
     if (/<\/style/i.test(text)) problems.push(`${name}: ${href} contains </style`);
     css++;
     return `<style data-inlined>/* ${href.replace(/^(\.\.\/)?assets\//, '')} */\n${text}</style>`;
   });
 
-  html = html.replace(/<script src="([^"]+\.js)"><\/script>/g, (m, src) => {
+  html = html.replace(/<script src="([^"]+\.js)(?:\?v=[0-9a-f]+)?"><\/script>/g, (m, src) => {
     const text = readFileSync(resolve(dir, src), 'utf8');
     js++;
     return `<script data-inlined>/* ${src.replace(/^(\.\.\/)?assets\//, '')} */\n${escapeCloser(text)}</script>`;
