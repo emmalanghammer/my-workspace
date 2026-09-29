@@ -4418,3 +4418,19 @@ text everywhere. Two changes fixed it:
   way in the copy and another way in the user list, which is the reason nothing
   matched. This was on the open-questions list and is now settled: the copy
   wins, because it is Emma's wording and it is what people read.
+
+### The deep link moved to Marcia Clark (2026-09-29)
+
+It was on Devin Lautner, account 333, which is a long way down a 367-row
+register and only easy to reach behind the aged-balance filter. It is on Marcia
+Clark now — account 1, the first row — so the jump out to the live system is one
+click from a register nobody has had to filter first:
+
+`https://class60.rmx.rentmanager.com/#/tenants/1/details?QuickFilters=Status,in,2`
+
+Devin's row goes to the prototype's own Tenant Details again, like every other
+row. He keeps the purple display colour and his place in the aged-balance
+result; only the link went.
+
+Recorded in `.claude/import-tenants.mjs` as well as in the screen, so it
+survives a re-import of the tenant export.

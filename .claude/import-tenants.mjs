@@ -102,7 +102,10 @@ const COLOR_OVERRIDES = { 320: 'Purple', 333: 'Purple', 14: null, 67: null, 249:
    number, so it cannot be derived and has to be recorded. Emma's link,
    2026-09-23. */
 const DEEP_LINKS = {
-  333: 'https://class60.rmx.rentmanager.com/#/tenants/390/details?SavedFilterID=45&ExpandList=1'
+  /* Moved off Devin Lautner (account 333) onto Marcia Clark on 2026-09-29:
+     she is the first row of the register, so the jump to the live system is
+     reachable without scrolling or filtering to find it. Emma's link. */
+  1: 'https://class60.rmx.rentmanager.com/#/tenants/1/details?QuickFilters=Status,in,2'
 };
 const out = [];
 let dogsAtRiverview = 0;
