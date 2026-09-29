@@ -2799,7 +2799,11 @@ function run(text, opts){
 function openPanel(){ state.showPanel = true; if (!state.criteria.length) state.criteria = state.applied; renderFilterUI(); }
 function closePanel(){ state.showPanel = false; renderFilterUI(); }
 function clearAll(){ state.applied = []; state.criteria = []; state.showPanel = false; state.prompt = ""; state.rationale = ""; state.promptText = ""; state.selectedFilter = ""; document.getElementById("promptInput").value=""; renderAll(); }
-function clearFilterDraft(){ state.criteria = []; state.prompt = ""; state.rationale = ""; state.promptText = ""; state.showPanel = false; document.getElementById("promptInput").value=""; renderFilterUI(); }
+/* Clear cancels the filter, it does not just empty the builder. It used to
+   wipe the draft criteria and leave state.applied alone, so the panel came
+   back empty while the register stayed filtered behind it — the one thing
+   somebody pressing Clear is trying to undo. Emma's call, 2026-09-29. */
+function clearFilterDraft(){ clearAll(); }
 function applyFilter(){ state.applied = state.criteria; state.showPanel = false; renderAll(); }
 
 function setOuterJoin(v){ state.outerJoin = v; renderFilterUI(); }
@@ -4030,8 +4034,11 @@ function toggleGroupsPanel(){
   d_syncGroupsPanelVisibility();
   if (d_state.groupsPanelOpen) d_renderGroupsPanel();
 }
+/* Same rule as the register's Clear: it drops the applied filter too, not
+   only the draft. Emma's call, 2026-09-29. */
 function d_clearFilterDraft(){
-  Object.assign(d_state, { criteria:[], prompt:"", statuses:[], properties:[], color:"Any", balance:"", excludeSubs:false, groupsPanelOpen:false, panelOpen:false });
+  Object.assign(d_state, { criteria:[], prompt:"", statuses:[], properties:[], color:"Any", balance:"", excludeSubs:false, groupsPanelOpen:false, panelOpen:false,
+                           appliedCriteria:[], appliedStatuses:[], appliedProperties:[], appliedColor:"Any", appliedBalance:"", appliedExcludeSubs:false });
   document.getElementById("orionPrompt").value = "";
   document.getElementById("balanceInput").value = "";
   document.getElementById("d_subsCheck").classList.remove("checked");
@@ -4040,6 +4047,7 @@ function d_clearFilterDraft(){
   d_syncGroupsPanelVisibility();
   document.getElementById("qfPanel").hidden = true;
   renderPanel(d_matches());
+  d_renderAll();
 }
 /* Orion (AI) criteria and the regular Status/Properties/Display Color/Balance
    fields are mutually exclusive — a tenant can't be narrowed by both an AI

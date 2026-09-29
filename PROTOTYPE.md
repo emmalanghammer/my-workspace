@@ -4134,3 +4134,60 @@ The Tasks register, Task Details, the History / Notes overlay, the shared task
 state between screens, the Mega Menu, the date pickers, the action list: all
 of it is untouched and all of it still works. What went is one tile and the
 page it sat on.
+
+---
+
+## Dates count from the day it is opened (2026-09-29)
+
+The prototype is demo'd on Tuesday 20 October 2026. Every date in the task
+dataset was a literal typed on the day it was written, and the anchors had
+already drifted apart from each other — the overdue pair implied "today" was
+around 11 September while the move-in task's own History / Notes ran to the
+16th, five days into its own future. Left alone, the demo would have opened on
+a register whose newest task was five weeks old.
+
+So the dataset counts from `new Date()` instead. `relDate(daysAgo)` already
+existed for the Pet Approval scene; it now has three companions in
+`screens/tasks.html`:
+
+- `inDays(n)` — the same clock forward, so the data reads "due in eight days".
+- `nextDow(5)` — the coming Friday. "Walk vacant units at Flagstone **before
+  Friday**" now falls on an actual Friday whenever it is opened, which the
+  fixed date only managed by accident.
+- `endOfMonth()` — Month End Close is due when the month ends.
+
+**Copy that names a day builds it from the date it is talking about.**
+`ordinalDay()` turns a stamp into "the 7th", and the notes that quote a date
+(`moves in on the ${MOVE_IN_DAY}`, `posted late on the ${MEC_THROUGH}`) are
+template strings over the very dates they refer to, so a note and the due date
+above it can never disagree. The same trick is in `index.html` as
+`data-ws-day="8"`, because the Workspace's first mention quotes Dana's move-in
+day and the task's History / Notes quotes it too.
+
+**The one coupling to know about:** the move-in offset is `8` in two files —
+`MOVE_IN_DATE = inDays(8)` in `screens/tasks.html` and `data-ws-day="8"` in
+`index.html`. Change one and change both, or the mention and the task will name
+different days. Both carry a comment saying so.
+
+### Two things that changed beyond a date
+
+- **Nathan Cole's `@charlieapegian` is now the newest note on the move-in
+  task**, not the oldest. The Workspace surfaces it as a live ask ("20m ago")
+  and it was stamped five days back; everyone else on the thread has already
+  done their item, so his follow-up to the one queue that has not moved is
+  where a real thread would end.
+- **The Pet Approval history was harvested from the mock as July/August 2025
+  stamps** and read as a task claimed over a year ago. Same shape, counted back
+  from today. A deliberate deviation from the harvest: the dates in that mock
+  are illustrative, and a demo cannot show a year-old claim.
+
+Tenant lease dates are untouched — those come from the real
+`Tenant_Register_2026-09-23.xlsx` export and are the point of that register.
+
+## Clear cancels the filter (2026-09-29)
+
+The Filters panel's **Clear** wiped the draft criteria and left `state.applied`
+alone, so the builder came back empty while the register stayed filtered behind
+it — the one thing somebody pressing Clear is trying to undo. It now drops the
+applied filter, the chip, and the saved-filter selection. The details view's
+Clear had the same bug and got the same fix.
