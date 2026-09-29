@@ -2,7 +2,7 @@
 /* Fold the whole prototype into ONE .html file you can attach to an email.
 
    Run:  node .claude/build-single.mjs
-   Out:  rmx-prototype-single.html
+   Out:  TasksandAIFilters.html   <- the name Emma sends it under
 
    This does its own inlining from the linked screens rather than reading
    dist/. scripts/bundle.mjs (the skill's bundler) writes a literal </script>
@@ -36,7 +36,10 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 
 const ROOT = process.cwd();
-const OUT = join(ROOT, 'rmx-prototype-single.html');
+/* Named for what it is, not for what built it: this is the file that gets
+   attached to an email, and "TasksandAIFilters.html" is what Emma calls the
+   prototype. Renamed from rmx-prototype-single.html on 2026-09-29. */
+const OUT = join(ROOT, 'TasksandAIFilters.html');
 
 /* name in the single file -> path on disk */
 const SCREENS = {
@@ -227,5 +230,5 @@ ${Object.keys(SCREENS).map(n => `    ${JSON.stringify(n)}: ${literal(pages[n])}`
 `;
 
 writeFileSync(OUT, shell);
-console.log('  wrote rmx-prototype-single.html  ' + Math.round(shell.length / 1024) + ' KB');
+console.log('  wrote TasksandAIFilters.html  ' + Math.round(shell.length / 1024) + ' KB');
 notes.forEach(n => console.log(n));

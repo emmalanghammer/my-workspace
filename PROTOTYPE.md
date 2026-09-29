@@ -4530,3 +4530,27 @@ tenants, none of them the one the field was showing, with nothing selected.
 Every record any task names is in the lists now. Same rule as the template
 library, and worth stating once: **a picker must contain the value its own field
 is displaying.**
+
+## The standalone file is TasksandAIFilters.html (2026-09-29)
+
+`node .claude/build-single.mjs` folds the whole prototype into one file you can
+attach to an email — no server, no assets folder, nothing to unzip. It writes
+**`TasksandAIFilters.html`** now, which is what Emma calls the prototype;
+`rmx-prototype-single.html` was the builder's name for its own output and meant
+nothing to anyone receiving it.
+
+Rebuilt and checked in a browser rather than just checked for size:
+
+- My Workspace opens with the five mentions, Nathan Cole green.
+- The first mention lands on New Resident Move In with its due date, Write
+  Letter / New Resident Welcome, and six History rows — bubbles on the System
+  rows, none on the Notes.
+- The History / Notes overlay injects and opens (it is lazy, so it is not in the
+  DOM until something asks for it — worth knowing before concluding it is
+  missing).
+- The Tenant Register opens on Status = Current, 206 rows, Marcia Clark first
+  with no colour bar.
+- The scripted AI filter types itself, Enter applies it, and it returns the
+  seven dogs at Riverview with Status still reading Current.
+
+No console errors on any of it.
