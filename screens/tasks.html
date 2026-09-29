@@ -1394,9 +1394,25 @@ let myTasks = [
       {text:'Pick up welcome gift and set aside for resident',      assigned:['role-office'], done:false},
     ], externalCal:false,
     links:[{label:'Tenant', value:'Dana Whitcomb'}],
+    /* The trail a move-in actually leaves: created, given an action, handed to
+       the Property Manager queue, then the chatter that comes with a date
+       moving toward you. Newest first, and deliberately consistent with the
+       rest of the task: nothing here says an item is done, because none of
+       them are, and nobody has claimed it, because the register still offers
+       Claim. Emma's call, 2026-09-29. */
     history:[
+      {date:'09/16/26 08:20 AM', type:'Note', avatar:'psullivan',
+       text:'Parking permit and pool pass are printed and in the move-in folder at the front desk.'},
+      {date:'09/15/26 02:45 PM', type:'Note', avatar:'lbennett',
+       text:'Unit 12 passed its make-ready inspection this morning, cleaning is finished.'},
+      {date:'09/14/26 04:10 PM', type:'Note', avatar:'kwarner',
+       text:'Dana asked whether she can pick up keys the evening of the 19th rather than the morning.'},
+      {date:'09/12/26 11:30 AM', type:'System', avatar:'hbrooks',
+       text:'Hannah Brooks assigned task to Property Manager'},
       {date:'09/11/26 09:40 AM', type:'Note', avatar:'ncole',
-       text:'@Charlie Dana Whitcomb moves in on the 19th. Can you set up her community app account?'},
+       text:'@charlieapegian Dana Whitcomb moves in on the 19th. Can you set up her community app account?'},
+      {date:'09/10/26 03:20 PM', type:'System', avatar:'ncole',
+       text:'Nathan Cole added action Write Letter'},
       {date:'09/10/26 03:15 PM', type:'System', avatar:'ncole',
        text:'Nathan Cole created task'},
     ] },

@@ -2577,11 +2577,26 @@ about an hour on 2026-09-24 until Emma caught it. Worth remembering when the
 checklist changes: the note is separate data and nothing keeps the two in step
 on its own.
 
-**The note tags Charlie by name.** It asked "@Property Manager" for part of
-2026-09-24 and went back to his name the same day, Emma's call. The rule that
-came out of that stayed: a mention of a role he holds gets the same chip his
-own name does, rather than reading as somebody else being asked. Nothing uses
-it today, and it is the right rule for a register where work is held by role. Closing the overlay leaves you on Task Details
+**The note tags `@charlieapegian`, inline and unchipped.** Emma's call,
+2026-09-29: a mention should read like a mention typed into a sentence, not a
+bordered orange badge sitting in the middle of one. It gets there without a
+rendering change, because `withMentionChips()` only wraps names it knows and
+`@charlieapegian` is not one of them. Two things follow from that: **the
+handle does not match the user record**, whose `uname` is `capegian`, which is
+worth settling; and a note that ever tags "Charlie Apegian" or "Charlie" in
+full will still chip.
+
+The note asked "@Property Manager" for part of 2026-09-24 and went back to him
+the same day. The rule that came out of that stayed: a mention of a role he
+holds gets the same chip his own name does, rather than reading as somebody
+else being asked. Nothing uses it today, and it is the right rule for a
+register where work is held by role.
+
+**Its History / Notes is seven entries**, added 2026-09-29: created, given its
+Write Letter action, handed to the Property Manager queue, then the chatter a
+date moving toward you produces. Deliberately consistent with the rest of the
+task: nothing in it says a checklist item is done, because none are, and
+nobody has claimed it, because the register still offers Claim. Closing the overlay leaves you on Task Details
 with the tenant link right there, which is the point of going to the register
 rather than opening a panel on the Workspace.
 
