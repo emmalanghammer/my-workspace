@@ -2592,9 +2592,10 @@ holds gets the same chip his own name does, rather than reading as somebody
 else being asked. Nothing uses it today, and it is the right rule for a
 register where work is held by role.
 
-**Its History / Notes is seven entries**, added 2026-09-29: created, given its
-Write Letter action, handed to the Property Manager queue, then the chatter a
-date moving toward you produces. Deliberately consistent with the rest of the
+**Its History / Notes is six entries**, added 2026-09-29: created, handed to
+the Property Manager queue, then the chatter a date moving toward you
+produces. A seventh, a System line saying the Write Letter action was added,
+came out the same day, Emma's call. Deliberately consistent with the rest of the
 task: nothing in it says a checklist item is done, because none are, and
 nobody has claimed it, because the register still offers Claim.
 
