@@ -753,6 +753,9 @@ a:hover { text-decoration:none; }
 .tpl-leaf.selected{background:var(--rmx-blue);color:#fff;}
 .tpl-leaf.selected:hover{background:var(--rmx-blue);}
 .tpl-empty{padding:16px 8px;text-align:center;font-size:12px;font-style:italic;color:var(--text-primary);}
+/* The record picker is the same panel without the filing: no folders, so its
+   rows sit at the panel's own padding rather than indented under one. */
+.tpl-dropdown--flat .tpl-leaf{padding-left:8px;}
 .actions-dropdown{min-width:231px;max-height:499px;overflow-y:auto;border-radius:var(--r-sm);box-shadow:0 3px 6px rgba(0,0,0,.15);padding:0;}
 .actions-dropdown .ad-search{padding:8px;}
 .actions-dropdown .ad-search .box{display:flex;align-items:center;gap:8px;height:36px;padding:0 8px;background:var(--component-input-default,#f5f8fa);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);}
@@ -1073,9 +1076,9 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
           </div>
           <hr class="action-card-divider hidden" id="actionCardDivider">
           <div class="action-detail-row hidden" id="actionDetailRow">
-            <div class="field"><label>Type</label><div class="input" style="cursor:pointer;"><span class="val" style="flex:1;">Tenant</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div></div>
+            <div class="field"><label>Type</label><div class="input" id="actionTypeInput" style="cursor:pointer;" onclick="event.stopPropagation();openActionTypePicker(event)"><span class="val" style="flex:1;">Tenant</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div></div>
             <div class="field"><label id="actionTemplateLabel">Email Template</label><div class="input" id="templateFieldInput" style="cursor:pointer;" onclick="event.stopPropagation();openTemplatePicker(event)"><span class="val" style="flex:1;">Pet Request Approval</span><span class="material-symbols-outlined" id="templateCaret">keyboard_arrow_down</span></div></div>
-            <div class="field"><label>Tenant</label><div class="input"><span class="material-symbols-outlined">search</span><span class="val" style="flex:1;">Daniel Smith</span></div></div>
+            <div class="field"><label id="actionRecordLabel">Tenant</label><div class="input" id="actionRecordInput" style="cursor:pointer;" onclick="event.stopPropagation();openActionRecordPicker(event)"><span class="material-symbols-outlined">search</span><span class="val" style="flex:1;">Daniel Smith</span></div></div>
           </div>
         </div>
       </div>
@@ -1221,6 +1224,17 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
     <input id="templateSearchInput" type="text" oninput="filterTemplates()" aria-label="Search templates">
   </div>
   <div class="tpl-tree" id="templateTree"></div>
+</div>
+
+<!-- Type, and the record the action is addressed to. Type is a short closed
+     list so it is a plain menu; the record list is as long as the register is,
+     so it gets a search box over it. -->
+<div class="float-panel" id="actionTypePanel" hidden onclick="event.stopPropagation()"></div>
+<div class="float-panel tpl-dropdown tpl-dropdown--flat" id="actionRecordPanel" hidden onclick="event.stopPropagation()">
+  <div class="tpl-search">
+    <input id="actionRecordSearch" type="text" oninput="renderActionRecordList()" aria-label="Search records">
+  </div>
+  <div class="tpl-tree" id="actionRecordList"></div>
 </div>
 
 <!-- ============================== FLOATING PANELS (Actions Dropdown, Add Checklist Item menu, row kebab) ============================== -->
@@ -2634,6 +2648,65 @@ function renderTemplateTree(){
   document.getElementById('templateTree').innerHTML =
     rows.length ? rows.join('') : '<div class="tpl-empty">No templates found.</div>';
 }
+/* ---- Type, and the record the action is addressed to ----
+   Both were painted-on fields: a caret that did not open and a search icon that
+   did not search. They pick from LINK_TYPES and LINK_RECORDS, the lists the
+   Links tile already picks from, so an action addressed to a tenant and a link
+   to that tenant can only ever name the same records. Emma's call, 2026-09-29.
+
+   `actionDetails.tenant` keeps its name although it can now hold an owner or a
+   vendor: it is read in four places and the rename is not worth the churn. The
+   label above it follows the type. */
+function openActionTypePicker(e){
+  const panel = document.getElementById('actionTypePanel');
+  const trigger = e.currentTarget;
+  if (!panel.hidden) { panel.hidden = true; return; }
+  const current = (state.modalActionDetails || {}).type;
+  panel.innerHTML = LINK_TYPES.map(t =>
+    '<div class="fp-plain-item" onclick="pickActionType(' + JSON.stringify(t).replace(/"/g, '&quot;') + ')">' +
+    escAttr(t) + (t === current ? '<span class="material-symbols-outlined" style="margin-left:auto;font-size:18px;color:var(--rmx-blue);">check</span>' : '') +
+    '</div>').join('');
+  panel.hidden = false;
+  panel.style.minWidth = Math.max(160, trigger.getBoundingClientRect().width) + 'px';
+  positionPanel(panel, trigger);
+}
+function pickActionType(type){
+  document.getElementById('actionTypePanel').hidden = true;
+  const d = state.modalActionDetails;
+  if (!d || d.type === type) return;
+  d.type = type;
+  /* The record below belonged to the old type. Carrying "Dana Whitcomb" over
+     into Type=Vendor would leave the action addressed to a tenant filed as a
+     vendor, so it moves to the first record of the type that was chosen. */
+  d.tenant = (LINK_RECORDS[type] || [])[0] || '';
+  renderActionArea();
+}
+function openActionRecordPicker(e){
+  const panel = document.getElementById('actionRecordPanel');
+  const trigger = e.currentTarget;
+  if (!panel.hidden) { panel.hidden = true; return; }
+  document.getElementById('actionRecordSearch').value = '';
+  renderActionRecordList();
+  panel.hidden = false;
+  panel.style.width = Math.max(240, trigger.getBoundingClientRect().width) + 'px';
+  positionPanel(panel, trigger);
+  document.getElementById('actionRecordSearch').focus();
+}
+function renderActionRecordList(){
+  const d = state.modalActionDetails || {};
+  const q = (document.getElementById('actionRecordSearch').value || '').toLowerCase().trim();
+  const all = LINK_RECORDS[d.type] || [];
+  const hits = q ? all.filter(r => r.toLowerCase().indexOf(q) > -1) : all;
+  document.getElementById('actionRecordList').innerHTML = hits.length
+    ? hits.map(r => '<div class="tpl-leaf' + (r === d.tenant ? ' selected' : '') + '" onclick="pickActionRecord(' +
+        JSON.stringify(r).replace(/"/g, '&quot;') + ')">' + escAttr(r) + '</div>').join('')
+    : '<div class="tpl-empty">No ' + escAttr(String(d.type || 'record').toLowerCase()) + 's found.</div>';
+}
+function pickActionRecord(value){
+  document.getElementById('actionRecordPanel').hidden = true;
+  if (state.modalActionDetails) state.modalActionDetails.tenant = value;
+  renderActionArea();
+}
 function pickTemplate(name){
   if (state.modalActionDetails) state.modalActionDetails.template = name;
   closeTemplatePicker();
@@ -2671,6 +2744,8 @@ function renderActionArea(){
     fields[0].textContent = state.modalActionDetails.type;
     document.getElementById('actionTemplateLabel').textContent = state.modalActionDetails.templateLabel;
     fields[1].textContent = state.modalActionDetails.template;
+    /* The third field is whatever the Type says it is, not always "Tenant". */
+    document.getElementById('actionRecordLabel').textContent = state.modalActionDetails.type || 'Tenant';
     fields[2].textContent = state.modalActionDetails.tenant;
   } else {
     divider.classList.add('hidden');
@@ -2792,10 +2867,16 @@ const LINK_ICONS = {
   Tenant: 'tenants', Unit: 'units', Property: 'properties',
   Owner: 'owners', Vendor: 'vendors',
 };
+/* Every record a task in this prototype names has to be in here, because these
+   lists are now what the Type and record fields pick out of as well as what the
+   Links tile picks out of. The move-in task is addressed to Dana Whitcomb and
+   she was missing: opening the picker showed four tenants, none of them the one
+   the field was displaying, and nothing selected. Emma's call, 2026-09-29 --
+   the same rule the template library follows. */
 const LINK_RECORDS = {
-  Tenant: ['Daniel Smith', "Patrick O'Malley", 'Marcia Clark', 'Tomas Webber'],
-  Unit: ['107B', 'Riverview #204', 'Lot 3'],
-  Property: ['Riverview Apartments', 'FMHP', 'HH', 'PARK', 'BUCK'],
+  Tenant: ['Dana Whitcomb', 'Daniel Smith', "Patrick O'Malley", 'Marcia Clark', 'Tomas Webber'],
+  Unit: ['107B', 'Riverview #204', 'FMHP - 105', 'FMHP - 106', 'HH - 1102', 'Lot 3'],
+  Property: ['Riverview Apartments', 'Flagstone Townhomes', 'FMHP', 'HH', 'PARK', 'BUCK'],
   Owner: ['Sally Klydon', 'Julia Kessler', 'M. Whitfield Properties LLC', 'Gerald Pruitt', 'Meridian Holdings LLC', 'Ruth Vance'],
   Vendor: ["Anderson Mechanical", "Bob's Appliances", 'Anderson Pest Control'],
 };
@@ -3480,7 +3561,7 @@ function positionPanel(panel, anchor){
   panel.style.left = Math.max(EDGE, left) + 'px';
 }
 function dismissFloatingPanels(e){
-  const triggers = {actionsPanel:'openActionsMenu', addChecklistPanel:'openAddChecklistMenu', rowKebabPanel:'openRowKebab', assigneeDropdown:'openAssigneeDropdown', checklistItemPanel:'openChecklistItemMenu', templatePanel:'openTemplatePicker'};
+  const triggers = {actionsPanel:'openActionsMenu', addChecklistPanel:'openAddChecklistMenu', rowKebabPanel:'openRowKebab', assigneeDropdown:'openAssigneeDropdown', checklistItemPanel:'openChecklistItemMenu', templatePanel:'openTemplatePicker', actionTypePanel:'openActionTypePicker', actionRecordPanel:'openActionRecordPicker'};
   Object.keys(triggers).forEach(id=>{
     const panel = document.getElementById(id);
     if(!panel.hidden && !panel.contains(e.target) && !e.target.closest('[onclick*="'+ triggers[id] +'"]')){

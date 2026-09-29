@@ -4498,3 +4498,35 @@ The folders and the two Move-Outs letters are from Emma's frame. The rest are
 filed the way a property manager would file them — a deliberate extension, since
 the frame shows one folder's contents and the picker needs the others to be
 usable.
+
+### Type and the record field open too (2026-09-29)
+
+Both were painted on: a caret that did not open and a search icon that did not
+search.
+
+- **Type** is a short closed list, so it is a plain menu with a tick on the
+  current value.
+- **The record** is as long as a register, so it gets the same search-over-list
+  panel the template picker uses, without the folders.
+
+They pick out of `LINK_TYPES` and `LINK_RECORDS` — the lists the Links tile
+already picks out of — so an action addressed to a tenant and a link to that
+tenant can only ever name the same records.
+
+Two things that fall out of making Type real:
+
+- **The label above the record follows the Type.** It was hard-coded "Tenant",
+  which was fine while Type could not be changed and wrong the moment it could.
+- **Changing the Type moves the record with it.** Carrying "Dana Whitcomb" into
+  Type = Vendor would leave the action addressed to a tenant filed as a vendor,
+  so the record becomes the first of the new type.
+
+`actionDetails.tenant` keeps its name although it can now hold an owner or a
+vendor: it is read in four places and the rename is not worth the churn.
+
+**One bug this found.** `LINK_RECORDS.Tenant` did not contain Dana Whitcomb, so
+the move-in task — the one being demoed — opened its record picker on four
+tenants, none of them the one the field was showing, with nothing selected.
+Every record any task names is in the lists now. Same rule as the template
+library, and worth stating once: **a picker must contain the value its own field
+is displaying.**
