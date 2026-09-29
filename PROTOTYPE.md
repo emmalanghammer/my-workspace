@@ -4257,3 +4257,30 @@ about the property going under contract. All three are now the same offset
 (11 days), so they cannot name three different days. The wording lost one month
 name in the process ("collected in October" became "collected the month
 after"), because that one could not be made true by an offset alone.
+
+## Red comes from the date, not from a flag (2026-09-29)
+
+Emma, looking at the Due Date column: *"will this due date apply to whenever
+the prototype is loaded? so it'll display as red for overdue on the day of the
+demo"*.
+
+The dates already did. The **red** did not — it came from a stored `overdue:
+true|false` typed next to each due date, so it was right only because the two
+were kept in step by hand. Two consequences: the whole dataset would have had
+to be re-flagged every time the dates moved, and editing a due date in Task
+Details did not change the colour, because nothing was looking at the date.
+
+`isOverdue(t)` asks the date instead. Two deliberate rules in it:
+
+- **Date only, not date and time.** A task due at 5pm today stays navy all day
+  rather than turning red partway through a demo.
+- **A closed task is never overdue**, whatever its date says. "Upload receipts"
+  is completed and a week past due, and it renders navy.
+
+The 19 `overdue:` flags are gone, since a second source of truth for a fact the
+date already carries is only a way to disagree with it.
+
+Checked against demo day by running the dataset's own offsets with the clock
+set to 2026-10-20: two tasks red (13 and 17 October), everything else ahead,
+Walk Vacant falling on Friday the 23rd, Month End Close on the 31st, and the
+closed task navy.
