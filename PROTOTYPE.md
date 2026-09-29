@@ -4383,3 +4383,38 @@ uses for them is reserved on the Tasks screen:
 
 Both are Emma's call: either the tile changes to a legal colour, or the rule
 gives. Left as they are until she says.
+
+## A tag is a lozenge where it is written, plain text where it is read (2026-09-29)
+
+Emma: *"show on the note details a lozenge... in orange if it's the user signed
+in or blue if it's another user. keep it as the @ tag normal if its in a tile or
+register"*.
+
+One note, two renderings, and which one you get is a question about where you
+are reading it:
+
+- **Note Details** is where a note is *written*, so a tag is an outlined
+  lozenge carrying the person's name with no "@" showing — orange when it tags
+  you, blue when it tags anyone else. `withMentionChips()`.
+- **A tile or a register** is where a note is read in passing, so a tag stays
+  plain `@text` and the row keeps reading as one sentence. `withMentions()`,
+  which now only escapes.
+
+The Tasks screen's History tile had its own chip renderer; it renders plain text
+now and no longer draws chips at all. `mentionNames()` went with it — the
+overlay builds the lozenges and the @-menu from the people and roles
+`taskHistoryRecord` hands over on the record.
+
+**Why it was not already working.** The lozenge machinery has been there since
+2026-09-10, matching on display names. The notes tag Charlie as
+`@charlieapegian` — a *username* — which matched nothing, so it rendered as raw
+text everywhere. Two changes fixed it:
+
+- `mentionTokens()` matches usernames as well as names, and a lozenge shows the
+  person while `data-name` keeps the token the note actually used. So
+  `@charlieapegian` draws as "Charlie Apegian" and is read back out of the field
+  as `@charlieapegian`, unchanged.
+- **Charlie's username is `charlieapegian`, not `capegian`.** It was spelled one
+  way in the copy and another way in the user list, which is the reason nothing
+  matched. This was on the open-questions list and is now settled: the copy
+  wins, because it is Emma's wording and it is what people read.

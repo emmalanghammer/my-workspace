@@ -2010,7 +2010,12 @@ const USERS = [
   {key:'bhollis',   initials:'BH', name:'Brian Hollis',   uname:'bhollis',  color:'green'},
   {key:'psullivan', initials:'PS', name:'Paige Sullivan', uname:'psullivan'},
   {key:'tnolan',    initials:'TN', name:'Travis Nolan',   uname:'tnolan'},
-  {key:'capegian',   initials:'CA', name:'Charlie Apegian',  uname:'capegian'},
+  /* charlieapegian, not capegian. The notes and the Workspace's mentions tag
+     him as "@charlieapegian" -- Emma's wording -- and the Note Details dialog
+     builds its lozenges out of these usernames, so a handle spelled one way in
+     the copy and another way here simply never matched and the tag stayed raw
+     text. One spelling. Emma's call, 2026-09-29. */
+  {key:'capegian',   initials:'CA', name:'Charlie Apegian',  uname:'charlieapegian'},
 ];
 /* Roles are what an orange bubble means, and what Claim claims from.
    `role-sa` is the one piece of this the data never named -- an orange SA on
@@ -2801,25 +2806,20 @@ document.addEventListener('click', dismissLinkPanels);
    what a mention looks like rather than a second that can drift.
 
    Roles are mentionable alongside people. A task handed to Bookkeeper is handed
-   to a queue, and the queue is the thing worth naming. */
-function mentionNames(){
-  return USERS.map(u => u.name)
-    .concat(ROLES.map(r => r.name), ['Charlie'])
-    .sort((a, b) => b.length - a.length);
-}
-function withMentionChips(text){
-  let out = String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;');
-  /* A mention of a role Charlie holds is a mention of Charlie, so it gets the
-     same chip his own name does rather than reading as somebody else being
-     asked. No note uses one today, the move-in note went back to tagging him
-     by name, but the rule is the right one for a register where work is held
-     by role. Added 2026-09-24. */
-  const mine = [assigneeName(ME_KEY), 'Charlie'].concat(MY_ROLES.map(assigneeName));
-  mentionNames().forEach(function(n){
-    const cls = mine.indexOf(n) > -1 ? 'hn-at hn-at--me' : 'hn-at hn-at--other';
-    out = out.split('@' + n).join('<span class="' + cls + '">' + n + '</span>');
-  });
-  return out;
+   to a queue, and the queue is the thing worth naming.
+
+   The list stays because the overlay asks for it -- taskHistoryRecord hands the
+   people and the roles over on the record, and the Note Details dialog builds
+   its lozenges and its @-menu from them. Nothing on this screen draws a chip
+   any more. */
+/* A tag in a tile stays plain "@text". It used to render the same outlined
+   lozenge the Note Details dialog does, which made a one-line note in a narrow
+   column read as a badge with a sentence stuck to it. The lozenge belongs where
+   a note is *written* -- the Note Details dialog, which still draws it, orange
+   for you and blue for anyone else. A tile is where a note is read in passing
+   and the row should read as one sentence. Emma's call, 2026-09-29. */
+function noteTextHTML(text){
+  return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 }
 
 /* The bubble belongs to the app's own entries, not to somebody's note. A System
@@ -2850,7 +2850,7 @@ function renderModalHistory(){
     <tr>
       <td>${String(r.date).split(' ')[0]}</td>
       <td>${r.type}</td>
-      <td><div class="hn-note-cell">${noteBubble(r)}<span class="hn-note-text" title="${String(r.text).replace(/"/g, '&quot;')}">${withMentionChips(r.text)}</span></div></td>
+      <td><div class="hn-note-cell">${noteBubble(r)}<span class="hn-note-text" title="${String(r.text).replace(/"/g, '&quot;')}">${noteTextHTML(r.text)}</span></div></td>
     </tr>`).join('');
 }
 
@@ -3513,6 +3513,6 @@ document.addEventListener('DOMContentLoaded', function(){
 <script src="../assets/taskstate.js?v=84f67f33"></script>
 <script src="../assets/actions.js?v=7d5ba7e6"></script>
 <script src="../assets/datetime.js?v=5c872dc6"></script>
-<script src="../assets/history-notes.js?v=e985a3db"></script>
+<script src="../assets/history-notes.js?v=d18d0740"></script>
 <script src="../assets/megamenu.js?v=783ad6a1"></script>
 </body></html>

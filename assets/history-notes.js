@@ -51,7 +51,7 @@ var USERS = [
   {initials:'LB', name:'Laura Bennett',   uname:'lbennett'},
   {initials:'KW', name:'Kelsey Warner',   uname:'kwarner'},
   {initials:'PS', name:'Paige Sullivan',  uname:'psullivan'},
-  {initials:'CA', name:'Charlie Apegian', uname:'capegian'}
+  {initials:'CA', name:'Charlie Apegian', uname:'charlieapegian'}
 ];
 
 var ENTITIES = {
@@ -222,10 +222,18 @@ function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&
 /* An @tag renders as an outlined pill carrying the person's name, with no
    "@" left showing -- orange when it is you, blue when it is anyone else.
    Emma's call, 2026-09-10, off a screenshot of the real product. */
-function isMe(name){ return name === ME || name === 'Charlie'; }
-function chipHTML(name){
-  return '<span class="hn-at ' + (isMe(name) ? 'hn-at--me' : 'hn-at--other') +
-         '" contenteditable="false" data-name="' + esc(name) + '">' + esc(name) + '</span>';
+function isMe(name){
+  return name === ME || name === 'Charlie' || name === 'charlieapegian';
+}
+/* `token` is what the note actually says after the "@" -- a name or a username.
+   `label` is the person as the lozenge shows them. The two differ because a
+   note written as "@charlieapegian" has to keep saying that when the field is
+   read back, while the lozenge reads "Charlie Apegian" the way the frame does.
+   data-name therefore carries the token, not the label. */
+function chipHTML(token, label){
+  return '<span class="hn-at ' + (isMe(token) ? 'hn-at--me' : 'hn-at--other') +
+         '" contenteditable="false" data-name="' + esc(token) + '">' +
+         esc(label || token) + '</span>';
 }
 /* Who can be tagged: the user list, plus anyone who has written a note on
    this record. Emma's call, 2026-09-10 -- "include any users who have added
@@ -332,9 +340,37 @@ function knownNames(){
     .concat(['Charlie'])
     .sort(function(a,b){ return b.length - a.length; });
 }
+/* Every "@token" a note can carry, longest first so "@Charlie Little" is not
+   eaten by "@Charlie", each paired with the person it should read as. Usernames
+   count: the task notes tag people as "@charlieapegian", and a note the product
+   would chip cannot be left as raw text just because it used the login form. */
+function mentionTokens(){
+  var out = [];
+  taggableUsers().forEach(function(u){
+    out.push({ token: u.name, label: u.name });
+    if (u.uname) out.push({ token: u.uname, label: u.name });
+  });
+  out.push({ token: 'Charlie', label: 'Charlie' });
+  return out.sort(function(a, b){ return b.token.length - a.token.length; });
+}
+/* Two renderings of the same note, and which one you get is a question about
+   where you are reading it. Emma's call, 2026-09-29:
+
+     * The Note Details dialog is where a note is written, so a tag is a
+       lozenge there -- orange when it tags you, blue when it tags anyone else.
+     * A tile or a register is where a note is read in passing, so a tag stays
+       plain "@text" and the row keeps reading as one sentence.
+
+   withMentions is the plain one and the register uses it; withMentionChips is
+   the dialog's. */
 function withMentions(text){
+  return esc(text);
+}
+function withMentionChips(text){
   var out = esc(text);
-  knownNames().forEach(function(n){ out = out.split('@' + esc(n)).join(chipHTML(n)); });
+  mentionTokens().forEach(function(m){
+    out = out.split('@' + esc(m.token)).join(chipHTML(m.token, m.label));
+  });
   return out;
 }
 /* The Note field is contenteditable so the chips can live inside it, the way
@@ -356,7 +392,7 @@ function noteFieldValue(){
   return walk(document.getElementById('ndNote'));
 }
 function setNoteField(text){
-  document.getElementById('ndNote').innerHTML = text ? withMentions(text) : '';
+  document.getElementById('ndNote').innerHTML = text ? withMentionChips(text) : '';
 }
 
 function renderScoreboard(){
