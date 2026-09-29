@@ -4284,3 +4284,35 @@ Checked against demo day by running the dataset's own offsets with the clock
 set to 2026-10-20: two tasks red (13 and 17 October), everything else ahead,
 Walk Vacant falling on Friday the 23rd, Month End Close on the 31st, and the
 closed task navy.
+
+### Tightened around the demo day (2026-09-29)
+
+Emma: *"make most of these due around october 20, i want most not overdue"*.
+The offsets ran from seven days back to nineteen days out, so the register
+opened on a month of work. They now sit within a few days either side of
+whenever it is opened:
+
+| On Tuesday 20 October | |
+|---|---|
+| Post 3-day notice for Flagstone | 10/16 **overdue** |
+| Approve carpet vendor quote | 10/18 **overdue** |
+| Upload receipts (closed) | 10/17 |
+| Sign off on Brookside HVAC scope | 10/21 |
+| Approve Daniel for Pet | 10/22 |
+| Walk vacant units *before Friday* | 10/23 |
+| Record Park's records | 10/23 |
+| Review W-9 for Julia Kessler | 10/23 |
+| New Resident Move In | 10/25 |
+| Month End Close | 10/31 |
+
+Two of ten overdue, which is the pair the register pins to the top and the
+reason the red state is on screen at all. Month End Close is the one that sits
+further out, and stays there: it is due when the month ends, which is a fact
+about the month rather than a spread somebody picked.
+
+Other Users' Tasks was tightened the same way. Its two long-overdue rows were
+months old (`08/01` and `07/25` as written); they are now six and eleven days
+past due, which still reads as neglected without reading as abandoned.
+
+Dana's move-in moved from eight days out to five, so `index.html`'s
+`data-ws-day` moved with it. That coupling is the one noted above.

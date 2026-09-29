@@ -1306,15 +1306,15 @@ function checklistProgress(t){
 // Assigned to Charlie, this prototype's signed-in persona, not Paige Sullivan.
 let myOwnTasks = [
   { id:'ws-post-notice', title:"Post 3-day notice for Flagstone Lot 3", flag:true, colorBar:'red', completed:false,
-    action:null, actionDetails:null, dueDate:relDate(7), dueTime:'09:00 AM',
+    action:null, actionDetails:null, dueDate:relDate(4), dueTime:'09:00 AM',
     assigned:['capegian'], link:"Patrick O'Malley", linkOverflow:0, workflow:'Eviction',
     checklist:[], externalCal:false, links:[{label:'Tenant', value:"Patrick O'Malley"}] },
   { id:'ws-carpet-vendor', title:'Approve carpet vendor quote', flag:false, colorBar:'green', completed:false,
-    action:null, actionDetails:null, dueDate:relDate(3), dueTime:'05:00 PM',
+    action:null, actionDetails:null, dueDate:relDate(2), dueTime:'05:00 PM',
     assigned:['capegian'], link:'Riverview #204', linkOverflow:0, workflow:'Unit Renovation',
     checklist:[], externalCal:false, links:[{label:'Unit', value:'Riverview #204'}] },
   { id:'ws-hvac-scope', title:'Sign off on Brookside HVAC scope', flag:false, colorBar:'orange', completed:false,
-    action:null, actionDetails:null, dueDate:inDays(3), dueTime:'05:00 PM',
+    action:null, actionDetails:null, dueDate:inDays(1), dueTime:'05:00 PM',
     assigned:['capegian'], link:'Anderson Mechanical', linkOverflow:0, workflow:'Vendor',
     checklist:[], externalCal:false, links:[{label:'Vendor', value:'Anderson Mechanical'}] },
 ];
@@ -1364,7 +1364,12 @@ function ordinalDay(stamp){
 }
 /* Dana's move-in. The Workspace's first mention quotes this day too, so the
    same offset is written into index.html -- change one and change both. */
-const MOVE_IN_DATE = inDays(8);
+/* Offsets are deliberately tight: Emma's call, 2026-09-29, most of the register
+   should fall within a few days either side of whenever it is opened, so the
+   demo opens on a week of work rather than on a month of it. Month End Close is
+   the one that sits further out, because it is due when the month ends and that
+   is a fact about the month, not a spread somebody chose. */
+const MOVE_IN_DATE = inDays(5);
 const MOVE_IN_DAY  = ordinalDay(MOVE_IN_DATE);
 /* The day the month-end notes are talking about, named by two of them. */
 const MEC_THROUGH  = ordinalDay(relDate(2));
@@ -1415,7 +1420,7 @@ let myTasks = [
        text:'Travis Nolan created task'}
     ] },
   { id:'t-approve-pet', title:'Approve Daniel for Pet', flag:true, colorBar:null, completed:false,
-    action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:inDays(7), dueTime:'11:00 AM',
+    action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:inDays(2), dueTime:'11:00 AM',
     assigned:['capegian'], link:'', linkOverflow:0, workflow:'',
     checklist: PET_CHECKLIST(), externalCal:true, links: PET_LINKS(), history: PET_HISTORY() },
   /* The move-in task, rebuilt on 2026-09-23 from Emma's frames. It carries a
@@ -1464,12 +1469,12 @@ let myTasks = [
      time. It shows on My Tasks because a role he is in holds it, and it
      carries a Claim button for the same reason. Emma's script, 2026-09-11. */
   { id:'t-kessler-w9', title:'Review W-9 for new owner Julia Kessler', flag:false, colorBar:'orange', completed:false,
-    action:null, actionDetails:null, dueDate:inDays(12), dueTime:'12:00 PM',
+    action:null, actionDetails:null, dueDate:inDays(3), dueTime:'12:00 PM',
     assigned:['role-bookkeeper'], link:'Julia Kessler', linkOverflow:0, workflow:'Onboarding',
     checklist:[], externalCal:false,
     links:[{label:'Owner', value:'Julia Kessler'}] },
   { id:'t-receipts', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:true,
-    action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:relDate(4), dueTime:'10:00 AM',
+    action:'Send Email', actionDetails:{...COMMUNICATION_ACTION_DEMOS['Send Email']}, dueDate:relDate(3), dueTime:'10:00 AM',
     assigned:['capegian'], link:"Patrick O'Malley", linkOverflow:1, workflow:'',
     checklist: PET_CHECKLIST(), externalCal:true, links:[{label:'Tenant', value:"Patrick O'Malley"}] },
 ];
@@ -1477,27 +1482,27 @@ let myTasks = [
 // Other Users' Tasks dataset (screenshot 10), fixed, per simplification #5 above.
 let otherTasks = [
   { id:'o1', title:'Send an email to Daniel', flag:true, colorBar:'red', completed:false,
-    action:'Send Email', actionDetails:null, dueDate:inDays(12), dueTime:'09:30 AM',
+    action:'Send Email', actionDetails:null, dueDate:inDays(2), dueTime:'09:30 AM',
     assigned:['gwhitaker'], link:'Daniel Smith', linkOverflow:0, workflow:'', checklist:[], links:[{label:'Tenant', value:'Daniel Smith'}] },
   { id:'o2', title:'Assign open maintenance ticket to vendor', flag:false, colorBar:null, completed:false,
-    action:null, actionDetails:null, dueDate:inDays(7), dueTime:'10:00 AM',
+    action:null, actionDetails:null, dueDate:inDays(1), dueTime:'10:00 AM',
     assigned:['jreeves'], link:'', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o4', title:'Close completed service ticket', flag:false, colorBar:'green', completed:false,
-    action:null, actionDetails:null, dueDate:inDays(13), dueTime:'02:00 PM',
+    action:null, actionDetails:null, dueDate:inDays(4), dueTime:'02:00 PM',
     assigned:['mdoyle'], link:'HH - 1102', linkOverflow:0, workflow:'Unit Renovation', checklist:[], links:[{label:'Unit', value:'HH - 1102'}] },
   { id:'o5', title:'Distribute payments to owners', flag:false, colorBar:null, completed:false,
-    action:null, actionDetails:null, dueDate:inDays(18), dueTime:'08:30 AM',
+    action:null, actionDetails:null, dueDate:inDays(6), dueTime:'08:30 AM',
     assigned:['bhollis','dshaw','psullivan','tnolan'], link:'', linkOverflow:0, workflow:'', checklist:[] },
   { id:'o6', title:'Close service tickets', showProgress:true, colorBar:'green', completed:false,
-    action:'View Issues', actionDetails:null, dueDate:relDate(41), dueTime:'09:30 AM',
+    action:'View Issues', actionDetails:null, dueDate:relDate(6), dueTime:'09:30 AM',
     assigned:['lbennett'], link:'FMHP - 105', linkOverflow:0, workflow:'Unit Renovation',
     checklist:[ {text:'Open service issue list', assigned:['ncole'], done:true},
                 {text:'Close all tickets', assigned:['mdoyle','hbrooks'], done:false} ], links:[{label:'Unit', value:'FMHP - 105'}] },
   { id:'o7', title:'Upload receipts for property expenses', flag:false, colorBar:null, completed:false,
-    action:null, actionDetails:null, dueDate:endOfMonth(), dueTime:'07:30 AM',
+    action:null, actionDetails:null, dueDate:inDays(6), dueTime:'07:30 AM',
     assigned:['kwarner'], link:"Patrick O'Malley", linkOverflow:1, workflow:'', checklist:[], links:[{label:'Tenant', value:"Patrick O'Malley"}] },
   { id:'o8', title:'Review owner details for FMHP', flag:false, colorBar:'blue', completed:false,
-    action:'Post Owner Checks', actionDetails:null, dueDate:relDate(48), dueTime:'07:30 AM',
+    action:'Post Owner Checks', actionDetails:null, dueDate:relDate(11), dueTime:'07:30 AM',
     assigned:['tnolan','hbrooks'], link:'FMHP - 106', linkOverflow:0, workflow:'Unit Renovation', checklist:[], links:[{label:'Unit', value:'FMHP - 106'}] },
   /* The same New Vendor Onboarding process as it looks to someone watching
      it rather than working it: Charlie found the vendor on the 5th, Dave created
@@ -1515,7 +1520,7 @@ let otherTasks = [
      here ("Record Park's records", "Assign open maintenance ticket to vendor")
      and came out as these arrived, so the tab still holds ten. */
   { id:'t3', title:"Record Park's records", flag:true, colorBar:null, completed:false,
-    action:'Add Journal', actionDetails:null, dueDate:inDays(4), dueTime:'07:30 AM',
+    action:'Add Journal', actionDetails:null, dueDate:inDays(3), dueTime:'07:30 AM',
     assigned:['role-pm'], link:'PARK', linkOverflow:0, workflow:'Property Renovation',
     checklist:[], externalCal:false, links:[{label:'Property', value:'PARK'}] },
   /* The third task in the Property Manager queue, a claim row and a register
