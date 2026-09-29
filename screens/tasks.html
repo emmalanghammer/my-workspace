@@ -554,6 +554,9 @@ a:hover { text-decoration:none; }
 .action-field__label{font-size:14px;color:var(--text-primary);}
 .action-field__input{display:flex;align-items:center;gap:8px;height:36px;padding:0 8px;background:var(--component-input-default,#f5f8fa);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);cursor:pointer;color:var(--text-secondary);}
 .action-field__input.open{border-color:var(--rmx-blue);}
+/* The Template field takes the same blue border while its picker is open, the
+   way the Action field does: the border belongs to the open panel. */
+.action-detail-row .input.open{border-color:var(--rmx-blue);}
 .action-field__input .val{flex:1;min-width:0;font-size:14px;color:var(--rmx-navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .action-field__input .material-symbols-outlined{flex:none;font-size:20px;color:var(--rmx-blue);}
 /* The cancel X sits outside the field and aligns to its 36px row, not to the
@@ -730,6 +733,26 @@ a:hover { text-decoration:none; }
    1088px under a 1088px input), not a narrow menu -- openActionsMenu sets the
    width. 499px is the frame's own height, so the list scrolls at the same
    point it does in the design. */
+/* Template picker. Same floating shell as the Actions dropdown -- a search
+   row over a scrolling list -- with folders instead of section labels. The
+   search box is bare: the frame has no magnifier and no placeholder in it, and
+   it sits inside its own bordered row above the tree. */
+.tpl-dropdown{min-width:320px;max-height:420px;overflow:hidden;padding:0;display:flex;flex-direction:column;}
+.tpl-search{padding:8px;flex:none;border-bottom:1px solid var(--rmx-hairline);}
+.tpl-search input{width:100%;box-sizing:border-box;height:36px;padding:0 8px;background:var(--component-input-default,#f5f8fa);border:1px solid var(--rmx-blue);border-radius:var(--r-sm);outline:none;font:400 14px 'Roboto',sans-serif;color:var(--rmx-navy);}
+.tpl-tree{flex:1;min-height:0;overflow-y:auto;padding:4px 0;}
+.tpl-folder{display:flex;align-items:center;gap:8px;padding:8px;font-size:14px;line-height:20px;color:var(--rmx-navy);cursor:pointer;user-select:none;}
+.tpl-folder:hover{background:var(--bg-hover);}
+.tpl-folder .tpl-chev{font-size:20px;color:var(--icon-muted);flex:none;transition:transform .12s ease;}
+.tpl-folder.open .tpl-chev{transform:rotate(90deg);}
+.tpl-folder .tpl-ico{font-size:20px;color:var(--icon-muted);flex:none;}
+/* Leaves line up under the folder name, not under its chevron: the indent is
+   what says "inside this folder" once the tree is scrolled. */
+.tpl-leaf{display:block;padding:8px 8px 8px 64px;font-size:14px;line-height:20px;color:var(--rmx-navy);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tpl-leaf:hover{background:var(--bg-hover);}
+.tpl-leaf.selected{background:var(--rmx-blue);color:#fff;}
+.tpl-leaf.selected:hover{background:var(--rmx-blue);}
+.tpl-empty{padding:16px 8px;text-align:center;font-size:12px;font-style:italic;color:var(--text-primary);}
 .actions-dropdown{min-width:231px;max-height:499px;overflow-y:auto;border-radius:var(--r-sm);box-shadow:0 3px 6px rgba(0,0,0,.15);padding:0;}
 .actions-dropdown .ad-search{padding:8px;}
 .actions-dropdown .ad-search .box{display:flex;align-items:center;gap:8px;height:36px;padding:0 8px;background:var(--component-input-default,#f5f8fa);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);}
@@ -1051,7 +1074,7 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
           <hr class="action-card-divider hidden" id="actionCardDivider">
           <div class="action-detail-row hidden" id="actionDetailRow">
             <div class="field"><label>Type</label><div class="input" style="cursor:pointer;"><span class="val" style="flex:1;">Tenant</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div></div>
-            <div class="field"><label id="actionTemplateLabel">Email Template</label><div class="input" style="cursor:pointer;"><span class="val" style="flex:1;">Pet Request Approval</span><span class="material-symbols-outlined">keyboard_arrow_down</span></div></div>
+            <div class="field"><label id="actionTemplateLabel">Email Template</label><div class="input" id="templateFieldInput" style="cursor:pointer;" onclick="event.stopPropagation();openTemplatePicker(event)"><span class="val" style="flex:1;">Pet Request Approval</span><span class="material-symbols-outlined" id="templateCaret">keyboard_arrow_down</span></div></div>
             <div class="field"><label>Tenant</label><div class="input"><span class="material-symbols-outlined">search</span><span class="val" style="flex:1;">Daniel Smith</span></div></div>
           </div>
         </div>
@@ -1187,6 +1210,17 @@ body.rmx-embedded #taskOverlay { background: rgba(19,49,76,.45); }
       <button class="btn btn-secondary" onclick="closeTemplateDialog()">Cancel</button>
     </div>
   </div>
+</div>
+
+<!-- Template picker. A folder tree, because a template library is filed in
+     folders and the field has to say which one a template came out of --
+     "Acknowledgement of Notice to Vacate" means something different filed under
+     Move-Outs than it would under Renewals. Emma's frame, 2026-09-29. -->
+<div class="float-panel tpl-dropdown" id="templatePanel" hidden onclick="event.stopPropagation()">
+  <div class="tpl-search">
+    <input id="templateSearchInput" type="text" oninput="filterTemplates()" aria-label="Search templates">
+  </div>
+  <div class="tpl-tree" id="templateTree"></div>
 </div>
 
 <!-- ============================== FLOATING PANELS (Actions Dropdown, Add Checklist Item menu, row kebab) ============================== -->
@@ -2506,6 +2540,106 @@ function collapseRecurring(){
   document.getElementById('recurringCollapsed').classList.remove('hidden');
 }
 
+/* ---- the template library the Template field picks out of ----
+   Four libraries, one per kind of action, because a letter template and a text
+   template are not the same shelf. The folders and the two Move-Outs letters
+   are Emma's frame, 2026-09-29; the rest are filed the way a property manager
+   would file them, and every template any task in this prototype names is in
+   here, so opening the picker always finds the current value rather than
+   showing a tree the field's own value is missing from. */
+const TEMPLATE_LIBRARY = {
+  'Letter Template': [
+    { name:'Renewals',    items:['Lease Renewal Offer', 'Renewal Rate Increase', 'Renewal Confirmation'] },
+    { name:'Delinquency', items:['Late Rent Notice', 'Second Notice of Past Due Rent', 'Notice to Pay or Quit'] },
+    { name:'Move-Ins',    items:['New Resident Welcome', 'Move-In Inspection Reminder', 'Utility Transfer Instructions'] },
+    { name:'Move-Outs',   items:['Acknowledgement of Notice to Vacate', 'Security Deposit Return Letter'] },
+    { name:'Violations',  items:['Lease Violation Notice', 'Parking Violation Notice'] },
+    { name:'Pets',        items:['Pet Addendum Cover Letter', 'Pet Approval Letter'] },
+  ],
+  'Email Template': [
+    { name:'Renewals',    items:['Renewal Offer', 'Renewal Reminder'] },
+    { name:'Delinquency', items:['Balance Reminder', 'Late Fee Notice'] },
+    { name:'Requests',    items:['Pet Request Approval', 'Pet Request Denial', 'Maintenance Request Received'] },
+    { name:'Move-Ins',    items:['Move-In Confirmation', 'Key Pickup Details'] },
+    { name:'Move-Outs',   items:['Move-Out Instructions', 'Deposit Disposition'] },
+  ],
+  'Text Template': [
+    { name:'Reminders',   items:['Pet Request Reminder', 'Rent Due Reminder', 'Appointment Reminder'] },
+    { name:'Maintenance', items:['Technician On The Way', 'Work Order Complete'] },
+    { name:'Delinquency', items:['Past Due Balance'] },
+  ],
+  'Document Template': [
+    { name:'Leases',       items:['Residential Lease Agreement', 'Lease Renewal Agreement'] },
+    { name:'Addenda',      items:['Pet Lease Agreement', 'Pet Addendum', 'Parking Addendum', 'Smoke-Free Addendum'] },
+    { name:'Move-Outs',    items:['Security Deposit Disposition'] },
+    { name:'Applications', items:['Rental Application', 'Guarantor Agreement'] },
+  ],
+};
+/* Which folders are open. Only the one holding the current template starts
+   open, which is what the frame shows: the tree is a filing cabinet, not a
+   list, and opening all of it would make it one. */
+let tplOpenFolders = new Set();
+
+function templateFolders(){
+  const label = (state.modalActionDetails && state.modalActionDetails.templateLabel) || 'Letter Template';
+  return TEMPLATE_LIBRARY[label] || TEMPLATE_LIBRARY['Letter Template'];
+}
+function openTemplatePicker(e){
+  const panel = document.getElementById('templatePanel');
+  const trigger = e.currentTarget;
+  if (!panel.hidden) { closeTemplatePicker(); return; }
+  const current = (state.modalActionDetails || {}).template || '';
+  tplOpenFolders = new Set(
+    templateFolders().filter(f => f.items.indexOf(current) > -1).map(f => f.name));
+  document.getElementById('templateSearchInput').value = '';
+  panel.hidden = false;
+  panel.style.width = Math.max(320, trigger.getBoundingClientRect().width) + 'px';
+  renderTemplateTree();
+  positionPanel(panel, trigger);
+  document.getElementById('templateFieldInput').classList.add('open');
+  document.getElementById('templateSearchInput').focus();
+}
+function closeTemplatePicker(){
+  document.getElementById('templatePanel').hidden = true;
+  const f = document.getElementById('templateFieldInput');
+  if (f) f.classList.remove('open');
+}
+function toggleTemplateFolder(name){
+  if (tplOpenFolders.has(name)) tplOpenFolders.delete(name); else tplOpenFolders.add(name);
+  renderTemplateTree();
+}
+/* Typing opens the tree up: a search that only highlighted matches buried two
+   folders deep would be a search you still had to click through. Folders with
+   no match drop out entirely rather than sitting there empty. */
+function filterTemplates(){ renderTemplateTree(); }
+function renderTemplateTree(){
+  const q = (document.getElementById('templateSearchInput').value || '').toLowerCase().trim();
+  const current = (state.modalActionDetails || {}).template || '';
+  const rows = [];
+  templateFolders().forEach(f => {
+    const hits = q ? f.items.filter(t => t.toLowerCase().indexOf(q) > -1) : f.items;
+    if (q && !hits.length) return;
+    const open = q ? true : tplOpenFolders.has(f.name);
+    rows.push(
+      '<div class="tpl-folder' + (open ? ' open' : '') + '" onclick="toggleTemplateFolder(' +
+      JSON.stringify(f.name).replace(/"/g, '&quot;') + ')">' +
+        '<span class="material-symbols-outlined tpl-chev">chevron_right</span>' +
+        '<span class="material-symbols-outlined tpl-ico">' + (open ? 'folder_open' : 'folder') + '</span>' +
+        '<span>' + escAttr(f.name) + '</span></div>');
+    if (!open) return;
+    hits.forEach(t => rows.push(
+      '<div class="tpl-leaf' + (t === current ? ' selected' : '') + '" onclick="pickTemplate(' +
+      JSON.stringify(t).replace(/"/g, '&quot;') + ')">' + escAttr(t) + '</div>'));
+  });
+  document.getElementById('templateTree').innerHTML =
+    rows.length ? rows.join('') : '<div class="tpl-empty">No templates found.</div>';
+}
+function pickTemplate(name){
+  if (state.modalActionDetails) state.modalActionDetails.template = name;
+  closeTemplatePicker();
+  renderActionArea();
+}
+
 /* ---- New Action UI (4465:114954) ----
    Add Action -> the Action field -> that field open -> the action selected.
    state.actionPicking is the middle step: the field is on screen with nothing
@@ -3346,13 +3480,14 @@ function positionPanel(panel, anchor){
   panel.style.left = Math.max(EDGE, left) + 'px';
 }
 function dismissFloatingPanels(e){
-  const triggers = {actionsPanel:'openActionsMenu', addChecklistPanel:'openAddChecklistMenu', rowKebabPanel:'openRowKebab', assigneeDropdown:'openAssigneeDropdown', checklistItemPanel:'openChecklistItemMenu'};
+  const triggers = {actionsPanel:'openActionsMenu', addChecklistPanel:'openAddChecklistMenu', rowKebabPanel:'openRowKebab', assigneeDropdown:'openAssigneeDropdown', checklistItemPanel:'openChecklistItemMenu', templatePanel:'openTemplatePicker'};
   Object.keys(triggers).forEach(id=>{
     const panel = document.getElementById(id);
     if(!panel.hidden && !panel.contains(e.target) && !e.target.closest('[onclick*="'+ triggers[id] +'"]')){
       panel.hidden = true;
       // the Action field's blue focus border belongs to the open panel
       if(id === 'actionsPanel') document.getElementById('actionFieldInput').classList.remove('open');
+      if(id === 'templatePanel') document.getElementById('templateFieldInput').classList.remove('open');
     }
   });
 }

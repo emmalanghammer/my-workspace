@@ -4469,3 +4469,32 @@ Left at four, because a register whose Status says Current while the rows
 include moved-out tenants is the thing an audience notices. Getting all seven
 back means either exempting that ask from the Status filter or moving those
 three to Current, and the statuses came from Emma's own export — her call.
+
+## The Template field opens a folder tree (2026-09-29)
+
+Emma's frame: the Template field opens a panel with a search box over a tree of
+template folders — Renewals, Delinquency, Move-Ins, Move-Outs, Violations — the
+folder holding the current template already open and that template highlighted
+in a full blue row. It was a static field that did nothing on click.
+
+Why a tree and not a list: a template library is filed, and the folder is part
+of what a template means. "Acknowledgement of Notice to Vacate" filed under
+Move-Outs says something a flat list of thirty names does not.
+
+- **Four libraries, one per kind of action** — Letter, Email, Text, Document —
+  keyed off the field's own label, because a letter template and a text
+  template are not the same shelf. Every template any task in this prototype
+  names is in the right one, so opening the picker always finds the current
+  value rather than showing a tree its own field's value is missing from.
+- **Only the folder holding the current template starts open.** The frame shows
+  it that way and it is the point of a tree: opening all of it makes it a list.
+- **Typing opens the tree up.** A search that only highlighted matches buried
+  two folders deep is a search you still have to click through. Folders with no
+  match drop out rather than sitting there empty.
+- Same floating shell, positioning and outside-click dismissal as the Actions
+  dropdown, and the field takes the same blue border while its panel is open.
+
+The folders and the two Move-Outs letters are from Emma's frame. The rest are
+filed the way a property manager would file them — a deliberate extension, since
+the frame shows one folder's contents and the picker needs the others to be
+usable.
