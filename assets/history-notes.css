@@ -182,6 +182,12 @@
 .hn-register .c-type { width:var(--hc-type); }
 .hn-register .c-date { width:var(--hc-date); }
 .hn-register .c-note { width:var(--hc-note); }
+/* The Note column leads with the bubble of whoever caused the entry. The cell
+   still truncates to one line, so the bubble holds its size and the text is
+   what gives way. */
+.hn-note-cell { display:flex; align-items:center; gap:4px; min-width:0; }
+.hn-note-body { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.hn-note-av { width:24px; height:24px; flex:none; border-radius:50%; background:var(--rmx-blue); color:#fff; font-size:12px; display:inline-flex; align-items:center; justify-content:center; }
 .hn-register .c-cat  { width:var(--hc-cat); }
 .hn-register .c-user { width:var(--hc-user); }
 .hn-register .c-kebab{ width:var(--hc-kebab); text-align:center; }

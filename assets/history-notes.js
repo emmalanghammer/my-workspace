@@ -58,13 +58,13 @@ var ENTITIES = {
       {icon:'units',      text:'Riverview #204'}
     ],
     notes: [
-      {type:'Vendor Coordination', date:'09/10/25 08:42 AM', category:'Maintenance', user:'Wesley Barnes',
+      {type:'Vendor Coordination', date:hnDate(1, '08:42 AM'), category:'Maintenance', user:'Wesley Barnes',
        note:'Carpet vendor quote received, $1,840 for unit and hallway. @Charlie can you confirm the carpet vendor before I close this issue?', files:['quote_riverview_204.pdf']},
-      {type:'Tenant Contact', date:'09/08/25 04:15 PM', category:'Maintenance', user:'Nathan Cole',
+      {type:'Tenant Contact', date:hnDate(3, '04:15 PM'), category:'Maintenance', user:'Nathan Cole',
        note:'Left voicemail for the tenant about access on Thursday morning.', files:[]},
-      {type:'Inspection', date:'09/05/25 11:20 AM', category:'<Unassigned>', user:'Grace Whitaker',
+      {type:'Inspection', date:hnDate(6, '11:20 AM'), category:'<Unassigned>', user:'Grace Whitaker',
        note:'Walked the unit. Carpet in the living room is past wear-and-tear; padding is dry, no sign of a leak.', files:['img_4321.jpg']},
-      {type:'Issue Created', date:'09/04/25 09:03 AM', category:'<Unassigned>', user:'Kelsey Warner',
+      {type:'Issue Created', date:hnDate(7, '09:03 AM'), category:'<Unassigned>', user:'Kelsey Warner',
        note:'Tenant reported the carpet lifting near the patio door.', files:[]}
     ]
   },
@@ -81,17 +81,17 @@ var ENTITIES = {
     status: {label:'Current'},
     balance: '0.00',
     notes: [
-      {type:'Tenant Contact', date:'09/10/25 03:40 PM', category:'Leasing', user:'Erin Caldwell',
+      {type:'Tenant Contact', date:hnDate(1, '03:40 PM'), category:'Leasing', user:'Erin Caldwell',
        note:'She is planning to add a roommate in the next six months and wants the process in writing before she commits. @Charlie she’s adding a roommate within six months and wants the steps in writing.', files:[]},
-      {type:'Tenant Contact', date:'09/10/25 02:15 PM', category:'Leasing', user:'Erin Caldwell',
+      {type:'Tenant Contact', date:hnDate(1, '02:15 PM'), category:'Leasing', user:'Erin Caldwell',
        note:'Called about adding her sister to the lease sometime after the new year. Walked her through it at a high level: application and screening for the new occupant, then a lease amendment, and the deposit recalculated at two occupants. She asked for it in writing.', files:[]},
-      {type:'Billing', date:'09/10/25 09:12 AM', category:'Receivables', user:'Erin Caldwell',
-       note:'Credit issued for the duplicate charge on the August statement.', files:[]},
-      {type:'Statement Dispute', date:'09/09/25 02:48 PM', category:'Receivables', user:'Erin Caldwell',
-       note:'Tenant called about a duplicate charge on her statement. Verified: the same $45 pet fee posted twice on 08/31.', files:['statement_aug.pdf']},
-      {type:'Lease', date:'06/01/25 10:00 AM', category:'Leasing', user:'Paige Sullivan',
-       note:'Renewal signed through 05/31/26 at $1,265.', files:[]},
-      {type:'Web Account Update', date:'03/24/25 03:24 PM', category:'<Unassigned>', user:'Caleb Foster',
+      {type:'Billing', date:hnDate(1, '09:12 AM'), category:'Receivables', user:'Erin Caldwell',
+       note:'Credit issued for the duplicate charge on the ' + hnMonth(-1) + ' statement.', files:[]},
+      {type:'Statement Dispute', date:hnDate(2, '02:48 PM'), category:'Receivables', user:'Erin Caldwell',
+       note:'Tenant called about a duplicate charge on her statement. Verified: the same $45 pet fee posted twice on ' + hnShort(-11) + '.', files:['statement_' + hnMonth(-1).slice(0,3).toLowerCase() + '.pdf']},
+      {type:'Lease', date:hnDate(102, '10:00 AM'), category:'Leasing', user:'Paige Sullivan',
+       note:'Renewal signed through ' + hnLeaseEnd(8) + ' at $1,265.', files:[]},
+      {type:'Web Account Update', date:hnDate(171, '03:24 PM'), category:'<Unassigned>', user:'Caleb Foster',
        note:'Tenant portal login reset at her request.', files:[]}
     ]
   },
@@ -104,11 +104,11 @@ var ENTITIES = {
     ],
     balance: '640.00',
     notes: [
-      {type:'Payment Setup', date:'09/10/25 06:30 AM', category:'Payables', user:'Corinne Vaughn',
+      {type:'Payment Setup', date:hnDate(1, '06:30 AM'), category:'Payables', user:'Corinne Vaughn',
        note:'flagging @Charlie, they want autopay set up before next visit.', files:[]},
-      {type:'Service Visit', date:'08/28/25 01:15 PM', category:'Maintenance', user:'Grace Whitaker',
+      {type:'Service Visit', date:hnDate(14, '01:15 PM'), category:'Maintenance', user:'Grace Whitaker',
        note:'Quarterly treatment completed at Flagstone. Invoice 8841 received.', files:['inv_8841.pdf']},
-      {type:'Contract', date:'01/15/25 08:00 AM', category:'<Unassigned>', user:'Laura Bennett',
+      {type:'Contract', date:hnDate(239, '08:00 AM'), category:'<Unassigned>', user:'Laura Bennett',
        note:'Annual contract renewed: quarterly treatment across three properties.', files:[]}
     ]
   },
@@ -122,14 +122,14 @@ var ENTITIES = {
       {icon:'call',         text:'513-555-7741'}
     ],
     notes: [
-      {type:'Quote', date:'09/10/25 11:05 AM', category:'Leasing', user:'Kelsey Warner',
+      {type:'Quote', date:hnDate(1, '11:05 AM'), category:'Leasing', user:'Kelsey Warner',
        note:'She wants to see the unit priced with the covered space in the rent, not as a separate line. @Charlie Nicole wants the quote repriced with the covered parking space included. Can you add it?', files:[]},
-      {type:'Showing', date:'09/09/25 04:30 PM', category:'Leasing', user:'Kelsey Warner',
+      {type:'Showing', date:hnDate(2, '04:30 PM'), category:'Leasing', user:'Kelsey Warner',
        note:'Toured #212. Liked the unit, asked twice about covered parking. She leaves for a job site before six and does not want to scrape in the winter. One garage space is open at $45.', files:[]},
-      {type:'Quote', date:'09/09/25 02:10 PM', category:'Leasing', user:'Kelsey Warner',
-       note:'Quoted $1,310 for #212, 12-month term, move-in 10/01. Parking not included.', files:['quote_riverview_212.pdf']},
-      {type:'Inquiry', date:'09/06/25 08:45 AM', category:'Leasing', user:'Megan Doyle',
-       note:'Web inquiry: two bedroom, October move-in, no pets.', files:[]}
+      {type:'Quote', date:hnDate(2, '02:10 PM'), category:'Leasing', user:'Kelsey Warner',
+       note:'Quoted $1,310 for #212, 12-month term, move-in ' + hnShort(20) + '. Parking not included.', files:['quote_riverview_212.pdf']},
+      {type:'Inquiry', date:hnDate(5, '08:45 AM'), category:'Leasing', user:'Megan Doyle',
+       note:'Web inquiry: two bedroom, ' + hnMonth(1) + ' move-in, no pets.', files:[]}
     ]
   },
   /* The prospect this property cannot suit: the note that matters is the one
@@ -143,14 +143,14 @@ var ENTITIES = {
       {icon:'call',         text:'513-555-9063'}
     ],
     notes: [
-      {type:'Lead Transfer', date:'09/10/25 09:20 AM', category:'Leasing', user:'Derek Shaw',
+      {type:'Lead Transfer', date:hnDate(1, '09:20 AM'), category:'Leasing', user:'Derek Shaw',
        note:'Flagstone has no dog run and the nearest park is a fifteen minute drive. Brookside has the fenced run off the south lot. @Charlie she really wants a dog park, and nothing at Flagstone fits. Can you move the lead to Brookside?', files:[]},
-      {type:'Prospect Contact', date:'09/09/25 05:40 PM', category:'Leasing', user:'Derek Shaw',
+      {type:'Prospect Contact', date:hnDate(2, '05:40 PM'), category:'Leasing', user:'Derek Shaw',
        note:'Followed up after the tour. She was straight about it: the dog run is the deciding factor, two large dogs, and she will keep looking without one.', files:[]},
-      {type:'Showing', date:'09/09/25 10:00 AM', category:'Leasing', user:'Derek Shaw',
+      {type:'Showing', date:hnDate(2, '10:00 AM'), category:'Leasing', user:'Derek Shaw',
        note:'Toured Flagstone Lot 12. Liked the townhome and the price; her first question at the door was where the dogs go.', files:[]},
-      {type:'Inquiry', date:'09/07/25 07:15 PM', category:'Leasing', user:'Megan Doyle',
-       note:'Web inquiry: three bedroom, November move-in, two dogs (60lb and 45lb).', files:[]}
+      {type:'Inquiry', date:hnDate(4, '07:15 PM'), category:'Leasing', user:'Megan Doyle',
+       note:'Web inquiry: three bedroom, ' + hnMonth(2) + ' move-in, two dogs (60lb and 45lb).', files:[]}
     ]
   },
   'tenant-daniel-smith': {
@@ -166,13 +166,13 @@ var ENTITIES = {
     status: {label:'Current'},
     balance: '0.00',
     notes: [
-      {type:'Pet Request', date:'09/11/25 08:50 AM', category:'Leasing', user:'Nathan Cole',
+      {type:'Pet Request', date:hnDate(0, '08:50 AM'), category:'Leasing', user:'Nathan Cole',
        note:'Vet records and the renter’s policy are attached. @Charlie he wants to get a dog, a 40lb lab mix. Pet addendum or do we need the deposit first?', files:['vaccination_record.pdf','renters_policy.pdf']},
-      {type:'Tenant Contact', date:'09/10/25 04:20 PM', category:'Leasing', user:'Nathan Cole',
+      {type:'Tenant Contact', date:hnDate(1, '04:20 PM'), category:'Leasing', user:'Nathan Cole',
        note:'Came into the office about adding a dog, a two year old lab mix, about 40lb, from the shelter on Vine. Told him the breed is fine and the weight is under the limit, and that we would need vet records and proof of renter’s insurance listing the dog.', files:[]},
-      {type:'Lease', date:'07/01/25 10:00 AM', category:'Leasing', user:'Paige Sullivan',
-       note:'Signed through 06/30/26 at $1,180. No pets on the original lease.', files:[]},
-      {type:'Move In', date:'07/01/25 09:00 AM', category:'<Unassigned>', user:'Grace Whitaker',
+      {type:'Lease', date:hnDate(72, '10:00 AM'), category:'Leasing', user:'Paige Sullivan',
+       note:'Signed through ' + hnLeaseEnd(9) + ' at $1,180. No pets on the original lease.', files:[]},
+      {type:'Move In', date:hnDate(72, '09:00 AM'), category:'<Unassigned>', user:'Grace Whitaker',
        note:'Move-in inspection completed with the tenant. No exceptions noted.', files:['moveIn_107B.pdf']}
     ]
   },
@@ -186,13 +186,16 @@ var ENTITIES = {
     ],
     balance: '0.00',
     notes: [
-      {type:'Management Agreement', date:'09/10/25 01:30 PM', category:'<Unassigned>', user:'Brian Hollis',
-       note:'She wants it ready to sign the week she closes, so rents can be collected in October. @Charlie she closes on the Westbrook fourplex on the 30th and wants the management agreement started.', files:[]},
-      {type:'Owner Contact', date:'09/10/25 11:45 AM', category:'<Unassigned>', user:'Brian Hollis',
-       note:'Called to say the Westbrook Ave fourplex is under contract, closing 09/30. Four units, three occupied, currently self-managed. She wants us on it from day one, same terms as her other two.', files:[]},
-      {type:'Statement', date:'09/01/25 06:00 AM', category:'<Unassigned>', user:'Erin Caldwell',
-       note:'August owner statement sent. Distribution $4,206.18.', files:['owner_stmt_aug.pdf']},
-      {type:'Management Agreement', date:'02/14/24 09:00 AM', category:'<Unassigned>', user:'Paige Sullivan',
+      {type:'Management Agreement', date:hnDate(1, '01:30 PM'), category:'<Unassigned>', user:'Brian Hollis',
+       /* The day is the same offset the Workspace mention uses (data-ws-day="11"
+          in index.html): the mention and this note are the same note, and
+          naming a month here as well only gave them a second way to disagree. */
+       note:'She wants it ready to sign the week she closes, so rents can be collected the month after. @Charlie she closes on the Westbrook fourplex on the ' + hnDay(11) + ' and wants the management agreement started.', files:[]},
+      {type:'Owner Contact', date:hnDate(1, '11:45 AM'), category:'<Unassigned>', user:'Brian Hollis',
+       note:'Called to say the Westbrook Ave fourplex is under contract, closing ' + hnShort(11) + '. Four units, three occupied, currently self-managed. She wants us on it from day one, same terms as her other two.', files:[]},
+      {type:'Statement', date:hnDate(10, '06:00 AM'), category:'<Unassigned>', user:'Erin Caldwell',
+       note:hnMonth(-1) + ' owner statement sent. Distribution $4,206.18.', files:['owner_stmt_' + hnMonth(-1).slice(0,3).toLowerCase() + '.pdf']},
+      {type:'Management Agreement', date:hnDate(575, '09:00 AM'), category:'<Unassigned>', user:'Paige Sullivan',
        note:'Agreement signed for both existing properties at 8% of collected rent.', files:[]}
     ]
   }
@@ -226,6 +229,19 @@ function chipHTML(name){
    the user list, and it reads oddly to get a note from someone you cannot
    reply to. Derived entries carry no username: the record gives us a name,
    not a login. */
+/* The bubble the Note column carries. Every entry -- a note somebody wrote and
+   a System line the app wrote on their behalf -- names the person who caused
+   it, so the Note column leads with their initials rather than making you read
+   across to the User column to find out who. Emma's spec, 2026-09-29. The host
+   screen's own user list wins when it passes one, so a person's initials are
+   the same here as in the register behind this overlay. */
+function noteAvatar(name){
+  if (!name) return '';
+  var known = ((state.entity && state.entity.users) || USERS)
+    .filter(function(u){ return u.name === name; })[0];
+  return '<span class="hn-note-av" title="' + esc(name) + '">' +
+         esc(known ? known.initials : initialsFor(name)) + '</span>';
+}
 function initialsFor(name){
   return String(name).split(/\s+/).filter(Boolean).slice(0, 2)
     .map(function(part){ return part.charAt(0).toUpperCase(); }).join('');
@@ -243,6 +259,45 @@ function taggableUsers(){
     if (!known) list.push({ initials: initialsFor(n.user), name: n.user, uname: '' });
   });
   return list.sort(function(a, b){ return a.name.localeCompare(b.name); });
+}
+/* Seeded notes count back from the day the overlay is opened, not from the day
+   they were typed. They were written as September 2025 literals and a demo in
+   October 2026 opened a prospect's history whose newest note was a year old.
+   Same offsets, same shape, relative to now. Emma's call, 2026-09-29 -- the
+   same move screens/tasks.html made for its task dates. */
+/* MM/DD, for a date named inside a note's own text. Negative is the past. */
+function hnShort(daysFromNow){
+  var d = new Date(); d.setDate(d.getDate() + daysFromNow);
+  var two = function(x){ return (x < 10 ? '0' : '') + x; };
+  return two(d.getMonth() + 1) + '/' + two(d.getDate());
+}
+/* The last day of the month this many months out -- how a lease end is
+   written, and always a real month end rather than a typed guess. */
+function hnLeaseEnd(monthsOut){
+  var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + monthsOut + 1); d.setDate(0);
+  var two = function(x){ return (x < 10 ? '0' : '') + x; };
+  return two(d.getMonth() + 1) + '/' + two(d.getDate()) + '/' + String(d.getFullYear()).slice(2);
+}
+function hnMonth(offset){
+  var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + (offset || 0));
+  return ['January','February','March','April','May','June','July','August',
+          'September','October','November','December'][d.getMonth()];
+}
+/* "the 30th" -- a day this many days out, spelled the way somebody writing a
+   note writes it. The Workspace's own mention quotes some of these days, so
+   the offset is the thing the two agree on, not the text. */
+function hnDay(daysAhead){
+  var d = new Date(); d.setDate(d.getDate() + daysAhead);
+  var n = d.getDate();
+  return n + ((n % 100 >= 11 && n % 100 <= 13) ? 'th'
+            : ({1:'st', 2:'nd', 3:'rd'}[n % 10] || 'th'));
+}
+function hnDate(daysAgo, time){
+  var d = new Date();
+  d.setDate(d.getDate() - daysAgo);
+  var two = function(n){ return (n < 10 ? '0' : '') + n; };
+  return two(d.getMonth() + 1) + '/' + two(d.getDate()) + '/' +
+         String(d.getFullYear()).slice(2) + (time ? ' ' + time : '');
 }
 /* A note is stored as plain text with "@Name" in it, so it reads the same in
    the register, in the field and in the data. Only names we know become
@@ -350,7 +405,9 @@ function renderNotes(){
       return '<tr onclick="openNote(' + r.i + ')">' +
         '<td class="c-type" title="' + esc(n.type) + '">' + esc(n.type) + '</td>' +
         '<td class="c-date">' + esc(n.date) + '</td>' +
-        '<td class="c-note" title="' + esc(n.note) + '">' + clip + withMentions(n.note) + '</td>' +
+        '<td class="c-note" title="' + esc(n.note) + '">' +
+          '<span class="hn-note-cell">' + noteAvatar(n.user) + clip +
+          '<span class="hn-note-body">' + withMentions(n.note) + '</span></span></td>' +
         '<td class="c-cat">' + esc(n.category) + '</td>' +
         '<td class="c-user" title="' + esc(n.user) + '">' + esc(n.user) + '</td>' +
         '<td class="c-kebab"><span class="kebab" onclick="event.stopPropagation();openRowMenu(event,' + r.i + ')"><svg class="hn-ico"><use href="#hn-more_vert"></use></svg></span></td>' +

@@ -4191,3 +4191,69 @@ alone, so the builder came back empty while the register stayed filtered behind
 it — the one thing somebody pressing Clear is trying to undo. It now drops the
 applied filter, the chip, and the saved-filter selection. The details view's
 Clear had the same bug and got the same fix.
+
+## A task writes its own history (2026-09-29)
+
+Emma's spec:
+
+> * Show Note column with user bubble of user that took action that triggered
+>   history/note (ex. user that created a task, user that closed a task, etc.)
+>   and descriptive note text (user x created the task)
+> * Create system-generated History / Notes entry when a task is created,
+>   assigned, and/or closed.
+
+**The bubble.** Task Details' History tile already led each note with the
+actor's initials; the History / Notes overlay did not — it had a User column
+off to the right instead, so on the one surface with room for the whole thread
+you had to read across to find out who. The overlay's Note column now leads
+with the same bubble (`noteAvatar`, `assets/history-notes.js`), using the host
+screen's own user list when it passes one, so a person's initials are the same
+in the overlay as in the register behind it.
+
+**The entries.** `logTaskEvent(task, text, who)` writes a System entry —
+actor's bubble, a sentence naming the actor — and is called from every place a
+task actually changes:
+
+| What happened | The entry |
+|---|---|
+| Quick-add, or Save on a new task | `Charlie Apegian created task` |
+| …assigned to anyone but yourself | `…assigned task to Property Manager` |
+| Claim, in the register or via Save | `Charlie Apegian claimed task` |
+| Assignee changed on Save | `…assigned task to Accountant and Laura Bennett` |
+| Closed, in the register or on Save | `Charlie Apegian closed task` |
+| Un-ticked | `Charlie Apegian reopened task` |
+
+Three things worth knowing about how it is wired:
+
+- **It writes to the task and to the modal's draft.** The History tile reads
+  the draft and the overlay reads the task; writing one leaves the same entry
+  showing in one place and not the other, which is the bug the checklist
+  hand-off note already had.
+- **On Save it logs *after* `RMXTaskState.patch`**, never before. The patch
+  carries `taskData.history` — the draft as it stood when Save was pressed, with
+  none of these entries in it — so logging first would write them and then
+  overwrite them.
+- **Taking a task out of a queue you are in says "claimed", not "assigned".**
+  The register calls it a claim and so does the history.
+
+Two bugs fell out of building this and are fixed: `noteHandOff` was building
+its own timestamp by hand (it uses `nowStamp()` now), and the overlay
+round-trip looked up authors in `USERS` only, so every role-authored entry came
+back as Charlie.
+
+## The overlay's seeded records count from today too (2026-09-29)
+
+Same move as the task dates, one file over. The 29 seeded notes in
+`assets/history-notes.js` were September 2025 literals, so clicking a mention
+during an October 2026 demo opened a prospect whose newest note was a year old.
+They now count back from the day the overlay is opened (`hnDate`), and so does
+every date, month and filename named inside the note copy itself — `hnShort`,
+`hnMonth`, `hnLeaseEnd`, `hnDay`, and `statement_<mon>.pdf` built from the
+month it belongs to.
+
+The one that mattered: Sally Klydon's closing day is quoted in three places —
+the Workspace mention, the note about the management agreement, and the note
+about the property going under contract. All three are now the same offset
+(11 days), so they cannot name three different days. The wording lost one month
+name in the process ("collected in October" became "collected the month
+after"), because that one could not be made true by an offset alone.
