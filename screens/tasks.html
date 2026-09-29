@@ -2000,14 +2000,14 @@ const USERS = [
   {key:'gwhitaker', initials:'GW', name:'Grace Whitaker', uname:'gwhitaker'},
   {key:'cfoster',   initials:'CF', name:'Caleb Foster',   uname:'cfoster'},
   {key:'hbrooks',   initials:'HB', name:'Hannah Brooks',  uname:'hbrooks'},
-  {key:'ncole',     initials:'NC', name:'Nathan Cole',    uname:'ncole'},
+  {key:'ncole',     initials:'NC', name:'Nathan Cole',    uname:'ncole',    color:'green'},
   {key:'mdoyle',    initials:'MD', name:'Megan Doyle',    uname:'mdoyle'},
   {key:'jreeves',   initials:'JR', name:'Jason Reeves',   uname:'jreeves'},
   {key:'lbennett',  initials:'LB', name:'Laura Bennett',  uname:'lbennett'},
   {key:'dshaw',     initials:'DS', name:'Derek Shaw',     uname:'dshaw'},
   {key:'cdevereaux', initials:'CD', name:'Chris Devereaux', uname:'cdevereaux'},
   {key:'kwarner',   initials:'KW', name:'Kelsey Warner',  uname:'kwarner'},
-  {key:'bhollis',   initials:'BH', name:'Brian Hollis',   uname:'bhollis'},
+  {key:'bhollis',   initials:'BH', name:'Brian Hollis',   uname:'bhollis',  color:'green'},
   {key:'psullivan', initials:'PS', name:'Paige Sullivan', uname:'psullivan'},
   {key:'tnolan',    initials:'TN', name:'Travis Nolan',   uname:'tnolan'},
   {key:'capegian',   initials:'CA', name:'Charlie Apegian',  uname:'capegian'},
@@ -2067,7 +2067,15 @@ function userColor(k){
      colour by construction rather than by coincidence. Emma's call,
      2026-09-11. */
   if (k === ME_KEY) return 'me';
-  const i = USERS.findIndex(u => u.key === k);
+  /* A colour written on the person wins over the ramp. My Workspace's Mentions
+     tile names its five avatars' colours in the markup, and the ramp was
+     deriving different ones here: Nathan Cole was green on the tile and grey in
+     a task's History. A person is one colour across the whole prototype, so the
+     people the tile names carry theirs explicitly. Emma's call, 2026-09-29.
+     Two of the tile's five are not pinned here on purpose -- see PROTOTYPE.md. */
+  const u = userByKey(k);
+  if (u && u.color) return u.color;
+  const i = USERS.findIndex(x => x.key === k);
   return i < 0 ? 'navy' : AVATAR_COLORS[i % AVATAR_COLORS.length];
 }
 function userByKey(k){ return USERS.find(u => u.key === k) || null; }

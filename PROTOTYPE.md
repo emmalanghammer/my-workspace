@@ -4362,3 +4362,24 @@ placeholder initials (`AA`, `AB`, `BC`, `DG`, `EL`, and `CA` on two people), so
 Kelsey Warner drew as "DG" and Laura Bennett wore Charlie's initials. Harmless
 while they only appeared in the @-menu; not harmless once they are drawn in the
 Note column.
+
+### A person's colour is written on the person (2026-09-29)
+
+Nathan Cole was green in the Mentions tile and grey in a task's History, because
+the tile names each avatar's colour in the markup and `userColor()` was deriving
+one from the person's position in `USERS`. Two rules, two answers. A colour
+written on the person now wins over the ramp, and the ramp is only the fallback.
+
+Two of the tile's five are deliberately **not** pinned, because the colour it
+uses for them is reserved on the Tasks screen:
+
+- **Kelsey Warner** is `brand` on the tile — `--container-secondary`, which is
+  the token the app bar's own avatar is filled with and is documented as
+  Charlie's alone, "so the bubble in a row and the avatar in the corner are the
+  same colour by construction". Pinning her there gives two people the
+  signed-in user's colour.
+- **Derek Shaw** is `orange` on the tile — and an orange bubble on the Tasks
+  screen means a *role*, which the roles depend on meaning only that.
+
+Both are Emma's call: either the tile changes to a legal colour, or the rule
+gives. Left as they are until she says.
