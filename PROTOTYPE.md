@@ -2874,6 +2874,26 @@ absence reads as a limitation of the frame rather than a decision: the tile
 keeps its 5. And its fifth mention is labelled Tenant where the record is an
 Owner, which is content drift in the frame, not an instruction.
 
+## The register's columns
+
+Emma's call, 2026-09-29, matching the shipped register: colour bar, **Name,
+Account#, Property, Unit, Lease Start, Lease End, Email, Phone, Status**, then
+the kebab. Email and Phone came in; **Site Classification and Balance came
+out**.
+
+The sort arrow moved to **Account#**, which is the order the rows are actually
+in. It had been sitting on Site Classification, a column this register no
+longer has, and putting it on Name would have claimed a sort that is not
+happening.
+
+**Balance is still in the data and still filtered on, it is just not a column
+any more.** Both delinquency beats work exactly as before, and a saved filter
+about money still returns the right people, but a viewer cannot see the figure
+the filter selected on: "Balance over $20, 30+ days old" now returns seven
+tenants whose balances are nowhere on screen. That is what the shipped register
+does, so it is the right call for fidelity, and it is worth knowing before
+demoing a filter whose whole point is an amount.
+
 ## Two saved filters are there before you start
 
 Emma's call, 2026-09-23. The register used to open with an empty Saved Filters

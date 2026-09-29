@@ -1146,14 +1146,18 @@ a:hover { text-decoration:underline; }
         <thead>
           <tr id="registerHeadRow">
             <th class="col-check"></th>
-            <th style="width:280px;">Name</th>
-            <th style="width:220px;"><svg class="material-symbols-outlined icon-16"><use href="#arrow-downward"></use></svg> Site Classification</th>
-            <th class="right" style="width:110px;">Balance</th>
-            <th class="right" style="width:90px;">Account#</th>
-            <th style="width:200px;">Property</th>
-            <th style="width:130px;">Unit</th>
+            <th style="width:220px;">Name</th>
+            <!-- The sort arrow sits on Account#, which is the order the rows are
+                 actually in. It used to sit on Site Classification, a column
+                 this register no longer has; putting it on Name would have
+                 claimed a sort that is not happening. -->
+            <th class="right" style="width:90px;"><svg class="material-symbols-outlined icon-16"><use href="#arrow-downward"></use></svg> Account#</th>
+            <th style="width:190px;">Property</th>
+            <th style="width:120px;">Unit</th>
             <th style="width:100px;">Lease Start</th>
             <th style="width:100px;">Lease End</th>
+            <th style="width:190px;">Email</th>
+            <th style="width:140px;">Phone</th>
             <th style="width:90px;">Status</th>
             <th class="col-kebab"><svg class="material-symbols-outlined icon-18"><use href="#list"></use></svg></th>
           </tr>
@@ -2441,13 +2445,13 @@ function renderRegister(){
       return '<tr class="tn-row" onclick="goToTenant('+r.account+')">'
         + '<td class="col-check">'+(check || bar)+'</td>'
         + '<td><div class="tn-name-cell"><span class="name" style="color:var(--rmx-navy);">'+r.name+'</span>'+notice+'</div></td>'
-        + '<td>'+r.siteClass+'</td>'
-        + '<td class="right">'+money(r.balance)+'</td>'
         + '<td class="right">'+r.account+'</td>'
         + '<td>'+r.property+'</td>'
         + '<td>'+r.unit+'</td>'
         + '<td>'+r.leaseStart+'</td>'
         + '<td>'+r.leaseEnd+'</td>'
+        + '<td>'+(r.email||"")+'</td>'
+        + '<td>'+(r.phone||"")+'</td>'
         + '<td><span class="status-dot'+(r.status==="Past"?" past":"")+'"></span><span class="status-text">'+(r.status==="Past"?"Past":"Current")+'</span></td>'
         + '<td class="col-kebab"><svg class="material-symbols-outlined kebab-btn" style="font-size:18px;" onclick="event.stopPropagation()"><use href="#more-vert"></use></svg></td>'
         + '</tr>';
