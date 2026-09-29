@@ -698,7 +698,14 @@ a:hover { text-decoration:none; }
 .hn-table th:first-child,.hn-table td:first-child,
 .hn-table th:nth-child(2),.hn-table td:nth-child(2){width:1%;}
 .hn-table td:last-child{white-space:normal;}
-.hn-note-cell{display:flex;align-items:center;gap:4px;}
+/* The bubble sits on the note's one line, and the note is one line: a note
+   long enough to wrap pushed the bubble to the middle of a two-line cell,
+   where it read as belonging to neither line. The third column takes
+   max-width:0 so an auto-layout table lets the cell shrink and the ellipsis
+   can happen at all. Emma's call, 2026-09-29. */
+.hn-table td:nth-child(3){max-width:0;}
+.hn-note-cell{display:flex;align-items:center;gap:4px;min-width:0;}
+.hn-note-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .hn-avatar{width:24px;height:24px;border-radius:50%;background:var(--rmx-blue);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex:none;}
 
 /* Floating dropdown panels (Select an Action / row kebab / add-checklist-item) */
@@ -2740,7 +2747,7 @@ function renderModalHistory(){
     <tr>
       <td>${String(r.date).split(' ')[0]}</td>
       <td>${r.type}</td>
-      <td><div class="hn-note-cell"><span class="hn-avatar">${assigneeInitials(r.avatar)}</span>${withMentionChips(r.text)}</div></td>
+      <td><div class="hn-note-cell"><span class="hn-avatar">${assigneeInitials(r.avatar)}</span><span class="hn-note-text" title="${String(r.text).replace(/"/g, '&quot;')}">${withMentionChips(r.text)}</span></div></td>
     </tr>`).join('');
 }
 

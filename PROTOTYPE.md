@@ -2596,7 +2596,14 @@ register where work is held by role.
 Write Letter action, handed to the Property Manager queue, then the chatter a
 date moving toward you produces. Deliberately consistent with the rest of the
 task: nothing in it says a checklist item is done, because none are, and
-nobody has claimed it, because the register still offers Claim. Closing the overlay leaves you on Task Details
+nobody has claimed it, because the register still offers Claim.
+
+**One line per note, bubble on that line.** A note long enough to wrap made a
+two-line cell and pushed the avatar to the middle of it, where it read as
+belonging to neither line. Notes truncate at one line now, with the whole text
+on the row's tooltip, and the bubble centres on the line it belongs to. The
+ellipsis needs `max-width: 0` on the third column, which is what lets an
+auto-layout table shrink a cell rather than widen for it. Closing the overlay leaves you on Task Details
 with the tenant link right there, which is the point of going to the register
 rather than opening a panel on the Workspace.
 
