@@ -187,7 +187,15 @@
    what gives way. */
 .hn-note-cell { display:flex; align-items:center; gap:4px; min-width:0; }
 .hn-note-body { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.hn-note-av { width:24px; height:24px; flex:none; border-radius:50%; background:var(--rmx-blue); color:#fff; font-size:12px; display:inline-flex; align-items:center; justify-content:center; }
+.hn-note-av { width:24px; height:24px; flex:none; border-radius:50%; color:#fff; font-size:12px; display:inline-flex; align-items:center; justify-content:center; }
+/* The same five fills the Tasks register draws its bubbles with. A flat blue
+   here made every author look like the same person. */
+.hn-note-av.hn-av-me    { background:var(--container-secondary, #008dd5); }
+.hn-note-av.hn-av-navy  { background:var(--container-secondary-dark, #13314c); }
+.hn-note-av.hn-av-green { background:var(--rmx-green, #6eb744); }
+.hn-note-av.hn-av-slate { background:var(--component-command-launch, #425a70); }
+.hn-note-av.hn-av-grey  { background:var(--container-tertiary-dark, #737373); }
+.hn-note-av.hn-av-role  { background:var(--lozenge-notice, #fdf0e4); border:1px solid var(--rmx-orange, #f58220); color:var(--rmx-navy, #13314c); }
 .hn-register .c-cat  { width:var(--hc-cat); }
 .hn-register .c-user { width:var(--hc-user); }
 .hn-register .c-kebab{ width:var(--hc-kebab); text-align:center; }

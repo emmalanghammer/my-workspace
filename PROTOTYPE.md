@@ -4316,3 +4316,49 @@ past due, which still reads as neglected without reading as abandoned.
 
 Dana's move-in moved from eight days out to five, so `index.html`'s
 `data-ws-day` moved with it. That coupling is the one noted above.
+
+## New Resident Move In is the demo task (2026-09-29)
+
+Emma: *"new resident move in will be the task that'll be demoed"*.
+
+**It is due tomorrow** — `inDays(1)`, the soonest date in the register that is
+not already overdue. That puts it directly under the overdue pair, has Dana
+arrive the day after the demo, and gives the five open checklist items
+something to be urgent about. Sign off on Brookside HVAC moved from `inDays(1)`
+to `inDays(3)` so nothing else lands on that date. `index.html`'s `data-ws-day`
+moved with it, as it must.
+
+Checked end to end from the Workspace: the first mention reads *"Dana Whitcomb
+moves in on the 30th"*, clicking it lands on the task with Write Letter / Tenant
+/ New Resident Welcome / Dana Whitcomb, the five checklist items in their three
+role queues, and the History / Notes thread quoting the same day.
+
+**One bug found doing that, and it was mine.** The `DOMContentLoaded` handler
+added earlier the same day to replace the `09/17/25` in the Due Date markup ran
+*after* the `?open=` auto-open, so opening this task from the Workspace showed a
+date a week out instead of its own. The markup carries `mm/dd/yy` now and
+`openTaskModal` is the only writer.
+
+## Bubbles: System rows only, in the person's own colour (2026-09-29)
+
+Two corrections from Emma on the entries above:
+
+- **Notes do not carry a bubble.** A System row is the app reporting what a
+  person did, so it leads with their initials. A Note is a person writing in
+  their own voice and the User column already names them — a bubble in front of
+  the text only says it twice. `type === 'Note'` renders no bubble, on both
+  surfaces.
+- **The bubble is the person's colour, not a flat blue.** It was
+  `var(--rmx-blue)` for everybody, which made every author look like the same
+  person. It now takes the same `av-*` fills the Tasks register uses, so one
+  person is one colour across the register, the tile and the overlay, and a role
+  is orange. The overlay is a shared asset and cannot see `userColor`, so the
+  colour travels on the record's `users` array alongside the initials and the
+  roles; a record whose host passes no colours falls back to the same four-colour
+  ramp by position.
+
+Fixed while doing it: the overlay's own user list carried the frame's
+placeholder initials (`AA`, `AB`, `BC`, `DG`, `EL`, and `CA` on two people), so
+Kelsey Warner drew as "DG" and Laura Bennett wore Charlie's initials. Harmless
+while they only appeared in the @-menu; not harmless once they are drawn in the
+Note column.

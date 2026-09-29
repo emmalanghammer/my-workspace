@@ -40,12 +40,17 @@ var ME = 'Charlie Apegian';
    the two screens agree about who exists. See PROTOTYPE.md on the two
    conflicting user lists in the Tasks data. */
 var USERS = [
-  {initials:'AA', name:'Grace Whitaker',   uname:'gwhitaker'},
-  {initials:'AB', name:'Caleb Foster',      uname:'cfoster'},
-  {initials:'BC', name:'Nathan Cole',     uname:'ncole'},
-  {initials:'CA', name:'Laura Bennett', uname:'lbennett'},
-  {initials:'DG', name:'Kelsey Warner', uname:'kwarner'},
-  {initials:'EL', name:'Paige Sullivan', uname:'psullivan'},
+  /* The frame's placeholder initials (AA, AB, BC, DG, EL, and CA twice) were
+     harmless while they only showed in the @-menu. They are drawn in the Note
+     column now, so Kelsey Warner was appearing as "DG" and Laura Bennett was
+     wearing Charlie's initials. Real initials, which also makes this list agree
+     with the Tasks screen's. Emma's call, 2026-09-29. */
+  {initials:'GW', name:'Grace Whitaker',  uname:'gwhitaker'},
+  {initials:'CF', name:'Caleb Foster',    uname:'cfoster'},
+  {initials:'NC', name:'Nathan Cole',     uname:'ncole'},
+  {initials:'LB', name:'Laura Bennett',   uname:'lbennett'},
+  {initials:'KW', name:'Kelsey Warner',   uname:'kwarner'},
+  {initials:'PS', name:'Paige Sullivan',  uname:'psullivan'},
   {initials:'CA', name:'Charlie Apegian', uname:'capegian'}
 ];
 
@@ -235,12 +240,30 @@ function chipHTML(name){
    across to the User column to find out who. Emma's spec, 2026-09-29. The host
    screen's own user list wins when it passes one, so a person's initials are
    the same here as in the register behind this overlay. */
-function noteAvatar(name){
-  if (!name) return '';
-  var known = ((state.entity && state.entity.users) || USERS)
-    .filter(function(u){ return u.name === name; })[0];
-  return '<span class="hn-note-av" title="' + esc(name) + '">' +
+function noteAvatar(name, type){
+  /* Only the app's own entries carry it. A "Note" is somebody writing in their
+     own voice and the User column already names them; a bubble in front of the
+     text only says it twice. Emma's call, 2026-09-29. */
+  if (!name || type === 'Note') return '';
+  var list = (state.entity && state.entity.users) || USERS;
+  var known = null, at = -1;
+  for (var i = 0; i < list.length; i++) if (list[i].name === name) { known = list[i]; at = i; }
+  return '<span class="hn-note-av ' + avColorClass(known, at, name) + '" title="' + esc(name) + '">' +
          esc(known ? known.initials : initialsFor(name)) + '</span>';
+}
+/* One person, one colour, and the same colour the host screen gives them. A
+   host that keeps its own people (Tasks does) passes `color` on each user and
+   `role: true` on each role, and that wins. Otherwise the colour comes from the
+   person's position in the list, which is the same rule the Tasks register uses
+   -- stable for a given record, and rarely the same twice in a row. Orange is
+   never in the ramp: an orange bubble means a role and has to keep meaning only
+   that. Emma's call, 2026-09-29. */
+var HN_AV_RAMP = ['navy', 'green', 'slate', 'grey'];
+function avColorClass(user, at, name){
+  if (user && user.role) return 'hn-av-role';
+  if (user && user.color) return 'hn-av-' + user.color;
+  if (name === 'Charlie Apegian') return 'hn-av-me';
+  return 'hn-av-' + HN_AV_RAMP[(at < 0 ? name.length : at) % HN_AV_RAMP.length];
 }
 function initialsFor(name){
   return String(name).split(/\s+/).filter(Boolean).slice(0, 2)
@@ -406,7 +429,7 @@ function renderNotes(){
         '<td class="c-type" title="' + esc(n.type) + '">' + esc(n.type) + '</td>' +
         '<td class="c-date">' + esc(n.date) + '</td>' +
         '<td class="c-note" title="' + esc(n.note) + '">' +
-          '<span class="hn-note-cell">' + noteAvatar(n.user) + clip +
+          '<span class="hn-note-cell">' + noteAvatar(n.user, n.type) + clip +
           '<span class="hn-note-body">' + withMentions(n.note) + '</span></span></td>' +
         '<td class="c-cat">' + esc(n.category) + '</td>' +
         '<td class="c-user" title="' + esc(n.user) + '">' + esc(n.user) + '</td>' +
