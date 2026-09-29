@@ -4438,3 +4438,34 @@ survives a re-import of the tenant export.
 Marcia Clark's display colour was cleared at the same time (2026-09-29), so the
 first row is a plain one. Recorded as `1: null` in the import script's
 `COLOR_OVERRIDES` alongside the others, not just deleted from the screen.
+
+## An AI filter narrows what is on screen, it does not widen it (2026-09-29)
+
+Emma: *"keep the status as current when doing the AI filters and only display
+current tenants"*.
+
+`run()` used to clear the Status quick filter outright, which meant asking Orion
+for "tenants with a balance over $20" quietly widened the register to include
+people who had moved out — the Status dropdown still said Current while the
+result did not. Status is kept now.
+
+The one exception is a query that **speaks about status itself**. "Past tenants
+who moved out more than 30 days ago" parses to a `Status is Past` condition, and
+with Current still on it returns nothing at all with nothing on screen to say
+why. That is the bug the clearing was added for on 2026-09-23; it is the
+condition now (`criteriaSpeakToStatus`) rather than the rule, and it covers
+`status` and `moveOutDays`. The saved filters follow the same rule: "Moved out,
+deposit still held" clears Status and returns 33 past tenants, "Delinquent as of
+the 3rd" keeps it and returns 91 current ones.
+
+**One consequence worth knowing.** The aged-balance filter returns **four**
+tenants now, not the seven Emma pinned on 2026-09-23 from the live app. Three of
+the seven — Ralph Donaldson (67), Lori Singer (249) and Kristen Jones (331) —
+carry `Past` in the real `Tenant_Register_2026-09-23.xlsx` export, so her
+screenshot of that result must have been taken with no Status filter on. Laura
+Villa, Rosita Campanel, Devin Lautner and Ashley Griffin are the current four.
+
+Left at four, because a register whose Status says Current while the rows
+include moved-out tenants is the thing an audience notices. Getting all seven
+back means either exempting that ask from the Status filter or moving those
+three to Current, and the statuses came from Emma's own export — her call.

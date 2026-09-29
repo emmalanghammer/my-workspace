@@ -2394,6 +2394,15 @@ function testGroup(row, g){
   g.items.forEach((c,i)=>{ if (i>0 && c.join==="or") runs.push([]); runs[runs.length-1].push(c); });
   return runs.some(run => run.every(c => testCond(row,c)));
 }
+/* Does this query speak for itself about status? A filter that asks for past
+   tenants, or for people who moved out, is making a claim about status and has
+   to be allowed to override the Status quick filter. Anything else -- a
+   balance, a pet, a property -- says nothing about status and should be read
+   as a narrowing of whatever the register is already showing. */
+function criteriaSpeakToStatus(crit){
+  return (crit || []).some(g => (g.items || []).some(c =>
+    c.field === "status" || c.field === "moveOutDays"));
+}
 function matches(crit){
   const s = state; const groups = crit || [];
   const qf = s.qfApplied;
@@ -2717,12 +2726,11 @@ function pickSavedFilter(i){
   state.rationale = f.rationale || "";
   state.promptText = f.promptText || "";
   state.applied = state.criteria;
-  /* Same reason run() does it: the Status quick filter defaults to Current, so
-     a saved filter about past tenants would come back empty with nothing on
-     screen to say why. The saved filter's own conditions are the query.
-     Found on 2026-09-23 by seeding "Moved out, deposit still held", which
-     returned nothing at all until this line existed. */
-  state.statuses = [];
+  /* Same rule as run(): the saved filter keeps the register's Status unless its
+     own conditions are about status. "Moved out, deposit still held" carries
+     Status is Past and so clears it; "Delinquent as of the 3rd" does not and so
+     stays inside the Current tenants on screen. */
+  if (criteriaSpeakToStatus(state.criteria)) state.statuses = [];
   state.selectedFilter = f.name;
   state.showPanel = false;
   state.prompt = "";
@@ -2767,11 +2775,17 @@ function run(text, opts){
     const flat = parse(text);
     const crit = toGroups(flat);
     state.thinking = false; state.showPanel = !applyDirect; state.criteria = crit; state.outerJoin = "and";
-    /* Orion's parsed criteria are the source of truth for the query it just
-       built — a leftover Status quick-filter (defaults to Current-only)
-       would otherwise silently zero out results for anything about Past/
-       moved-out tenants, no matter how correctly the prompt was parsed. */
-    state.statuses = [];
+    /* Status is kept, not cleared. Asking Orion for "tenants with a balance
+       over $20" is a narrowing of the register you are looking at, and the
+       register is showing Current tenants -- dropping the Status quick filter
+       quietly widened every AI filter to include people who have moved out.
+       Emma's call, 2026-09-29.
+
+       The exception is a query that speaks about status itself ("past tenants
+       who moved out..."), which has to be able to override it or it returns
+       nothing at all with nothing on screen to say why. That was the bug this
+       line was added for on 2026-09-23; it is the condition now, not the rule. */
+    if (criteriaSpeakToStatus(crit)) state.statuses = [];
     state.rationale = rationaleFor(text, crit);
     /* The box is cleared a few lines down, so without this the sentence that
        started the filter is gone by the time anyone reaches Save as Filter and
