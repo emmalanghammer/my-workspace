@@ -95,7 +95,7 @@ const AGED_OVER_30 = new Set([14, 67, 249, 320, 331, 333, 451]);
    colour is the live app's own purple, #6a5589, sampled from the screenshot;
    display colours are product data a user picks, and RMX Foundations has no
    purple for them. Everyone else in the file keeps the generated colour. */
-const COLOR_OVERRIDES = { 320: 'Purple', 333: 'Purple', 14: null, 67: null, 249: null, 331: null, 451: null };
+const COLOR_OVERRIDES = { 320: 'Purple', 333: 'Purple', 1: null, 14: null, 67: null, 249: null, 331: null, 451: null };
 
 /* Tenants whose row leaves the prototype for the live system, by account
    number. The id in the URL is the real app's, not this export's account

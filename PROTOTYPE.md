@@ -4434,3 +4434,7 @@ result; only the link went.
 
 Recorded in `.claude/import-tenants.mjs` as well as in the screen, so it
 survives a re-import of the tenant export.
+
+Marcia Clark's display colour was cleared at the same time (2026-09-29), so the
+first row is a plain one. Recorded as `1: null` in the import script's
+`COLOR_OVERRIDES` alongside the others, not just deleted from the screen.
