@@ -532,20 +532,12 @@
 [data-ws-avatar="green"] { background: var(--icon-success); }
 [data-ws-avatar="orange"] { background: var(--icon-attention); }
 [data-ws-avatar="navy"] { background: var(--container-secondary-dark); }
-/* The @handle. Brand-tinted rather than the export's peach, which had no
-   token behind it. */
-.ws-handle {
-  padding: 0 var(--spacing-xxs);
-  border-radius: var(--radius-sm);
-  /* Emma's frame tints the handle with text-link at 20% rather than the flat
-     lozenge-brand, and sets it regular, not semibold. color-mix keeps the
-     token as the source; the rgba line is the same colour for a browser that
-     cannot do color-mix. */
-  background: rgba(0, 141, 213, .2);
-  background: color-mix(in srgb, var(--text-link) 20%, transparent);
-  color: var(--text-link);
-  font: var(--type-paragraph-s-regular);
-}
+/* The @handle wears the Note Details lozenge -- `.hn-at` in
+   assets/history-notes.css, which this page already loads. It was a
+   brand-tinted fill of its own, so the same mention was a filled chip on the
+   Workspace and an outlined one the moment you opened it. One definition of
+   what a mention looks like, rather than a second that can drift. Emma's call,
+   2026-09-30; `.ws-handle` went with the fill. */
 
 /* ---------- My Tasks ---------- */
 /* A checked row here means "task complete," matching the Tasks screen's own

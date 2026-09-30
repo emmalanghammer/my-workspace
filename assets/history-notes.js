@@ -344,17 +344,22 @@ function knownNames(){
    eaten by "@Charlie", each paired with the person it should read as. Usernames
    count: a note written as "@capegian" cannot be left as raw text just because
    it used the login form rather than the name. */
+/* Charlie is "@Charlie" wherever he is tagged -- Emma's call, 2026-09-30.
+   Everyone else's lozenge carries their name the way the frame draws it, but
+   the signed-in user has a short handle the whole prototype uses and three
+   spellings would have been three ways of naming the same person. Whichever
+   spelling a note used, the lozenge reads "@Charlie" and the note keeps saying
+   what it said. */
+function mentionLabel(token, name){
+  return isMe(token) ? '@Charlie' : name;
+}
 function mentionTokens(){
   var out = [];
   taggableUsers().forEach(function(u){
-    out.push({ token: u.name, label: u.name });
-    if (u.uname) out.push({ token: u.uname, label: u.name });
+    out.push({ token: u.name, label: mentionLabel(u.name, u.name) });
+    if (u.uname) out.push({ token: u.uname, label: mentionLabel(u.uname, u.name) });
   });
-  /* "@Charlie" is the short alias the seeded mentions use. The lozenge spells
-     him out in full anyway -- it names a person, and "Charlie" on its own reads
-     like a first name somebody typed rather than a record -- while the token
-     keeps the note saying exactly what it said. */
-  out.push({ token: 'Charlie', label: ME });
+  out.push({ token: 'Charlie', label: '@Charlie' });
   return out.sort(function(a, b){ return b.token.length - a.token.length; });
 }
 /* Two renderings of the same note, and which one you get is a question about
@@ -719,11 +724,15 @@ function pickAt(i){
   var node = tok.node;
   var rest = node.nodeValue.slice(tok.end);
   node.nodeValue = node.nodeValue.slice(0, tok.at);
+  /* The token stored for Charlie is the short handle, not his full name: a
+     mention typed here has to come out spelled the way every other mention of
+     him is spelled. Emma's call, 2026-09-30. */
+  var token = isMe(u.name) ? 'Charlie' : u.name;
   var chip = document.createElement('span');
   chip.className = 'hn-at ' + (isMe(u.name) ? 'hn-at--me' : 'hn-at--other');
   chip.setAttribute('contenteditable', 'false');
-  chip.setAttribute('data-name', u.name);
-  chip.textContent = u.name;
+  chip.setAttribute('data-name', token);
+  chip.textContent = mentionLabel(token, u.name);
   var tail = document.createTextNode('\u00a0' + rest);
   node.parentNode.insertBefore(chip, node.nextSibling);
   chip.parentNode.insertBefore(tail, chip.nextSibling);

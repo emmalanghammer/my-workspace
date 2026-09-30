@@ -4588,3 +4588,32 @@ Two things followed:
   than a record, so the chip shows **Charlie Apegian** while the token keeps the
   note saying `@Charlie`. Checked: the field reads back as
   `@Charlie Dana Whitcomb moves in on the 1st...`, unchanged.
+
+### One lozenge, one spelling (2026-09-30)
+
+Two corrections, and they go together.
+
+**The Workspace's mention handles wear the Note Details lozenge.** They had a
+brand-tinted fill of their own (`.ws-handle`), so the same mention was a filled
+chip on the Workspace and an outlined one the moment you opened it. They use
+`.hn-at` / `.hn-at--me` now — the classes `assets/history-notes.css` already
+defines and this page already loads — so there is one definition of what a
+mention looks like rather than a second that can drift. `.ws-handle` went with
+the fill.
+
+**Every tag on Charlie reads `@Charlie`.** He had three spellings in play by the
+end of yesterday — `@charlieapegian` in the copy, `Charlie Apegian` in the
+lozenge, `capegian` in the user list — which is three ways of naming one person.
+Now:
+
+- the copy says `@Charlie`, on the Workspace and in the task's own note;
+- the lozenge reads `@Charlie` whichever of the three a note used, so an old
+  note does not have to be rewritten to look right;
+- the @-menu writes `Charlie` as the token, so a mention typed in the dialog
+  cannot introduce a fourth spelling;
+- the field still reads back byte for byte — `@Charlie Dana Whitcomb moves in on
+  the 1st...` — so opening a note never rewrites it.
+
+Everyone else's lozenge still carries their name the way the frame draws it
+("Laura Bennett", no "@"). Charlie is the exception because he is the signed-in
+user and the whole prototype refers to him by the short handle.
