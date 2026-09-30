@@ -4554,3 +4554,18 @@ Rebuilt and checked in a browser rather than just checked for size:
   seven dogs at Riverview with Status still reading Current.
 
 No console errors on any of it.
+
+### The second ask is over $100 (2026-09-30)
+
+Emma's call: the tenant register's second scripted ask now reads *"tenants with
+a balance greater than $100 and more than 30 days old"*.
+
+One word changed, in `DEMO_PROMPTS`. Everything downstream is derived from the
+parsed value rather than written out, so the tag re-reads itself as **Balance
+over $100, 30+ days old** with nothing else touched.
+
+The result is the same four tenants — Laura Villa, Rosita Campanel, Devin
+Lautner and Ashley Griffin — because the smallest balance among the current ones
+is $405.81. The pinned seven from the live app all clear $100 too (the smallest
+is Ralph Donaldson at $227.92), so raising the threshold did not force the
+pinned answer to move with it.

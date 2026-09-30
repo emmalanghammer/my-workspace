@@ -181,7 +181,9 @@ for (const r of data) {
 
      The seven in AGED_OVER_30 are the answer the real app gives for "balance
      greater than $20 and more than 30 days old" (Emma's screenshot of it,
-     2026-09-23). The export carries no balances and no aging, so rather than
+     2026-09-23). The demo now asks for over $100 instead, which the same seven
+     still clear -- the smallest of them owes $227.92 -- so the pinned answer
+     did not have to move with the threshold. The export carries no balances and no aging, so rather than
      invent a different answer to the same question, the generator is made to
      agree with the real one: those seven clear the filter and nobody else
      does. Everyone else who owes is aged under 30 days, which leaves the
@@ -230,3 +232,4 @@ console.log(`    flags         ${n(r=>r.notice)} notice, ${n(r=>r.eviction)} evi
 console.log(`    exclusions    ${n(r=>r.collections)} collections, ${n(r=>r.paymentPlan)} payment plan, ${n(r=>r.deposit)} deposit held`);
 const over20aged = out.filter(r => r.balance > 20 && r.agedDays > 30);
 console.log(`    aged          ${over20aged.length} clear "over $20 and more than 30 days old": ${over20aged.map(r=>r.name).join(', ')}`);
+console.log(`                  ${over20aged.filter(r=>r.balance>100).length} of them also clear over $100, which is what the demo asks for`);
