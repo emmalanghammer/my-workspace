@@ -1507,12 +1507,12 @@ let myTasks = [
        them are, and nobody has claimed it, because the register still offers
        Claim. Emma's call, 2026-09-29. */
     history:[
-      /* Nathan's @charlieapegian is the newest note, not the oldest: the
+      /* Nathan's @Charlie is the newest note, not the oldest: the
          Workspace surfaces it as the live ask ("20m ago"), and the others have
          already done their items, so his follow-up to the one queue that has
          not moved is what a real thread would end on. */
       {date:relDate(0, '08:20 AM'), type:'Note', avatar:'ncole',
-       text:`@charlieapegian Dana Whitcomb moves in on the ${MOVE_IN_DAY}. Can you set up her community app account?`},
+       text:`@Charlie Dana Whitcomb moves in on the ${MOVE_IN_DAY}. Can you set up her community app account?`},
       {date:relDate(1, '02:45 PM'), type:'Note', avatar:'psullivan',
        text:'Parking permit and pool pass are printed and in the move-in folder at the front desk.'},
       {date:relDate(2, '04:10 PM'), type:'Note', avatar:'kwarner',
@@ -2058,12 +2058,12 @@ const USERS = [
   {key:'bhollis',   initials:'BH', name:'Brian Hollis',   uname:'bhollis',  color:'green'},
   {key:'psullivan', initials:'PS', name:'Paige Sullivan', uname:'psullivan'},
   {key:'tnolan',    initials:'TN', name:'Travis Nolan',   uname:'tnolan'},
-  /* charlieapegian, not capegian. The notes and the Workspace's mentions tag
-     him as "@charlieapegian" -- Emma's wording -- and the Note Details dialog
-     builds its lozenges out of these usernames, so a handle spelled one way in
-     the copy and another way here simply never matched and the tag stayed raw
-     text. One spelling. Emma's call, 2026-09-29. */
-  {key:'capegian',   initials:'CA', name:'Charlie Apegian',  uname:'charlieapegian'},
+  /* Briefly charlieapegian, on 2026-09-29, because the move-in note tagged him
+     that way and the Note Details lozenge is built out of these usernames. The
+     note says "@Charlie" now like every other mention does (Emma, 2026-09-30),
+     so the username goes back to the first-initial-plus-surname every other
+     person here follows. */
+  {key:'capegian',   initials:'CA', name:'Charlie Apegian',  uname:'capegian'},
 ];
 /* Roles are what an orange bubble means, and what Claim claims from.
    `role-sa` is the one piece of this the data never named -- an orange SA on
@@ -3729,6 +3729,6 @@ document.addEventListener('DOMContentLoaded', function(){
 <script src="../assets/taskstate.js?v=84f67f33"></script>
 <script src="../assets/actions.js?v=7d5ba7e6"></script>
 <script src="../assets/datetime.js?v=5c872dc6"></script>
-<script src="../assets/history-notes.js?v=d18d0740"></script>
+<script src="../assets/history-notes.js?v=dfa0d960"></script>
 <script src="../assets/megamenu.js?v=783ad6a1"></script>
 </body></html>

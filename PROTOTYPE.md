@@ -4569,3 +4569,22 @@ Lautner and Ashley Griffin — because the smallest balance among the current on
 is $405.81. The pinned seven from the live app all clear $100 too (the smallest
 is Ralph Donaldson at $227.92), so raising the threshold did not force the
 pinned answer to move with it.
+
+### "@Charlie", like the rest (2026-09-30)
+
+The Workspace's first mention and the move-in task's note both read `@Charlie`
+now, the way the other four mentions always have. They are the same note, so
+they change together.
+
+Two things followed:
+
+- **Charlie's username goes back to `capegian`.** It was changed to
+  `charlieapegian` on 2026-09-29 only because the copy spelled it that way and
+  the Note Details lozenge is built out of these usernames. The copy no longer
+  does, so it returns to the first-initial-plus-surname every other person in
+  the list follows.
+- **The lozenge spells him out in full.** `@Charlie` is a short alias, and
+  "Charlie" alone in a lozenge reads like a first name somebody typed rather
+  than a record, so the chip shows **Charlie Apegian** while the token keeps the
+  note saying `@Charlie`. Checked: the field reads back as
+  `@Charlie Dana Whitcomb moves in on the 1st...`, unchanged.

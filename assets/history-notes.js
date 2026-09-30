@@ -51,7 +51,7 @@ var USERS = [
   {initials:'LB', name:'Laura Bennett',   uname:'lbennett'},
   {initials:'KW', name:'Kelsey Warner',   uname:'kwarner'},
   {initials:'PS', name:'Paige Sullivan',  uname:'psullivan'},
-  {initials:'CA', name:'Charlie Apegian', uname:'charlieapegian'}
+  {initials:'CA', name:'Charlie Apegian', uname:'capegian'}
 ];
 
 var ENTITIES = {
@@ -223,12 +223,12 @@ function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&
    "@" left showing -- orange when it is you, blue when it is anyone else.
    Emma's call, 2026-09-10, off a screenshot of the real product. */
 function isMe(name){
-  return name === ME || name === 'Charlie' || name === 'charlieapegian';
+  return name === ME || name === 'Charlie' || name === 'capegian';
 }
 /* `token` is what the note actually says after the "@" -- a name or a username.
    `label` is the person as the lozenge shows them. The two differ because a
-   note written as "@charlieapegian" has to keep saying that when the field is
-   read back, while the lozenge reads "Charlie Apegian" the way the frame does.
+   note written as "@Charlie" has to keep saying that when the field is read
+   back, while the lozenge reads "Charlie Apegian" the way the frame does.
    data-name therefore carries the token, not the label. */
 function chipHTML(token, label){
   return '<span class="hn-at ' + (isMe(token) ? 'hn-at--me' : 'hn-at--other') +
@@ -342,15 +342,19 @@ function knownNames(){
 }
 /* Every "@token" a note can carry, longest first so "@Charlie Little" is not
    eaten by "@Charlie", each paired with the person it should read as. Usernames
-   count: the task notes tag people as "@charlieapegian", and a note the product
-   would chip cannot be left as raw text just because it used the login form. */
+   count: a note written as "@capegian" cannot be left as raw text just because
+   it used the login form rather than the name. */
 function mentionTokens(){
   var out = [];
   taggableUsers().forEach(function(u){
     out.push({ token: u.name, label: u.name });
     if (u.uname) out.push({ token: u.uname, label: u.name });
   });
-  out.push({ token: 'Charlie', label: 'Charlie' });
+  /* "@Charlie" is the short alias the seeded mentions use. The lozenge spells
+     him out in full anyway -- it names a person, and "Charlie" on its own reads
+     like a first name somebody typed rather than a record -- while the token
+     keeps the note saying exactly what it said. */
+  out.push({ token: 'Charlie', label: ME });
   return out.sort(function(a, b){ return b.token.length - a.token.length; });
 }
 /* Two renderings of the same note, and which one you get is a question about
