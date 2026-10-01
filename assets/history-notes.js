@@ -35,7 +35,7 @@
    the tenant on "Return Marcia Clark's call", and so on, so a
    record reads the same wherever you meet it.
    ============================================================ */
-var ME = 'Charlie Apegian';
+var ME = 'Riley Parker';
 /* The same seven people the Tasks screen's Assigned To dropdown lists, so
    the two screens agree about who exists. See PROTOTYPE.md on the two
    conflicting user lists in the Tasks data. */
@@ -43,7 +43,7 @@ var USERS = [
   /* The frame's placeholder initials (AA, AB, BC, DG, EL, and CA twice) were
      harmless while they only showed in the @-menu. They are drawn in the Note
      column now, so Kelsey Warner was appearing as "DG" and Laura Bennett was
-     wearing Charlie's initials. Real initials, which also makes this list agree
+     wearing Riley's initials. Real initials, which also makes this list agree
      with the Tasks screen's. Emma's call, 2026-09-29. */
   {initials:'GW', name:'Grace Whitaker',  uname:'gwhitaker'},
   {initials:'CF', name:'Caleb Foster',    uname:'cfoster'},
@@ -51,7 +51,7 @@ var USERS = [
   {initials:'LB', name:'Laura Bennett',   uname:'lbennett'},
   {initials:'KW', name:'Kelsey Warner',   uname:'kwarner'},
   {initials:'PS', name:'Paige Sullivan',  uname:'psullivan'},
-  {initials:'CA', name:'Charlie Apegian', uname:'capegian'}
+  {initials:'RP', name:'Riley Parker', uname:'rparker'}
 ];
 
 var ENTITIES = {
@@ -64,7 +64,7 @@ var ENTITIES = {
     ],
     notes: [
       {type:'Vendor Coordination', date:hnDate(1, '08:42 AM'), category:'Maintenance', user:'Wesley Barnes',
-       note:'Carpet vendor quote received, $1,840 for unit and hallway. @Charlie can you confirm the carpet vendor before I close this issue?', files:['quote_riverview_204.pdf']},
+       note:'Carpet vendor quote received, $1,840 for unit and hallway. @Riley can you confirm the carpet vendor before I close this issue?', files:['quote_riverview_204.pdf']},
       {type:'Tenant Contact', date:hnDate(3, '04:15 PM'), category:'Maintenance', user:'Nathan Cole',
        note:'Left voicemail for the tenant about access on Thursday morning.', files:[]},
       {type:'Inspection', date:hnDate(6, '11:20 AM'), category:'<Unassigned>', user:'Grace Whitaker',
@@ -87,7 +87,7 @@ var ENTITIES = {
     balance: '0.00',
     notes: [
       {type:'Tenant Contact', date:hnDate(1, '03:40 PM'), category:'Leasing', user:'Erin Caldwell',
-       note:'She is planning to add a roommate in the next six months and wants the process in writing before she commits. @Charlie she’s adding a roommate within six months and wants the steps in writing.', files:[]},
+       note:'She is planning to add a roommate in the next six months and wants the process in writing before she commits. @Riley she’s adding a roommate within six months and wants the steps in writing.', files:[]},
       {type:'Tenant Contact', date:hnDate(1, '02:15 PM'), category:'Leasing', user:'Erin Caldwell',
        note:'Called about adding her sister to the lease sometime after the new year. Walked her through it at a high level: application and screening for the new occupant, then a lease amendment, and the deposit recalculated at two occupants. She asked for it in writing.', files:[]},
       {type:'Billing', date:hnDate(1, '09:12 AM'), category:'Receivables', user:'Erin Caldwell',
@@ -110,7 +110,7 @@ var ENTITIES = {
     balance: '640.00',
     notes: [
       {type:'Payment Setup', date:hnDate(1, '06:30 AM'), category:'Payables', user:'Corinne Vaughn',
-       note:'flagging @Charlie, they want autopay set up before next visit.', files:[]},
+       note:'flagging @Riley, they want autopay set up before next visit.', files:[]},
       {type:'Service Visit', date:hnDate(14, '01:15 PM'), category:'Maintenance', user:'Grace Whitaker',
        note:'Quarterly treatment completed at Flagstone. Invoice 8841 received.', files:['inv_8841.pdf']},
       {type:'Contract', date:hnDate(239, '08:00 AM'), category:'<Unassigned>', user:'Laura Bennett',
@@ -128,7 +128,7 @@ var ENTITIES = {
     ],
     notes: [
       {type:'Quote', date:hnDate(1, '11:05 AM'), category:'Leasing', user:'Kelsey Warner',
-       note:'She wants to see the unit priced with the covered space in the rent, not as a separate line. @Charlie Nicole wants the quote repriced with the covered parking space included. Can you add it?', files:[]},
+       note:'She wants to see the unit priced with the covered space in the rent, not as a separate line. @Riley Nicole wants the quote repriced with the covered parking space included. Can you add it?', files:[]},
       {type:'Showing', date:hnDate(2, '04:30 PM'), category:'Leasing', user:'Kelsey Warner',
        note:'Toured #212. Liked the unit, asked twice about covered parking. She leaves for a job site before six and does not want to scrape in the winter. One garage space is open at $45.', files:[]},
       {type:'Quote', date:hnDate(2, '02:10 PM'), category:'Leasing', user:'Kelsey Warner',
@@ -149,7 +149,7 @@ var ENTITIES = {
     ],
     notes: [
       {type:'Lead Transfer', date:hnDate(1, '09:20 AM'), category:'Leasing', user:'Derek Shaw',
-       note:'Flagstone has no dog run and the nearest park is a fifteen minute drive. Brookside has the fenced run off the south lot. @Charlie she really wants a dog park, and nothing at Flagstone fits. Can you move the lead to Brookside?', files:[]},
+       note:'Flagstone has no dog run and the nearest park is a fifteen minute drive. Brookside has the fenced run off the south lot. @Riley she really wants a dog park, and nothing at Flagstone fits. Can you move the lead to Brookside?', files:[]},
       {type:'Prospect Contact', date:hnDate(2, '05:40 PM'), category:'Leasing', user:'Derek Shaw',
        note:'Followed up after the tour. She was straight about it: the dog run is the deciding factor, two large dogs, and she will keep looking without one.', files:[]},
       {type:'Showing', date:hnDate(2, '10:00 AM'), category:'Leasing', user:'Derek Shaw',
@@ -172,7 +172,7 @@ var ENTITIES = {
     balance: '0.00',
     notes: [
       {type:'Pet Request', date:hnDate(0, '08:50 AM'), category:'Leasing', user:'Nathan Cole',
-       note:'Vet records and the renter’s policy are attached. @Charlie he wants to get a dog, a 40lb lab mix. Pet addendum or do we need the deposit first?', files:['vaccination_record.pdf','renters_policy.pdf']},
+       note:'Vet records and the renter’s policy are attached. @Riley he wants to get a dog, a 40lb lab mix. Pet addendum or do we need the deposit first?', files:['vaccination_record.pdf','renters_policy.pdf']},
       {type:'Tenant Contact', date:hnDate(1, '04:20 PM'), category:'Leasing', user:'Nathan Cole',
        note:'Came into the office about adding a dog, a two year old lab mix, about 40lb, from the shelter on Vine. Told him the breed is fine and the weight is under the limit, and that we would need vet records and proof of renter’s insurance listing the dog.', files:[]},
       {type:'Lease', date:hnDate(72, '10:00 AM'), category:'Leasing', user:'Paige Sullivan',
@@ -195,7 +195,7 @@ var ENTITIES = {
        /* The day is the same offset the Workspace mention uses (data-ws-day="11"
           in index.html): the mention and this note are the same note, and
           naming a month here as well only gave them a second way to disagree. */
-       note:'She wants it ready to sign the week she closes, so rents can be collected the month after. @Charlie she closes on the Westbrook fourplex on the ' + hnDay(11) + ' and wants the management agreement started.', files:[]},
+       note:'She wants it ready to sign the week she closes, so rents can be collected the month after. @Riley she closes on the Westbrook fourplex on the ' + hnDay(11) + ' and wants the management agreement started.', files:[]},
       {type:'Owner Contact', date:hnDate(1, '11:45 AM'), category:'<Unassigned>', user:'Brian Hollis',
        note:'Called to say the Westbrook Ave fourplex is under contract, closing ' + hnShort(11) + '. Four units, three occupied, currently self-managed. She wants us on it from day one, same terms as her other two.', files:[]},
       {type:'Statement', date:hnDate(10, '06:00 AM'), category:'<Unassigned>', user:'Erin Caldwell',
@@ -223,12 +223,12 @@ function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&
    "@" left showing -- orange when it is you, blue when it is anyone else.
    Emma's call, 2026-09-10, off a screenshot of the real product. */
 function isMe(name){
-  return name === ME || name === 'Charlie' || name === 'capegian';
+  return name === ME || name === 'Riley' || name === 'rparker';
 }
 /* `token` is what the note actually says after the "@" -- a name or a username.
    `label` is the person as the lozenge shows them. The two differ because a
-   note written as "@Charlie" has to keep saying that when the field is read
-   back, while the lozenge reads "Charlie Apegian" the way the frame does.
+   note written as "@Riley" has to keep saying that when the field is read
+   back, while the lozenge reads "Riley Parker" the way the frame does.
    data-name therefore carries the token, not the label. */
 function chipHTML(token, label){
   return '<span class="hn-at ' + (isMe(token) ? 'hn-at--me' : 'hn-at--other') +
@@ -270,7 +270,7 @@ var HN_AV_RAMP = ['navy', 'green', 'slate', 'grey'];
 function avColorClass(user, at, name){
   if (user && user.role) return 'hn-av-role';
   if (user && user.color) return 'hn-av-' + user.color;
-  if (name === 'Charlie Apegian') return 'hn-av-me';
+  if (name === 'Riley Parker') return 'hn-av-me';
   return 'hn-av-' + HN_AV_RAMP[(at < 0 ? name.length : at) % HN_AV_RAMP.length];
 }
 function initialsFor(name){
@@ -332,26 +332,26 @@ function hnDate(daysAgo, time){
 }
 /* A note is stored as plain text with "@Name" in it, so it reads the same in
    the register, in the field and in the data. Only names we know become
-   chips; a stray "@" stays text rather than posing as a person. "Charlie" stays
+   chips; a stray "@" stays text rather than posing as a person. "Riley" stays
    as a short alias for the signed-in user, since the seeded mentions use it.
-   Longest first, so "@Charlie Little" is not eaten by "@Charlie". */
+   Longest first, so "@Riley Little" is not eaten by "@Riley". */
 function knownNames(){
   return taggableUsers().map(function(u){ return u.name; })
-    .concat(['Charlie'])
+    .concat(['Riley'])
     .sort(function(a,b){ return b.length - a.length; });
 }
-/* Every "@token" a note can carry, longest first so "@Charlie Little" is not
-   eaten by "@Charlie", each paired with the person it should read as. Usernames
-   count: a note written as "@capegian" cannot be left as raw text just because
+/* Every "@token" a note can carry, longest first so "@Riley Little" is not
+   eaten by "@Riley", each paired with the person it should read as. Usernames
+   count: a note written as "@rparker" cannot be left as raw text just because
    it used the login form rather than the name. */
-/* Charlie is "@Charlie" wherever he is tagged -- Emma's call, 2026-09-30.
+/* Riley is "@Riley" wherever he is tagged -- Emma's call, 2026-09-30.
    Everyone else's lozenge carries their name the way the frame draws it, but
    the signed-in user has a short handle the whole prototype uses and three
    spellings would have been three ways of naming the same person. Whichever
-   spelling a note used, the lozenge reads "@Charlie" and the note keeps saying
+   spelling a note used, the lozenge reads "@Riley" and the note keeps saying
    what it said. */
 function mentionLabel(token, name){
-  return isMe(token) ? '@Charlie' : name;
+  return isMe(token) ? '@Riley' : name;
 }
 function mentionTokens(){
   var out = [];
@@ -359,7 +359,7 @@ function mentionTokens(){
     out.push({ token: u.name, label: mentionLabel(u.name, u.name) });
     if (u.uname) out.push({ token: u.uname, label: mentionLabel(u.uname, u.name) });
   });
-  out.push({ token: 'Charlie', label: '@Charlie' });
+  out.push({ token: 'Riley', label: '@Riley' });
   return out.sort(function(a, b){ return b.token.length - a.token.length; });
 }
 /* Two renderings of the same note, and which one you get is a question about
@@ -724,10 +724,10 @@ function pickAt(i){
   var node = tok.node;
   var rest = node.nodeValue.slice(tok.end);
   node.nodeValue = node.nodeValue.slice(0, tok.at);
-  /* The token stored for Charlie is the short handle, not his full name: a
+  /* The token stored for Riley is the short handle, not his full name: a
      mention typed here has to come out spelled the way every other mention of
      him is spelled. Emma's call, 2026-09-30. */
-  var token = isMe(u.name) ? 'Charlie' : u.name;
+  var token = isMe(u.name) ? 'Riley' : u.name;
   var chip = document.createElement('span');
   chip.className = 'hn-at ' + (isMe(u.name) ? 'hn-at--me' : 'hn-at--other');
   chip.setAttribute('contenteditable', 'false');

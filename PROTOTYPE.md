@@ -4617,3 +4617,32 @@ Now:
 Everyone else's lozenge still carries their name the way the frame draws it
 ("Laura Bennett", no "@"). Charlie is the exception because he is the signed-in
 user and the whole prototype refers to him by the short handle.
+
+## The signed-in user is Riley Parker (2026-10-01)
+
+Emma's call. Renamed everywhere the prototype speaks: the Workspace greeting,
+the app bar avatar (`CA` → `RP`) on all three screens, the user list and its
+key (`capegian` → `rparker`), `ME_KEY`, the overlay's own `ME`, every
+system-written history line ("Riley Parker claimed task"), and every `@Charlie`
+in the copy, which is now `@Riley`.
+
+**Two names that are deliberately still Charlie, and must stay that way:**
+
+- **Charlie Wilcox**, account 99, is a real tenant in
+  `Tenant_Register_2026-09-23.xlsx`, as is his `charlie@email.com`. He has
+  nothing to do with the signed-in user, and `screens/tenants.html` was left out
+  of the rename for exactly this reason. A blind find-and-replace across the
+  prototype renames a tenant out of Emma's own export.
+- Earlier entries in this file still say Charlie. They are a dated record of
+  what was decided when, and rewriting them would make the log say things that
+  were not said. Read anything above this heading with the rename in mind.
+
+Worth knowing: the export also contains a tenant called **Riley Payton**
+(account 215). Different person, no collision, but the register now holds a
+Riley who is not the user.
+
+Checked after the rename: the Workspace greets Riley with five `@Riley`
+mentions, the register shows RP bubbles on his five tasks, claiming writes
+"Riley Parker claimed task", and the move-in note's lozenge reads `@Riley` and
+still reads back byte for byte. The tenant register is untouched at 367, Charlie
+Wilcox included.
