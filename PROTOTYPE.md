@@ -4646,3 +4646,56 @@ mentions, the register shows RP bubbles on his five tasks, claiming writes
 "Riley Parker claimed task", and the move-in note's lozenge reads `@Riley` and
 still reads back byte for byte. The tenant register is untouched at 367, Charlie
 Wilcox included.
+
+## A tag is a lozenge wherever it is drawn (2026-10-01)
+
+Reversing 2026-09-29's "plain @text in a tile or register". Emma's call: always
+the lozenge — orange when it tags you, blue when it tags anyone else — because
+that is what says a tag is a *person* rather than some words after an "@".
+
+Drawn by one function, not three. The Tasks screen had its own chipping
+function once and a second implementation of "what a mention looks like" is
+exactly what drifted, so the overlay exposes `RMXHistory.mentions(text, users)`
+and the task tile calls it. `users` exists because the overlay only learns about
+the role queues when a record is opened on it, and the tile draws before that.
+
+A mention of a role Riley holds wears his orange rather than reading as somebody
+else being asked — ticking a checklist item writes exactly such a note
+("@Bookkeeper notified: ..."). That rule came from the Tasks screen's own
+chipper and was the one thing it knew that the overlay did not; it travels on
+the user list now as `me: true`.
+
+The lozenge padding came down to 4px either side at the same time: at 6 there
+was more air around the name than between the words beside it, and 6 was off the
+4px grid.
+
+## The action is built up, not arrived at (2026-10-01)
+
+Emma: *"remove the action by default... by default only type and letter template
+should display, then when I selected the tenant, the tenant field should display
+and I can select everything"*.
+
+New Resident Move In is the task being demoed and the demo is **adding** the
+action, so it now opens with none. Picking one builds up:
+
+1. **Add Action → Write Letter.** Type and Letter Template appear, both showing
+   their own name in the italic grey this prototype uses for a placeholder. The
+   record field is not there at all.
+2. **Type → Tenant.** A **Tenant** field appears, because until there is a type
+   there is no saying what kind of record is being asked for — the label above
+   it *is* the type. Pick Vendor and it is a Vendor field.
+3. **Letter Template → New Resident Welcome**, **Tenant → Dana Whitcomb.**
+
+Two older behaviours went with it:
+
+- **A freshly picked action starts empty.** It used to be filled from
+  `COMMUNICATION_ACTION_DEMOS`, so choosing "Write Letter" put a tenant and a
+  template on screen that nobody had picked. The tasks that ship with an action
+  still carry their own details — Pet Approval still opens on Document Template
+  / Pet Lease Agreement / Marcia Clark.
+- **Changing the Type clears the record rather than guessing one.** It used to
+  jump to the first record of the new type, which was a guess nobody asked for.
+
+`.action-detail-row .field` is `display:flex`, which outranks the UA's
+`[hidden]{display:none}`, so hiding the record field needed a rule of its own —
+without it the field keeps its space and only loses its contents.

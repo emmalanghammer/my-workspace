@@ -230,8 +230,8 @@ function isMe(name){
    note written as "@Riley" has to keep saying that when the field is read
    back, while the lozenge reads "Riley Parker" the way the frame does.
    data-name therefore carries the token, not the label. */
-function chipHTML(token, label){
-  return '<span class="hn-at ' + (isMe(token) ? 'hn-at--me' : 'hn-at--other') +
+function chipHTML(token, label, mine){
+  return '<span class="hn-at ' + (mine || isMe(token) ? 'hn-at--me' : 'hn-at--other') +
          '" contenteditable="false" data-name="' + esc(token) + '">' +
          esc(label || token) + '</span>';
 }
@@ -353,32 +353,36 @@ function knownNames(){
 function mentionLabel(token, name){
   return isMe(token) ? '@Riley' : name;
 }
-function mentionTokens(){
+function mentionTokens(users){
   var out = [];
-  taggableUsers().forEach(function(u){
-    out.push({ token: u.name, label: mentionLabel(u.name, u.name) });
-    if (u.uname) out.push({ token: u.uname, label: mentionLabel(u.uname, u.name) });
+  /* `u.me` lets a host say "this one is the signed-in person too". The Tasks
+     screen uses it for the role queues Riley is in: a note telling Property
+     Manager their step is ready IS telling Riley, and it should not read as
+     somebody else being asked. */
+  (users || taggableUsers()).forEach(function(u){
+    out.push({ token: u.name, label: mentionLabel(u.name, u.name), mine: !!u.me });
+    if (u.uname) out.push({ token: u.uname, label: mentionLabel(u.uname, u.name), mine: !!u.me });
   });
   out.push({ token: 'Riley', label: '@Riley' });
   return out.sort(function(a, b){ return b.token.length - a.token.length; });
 }
-/* Two renderings of the same note, and which one you get is a question about
-   where you are reading it. Emma's call, 2026-09-29:
+/* A tag is a lozenge wherever it is drawn -- orange when it tags you, blue when
+   it tags anyone else. It was briefly plain "@text" outside the Note Details
+   dialog (2026-09-29) on the grounds that a row reads better as one sentence;
+   Emma's call on 2026-10-01 is that the lozenge wins, because it is what says
+   a tag is a *person* rather than some words after an "@".
 
-     * The Note Details dialog is where a note is written, so a tag is a
-       lozenge there -- orange when it tags you, blue when it tags anyone else.
-     * A tile or a register is where a note is read in passing, so a tag stays
-       plain "@text" and the row keeps reading as one sentence.
-
-   withMentions is the plain one and the register uses it; withMentionChips is
-   the dialog's. */
-function withMentions(text){
-  return esc(text);
+   `withMentions` is kept as the name the register and the host screens call,
+   and it is the chipped one now. `users` lets a host hand over its own people
+   -- the Tasks screen has roles the overlay knows nothing about until an
+   overlay is actually open. */
+function withMentions(text, users){
+  return withMentionChips(text, users);
 }
-function withMentionChips(text){
+function withMentionChips(text, users){
   var out = esc(text);
-  mentionTokens().forEach(function(m){
-    out = out.split('@' + esc(m.token)).join(chipHTML(m.token, m.label));
+  mentionTokens(users).forEach(function(m){
+    out = out.split('@' + esc(m.token)).join(chipHTML(m.token, m.label, m.mine));
   });
   return out;
 }
@@ -821,7 +825,11 @@ function toast(msg){
     if (note) note.hidden = true;
   }
 
-  window.RMXHistory = { open: open, close: closeOverlay };
+  /* `mentions` is the one piece of this file a host screen reads rather than
+     opens: the Tasks screen draws its own History / Notes tile and has to chip
+     a tag exactly the way this overlay does. One implementation, so the two can
+     never disagree about what a mention looks like. */
+  window.RMXHistory = { open: open, close: closeOverlay, mentions: withMentions };
   /* The injected markup carries inline handlers, so the handlers it names
      have to be reachable from the page. */
   window.closeOverlay = closeOverlay;

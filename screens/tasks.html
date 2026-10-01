@@ -565,6 +565,10 @@ a:hover { text-decoration:none; }
 .action-cancel .material-symbols-outlined{font-size:20px;color:var(--rmx-blue);}
 .action-detail-row{display:flex;gap:8px;align-items:flex-end;width:100%;}
 .action-detail-row .field{flex:1;}
+/* .field is display:flex, which outranks the UA's [hidden]{display:none}. The
+   record field is hidden until a Type is chosen, so it needs this to actually
+   go away rather than just lose its contents. */
+.action-detail-row .field[hidden]{display:none;}
 
 .tile{background:var(--bg-surface);border:1px solid var(--rmx-hairline);border-radius:var(--r-sm);}
 /* The 2px blue bottom border is the Tile's signature underline (design.md §7.3) -- every tile
@@ -1487,9 +1491,12 @@ let myTasks = [
      task's own tenant) and the four things a move-in actually takes. Task and
      every checklist item belong to the Property Manager queue rather than to
      Riley by name: the work is the role's, and he holds that role. */
+  /* Opens with no action on it. Emma's call, 2026-10-01: this is the task being
+     demoed, and the demo is *adding* the action -- picking Write Letter, then a
+     Type, then the template and the record. Arriving with the whole thing
+     already filled in left nothing to show. */
   { id:'t-movein-credit', title:'New Resident Move In', flag:false, colorBar:'green', completed:false,
-    action:'Write Letter',
-    actionDetails:{templateLabel:'Letter Template', type:'Tenant', template:'New Resident Welcome', tenant:'Dana Whitcomb'},
+    action:null, actionDetails:null,
     dueDate:MOVE_IN_DATE, dueTime:'09:00 AM',
     assigned:['role-pm'], link:'Dana Whitcomb', linkOverflow:0, workflow:'Leasing',
     checklist:[
@@ -2675,10 +2682,12 @@ function pickActionType(type){
   const d = state.modalActionDetails;
   if (!d || d.type === type) return;
   d.type = type;
-  /* The record below belonged to the old type. Carrying "Dana Whitcomb" over
-     into Type=Vendor would leave the action addressed to a tenant filed as a
-     vendor, so it moves to the first record of the type that was chosen. */
-  d.tenant = (LINK_RECORDS[type] || [])[0] || '';
+  /* The record below belonged to the old type, so it is cleared rather than
+     carried over: "Dana Whitcomb" under Type = Vendor would leave the action
+     addressed to a tenant filed as a vendor. It used to jump to the first
+     record of the new type, which was a guess nobody asked for -- the field
+     asks instead. Emma's call, 2026-10-01. */
+  d.tenant = '';
   renderActionArea();
 }
 function openActionRecordPicker(e){
@@ -2740,13 +2749,28 @@ function renderActionArea(){
   if(COMMUNICATION_ACTION_DEMOS[state.modalActionLabel] && state.modalActionDetails){
     divider.classList.remove('hidden');
     row.classList.remove('hidden');
+    const d = state.modalActionDetails;
     const fields = row.querySelectorAll('.input .val');
-    fields[0].textContent = state.modalActionDetails.type;
-    document.getElementById('actionTemplateLabel').textContent = state.modalActionDetails.templateLabel;
-    fields[1].textContent = state.modalActionDetails.template;
-    /* The third field is whatever the Type says it is, not always "Tenant". */
-    document.getElementById('actionRecordLabel').textContent = state.modalActionDetails.type || 'Tenant';
-    fields[2].textContent = state.modalActionDetails.tenant;
+    /* An unchosen field shows its own name in the italic grey the rest of this
+       prototype uses for a placeholder, not an empty box. */
+    const put = (el, value, placeholder) => {
+      el.textContent = value || placeholder;
+      el.style.color = value ? '' : 'var(--text-disabled)';
+      el.style.fontStyle = value ? '' : 'italic';
+    };
+    put(fields[0], d.type, 'Type');
+    document.getElementById('actionTemplateLabel').textContent = d.templateLabel;
+    put(fields[1], d.template, d.templateLabel);
+    /* The record field waits for a Type, because until there is one there is no
+       saying what kind of record it is asking for -- the label above it IS the
+       type. Pick Tenant and a Tenant field appears; pick Vendor and it is a
+       Vendor field. Emma's call, 2026-10-01. */
+    const recordField = fields[2].closest('.field');
+    recordField.hidden = !d.type;
+    if (d.type) {
+      document.getElementById('actionRecordLabel').textContent = d.type;
+      put(fields[2], d.tenant, 'Search');
+    }
   } else {
     divider.classList.add('hidden');
     row.classList.add('hidden');
@@ -2820,8 +2844,15 @@ function pickActionItem(label){
   if(state.actionsMenuContext==='modal'){
     state.modalActionLabel = label;
     state.actionPicking = false;
+    /* Empty, not the demo's filled-in example. You have just said what KIND of
+       thing to send; nothing has been chosen yet, and pre-filling it put a
+       tenant and a template on screen that nobody picked. The tasks that ship
+       with an action still carry their own details -- this is only what a
+       freshly added one starts as. Emma's call, 2026-10-01. */
     const demo = COMMUNICATION_ACTION_DEMOS[label];
-    state.modalActionDetails = demo ? {...demo} : null;
+    state.modalActionDetails = demo
+      ? { templateLabel: demo.templateLabel, type: '', template: '', tenant: '' }
+      : null;
     renderActionArea();
     return;
   }
@@ -3027,13 +3058,24 @@ document.addEventListener('click', dismissLinkPanels);
    people and the roles over on the record, and the Note Details dialog builds
    its lozenges and its @-menu from them. Nothing on this screen draws a chip
    any more. */
-/* A tag in a tile stays plain "@text". It used to render the same outlined
-   lozenge the Note Details dialog does, which made a one-line note in a narrow
-   column read as a badge with a sentence stuck to it. The lozenge belongs where
-   a note is *written* -- the Note Details dialog, which still draws it, orange
-   for you and blue for anyone else. A tile is where a note is read in passing
-   and the row should read as one sentence. Emma's call, 2026-09-29. */
+/* A tag is a lozenge here too -- Emma's call, 2026-10-01, reversing the plain
+   "@text" of two days earlier. Drawn by the overlay's own renderer rather than
+   by a copy of it here: this screen had its own chipping function once, and a
+   second implementation of "what does a mention look like" is exactly what
+   drifted. The people and the roles are handed over, because the overlay only
+   learns about roles when a record is opened on it and this tile draws before
+   that happens. */
+function mentionPeople(){
+  /* A mention of a role Riley holds is a mention of Riley, so it wears his
+     orange rather than reading as somebody else being asked. Ticking a
+     checklist item writes exactly such a note ("@Bookkeeper notified: ...").
+     Carried over from this screen's own chipping function, which is the only
+     thing it knew that the overlay did not. */
+  return USERS.map(u => ({ name:u.name, uname:u.uname }))
+    .concat(ROLES.map(r => ({ name:r.name, uname:r.key, me: MY_ROLES.indexOf(r.key) > -1 })));
+}
 function noteTextHTML(text){
+  if (window.RMXHistory && RMXHistory.mentions) return RMXHistory.mentions(text, mentionPeople());
   return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 }
 
@@ -3729,6 +3771,6 @@ document.addEventListener('DOMContentLoaded', function(){
 <script src="../assets/taskstate.js?v=84f67f33"></script>
 <script src="../assets/actions.js?v=7d5ba7e6"></script>
 <script src="../assets/datetime.js?v=5c872dc6"></script>
-<script src="../assets/history-notes.js?v=3c0e5540"></script>
+<script src="../assets/history-notes.js?v=97c18caa"></script>
 <script src="../assets/megamenu.js?v=783ad6a1"></script>
 </body></html>
