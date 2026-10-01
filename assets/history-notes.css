@@ -208,7 +208,10 @@
    else. Emma's call, 2026-09-10, off a screenshot of the real product. The
    same chip renders in the Note field and in the register's Note column, so a
    tag looks the same wherever you meet it. */
-.hn-at { display:inline-block; padding:0 6px; border:1px solid currentColor; border-radius:var(--r-sm); line-height:18px; white-space:nowrap; user-select:none; }
+/* 4px, not 6: the lozenge sits inline in a sentence, and 6px either side put
+   more air around the name than between the words next to it. 4px is also on
+   the grid, which 6 was not. Emma's call, 2026-10-01. */
+.hn-at { display:inline-block; padding:0 4px; border:1px solid currentColor; border-radius:var(--r-sm); line-height:18px; white-space:nowrap; user-select:none; }
 .hn-at--me    { color:var(--icon-attention,#f58220); }
 .hn-at--other { color:var(--rmx-blue); }
 
