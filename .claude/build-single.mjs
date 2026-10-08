@@ -4,16 +4,19 @@
    Run:  node .claude/build-single.mjs
    Out:  TasksandAIFilters.html   <- the name Emma sends it under
 
-   KNOWN LIMIT, and it matters for anything that watches the page from the
-   outside: every screen runs inside a full-viewport <iframe srcdoc>, so no
-   mouse event over the prototype reaches the top document (measured: a click
-   and a hover both land zero listeners on the outer page). A browser extension
-   whose content script only runs in the top frame -- a cursor highlighter, a
-   click recorder, most annotation tools -- sees a page where the pointer never
-   moves. The isolation is load-bearing (the three screens each declare their
-   own `state`, `matches`, `renderAll`, so they cannot share one global), which
-   means this cannot be fixed by dropping the iframe. The linked screens have
-   no iframe at all; that is the build to demo with an extension running.
+   NO IFRAME, deliberately. Every screen is written straight into the top
+   document, because a browser extension's content script usually only runs
+   there: with the screens inside an <iframe srcdoc> a cursor highlighter saw a
+   page where the pointer never moved, which is most of what this file is for
+   during a demo. Emma's constraint, 2026-10-08 (mClick - Professional Cursor
+   Studio: activeTab, no host permissions, so top frame only).
+
+   The frame used to earn its keep by keeping the three screens' globals apart
+   -- each declares its own `state`, `matches`, `renderAll`. A full reload does
+   the same job for free: navigating sets location.hash and reloads, so every
+   screen starts in a brand-new global and can never collide with the last one.
+   State that has to survive a navigation goes through real sessionStorage,
+   which is what the screens already use and what a reload preserves.
 
    This does its own inlining from the linked screens rather than reading
    dist/. scripts/bundle.mjs (the skill's bundler) writes a literal </script>
@@ -138,60 +141,72 @@ const shell = `<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tasks and AI Filters</title>
 <link rel="icon" type="image/svg+xml" href="${faviconURI}">
-<style>
-  html, body { margin: 0; height: 100%; background: #f1f1f1; }
-  #screen { display: block; border: 0; width: 100%; height: 100%; }
-</style>
 </head>
 <body>
 <!-- The whole RMX prototype in one file: My Workspace, the Tasks register and
      the Tenants register, with the mega menu, the AI filters and the task
      overlays. Built by .claude/build-single.mjs from the linked screens.
-     Open it straight from disk, no server needed. -->
-<iframe id="screen" title="RMX prototype"></iframe>
+     Open it straight from disk, no server needed.
+
+     The chosen screen is written into THIS document, not into a frame, so a
+     browser extension sees the real page. See the builder's header. -->
 <script>
 (function () {
   var SCREENS = {
 ${Object.keys(SCREENS).map(n => `    ${JSON.stringify(n)}: ${literal(pages[n])}`).join(',\n')}
   };
 
-  /* One object standing in for sessionStorage, shared by every screen, so
-     cross-screen state survives a navigation the way it does on the site. */
-  function makeStore() {
-    var d = {};
-    return {
-      getItem: function (k) { return Object.prototype.hasOwnProperty.call(d, k) ? d[k] : null; },
-      setItem: function (k, v) { d[k] = String(v); },
-      removeItem: function (k) { delete d[k]; },
-      clear: function () { d = {}; },
-      key: function (i) { return Object.keys(d)[i] || null; },
-      get length() { return Object.keys(d).length; }
-    };
-  }
-  window.__rmxStore = makeStore();
-
+  /* Injected ahead of each screen's own scripts. It papers over the three
+     things a screen notices about being one of several in one file. */
   var SHIM = [
     '<script>(function(){',
+    /* 1. the query string. It lives in the hash here ("#tasks.html?open=..."),
+          so ?open= and ?notes= would otherwise be invisible to the screen. */
     'var SEARCH = __SEARCH__;',
     'var U = window.URLSearchParams;',
     'window.URLSearchParams = function (init) {',
     '  return new U(arguments.length === 0 || init === "" || init == null ? SEARCH : init);',
     '};',
     'window.URLSearchParams.prototype = U.prototype;',
-    'var store = null;',
-    'try { store = parent.__rmxStore; } catch (e) {}',
-    'if (!store) { var d = {}; store = {',
-    '  getItem: function (k) { return Object.prototype.hasOwnProperty.call(d, k) ? d[k] : null; },',
-    '  setItem: function (k, v) { d[k] = String(v); },',
-    '  removeItem: function (k) { delete d[k]; },',
-    '  clear: function () { d = {}; },',
-    '  key: function (i) { return Object.keys(d)[i] || null; },',
-    '  get length() { return Object.keys(d).length; } }; }',
-    'try {',
-    '  Object.defineProperty(window, "sessionStorage", { configurable: true, get: function () { return store; } });',
-    '  Object.defineProperty(window, "localStorage", { configurable: true, get: function () { return store; } });',
-    '} catch (e) {}',
-    'window.__rmxNav = function (href) { parent.postMessage({ rmxNav: String(href) }, "*"); };',
+    /* 2. storage. Real sessionStorage, because a navigation is a reload now and
+          an in-memory stand-in would forget everything on the way. Chrome gives
+          a file:// page its own sessionStorage; if a browser refuses, the
+          screens still run, they just stop remembering across screens. */
+    'try { window.sessionStorage.setItem("__rmx", "1"); window.sessionStorage.removeItem("__rmx"); }',
+    /* If a browser refuses storage to a file:// page, fall back to window.name,
+       which survives a same-tab navigation and is just a string. A plain
+       in-memory object would forget everything on every reload, and a reload is
+       exactly what a navigation is here -- claiming a task and then changing
+       screen would quietly lose the claim. */
+    'catch (e) {',
+    '  var TAG = "__rmx:";',
+    '  var d = {};',
+    '  try { if (name.indexOf(TAG) === 0) d = JSON.parse(name.slice(TAG.length)) || {}; } catch (e3) { d = {}; }',
+    '  var flush = function () { try { name = TAG + JSON.stringify(d); } catch (e4) {} };',
+    '  var store = {',
+    '    getItem: function (k) { return Object.prototype.hasOwnProperty.call(d, k) ? d[k] : null; },',
+    '    setItem: function (k, v) { d[k] = String(v); flush(); },',
+    '    removeItem: function (k) { delete d[k]; flush(); },',
+    '    clear: function () { d = {}; flush(); },',
+    '    key: function (i) { return Object.keys(d)[i] || null; },',
+    '    get length() { return Object.keys(d).length; } };',
+    '  try {',
+    '    Object.defineProperty(window, "sessionStorage", { configurable: true, get: function () { return store; } });',
+    '    Object.defineProperty(window, "localStorage", { configurable: true, get: function () { return store; } });',
+    '  } catch (e2) {}',
+    '}',
+    /* 3. navigation. A relative href has nowhere to go in a one-file build, so
+          every link to a screen becomes a hash change plus a reload -- which is
+          also what hands the next screen a clean global. */
+    'window.__rmxNav = function (href) {',
+    '  var raw = String(href || "");',
+    '  var q = raw.indexOf("?");',
+    '  var path = q === -1 ? raw : raw.slice(0, q);',
+    '  var key = path.split("/").pop() || "index.html";',
+    '  var next = "#" + key + (q === -1 ? "" : raw.slice(q));',
+    '  if (location.hash === next) location.reload();',
+    '  else { location.hash = next; location.reload(); }',
+    '};',
     'document.addEventListener("click", function (e) {',
     '  var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;',
     '  if (!a) return;',
@@ -213,27 +228,27 @@ ${Object.keys(SCREENS).map(n => `    ${JSON.stringify(n)}: ${literal(pages[n])}`
     return { key: key, search: search };
   }
 
-  var frame = document.getElementById('screen');
+  var r = route(decodeURIComponent((location.hash || '').replace(/^#/, '')) || 'index.html');
+  var html = SCREENS[r.key];
 
-  function render(r) {
-    var shim = SHIM.replace('__SEARCH__', JSON.stringify(r.search));
-    frame.srcdoc = SCREENS[r.key].replace('<head>', '<head>' + shim);
+  /* The screen's own <body> attributes, applied by hand rather than left to
+     the parser's merging rules: My Workspace is <body class="rmx"> and the
+     whole page is styled off that class. */
+  var bodyTag = /<body([^>]*)>/i.exec(html);
+  if (bodyTag && bodyTag[1].trim()) {
+    var holder = document.createElement('div');
+    holder.innerHTML = '<i ' + bodyTag[1].trim() + '></i>';
+    var attrs = holder.firstChild.attributes;
+    for (var i = 0; i < attrs.length; i++) document.body.setAttribute(attrs[i].name, attrs[i].value);
   }
 
-  function fromHash() {
-    return route(decodeURIComponent((location.hash || '').replace(/^#/, '')) || 'index.html');
-  }
-
-  window.addEventListener('message', function (e) {
-    if (!e.data || !e.data.rmxNav) return;
-    var r = route(e.data.rmxNav);
-    var next = '#' + r.key + r.search;
-    if (location.hash === next) render(r);
-    else location.hash = next;
-  });
-
-  window.addEventListener('hashchange', function () { render(fromHash()); });
-  render(fromHash());
+  /* Written during the initial parse, so the screen's scripts run in order and
+     its DOMContentLoaded listeners fire the way they do on the real page. The
+     screen's own <!doctype>, <html>, <head> and <body> tags are ignored at this
+     point in the stream; its <style> blocks still apply. */
+  document.write(SHIM.replace('__SEARCH__', JSON.stringify(r.search)) + html);
+  /* Back and forward change the hash without reloading, so make them reload. */
+  window.addEventListener('hashchange', function () { location.reload(); });
 })();
 <\/script>
 </body>

@@ -4700,32 +4700,48 @@ Two older behaviours went with it:
 `[hidden]{display:none}`, so hiding the record field needed a rule of its own —
 without it the field keeps its space and only loses its contents.
 
-## The single file and browser extensions (2026-10-08)
+## The single file has no iframe, so extensions can see it (2026-10-08)
 
-Emma is demoing from `TasksandAIFilters.html` with a cursor-highlighter
-extension (mclick) running, and asked whether the two are compatible.
+Emma is demoing from `TasksandAIFilters.html` with **mClick - Professional
+Cursor Studio** running, and has to use the file rather than the deployed link.
 
-**Measured, not assumed.** In the single file the prototype is a full-viewport
-`<iframe srcdoc>` — 776×697 inside a 776×697 viewport. A click and a hover over
-it fire **zero** listeners on the top document. On the linked screens the same
-two gestures fire two, and there is no iframe on any of the three.
+**The problem, measured.** The prototype used to be a full-viewport
+`<iframe srcdoc>` — 776x697 inside a 776x697 viewport. A click and a hover over
+it fired **zero** listeners on the top document. mClick declares `storage` and
+`activeTab` and no host permissions, so it injects into the top frame only; it
+saw a page where the pointer never moved. It works on Emma's other local HTML
+file, which has no frame, which is the same finding from the other side.
 
-So an extension that only injects into the top frame sees a page where the
-pointer never moves. Chrome does not run content scripts in a `srcdoc` frame
-unless the extension declares both `all_frames` and `match_origin_as_fallback`,
-which most do not.
+**The fix: the chosen screen is written into the top document.** The frame used
+to earn its keep by keeping the three screens' globals apart — each declares its
+own `state`, `matches`, `renderAll`. A full reload does that job for free:
+`__rmxNav` sets `location.hash` and reloads, so every screen starts in a new
+global and can never collide with the last one. The screen is `document.write`n
+during the initial parse, so its scripts run in order and its `DOMContentLoaded`
+listeners fire exactly as they do on the real page.
 
-**It cannot be fixed by dropping the iframe.** The three screens each declare
-their own `state`, `matches`, `renderAll` and so on; the frame is what keeps
-them from colliding in one global. A top-level `document.write`, a `blob:` URL
-or a `data:` URL would all either reuse the same global or hit the same
-content-script limitation.
+Three things that needed care:
 
-The single file is not *hostile* to extensions — no CSP, no `sandbox` on the
-iframe — so one that does inject into all frames works normally. It is a
-question about the extension, not about the file.
+- **State across a navigation is real `sessionStorage` now**, not the
+  in-memory object the frames shared — a reload would have wiped that. If a
+  browser refuses storage to a `file://` page the shim falls back to
+  `window.name`, which survives a same-tab navigation; a plain in-memory
+  fallback would lose a claim the moment you changed screen.
+- **The screen's `<body>` attributes are applied by hand.** My Workspace is
+  `<body class="rmx">` and the whole page is styled off that class; relying on
+  the parser to merge a `<body>` tag encountered mid-stream is not something to
+  bet a demo on.
+- **Back and forward change the hash without reloading**, so a `hashchange`
+  listener reloads.
 
-**For a demo with an extension running, use the deployed link**
-(`https://emmalanghammer.github.io/my-workspace/`). Real top-level pages, no
-iframe, nothing to work around. The single file stays what it is for: the thing
-you attach to an email.
+Checked on the rebuilt file: no iframe anywhere, a hover over the prototype
+fires on the top document, all three screens render, navigation works from a
+mention, from the mega menu and from `__rmxNav`, `?open=` / `?notes=` /
+`?view=details` all arrive, claiming a task survives a navigation, the scripted
+AI filter still types itself and returns the seven dogs at Riverview, and the
+task modal, History / Notes tile, overlay, lozenges, mega menu and browser Back
+all behave.
+
+What is **not** verified: mClick itself. Extensions cannot be installed in the
+browser used for checking, so what has been removed is the structural reason it
+could not work, not a sighting of it working.
