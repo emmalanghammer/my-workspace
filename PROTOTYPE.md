@@ -4699,3 +4699,33 @@ Two older behaviours went with it:
 `.action-detail-row .field` is `display:flex`, which outranks the UA's
 `[hidden]{display:none}`, so hiding the record field needed a rule of its own —
 without it the field keeps its space and only loses its contents.
+
+## The single file and browser extensions (2026-10-08)
+
+Emma is demoing from `TasksandAIFilters.html` with a cursor-highlighter
+extension (mclick) running, and asked whether the two are compatible.
+
+**Measured, not assumed.** In the single file the prototype is a full-viewport
+`<iframe srcdoc>` — 776×697 inside a 776×697 viewport. A click and a hover over
+it fire **zero** listeners on the top document. On the linked screens the same
+two gestures fire two, and there is no iframe on any of the three.
+
+So an extension that only injects into the top frame sees a page where the
+pointer never moves. Chrome does not run content scripts in a `srcdoc` frame
+unless the extension declares both `all_frames` and `match_origin_as_fallback`,
+which most do not.
+
+**It cannot be fixed by dropping the iframe.** The three screens each declare
+their own `state`, `matches`, `renderAll` and so on; the frame is what keeps
+them from colliding in one global. A top-level `document.write`, a `blob:` URL
+or a `data:` URL would all either reuse the same global or hit the same
+content-script limitation.
+
+The single file is not *hostile* to extensions — no CSP, no `sandbox` on the
+iframe — so one that does inject into all frames works normally. It is a
+question about the extension, not about the file.
+
+**For a demo with an extension running, use the deployed link**
+(`https://emmalanghammer.github.io/my-workspace/`). Real top-level pages, no
+iframe, nothing to work around. The single file stays what it is for: the thing
+you attach to an email.

@@ -4,6 +4,17 @@
    Run:  node .claude/build-single.mjs
    Out:  TasksandAIFilters.html   <- the name Emma sends it under
 
+   KNOWN LIMIT, and it matters for anything that watches the page from the
+   outside: every screen runs inside a full-viewport <iframe srcdoc>, so no
+   mouse event over the prototype reaches the top document (measured: a click
+   and a hover both land zero listeners on the outer page). A browser extension
+   whose content script only runs in the top frame -- a cursor highlighter, a
+   click recorder, most annotation tools -- sees a page where the pointer never
+   moves. The isolation is load-bearing (the three screens each declare their
+   own `state`, `matches`, `renderAll`, so they cannot share one global), which
+   means this cannot be fixed by dropping the iframe. The linked screens have
+   no iframe at all; that is the build to demo with an extension running.
+
    This does its own inlining from the linked screens rather than reading
    dist/. scripts/bundle.mjs (the skill's bundler) writes a literal </script>
    into the page when it inlines any of assets/{datetime,history-notes,
