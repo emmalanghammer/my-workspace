@@ -4745,3 +4745,40 @@ all behave.
 What is **not** verified: mClick itself. Extensions cannot be installed in the
 browser used for checking, so what has been removed is the structural reason it
 could not work, not a sighting of it working.
+
+## Display brightness (2026-10-09)
+
+A projector in a bright room washes this design out — it leans on light greys
+and 1px hairlines, and those are the first things to go. Clicking the app bar's
+avatar opens a slider that darkens or brightens the whole page.
+
+`assets/brightness.js`, self-injecting the way `megamenu.js` and
+`history-notes.js` are: one line on a screen and it brings its behaviour and its
+styling together. It carries its own `<style>` rather than a companion `.css` —
+ten rules, and a second `<link>` on every screen is more to keep in step than it
+is worth. It depends on nothing from the host screen but the avatar's class.
+
+- **Darker also raises contrast**, by 1.4× the amount it darkens. Darkening
+  alone makes a washed-out projector worse: everything slides toward the middle
+  and the hairlines vanish. Brighter is brightness only — contrast there would
+  crush the whites the page is mostly made of.
+- **At 0 the filter is removed outright**, not set to a no-op, so a page nobody
+  has touched carries no filter at all.
+- Saved under `display-brightness` and re-applied on load. Every storage call is
+  in a try/catch: a prototype that will not open because a browser declined to
+  remember a slider is worse than one that forgets it.
+- Escape closes it, as it does every other overlay here.
+
+**The filter goes on `<html>`, and that is load-bearing.** A `filter` normally
+makes an element a containing block for its fixed-position descendants, which
+would have thrown every overlay on these screens — the task modal, the mega
+menu, the floating panels, the toasts — out of position as soon as somebody
+touched the slider. The root element is explicitly exempt from that rule, which
+is why this works at all. Verified rather than trusted: with the filter active
+and the page scrolled, the task modal and the mega menu each still measure
+exactly the viewport at 0,0.
+
+Checked on all three screens and in the single file: the panel opens under the
+avatar and flush to its right edge, fully on screen; both ends of the slider do
+what they say; Reset clears it; the setting survives a reload and an in-file
+navigation; outside-click, a second avatar click and Escape all close it.
